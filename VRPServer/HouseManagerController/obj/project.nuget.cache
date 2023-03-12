@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "eqygSht9slLoOd9BFanJuagjE8t6n15Kl/IU80U837RmKdcSaKrhiqUFv3C34DRpSQTni7WwA4DeTVTg9lX3Cw==",
+  "dgSpecHash": "02/mi8s2iNEghYR/+CEn9vpvNmSbe1/o+tfQvJV7Oji7fdDqvAVBRzo6vqTV024G4SPz7nv0JaEdkXLWO1hnEA==",
   "success": true,
-  "projectFilePath": "E:\\Project\\VRPGame\\VRPServer\\HouseManagerController\\HouseManagerController.csproj",
+  "projectFilePath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\HouseManagerController\\HouseManagerController.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sxtgy\\.nuget\\packages\\fontstashsharp.base\\1.0.0\\fontstashsharp.base.1.0.0.nupkg.sha512",
     "C:\\Users\\sxtgy\\.nuget\\packages\\fontstashsharp.rasterizers.sixlabors.fonts\\1.1.5\\fontstashsharp.rasterizers.sixlabors.fonts.1.1.5.nupkg.sha512",

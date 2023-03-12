@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using static CommonClass.PathCal;
 using OssModel = Model;
-namespace HouseManager4_0
+namespace HouseManager5_0
 {
 
     public interface GetRandomPos

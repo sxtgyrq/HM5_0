@@ -1,7 +1,7 @@
 ﻿using CommonClass;
-using static HouseManager4_0.RoomMainF.RoomMain;
+using static HouseManager5_0.RoomMainF.RoomMain;
 
-namespace HouseManager4_0.interfaceOfHM
+namespace HouseManager5_0.interfaceOfHM
 {
     interface Position
     {

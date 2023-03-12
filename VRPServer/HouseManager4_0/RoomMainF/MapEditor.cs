@@ -1,5 +1,5 @@
 ﻿using CommonClass;
-//using HouseManager4_0.interfaceOfHM;
+//using HouseManager5_0.interfaceOfHM;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using OssModel = Model;
 
-namespace HouseManager4_0.RoomMainF
+namespace HouseManager5_0.RoomMainF
 {
     public partial class RoomMain : interfaceOfHM.MapEditor
     {
@@ -939,7 +939,7 @@ namespace HouseManager4_0.RoomMainF
         public string GetRoadNearby(ModelTranstraction.GetRoadNearby grn)
         {
 
-            HouseManager4_0.OperateObj_Model op = new OperateObj_Model(this);
+            HouseManager5_0.OperateObj_Model op = new OperateObj_Model(this);
             op.GetRoadNearby(grn);
             return "";
         }

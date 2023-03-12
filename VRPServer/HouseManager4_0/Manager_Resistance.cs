@@ -1,12 +1,12 @@
 ﻿using CommonClass;
-using HouseManager4_0.RoomMainF;
+using HouseManager5_0.RoomMainF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace HouseManager4_0
+namespace HouseManager5_0
 {
     public class Manager_Resistance : Manager
     {

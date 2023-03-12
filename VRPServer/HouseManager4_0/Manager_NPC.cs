@@ -1,13 +1,13 @@
-﻿using HouseManager4_0.interfaceOfHM;
-using HouseManager4_0.RoomMainF;
+﻿using HouseManager5_0.interfaceOfHM;
+using HouseManager5_0.RoomMainF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using static HouseManager4_0.RoomMainF.RoomMain;
+using static HouseManager5_0.RoomMainF.RoomMain;
 
-namespace HouseManager4_0
+namespace HouseManager5_0
 {
     public class Manager_NPC : Manager, interfaceOfEngine.startNewCommandThread
     {

@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using static CommonClass.Finance;
-using static HouseManager4_0.RoomMainF.RoomMain;
+using static HouseManager5_0.RoomMainF.RoomMain;
 
-namespace HouseManager4_0.interfaceOfHM
+namespace HouseManager5_0.interfaceOfHM
 {
     interface ListenInterface : MapEditor, ModelTranstractionI, Resistance
     {

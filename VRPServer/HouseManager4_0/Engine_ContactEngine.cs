@@ -2,13 +2,13 @@
 using CommonClass.driversource;
 using System;
 using System.Collections.Generic;
-using static HouseManager4_0.Engine_MagicEngine;
+using static HouseManager5_0.Engine_MagicEngine;
 using System.Data;
-using static HouseManager4_0.RoomMainF.RoomMain;
+using static HouseManager5_0.RoomMainF.RoomMain;
 using OssModel = Model;
-using HouseManager4_0.interfaceOfHM;
+using HouseManager5_0.interfaceOfHM;
 
-namespace HouseManager4_0
+namespace HouseManager5_0
 {
     public abstract class Engine_ContactEngine : Engine
     {

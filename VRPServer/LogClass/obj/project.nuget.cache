@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "aGxkFbxPD5Rygx3unr+HEEK+Tn8QLlIUT+R6cRCjOkZ1gKb/I1fsFG7C4bA02IyucMLyvi51GJuu3WbN+KSyFQ==",
+  "dgSpecHash": "lrC/bREsjDgk0RrfwUZdjX4SskGEb3k4LiSdZPFqdcC7GXfNlB1CTErBu9+HQAfCIt8xvfO8GejTgOyXTKaVFQ==",
   "success": true,
-  "projectFilePath": "E:\\Project\\VRPGame\\VRPServer\\LogClass\\LogClass.csproj",
+  "projectFilePath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\LogClass\\LogClass.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

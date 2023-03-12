@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HouseManager4_0.RoomMainF
+namespace HouseManager5_0.RoomMainF
 {
     public abstract class RoomMainBaseData
     {
@@ -24,12 +24,12 @@ namespace HouseManager4_0.RoomMainF
         /// <summary>
         /// 游戏官方市场
         /// </summary>
-        public HouseManager4_0.Market Market { get; internal set; }
+        public HouseManager5_0.Market Market { get; internal set; }
 
         /// <summary>
         /// 背景音乐选择器
         /// </summary>
-        public HouseManager4_0.Music Music { get; internal set; }
+        public HouseManager5_0.Music Music { get; internal set; }
 
         /// <summary>
         /// 背景Cube

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace HouseManager4_0
+namespace HouseManager5_0
 {
     class Program
     {

@@ -1,6 +1,6 @@
 ﻿using CommonClass.databaseModel;
-using HouseManager4_0.interfaceOfHM;
-using HouseManager4_0.RoomMainF;
+using HouseManager5_0.interfaceOfHM;
+using HouseManager5_0.RoomMainF;
 using System;
 using System.Collections.Generic;
 using System.Net.WebSockets;
@@ -8,7 +8,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using RoomMain = HouseManager4_0.RoomMainF.RoomMain;
+using RoomMain = HouseManager5_0.RoomMainF.RoomMain;
 using static NBitcoin.Scripting.OutputDescriptor;
 using static CommonClass.ModelTranstraction;
 using System.Runtime.CompilerServices;
@@ -19,7 +19,7 @@ using DalOfAddress;
 using MySql.Data.MySqlClient;
 using System.Linq;
 
-namespace HouseManager4_0
+namespace HouseManager5_0
 {
     public partial class Manager_TaskCopy : Manager
     {

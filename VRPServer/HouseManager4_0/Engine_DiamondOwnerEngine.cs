@@ -1,12 +1,12 @@
 ﻿using CommonClass;
-using HouseManager4_0.RoomMainF;
+using HouseManager5_0.RoomMainF;
 using Model;
 using System;
 using System.Collections.Generic;
-using static HouseManager4_0.Car;
-using static HouseManager4_0.RoomMainF.RoomMain;
+using static HouseManager5_0.Car;
+using static HouseManager5_0.RoomMainF.RoomMain;
 
-namespace HouseManager4_0
+namespace HouseManager5_0
 {
     public class Engine_DiamondOwnerEngine : Engine, interfaceOfEngine.engine, interfaceOfEngine.startNewThread
     {

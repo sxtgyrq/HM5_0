@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Project\\VRPGame\\VRPServer\\DalOfAddress\\DalOfAddress.csproj": {}
+    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj": {}
   },
   "projects": {
-    "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj": {
+    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj",
+        "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj",
         "projectName": "CommonClass",
-        "projectPath": "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj",
+        "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\obj\\",
+        "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -33,8 +33,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "E:\\Project\\VRPGame\\VRPServer\\Model\\Model.csproj": {
-                "projectPath": "E:\\Project\\VRPGame\\VRPServer\\Model\\Model.csproj"
+              "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj": {
+                "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj"
               }
             }
           }
@@ -90,14 +90,14 @@
         }
       }
     },
-    "E:\\Project\\VRPGame\\VRPServer\\DalOfAddress\\DalOfAddress.csproj": {
+    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Project\\VRPGame\\VRPServer\\DalOfAddress\\DalOfAddress.csproj",
+        "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj",
         "projectName": "DalOfAddress",
-        "projectPath": "E:\\Project\\VRPGame\\VRPServer\\DalOfAddress\\DalOfAddress.csproj",
+        "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "E:\\Project\\VRPGame\\VRPServer\\DalOfAddress\\obj\\",
+        "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -119,8 +119,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj": {
-                "projectPath": "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj"
+              "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
+                "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj"
               }
             }
           }
@@ -160,14 +160,14 @@
         }
       }
     },
-    "E:\\Project\\VRPGame\\VRPServer\\Model\\Model.csproj": {
+    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Project\\VRPGame\\VRPServer\\Model\\Model.csproj",
+        "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj",
         "projectName": "Model",
-        "projectPath": "E:\\Project\\VRPGame\\VRPServer\\Model\\Model.csproj",
+        "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "E:\\Project\\VRPGame\\VRPServer\\Model\\obj\\",
+        "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

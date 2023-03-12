@@ -1,10 +1,10 @@
 ﻿using CommonClass;
-using HouseManager4_0.interfaceTag;
+using HouseManager5_0.interfaceTag;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HouseManager4_0.RoomMainF
+namespace HouseManager5_0.RoomMainF
 {
     public partial class RoomMain : interfaceOfHM.Ability
     {

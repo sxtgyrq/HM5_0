@@ -47,7 +47,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogClass", "..\LogClass\Log
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleAppOtherFunc", "..\ConsoleAppOtherFunc\ConsoleAppOtherFunc.csproj", "{82CB3AA1-CCF7-4679-B4CE-5C2F193A7D34}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HouseManager4_0", "..\HouseManager4_0\HouseManager4_0.csproj", "{12F38116-8D9F-40E6-BC40-E8B896A5569A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HouseManager5_0", "..\HouseManager4_0\HouseManager5_0.csproj", "{12F38116-8D9F-40E6-BC40-E8B896A5569A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CubeImageTool", "..\CubeImageTool\CubeImageTool.csproj", "{EA57CF6E-9B33-41B7-9AF7-F33BF4F13CD1}"
 EndProject
@@ -59,7 +59,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCore", "..\TestCore\Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitCoinTrasfer", "..\BitCoinTrasfer\BitCoinTrasfer.csproj", "{F091D8FC-9348-4C50-BA2E-D1276AB25081}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleBitcoinChainApp", "..\ConsoleBitcoinChainApp\ConsoleBitcoinChainApp.csproj", "{3D88488E-1258-48BC-8F15-4FFBBCC5DF00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleBitcoinChainApp", "..\ConsoleBitcoinChainApp\ConsoleBitcoinChainApp.csproj", "{3D88488E-1258-48BC-8F15-4FFBBCC5DF00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

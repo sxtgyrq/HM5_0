@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HouseManager4_0.interfaceOfHM
+namespace HouseManager5_0.interfaceOfHM
 {
     interface Ability
     {
@@ -14,7 +14,7 @@ namespace HouseManager4_0.interfaceOfHM
         /// <param name="car"></param>
         /// <param name="notifyMsgs"></param>
         /// <param name="pType"></param>
-        void AbilityChanged2_0(interfaceTag.HasContactInfo player, HouseManager4_0.Car car, ref List<string> notifyMsgs, string pType);
+        void AbilityChanged2_0(interfaceTag.HasContactInfo player, HouseManager5_0.Car car, ref List<string> notifyMsgs, string pType);
 
         string SetAbility(SetAbility sa);
 

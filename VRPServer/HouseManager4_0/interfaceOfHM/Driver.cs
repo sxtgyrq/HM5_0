@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HouseManager4_0.interfaceOfHM
+namespace HouseManager5_0.interfaceOfHM
 {
     interface Driver
     {
@@ -57,10 +57,10 @@ namespace HouseManager4_0.interfaceOfHM
         int GetDefensiveValue(CommonClass.driversource.Driver driver, bool defened);
         string GetSkillName();
         long leftValue(AbilityAndState ability);
-        void setCost(long reduce, RoleInGame player, HouseManager4_0.Car car, ref List<string> notifyMsg);
+        void setCost(long reduce, RoleInGame player, HouseManager5_0.Car car, ref List<string> notifyMsg);
         Engine_DebtEngine.DebtCondition getCondition();
         // long getVolumeOrBussiness(Manager_Driver.ConfuseManger.AmbushInfomation ambushInfomation);
-        bool CheckCarState(HouseManager4_0.Car car);
+        bool CheckCarState(HouseManager5_0.Car car);
         public long ImproveAttack(RoleInGame role, long attackMoney, ref List<string> notifyMsgs);
         long DealWithPercentValue(long percentValue, RoleInGame player, RoleInGame victim, RoomMainF.RoomMain that, GetRandomPos grp, ref List<string> notifyMsg);
         void MagicAnimateShow(RoleInGame player, RoleInGame victim, ref List<string> notifyMsgs);

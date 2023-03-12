@@ -5984,11 +5984,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Project\\VRPGame\\VRPServer\\HouseManagerController\\HouseManagerController.csproj",
+      "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\HouseManagerController\\HouseManagerController.csproj",
       "projectName": "HouseManagerController",
-      "projectPath": "E:\\Project\\VRPGame\\VRPServer\\HouseManagerController\\HouseManagerController.csproj",
+      "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\HouseManagerController\\HouseManagerController.csproj",
       "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-      "outputPath": "E:\\Project\\VRPGame\\VRPServer\\HouseManagerController\\obj\\",
+      "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\HouseManagerController\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -6010,8 +6010,8 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "E:\\Project\\VRPGame\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
-              "projectPath": "E:\\Project\\VRPGame\\VRPServer\\TcpFunction\\TcpFunction.csproj"
+            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
+              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj"
             }
           }
         }

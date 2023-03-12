@@ -6674,11 +6674,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Project\\VRPGame\\VRPServer\\ConsoleAppOtherFunc\\ConsoleAppOtherFunc.csproj",
+      "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleAppOtherFunc\\ConsoleAppOtherFunc.csproj",
       "projectName": "ConsoleAppOtherFunc",
-      "projectPath": "E:\\Project\\VRPGame\\VRPServer\\ConsoleAppOtherFunc\\ConsoleAppOtherFunc.csproj",
+      "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleAppOtherFunc\\ConsoleAppOtherFunc.csproj",
       "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-      "outputPath": "E:\\Project\\VRPGame\\VRPServer\\ConsoleAppOtherFunc\\obj\\",
+      "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleAppOtherFunc\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -6700,11 +6700,11 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "E:\\Project\\VRPGame\\VRPServer\\BitCoin\\BitCoin.csproj": {
-              "projectPath": "E:\\Project\\VRPGame\\VRPServer\\BitCoin\\BitCoin.csproj"
+            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {
+              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj"
             },
-            "E:\\Project\\VRPGame\\VRPServer\\DalOfAddress\\DalOfAddress.csproj": {
-              "projectPath": "E:\\Project\\VRPGame\\VRPServer\\DalOfAddress\\DalOfAddress.csproj"
+            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj": {
+              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj"
             }
           }
         }

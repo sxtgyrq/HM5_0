@@ -1,7 +1,7 @@
 ﻿using CommonClass;
 using CommonClass.driversource;
-using HouseManager4_0.interfaceOfEngine;
-using HouseManager4_0.RoomMainF;
+using HouseManager5_0.interfaceOfEngine;
+using HouseManager5_0.RoomMainF;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -10,13 +10,13 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Security.Cryptography.Xml;
-using static HouseManager4_0.Car;
-using static HouseManager4_0.Engine_MagicEngine;
-using static HouseManager4_0.Manager_Driver.ConfuseManger;
-using static HouseManager4_0.RoomMainF.RoomMain;
+using static HouseManager5_0.Car;
+using static HouseManager5_0.Engine_MagicEngine;
+using static HouseManager5_0.Manager_Driver.ConfuseManger;
+using static HouseManager5_0.RoomMainF.RoomMain;
 using OssModel = Model;
 
-namespace HouseManager4_0
+namespace HouseManager5_0
 {
     public partial class Engine_MagicEngine : Engine_ContactEngine, interfaceOfEngine.engine, interfaceOfEngine.tryCatchAction, interfaceOfEngine.startNewThread
     {

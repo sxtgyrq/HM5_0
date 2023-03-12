@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using OssModel = Model;
 
-namespace HouseManager4_0.RoomMainF
+namespace HouseManager5_0.RoomMainF
 {
     public partial class RoomMain : interfaceOfHM.Path
     {

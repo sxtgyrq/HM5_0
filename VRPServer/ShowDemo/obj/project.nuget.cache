@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "PZpA2onUqawQAG/oxagc0oWnc9Oo/02HcEy8HEITSROQ1eXZAxsuAzN+OBm2Hpg8/RwlzJH8bocjyaPsMFegVA==",
+  "dgSpecHash": "kl29LzFAIb99aRXwsBoCP87di/pJzllqydhsKzAjbYuImMoez1j4P7bAs/BQAzcfgICEpYp09nUPMiRiUrucDQ==",
   "success": true,
-  "projectFilePath": "E:\\Project\\VRPGame\\VRPServer\\ShowDemo\\ShowDemo.csproj",
+  "projectFilePath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ShowDemo\\ShowDemo.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sxtgy\\.nuget\\packages\\fontstashsharp.base\\1.0.0\\fontstashsharp.base.1.0.0.nupkg.sha512",
     "C:\\Users\\sxtgy\\.nuget\\packages\\fontstashsharp.rasterizers.sixlabors.fonts\\1.1.5\\fontstashsharp.rasterizers.sixlabors.fonts.1.1.5.nupkg.sha512",

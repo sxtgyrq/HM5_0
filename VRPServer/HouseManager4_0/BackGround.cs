@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace HouseManager4_0
+namespace HouseManager5_0
 {
-    public class BackGround : HouseManager4_0.interfaceTag.Config
+    public class BackGround : HouseManager5_0.interfaceTag.Config
     {
         Dictionary<string, string> ids;
         Dictionary<string, string> types;

@@ -1,8 +1,8 @@
-﻿using HouseManager4_0.interfaceOfEngine;
+﻿using HouseManager5_0.interfaceOfEngine;
 using System.Threading;
-using static HouseManager4_0.RoomMainF.RoomMain;
+using static HouseManager5_0.RoomMainF.RoomMain;
 
-namespace HouseManager4_0
+namespace HouseManager5_0
 {
     public abstract class Manager : EngineAndManger
     {

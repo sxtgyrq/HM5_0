@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "D4ik8CmWjGPK0om/LsO8FmNZzy9zQgI+Vze3Ryg1+S9Ndm3HgVNCuaDJAbG7HfFt+8MyFUXALoJK3jocSDs8fg==",
+  "dgSpecHash": "NWBB+PtoHyNdF8LHyQklo18SDcNzEnubcIFsTrR4eSgFQTuGOGbabPKZcCuDtDHSY8G05eFyj9NUOLVh8kwglw==",
   "success": true,
-  "projectFilePath": "E:\\Project\\VRPGame\\VRPServer\\TestCore\\TestCore.csproj",
+  "projectFilePath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TestCore\\TestCore.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sxtgy\\.nuget\\packages\\bouncycastle.netcore\\1.8.5\\bouncycastle.netcore.1.8.5.nupkg.sha512",
     "C:\\Users\\sxtgy\\.nuget\\packages\\fontstashsharp.base\\1.0.0\\fontstashsharp.base.1.0.0.nupkg.sha512",

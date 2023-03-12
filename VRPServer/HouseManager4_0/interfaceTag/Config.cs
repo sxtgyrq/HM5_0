@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HouseManager4_0.interfaceTag
+namespace HouseManager5_0.interfaceTag
 {
     interface Config
     {

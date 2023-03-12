@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HouseManager4_0.interfaceOfHM
+namespace HouseManager5_0.interfaceOfHM
 {
     interface Player
     {

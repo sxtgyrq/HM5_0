@@ -1,14 +1,14 @@
-﻿//using HouseManager4_0.interfaceOfHM;
-using HouseManager4_0.RoomMainF;
+﻿//using HouseManager5_0.interfaceOfHM;
+using HouseManager5_0.RoomMainF;
 using System;
 using System.Collections.Generic;
-using static HouseManager4_0.Engine;
+using static HouseManager5_0.Engine;
 using System.Reflection;
 using System.Linq;
-//using HouseManager4_0.interfaceOfHM;
-//using HouseManager4_0.interfaceOfHM;
+//using HouseManager5_0.interfaceOfHM;
+//using HouseManager5_0.interfaceOfHM;
 
-namespace HouseManager4_0
+namespace HouseManager5_0
 {
     public class Manager_GoodsReward : Manager
     {

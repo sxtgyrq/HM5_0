@@ -6369,11 +6369,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Project\\VRPGame\\VRPServer\\ConsoleTestAPP\\ConsoleTestAPP.csproj",
+      "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleTestAPP\\ConsoleTestAPP.csproj",
       "projectName": "ConsoleTestAPP",
-      "projectPath": "E:\\Project\\VRPGame\\VRPServer\\ConsoleTestAPP\\ConsoleTestAPP.csproj",
+      "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleTestAPP\\ConsoleTestAPP.csproj",
       "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-      "outputPath": "E:\\Project\\VRPGame\\VRPServer\\ConsoleTestAPP\\obj\\",
+      "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleTestAPP\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -6395,20 +6395,20 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "E:\\Project\\VRPGame\\VRPServer\\BitCoinTrasfer\\BitCoinTrasfer.csproj": {
-              "projectPath": "E:\\Project\\VRPGame\\VRPServer\\BitCoinTrasfer\\BitCoinTrasfer.csproj"
+            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoinTrasfer\\BitCoinTrasfer.csproj": {
+              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoinTrasfer\\BitCoinTrasfer.csproj"
             },
-            "E:\\Project\\VRPGame\\VRPServer\\BitCoin\\BitCoin.csproj": {
-              "projectPath": "E:\\Project\\VRPGame\\VRPServer\\BitCoin\\BitCoin.csproj"
+            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {
+              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj"
             },
-            "E:\\Project\\VRPGame\\VRPServer\\CityRunFunction\\CityRunFunction.csproj": {
-              "projectPath": "E:\\Project\\VRPGame\\VRPServer\\CityRunFunction\\CityRunFunction.csproj"
+            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj": {
+              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj"
             },
-            "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj": {
-              "projectPath": "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj"
+            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
+              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj"
             },
-            "E:\\Project\\VRPGame\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
-              "projectPath": "E:\\Project\\VRPGame\\VRPServer\\TcpFunction\\TcpFunction.csproj"
+            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
+              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj"
             }
           }
         }

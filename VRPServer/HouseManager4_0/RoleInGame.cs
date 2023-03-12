@@ -1,15 +1,15 @@
 ﻿using CommonClass;
 using CommonClass.databaseModel;
 using Google.Protobuf.WellKnownTypes;
-using HouseManager4_0.interfaceOfEngine;
-using HouseManager4_0.RoomMainF;
+using HouseManager5_0.interfaceOfEngine;
+using HouseManager5_0.RoomMainF;
 using Model;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HouseManager4_0
+namespace HouseManager5_0
 {
     public abstract class RoleInGame : interfaceOfHM.GetFPIndex
     {

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "1nnBuXff+xBYP56cyjhTTN7M6nx78nMybZU+igCBcXX1eSWMKgfKiXCedSDCcyL0nUYP9FbHNJKyv9oIAfXyiQ==",
+  "dgSpecHash": "4pwq/m//fMDzx+8sPsrO+jsx1cwVn7F/pmSJNhOpJGL0SKAQ0mhnLdYMgukhxcBUVuHMmBC/8wU8q/eI6fHJkA==",
   "success": true,
-  "projectFilePath": "E:\\Project\\VRPGame\\VRPServer\\ConsoleAppOtherFunc\\ConsoleAppOtherFunc.csproj",
+  "projectFilePath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleAppOtherFunc\\ConsoleAppOtherFunc.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sxtgy\\.nuget\\packages\\bouncycastle.netcore\\1.8.5\\bouncycastle.netcore.1.8.5.nupkg.sha512",
     "C:\\Users\\sxtgy\\.nuget\\packages\\fontstashsharp.base\\1.0.0\\fontstashsharp.base.1.0.0.nupkg.sha512",

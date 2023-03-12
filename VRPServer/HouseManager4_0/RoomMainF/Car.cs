@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HouseManager4_0.RoomMainF
+namespace HouseManager5_0.RoomMainF
 {
     public partial class RoomMain : interfaceOfHM.Car
     {
 
-        public void SendStateOfCar(Player player, HouseManager4_0.Car car, ref List<string> notifyMsg)
+        public void SendStateOfCar(Player player, HouseManager5_0.Car car, ref List<string> notifyMsg)
         {
             // lock (car.countStamp)
             {

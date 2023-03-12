@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "AjA1SnspfqZszSzimR7Vg7KnPkDkffc8JAHwQ8rpU1/iMEXrQZXt6HRuhi5RhJnlLtpXbJoQMTx5kj208Q2Ikg==",
+  "dgSpecHash": "6JC/KEV70TjVAOPttpRiBtbDb55vhX73ZGwl4Ik7RVu7Bc1Y1jZOLlzb3c8Gs0Rkv5IhSd4hVFFtj+EekgvDsg==",
   "success": true,
-  "projectFilePath": "E:\\Project\\VRPGame\\VRPServer\\HouseManager4_0\\HouseManager4_0.csproj",
+  "projectFilePath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\HouseManager4_0\\HouseManager5_0.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sxtgy\\.nuget\\packages\\bouncycastle.netcore\\1.8.5\\bouncycastle.netcore.1.8.5.nupkg.sha512",
     "C:\\Users\\sxtgy\\.nuget\\packages\\fontstashsharp.base\\1.0.0\\fontstashsharp.base.1.0.0.nupkg.sha512",

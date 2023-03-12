@@ -2634,7 +2634,7 @@
           "bin/placeholder/Geometry.dll": {}
         }
       },
-      "HouseManager4_0/1.0.0": {
+      "HouseManager5_0/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
@@ -2652,10 +2652,10 @@
           "TcpFunction": "1.0.0"
         },
         "compile": {
-          "bin/placeholder/HouseManager4_0.dll": {}
+          "bin/placeholder/HouseManager5_0.dll": {}
         },
         "runtime": {
-          "bin/placeholder/HouseManager4_0.dll": {}
+          "bin/placeholder/HouseManager5_0.dll": {}
         }
       },
       "LogClass/1.0.0": {
@@ -7936,10 +7936,10 @@
       "path": "../Geometry/Geometry.csproj",
       "msbuildProject": "../Geometry/Geometry.csproj"
     },
-    "HouseManager4_0/1.0.0": {
+    "HouseManager5_0/1.0.0": {
       "type": "project",
-      "path": "../HouseManager4_0/HouseManager4_0.csproj",
-      "msbuildProject": "../HouseManager4_0/HouseManager4_0.csproj"
+      "path": "../HouseManager4_0/HouseManager5_0.csproj",
+      "msbuildProject": "../HouseManager4_0/HouseManager5_0.csproj"
     },
     "LogClass/1.0.0": {
       "type": "project",
@@ -7960,7 +7960,7 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
       "BitCoin >= 1.0.0",
-      "HouseManager4_0 >= 1.0.0",
+      "HouseManager5_0 >= 1.0.0",
       "Microsoft.NET.Test.Sdk >= 16.5.0",
       "NUnit >= 3.12.0",
       "NUnit3TestAdapter >= 3.16.1"
@@ -7973,11 +7973,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Project\\VRPGame\\VRPServer\\TestCore\\TestCore.csproj",
+      "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TestCore\\TestCore.csproj",
       "projectName": "TestCore",
-      "projectPath": "E:\\Project\\VRPGame\\VRPServer\\TestCore\\TestCore.csproj",
+      "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TestCore\\TestCore.csproj",
       "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-      "outputPath": "E:\\Project\\VRPGame\\VRPServer\\TestCore\\obj\\",
+      "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TestCore\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -7999,11 +7999,11 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "E:\\Project\\VRPGame\\VRPServer\\BitCoin\\BitCoin.csproj": {
-              "projectPath": "E:\\Project\\VRPGame\\VRPServer\\BitCoin\\BitCoin.csproj"
+            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {
+              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj"
             },
-            "E:\\Project\\VRPGame\\VRPServer\\HouseManager4_0\\HouseManager4_0.csproj": {
-              "projectPath": "E:\\Project\\VRPGame\\VRPServer\\HouseManager4_0\\HouseManager4_0.csproj"
+            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\HouseManager4_0\\HouseManager5_0.csproj": {
+              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\HouseManager4_0\\HouseManager5_0.csproj"
             }
           }
         }
