@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "N60/p0HHkBfY9N8crHBBkTqDFz4PhntW38tRNpFmT8ji6i/K5T2Pv7MvndQu5fyZ+bLkCves1Bb3N8IpeJl+Fw==",
+  "success": true,
+  "projectFilePath": "E:\\Project\\VRPGame\\VRPServer\\AppCheckConnection\\AppCheckConnection.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\sxtgy\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
