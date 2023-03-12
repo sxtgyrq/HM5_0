@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FNpL2qZkuK/v9AOxqeBExWdk4eNHvLaO7Tr0o0yJI/58EcUzy4z8YXb0Fe+rml9kgaoFCLQClonL1dpxoO+yrQ==",
+  "dgSpecHash": "uT5gREdfcDDytuIXYp1zYvYAFqc/OK8x1xIbFDWJwcqnvH29Z4tDfXKI6HabWxS67M0IHcCMKj8dCi9n97STRQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleTestAPP\\ConsoleTestAPP.csproj",
+  "projectFilePath": "E:\\Project\\HouseManager5_0\\VRPServer\\ConsoleTestAPP\\ConsoleTestAPP.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sxtgy\\.nuget\\packages\\fontstashsharp.base\\1.0.0\\fontstashsharp.base.1.0.0.nupkg.sha512",
     "C:\\Users\\sxtgy\\.nuget\\packages\\fontstashsharp.rasterizers.sixlabors.fonts\\1.1.5\\fontstashsharp.rasterizers.sixlabors.fonts.1.1.5.nupkg.sha512",

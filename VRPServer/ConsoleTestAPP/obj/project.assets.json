@@ -6369,11 +6369,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleTestAPP\\ConsoleTestAPP.csproj",
+      "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\ConsoleTestAPP\\ConsoleTestAPP.csproj",
       "projectName": "ConsoleTestAPP",
-      "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleTestAPP\\ConsoleTestAPP.csproj",
+      "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\ConsoleTestAPP\\ConsoleTestAPP.csproj",
       "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleTestAPP\\obj\\",
+      "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\ConsoleTestAPP\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -6395,20 +6395,20 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoinTrasfer\\BitCoinTrasfer.csproj": {
-              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoinTrasfer\\BitCoinTrasfer.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoinTrasfer\\BitCoinTrasfer.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoinTrasfer\\BitCoinTrasfer.csproj"
             },
-            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {
-              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj"
             },
-            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj": {
-              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj"
             },
-            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
-              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj"
             },
-            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
-              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj"
             }
           }
         }

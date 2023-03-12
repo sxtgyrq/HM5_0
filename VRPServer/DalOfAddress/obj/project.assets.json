@@ -6125,11 +6125,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj",
+      "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj",
       "projectName": "DalOfAddress",
-      "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj",
+      "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj",
       "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\obj\\",
+      "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\DalOfAddress\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -6151,8 +6151,8 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
-              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj"
             }
           }
         }

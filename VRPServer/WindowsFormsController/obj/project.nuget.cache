@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "20L1AtxQneHu9AMBSmz1reuMNuQ81//5/EjqQT07LuV/sS7n9OHpZKwxgmeiv9b/RfcQZx7Nlt/IuqahlIw4xA==",
+  "dgSpecHash": "uMKurqO95PCAqXp/Qy8oojrXIqnMjaZ0xm3AzZgl53Ayq6FCTAHW/V2R98B+6yteFIoRST0FJra7R+DL3a1pJw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\WindowsFormsController\\WindowsFormsController.csproj",
+  "projectFilePath": "E:\\Project\\HouseManager5_0\\VRPServer\\WindowsFormsController\\WindowsFormsController.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sxtgy\\.nuget\\packages\\fontstashsharp.base\\1.0.0\\fontstashsharp.base.1.0.0.nupkg.sha512",
     "C:\\Users\\sxtgy\\.nuget\\packages\\fontstashsharp.rasterizers.sixlabors.fonts\\1.1.5\\fontstashsharp.rasterizers.sixlabors.fonts.1.1.5.nupkg.sha512",

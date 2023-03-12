@@ -242,11 +242,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Geometry\\Geometry.csproj",
+      "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\Geometry\\Geometry.csproj",
       "projectName": "Geometry",
-      "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Geometry\\Geometry.csproj",
+      "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\Geometry\\Geometry.csproj",
       "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Geometry\\obj\\",
+      "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\Geometry\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

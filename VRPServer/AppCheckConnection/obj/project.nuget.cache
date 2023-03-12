@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ecqk5lz9BXAQRv1y4YaJPAmbA6HnZMxUSdHkV6MT3ADu2BBDoL3f6/Rg3f4udMND/r9YyYiruXdolr7d2gygjg==",
+  "dgSpecHash": "XQBtSns6HkiXviNjstxjopnhJU4UxfvRF7SGBilSR1ofJfRc+Hr/l7C9x7xcM/HZx0TkkXdBlHWcTezw9srSEw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\AppCheckConnection\\AppCheckConnection.csproj",
+  "projectFilePath": "E:\\Project\\HouseManager5_0\\VRPServer\\AppCheckConnection\\AppCheckConnection.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sxtgy\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
   ],

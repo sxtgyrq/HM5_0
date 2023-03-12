@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "8Q/GgIkbWleTtLIRYe9FirqI30YDO6tmE6AD0ZIOXWym0PbyDJf45gle69LaoEEWjncwPLp7Pp/yuNY8l45OzA==",
+  "dgSpecHash": "A9yjTVEvTmWgjKwXJM5N6a3810RYvlnEP7GdnoTm6JOsXHfidlMTjzXRdZihBUF6PLEcJ0pE0kPAvARaU3ZqMw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\MateWsAndHouse\\MateWsAndHouse.csproj",
+  "projectFilePath": "E:\\Project\\HouseManager5_0\\VRPServer\\MateWsAndHouse\\MateWsAndHouse.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sxtgy\\.nuget\\packages\\fontstashsharp.base\\1.0.0\\fontstashsharp.base.1.0.0.nupkg.sha512",
     "C:\\Users\\sxtgy\\.nuget\\packages\\fontstashsharp.rasterizers.sixlabors.fonts\\1.1.5\\fontstashsharp.rasterizers.sixlabors.fonts.1.1.5.nupkg.sha512",

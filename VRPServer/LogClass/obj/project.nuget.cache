@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lrC/bREsjDgk0RrfwUZdjX4SskGEb3k4LiSdZPFqdcC7GXfNlB1CTErBu9+HQAfCIt8xvfO8GejTgOyXTKaVFQ==",
+  "dgSpecHash": "xTaeuKoNauzLvH+0M40Y8DGzSgFSdt3qvOayU8tD+6DXmzEyy4S0s+s0V6Mjqjc+2rkP/g1Re3D61UK3cV+vXA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\LogClass\\LogClass.csproj",
+  "projectFilePath": "E:\\Project\\HouseManager5_0\\VRPServer\\LogClass\\LogClass.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

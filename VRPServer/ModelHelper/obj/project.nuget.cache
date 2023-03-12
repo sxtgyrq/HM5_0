@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "59X90Yx5qY8AWDmS+KwBA0GUMj0LcnQQcUJYdZFTbz1tff0wmiMZ3eTBeOWmPK3HC/WzauGRABLEpG/vCrKB4Q==",
+  "dgSpecHash": "LPkq/4q8PEcVfPa79J6P43mXeiJFgupekLlLOOhv7m7QW5b+rV3AYr0K1iwlUrvIhwdO1fY0iO/tcYIBLqnSTQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ModelHelper\\ModelHelper.csproj",
+  "projectFilePath": "E:\\Project\\HouseManager5_0\\VRPServer\\ModelHelper\\ModelHelper.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sxtgy\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",
     "C:\\Users\\sxtgy\\.nuget\\packages\\microsoft.win32.systemevents\\4.5.0\\microsoft.win32.systemevents.4.5.0.nupkg.sha512",

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "x6Jnb08m4izvqP2pP0TO4KglAlbuAMquXwTvI6umQ7rhbZh30pyfw9cM89Px7MIC8+HG/VGSRuu0zA6VW7oWOw==",
+  "dgSpecHash": "nn0JjitAgiXA8N0a/1g+6PEgjzKa65c2W+xBBvrbmRVnTGu72+XfWwm8COCtiJZQqZWMNvIqYpyjBf0wnLSdsw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\MarketConsoleApp\\MarketConsoleApp.csproj",
+  "projectFilePath": "E:\\Project\\HouseManager5_0\\VRPServer\\MarketConsoleApp\\MarketConsoleApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sxtgy\\.nuget\\packages\\bouncycastle.netcore\\1.8.5\\bouncycastle.netcore.1.8.5.nupkg.sha512",
     "C:\\Users\\sxtgy\\.nuget\\packages\\fontstashsharp.base\\1.0.0\\fontstashsharp.base.1.0.0.nupkg.sha512",

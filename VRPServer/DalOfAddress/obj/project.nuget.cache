@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "26aELvvhUpw6+cANi/w8zR7Lq0j+py8pPwdec1Y+TlZsfvWPmAi/Dih6txAQtGfGf+tXs0oFnQYxDl3RI5AXuQ==",
+  "dgSpecHash": "5MnLBTrDSvapz3Mklv+rzn9MHapBI5kywSHaVPedIZKvB5eMF8sz9JCRolaLMnmqSefeRTt/XOPuHZJIcMDrmw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj",
+  "projectFilePath": "E:\\Project\\HouseManager5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sxtgy\\.nuget\\packages\\bouncycastle.netcore\\1.8.5\\bouncycastle.netcore.1.8.5.nupkg.sha512",
     "C:\\Users\\sxtgy\\.nuget\\packages\\fontstashsharp.base\\1.0.0\\fontstashsharp.base.1.0.0.nupkg.sha512",

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\MarketConsoleApp\\MarketConsoleApp.csproj": {}
+    "E:\\Project\\HouseManager5_0\\VRPServer\\MarketConsoleApp\\MarketConsoleApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {
+    "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj",
+        "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj",
         "projectName": "BitCoin",
-        "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj",
+        "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\obj\\",
+        "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -78,14 +78,14 @@
         }
       }
     },
-    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
+    "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj",
+        "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj",
         "projectName": "CommonClass",
-        "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj",
+        "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\obj\\",
+        "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -107,8 +107,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj": {
-                "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj"
               }
             }
           }
@@ -164,14 +164,14 @@
         }
       }
     },
-    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleBitcoinChainApp\\ConsoleBitcoinChainApp.csproj": {
+    "E:\\Project\\HouseManager5_0\\VRPServer\\ConsoleBitcoinChainApp\\ConsoleBitcoinChainApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleBitcoinChainApp\\ConsoleBitcoinChainApp.csproj",
+        "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\ConsoleBitcoinChainApp\\ConsoleBitcoinChainApp.csproj",
         "projectName": "ConsoleBitcoinChainApp",
-        "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleBitcoinChainApp\\ConsoleBitcoinChainApp.csproj",
+        "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\ConsoleBitcoinChainApp\\ConsoleBitcoinChainApp.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleBitcoinChainApp\\obj\\",
+        "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\ConsoleBitcoinChainApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -193,14 +193,14 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {
-                "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj"
               },
-              "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj": {
-                "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj"
               },
-              "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
-                "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj"
               }
             }
           }
@@ -234,14 +234,14 @@
         }
       }
     },
-    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj": {
+    "E:\\Project\\HouseManager5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj",
+        "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj",
         "projectName": "DalOfAddress",
-        "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj",
+        "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\obj\\",
+        "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\DalOfAddress\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -263,8 +263,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
-                "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj"
               }
             }
           }
@@ -304,14 +304,14 @@
         }
       }
     },
-    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\MarketConsoleApp\\MarketConsoleApp.csproj": {
+    "E:\\Project\\HouseManager5_0\\VRPServer\\MarketConsoleApp\\MarketConsoleApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\MarketConsoleApp\\MarketConsoleApp.csproj",
+        "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\MarketConsoleApp\\MarketConsoleApp.csproj",
         "projectName": "MarketConsoleApp",
-        "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\MarketConsoleApp\\MarketConsoleApp.csproj",
+        "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\MarketConsoleApp\\MarketConsoleApp.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\MarketConsoleApp\\obj\\",
+        "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\MarketConsoleApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -333,17 +333,17 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {
-                "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj"
               },
-              "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleBitcoinChainApp\\ConsoleBitcoinChainApp.csproj": {
-                "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleBitcoinChainApp\\ConsoleBitcoinChainApp.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\ConsoleBitcoinChainApp\\ConsoleBitcoinChainApp.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\ConsoleBitcoinChainApp\\ConsoleBitcoinChainApp.csproj"
               },
-              "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj": {
-                "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj"
               },
-              "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
-                "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj"
               }
             }
           }
@@ -383,14 +383,14 @@
         }
       }
     },
-    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj": {
+    "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj",
+        "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj",
         "projectName": "Model",
-        "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj",
+        "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\obj\\",
+        "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -443,14 +443,14 @@
         }
       }
     },
-    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
+    "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj",
+        "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj",
         "projectName": "TcpFunction",
-        "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj",
+        "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\obj\\",
+        "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -472,8 +472,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
-                "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj"
               }
             }
           }

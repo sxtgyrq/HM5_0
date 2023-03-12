@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cMDoJiRx3cdLs6gtnyee7Gvi2WxMHWvYRLJf/lk98xEHi0ZKHML1PvY1jD3R9xBUpS18zDCuoVpZGcSuGADTgg==",
+  "dgSpecHash": "/jMivmUz+MeUAPhULeufMwoP2ijfnybvmiYjtwghOGfJsXIdGRlFqfTDzrLw9hwDNVX1Rl9XI5bVh0H4ACzisg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj",
+  "projectFilePath": "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sxtgy\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\3.1.3\\microsoft.aspnetcore.jsonpatch.3.1.3.nupkg.sha512",
     "C:\\Users\\sxtgy\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\3.1.3\\microsoft.aspnetcore.mvc.newtonsoftjson.3.1.3.nupkg.sha512",

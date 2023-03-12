@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {}
+    "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {
+    "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj",
+        "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj",
         "projectName": "BitCoin",
-        "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj",
+        "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\obj\\",
+        "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

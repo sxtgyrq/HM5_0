@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunServerRouteApp\\CityRunServerRouteApp.csproj": {}
+    "E:\\Project\\HouseManager5_0\\VRPServer\\CityRunServerRouteApp\\CityRunServerRouteApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj": {
+    "E:\\Project\\HouseManager5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj",
+        "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj",
         "projectName": "CityRunFunction",
-        "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj",
+        "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunFunction\\obj\\",
+        "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CityRunFunction\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -64,14 +64,14 @@
         }
       }
     },
-    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunServerRouteApp\\CityRunServerRouteApp.csproj": {
+    "E:\\Project\\HouseManager5_0\\VRPServer\\CityRunServerRouteApp\\CityRunServerRouteApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunServerRouteApp\\CityRunServerRouteApp.csproj",
+        "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\CityRunServerRouteApp\\CityRunServerRouteApp.csproj",
         "projectName": "CityRunServerRouteApp",
-        "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunServerRouteApp\\CityRunServerRouteApp.csproj",
+        "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CityRunServerRouteApp\\CityRunServerRouteApp.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunServerRouteApp\\obj\\",
+        "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CityRunServerRouteApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -93,11 +93,11 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj": {
-                "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj"
               },
-              "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj": {
-                "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj"
               }
             }
           }
@@ -131,14 +131,14 @@
         }
       }
     },
-    "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj": {
+    "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj",
+        "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj",
         "projectName": "Model",
-        "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj",
+        "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\obj\\",
+        "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

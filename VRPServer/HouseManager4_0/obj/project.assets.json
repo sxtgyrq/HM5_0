@@ -7292,11 +7292,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\HouseManager4_0\\HouseManager5_0.csproj",
+      "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\HouseManager4_0\\HouseManager5_0.csproj",
       "projectName": "HouseManager5_0",
-      "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\HouseManager4_0\\HouseManager5_0.csproj",
+      "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\HouseManager4_0\\HouseManager5_0.csproj",
       "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\HouseManager4_0\\obj\\",
+      "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\HouseManager4_0\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -7318,32 +7318,32 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {
-              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\BitCoin\\BitCoin.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\BitCoin\\BitCoin.csproj"
             },
-            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj": {
-              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CityRunFunction\\CityRunFunction.csproj"
             },
-            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
-              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\CommonClass\\CommonClass.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj"
             },
-            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleBitcoinChainApp\\ConsoleBitcoinChainApp.csproj": {
-              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\ConsoleBitcoinChainApp\\ConsoleBitcoinChainApp.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\ConsoleBitcoinChainApp\\ConsoleBitcoinChainApp.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\ConsoleBitcoinChainApp\\ConsoleBitcoinChainApp.csproj"
             },
-            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj": {
-              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\DalOfAddress\\DalOfAddress.csproj"
             },
-            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Geometry\\Geometry.csproj": {
-              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Geometry\\Geometry.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\Geometry\\Geometry.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\Geometry\\Geometry.csproj"
             },
-            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\LogClass\\LogClass.csproj": {
-              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\LogClass\\LogClass.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\LogClass\\LogClass.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\LogClass\\LogClass.csproj"
             },
-            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj": {
-              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\Model\\Model.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj"
             },
-            "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
-              "projectPath": "C:\\Users\\sxtgy\\Source\\Repos\\HM5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj"
             }
           }
         }
