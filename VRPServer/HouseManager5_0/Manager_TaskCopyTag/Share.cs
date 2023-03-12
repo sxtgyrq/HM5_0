@@ -128,19 +128,19 @@ namespace HouseManager5_0
 
             }
 
-            void TaskCopyCallF.DiamondSell(taskcopy item, Player player, Action<RoleInGame, string> webNotify)
+            void TaskCopyCallF.DiamondSell(taskcopy item, Player player, Action<Player, string> webNotify)
             {
             }
 
-            void TaskCopyCallF.DoCollect(taskcopy Item, Player player, Action<RoleInGame, string> WebNotify)
+            void TaskCopyCallF.DoCollect(taskcopy Item, Player player, Action<Player, string> WebNotify)
             {
             }
 
-            void TaskCopyCallF.DriverSelected(taskcopy item, Player player, Action<RoleInGame, string> webNotify)
+            void TaskCopyCallF.DriverSelected(taskcopy item, Player player, Action<Player, string> webNotify)
             {
             }
 
-            void TaskCopyCallF.GetRewardFromBuildingF(taskcopy item, Player player, Action<RoleInGame, string> webNotify)
+            void TaskCopyCallF.GetRewardFromBuildingF(taskcopy item, Player player, Action<Player, string> webNotify)
             {
             }
 
@@ -149,27 +149,27 @@ namespace HouseManager5_0
                 return this.TaskName;
             }
 
-            void TaskCopyCallF.MagicReleased(taskcopy item, Player player, Action<RoleInGame, string> webNotify)
+            void TaskCopyCallF.MagicReleased(taskcopy item, Player player, Action<Player, string> webNotify)
             {
             }
 
-            void TaskCopyCallF.MoneySet(taskcopy item, Player player, Action<RoleInGame, string> webNotify)
+            void TaskCopyCallF.MoneySet(taskcopy item, Player player, Action<Player, string> webNotify)
             {
             }
 
-            void TaskCopyCallF.OrderToUpdateLevel(taskcopy item, Player player, Action<RoleInGame, string> webNotify)
+            void TaskCopyCallF.OrderToUpdateLevel(taskcopy item, Player player, Action<Player, string> webNotify)
             {
             }
 
-            void TaskCopyCallF.TakeApartF(taskcopy item, Player player, Action<RoleInGame, string> webNotify)
+            void TaskCopyCallF.TakeApartF(taskcopy item, Player player, Action<Player, string> webNotify)
             {
             }
 
-            void TaskCopyCallF.TradeCoinF(string addrBussiness, string addrTo, long passCoin, taskcopy item, Player[] players, Action<RoleInGame, string> webNotify)
+            void TaskCopyCallF.TradeCoinF(string addrBussiness, string addrTo, long passCoin, taskcopy item, Player[] players, Action<Player, string> webNotify)
             {
             }
 
-            void TaskCopyCallF.UseDiamondSuccess(taskcopy item, Player player, Action<RoleInGame, string> webNotify)
+            void TaskCopyCallF.UseDiamondSuccess(taskcopy item, Player player, Action<Player, string> webNotify)
             {
             }
         }

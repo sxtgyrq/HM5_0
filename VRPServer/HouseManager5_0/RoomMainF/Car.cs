@@ -27,94 +27,99 @@ namespace HouseManager5_0.RoomMainF
             }
         }
 
-        public void SetAnimateStepChanged(RoleInGame player, Car car, ref List<string> notifyMsg)
+        public void SetAnimateStepChanged(Player player, Car car, ref List<string> notifyMsg)
         {
-            lock (this.PlayerLock)
-            {
-                var key = player.Key;
-                var players = getGetAllRoles();
-                for (var i = 0; i < players.Count; i++)
-                {
-                    if (players[i].Key == key)
-                    {
+            throw new Exception();
 
-                    }
-                    else
-                    {
-                        {
-                            /*
-                             * 告诉自己，场景中有哪些别人的车！
-                             * 告诉别人，场景中有哪些车是我的的！
-                             */
-                            {
-                                var self = this._Players[key];
-                                var other = players[i];
-                                if (self.playerType == RoleInGame.PlayerType.player)
-                                    addPlayerCarRecord((Player)self, other, ref notifyMsg);
+            //lock (this.PlayerLock)
+            //{
+            //    var key = player.Key;
+            //    var players = getGetAllRoles();
+            //    for (var i = 0; i < players.Count; i++)
+            //    {
+            //        if (players[i].Key == key)
+            //        {
 
-                            }
-                            {
-                                var self = players[i];
-                                var other = this._Players[key];
-                                if (self.playerType == RoleInGame.PlayerType.player)
-                                    addPlayerCarRecord((Player)self, other, ref notifyMsg);
-                            }
+            //        }
+            //        else
+            //        {
+            //            {
+            //                /*
+            //                 * 告诉自己，场景中有哪些别人的车！
+            //                 * 告诉别人，场景中有哪些车是我的的！
+            //                 */
+            //                {
+            //                    var self = this._Players[key];
+            //                    var other = players[i];
+            //                    if (self.playerType == Player.PlayerType.player)
+            //                        addPlayerCarRecord((Player)self, other, ref notifyMsg);
 
-                        }
-                    }
-                }
-                {
-                    var self = this._Players[key];
-                    if (self.playerType == RoleInGame.PlayerType.player)
-                        addSelfCarSingleRecord((Player)self, car, ref notifyMsg);
-                }
-            }
+            //                }
+            //                {
+            //                    var self = players[i];
+            //                    var other = this._Players[key];
+            //                    if (self.playerType == Player.PlayerType.player)
+            //                        addPlayerCarRecord((Player)self, other, ref notifyMsg);
+            //                }
+
+            //            }
+            //        }
+            //    }
+            //    {
+            //        var self = this._Players[key];
+            //        if (self.playerType == Player.PlayerType.player)
+            //            addSelfCarSingleRecord((Player)self, car, ref notifyMsg);
+            //    }
+            //}
         }
-        public void SetAnimateChanged(RoleInGame player, Car car, ref List<string> notifyMsg)
+        public void SetAnimateChanged(Player player, Car car, ref List<string> notifyMsg)
         {
-            lock (this.PlayerLock)
-            {
-                var key = player.Key;
-                var players = getGetAllRoles();
-                for (var i = 0; i < players.Count; i++)
-                {
-                    if (players[i].Key == key)
-                    {
+            //throw new Exception();
+            var group = player.Group;
+            group.SetAnimateChanged(player, car, ref notifyMsg);
+            //lock (this.PlayerLock)
+            //{
+            //    var key = player.Key;
+            //    var players = getGetAllRoles();
+            //    for (var i = 0; i < players.Count; i++)
+            //    {
+            //        if (players[i].Key == key)
+            //        {
 
-                    }
-                    else
-                    {
-                        {
-                            /*
-                             * 告诉自己，场景中有哪些别人的车！
-                             * 告诉别人，场景中有哪些车是我的的！
-                             */
-                            {
-                                var self = this._Players[key];
-                                var other = players[i];
-                                if (self.playerType == RoleInGame.PlayerType.player)
-                                    addPlayerCarRecord((Player)self, other, ref notifyMsg);
+            //        }
+            //        else
+            //        {
+            //            {
+            //                /*
+            //                 * 告诉自己，场景中有哪些别人的车！
+            //                 * 告诉别人，场景中有哪些车是我的的！
+            //                 */
+            //                {
+            //                    var self = this._Players[key];
+            //                    var other = players[i];
+            //                    if (self.playerType == Player.PlayerType.player)
+            //                        addPlayerCarRecord((Player)self, other, ref notifyMsg);
 
-                            }
-                            {
-                                var self = players[i];
-                                var other = this._Players[key];
-                                if (self.playerType == RoleInGame.PlayerType.player)
-                                    addPlayerCarRecord((Player)self, other, ref notifyMsg);
-                            }
+            //                }
+            //                {
+            //                    var self = players[i];
+            //                    var other = this._Players[key];
+            //                    if (self.playerType == Player.PlayerType.player)
+            //                        addPlayerCarRecord((Player)self, other, ref notifyMsg);
+            //                }
 
-                        }
-                    }
-                }
-                {
-                    var self = this._Players[key];
-                    if (self.playerType == RoleInGame.PlayerType.player)
-                        addSelfCarSingleRecord((Player)self, car, ref notifyMsg);
-                }
-            }
+            //            }
+            //        }
+            //    }
+            //    {
+            //        var self = this._Players[key];
+            //        if (self.playerType == Player.PlayerType.player)
+            //            addSelfCarSingleRecord((Player)self, car, ref notifyMsg);
+            //    }
+            //}
         }
 
-        private void addPlayerCarRecord_bak(Player self, RoleInGame other, ref List<string> msgsWithUrl)
+        private void addPlayerCarRecord_bak(Player self, Player other, ref List<string> msgsWithUrl)
         {
             //这是发送给self的消息
             //throw new NotImplementedException(); 
@@ -175,7 +180,7 @@ namespace HouseManager5_0.RoomMainF
             }
 */
         }
-        private void addPlayerCarRecord(Player self, RoleInGame other, ref List<string> msgsWithUrl)
+        public void addPlayerCarRecord(Player self, Player other, ref List<string> msgsWithUrl)
         {
             //这是发送给self的消息
             //throw new NotImplementedException(); 
@@ -390,47 +395,16 @@ namespace HouseManager5_0.RoomMainF
         /// </summary>
         /// <param name="key"></param>
         /// <param name="msgsWithUrl"></param>
-        private void GetAllCarInfomationsWhenInitialize(string key, ref List<string> msgsWithUrl)
+        private void GetAllCarInfomationsWhenInitialize(string key, string groupKey, ref List<string> msgsWithUrl)
         {
-            var players = getGetAllRoles();
-            for (var i = 0; i < players.Count; i++)
+            if (this._Groups.ContainsKey(groupKey))
             {
-                if (players[i].Key == key)
-                {
-
-                }
-                else
-                {
-                    {
-                        /*
-                         * 告诉自己，场景中有哪些别人的车！
-                         * 告诉别人，场景中有哪些车是我的的！
-                         */
-                        {
-                            var self = this._Players[key];
-                            var other = players[i];
-                            if (self.playerType == RoleInGame.PlayerType.player)
-                                addPlayerCarRecord((Player)self, other, ref msgsWithUrl);
-
-                        }
-                        {
-                            var self = players[i];
-                            var other = this._Players[key];
-                            if (self.playerType == RoleInGame.PlayerType.player)
-                                addPlayerCarRecord((Player)self, other, ref msgsWithUrl);
-                        }
-
-                    }
-                }
-            }
-            {
-                var self = this._Players[key];
-                if (self.playerType == RoleInGame.PlayerType.player)
-                    addSelfCarRecord((Player)self, ref msgsWithUrl);
+                var group = this._Groups[groupKey];
+                group.GetAllCarInfomationsWhenInitialize(key, ref msgsWithUrl);
             }
         }
 
-        private void addSelfCarRecord(Player self, ref List<string> msgsWithUrl)
+        public void addSelfCarRecord(Player self, ref List<string> msgsWithUrl)
         {
             //  for (var indexOfCar = 0; indexOfCar < 5; indexOfCar++)
             if (self.getCar().animateObj == null)
@@ -468,18 +442,25 @@ namespace HouseManager5_0.RoomMainF
             }
         }
 
-        private void sendCarStateAndPurpose(string key)
+        private void sendCarStateAndPurpose(string key, string groupKey)
         {
-            List<string> notifyMsg = new List<string>();
-            var player = this._Players[key];
+            if (this._Groups.ContainsKey(groupKey))
             {
-                var car = this._Players[key].getCar();
-                if (player.playerType == RoleInGame.PlayerType.player)
-                    SendStateOfCar((Player)player, car, ref notifyMsg);
-                if (player.playerType == RoleInGame.PlayerType.player)
-                    SendPurposeOfCar((Player)player, car, ref notifyMsg);
+                var group = this._Groups[groupKey];
+                group.sendCarStateAndPurpose(key);
             }
-            Startup.sendSeveralMsgs(notifyMsg);
+            //throw new Exception("");
+
+            //List<string> notifyMsg = new List<string>();
+            //var player = this._Players[key];
+            //{
+            //    var car = this._Players[key].getCar();
+            //    if (player.playerType == Player.PlayerType.player)
+            //        SendStateOfCar((Player)player, car, ref notifyMsg);
+            //    if (player.playerType == Player.PlayerType.player)
+            //        SendPurposeOfCar((Player)player, car, ref notifyMsg);
+            //}
+            //Startup.sendSeveralMsgs(notifyMsg);
         }
 
         void SendPurposeOfCar(Player player, Car car, ref List<string> notifyMsg)

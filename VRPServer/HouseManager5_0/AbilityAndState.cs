@@ -8,7 +8,7 @@ namespace HouseManager5_0
 {
     public class AbilityAndState
     {
-        RoleInGame role;
+        Player role;
         Dictionary<string, List<DateTime>> Data { get; set; }
         public int[] getDataCount(string key)
         {
@@ -28,7 +28,7 @@ namespace HouseManager5_0
             }
         }
 
-        public void AbilityAdd(string pType, int count, RoleInGame role, Car car, ref List<string> notifyMsg)
+        public void AbilityAdd(string pType, int count, Player role, Car car, ref List<string> notifyMsg)
         {
             if (this.Data.ContainsKey(pType))
             {
@@ -41,41 +41,41 @@ namespace HouseManager5_0
 
                     case "mile":
                         {
-                            if (role.playerType == RoleInGame.PlayerType.player)
+                            if (role.playerType == Player.PlayerType.player)
                             {
                                 var player = (Player)role;
                                 this.MileChanged(player, car, ref notifyMsg, pType);
-                                ChangeTheUnder(role.Key, this.MileChanged, ref notifyMsg, pType);
+                                ChangeTheUnder(player, this.MileChanged, ref notifyMsg, pType);
 
                             }
 
                         }; break;
-                    case "business":
-                        {
-                            if (role.playerType == RoleInGame.PlayerType.player)
-                            {
-                                var player = (Player)role;
-                                this.BusinessChanged(player, car, ref notifyMsg, pType);
-                                ChangeTheUnder(role.Key, this.BusinessChanged, ref notifyMsg, pType);
-                            }
-                        }; break;
+                    //case "business":
+                    //    {
+                    //        if (role.playerType == Player.PlayerType.player)
+                    //        {
+                    //            var player = (Player)role;
+                    //            this.BusinessChanged(player, car, ref notifyMsg, pType);
+                    //            ChangeTheUnder(player, this.BusinessChanged, ref notifyMsg, pType);
+                    //        }
+                    //    }; break;
                     case "volume":
                         {
-                            if (role.playerType == RoleInGame.PlayerType.player)
+                            if (role.playerType == Player.PlayerType.player)
                             {
                                 var player = (Player)role;
                                 this.VolumeChanged(player, car, ref notifyMsg, pType);
-                                ChangeTheUnder(role.Key, this.VolumeChanged, ref notifyMsg, pType);
+                                ChangeTheUnder(player, this.VolumeChanged, ref notifyMsg, pType);
                             }
 
                         }; break;
                     case "speed":
                         {
-                            if (role.playerType == RoleInGame.PlayerType.player)
+                            if (role.playerType == Player.PlayerType.player)
                             {
                                 var player = (Player)role;
                                 this.SpeedChanged(player, car, ref notifyMsg, pType);
-                                ChangeTheUnder(role.Key, this.SpeedChanged, ref notifyMsg, pType);
+                                ChangeTheUnder(player, this.SpeedChanged, ref notifyMsg, pType);
                             }
 
                         }; break;
@@ -89,11 +89,13 @@ namespace HouseManager5_0
         /// <param name="mileChangedF"></param>
         /// <param name="notifyMsg"></param>
         /// <param name="pType"></param>
-        static void ChangeTheUnder(string key, AbilityChangedF mileChangedF, ref List<string> notifyMsg, string pType)
+        static void ChangeTheUnder(Player player, AbilityChangedF mileChangedF, ref List<string> notifyMsg, string pType)
         {
-            foreach (var item in Program.rm._Players)
+
+            string key = player.Key;
+            foreach (var item in player.Group._PlayerInGroup)
             {
-                if (item.Value.playerType == RoleInGame.PlayerType.player)
+                if (item.Value.playerType == Player.PlayerType.player)
                 {
                     if (item.Value.TheLargestHolderKey == key && item.Value.Key != key)
                     {
@@ -103,7 +105,7 @@ namespace HouseManager5_0
             }
         }
 
-        internal void AbilityClear(string pType, RoleInGame role, Car car, ref List<string> notifyMsg)
+        internal void AbilityClear(string pType, Player role, Car car, ref List<string> notifyMsg)
         {
             if (this.Data.ContainsKey(pType))
             {
@@ -114,40 +116,40 @@ namespace HouseManager5_0
                     {
                         case "mile":
                             {
-                                if (role.playerType == RoleInGame.PlayerType.player)
+                                if (role.playerType == Player.PlayerType.player)
                                 {
                                     var player = (Player)role;
                                     this.MileChanged(player, car, ref notifyMsg, pType);
-                                    ChangeTheUnder(role.Key, this.MileChanged, ref notifyMsg, pType);
+                                    ChangeTheUnder(player, this.MileChanged, ref notifyMsg, pType);
                                 }
 
                             }; break;
-                        case "business":
-                            {
-                                if (role.playerType == RoleInGame.PlayerType.player)
-                                {
-                                    var player = (Player)role;
-                                    this.BusinessChanged(player, car, ref notifyMsg, pType);
-                                    ChangeTheUnder(role.Key, this.BusinessChanged, ref notifyMsg, pType);
-                                }
-                            }; break;
+                        //case "business":
+                        //    {
+                        //        if (role.playerType == Player.PlayerType.player)
+                        //        {
+                        //            var player = (Player)role;
+                        //            this.BusinessChanged(player, car, ref notifyMsg, pType);
+                        //            ChangeTheUnder(player, this.BusinessChanged, ref notifyMsg, pType);
+                        //        }
+                        //    }; break;
                         case "volume":
                             {
-                                if (role.playerType == RoleInGame.PlayerType.player)
+                                if (role.playerType == Player.PlayerType.player)
                                 {
                                     var player = (Player)role;
                                     this.VolumeChanged(player, car, ref notifyMsg, pType);
-                                    ChangeTheUnder(role.Key, this.VolumeChanged, ref notifyMsg, pType);
+                                    ChangeTheUnder(player, this.VolumeChanged, ref notifyMsg, pType);
                                 }
 
                             }; break;
                         case "speed":
                             {
-                                if (role.playerType == RoleInGame.PlayerType.player)
+                                if (role.playerType == Player.PlayerType.player)
                                 {
                                     var player = (Player)role;
                                     this.SpeedChanged(player, car, ref notifyMsg, pType);
-                                    ChangeTheUnder(role.Key, this.SpeedChanged, ref notifyMsg, pType);
+                                    ChangeTheUnder(player, this.SpeedChanged, ref notifyMsg, pType);
                                 }
 
                             }; break;
@@ -168,11 +170,11 @@ namespace HouseManager5_0
         public string diamondInCar { get { return this._diamondInCar; } }
 
 
-        public void setDiamondInCar(string diamondInCarInput, RoleInGame role, Car car, ref List<string> notifyMsg)
+        public void setDiamondInCar(string diamondInCarInput, Player role, Car car, ref List<string> notifyMsg)
         {
             bool changed = this._diamondInCar != diamondInCarInput;
             this._diamondInCar = diamondInCarInput;
-            if (role.playerType == RoleInGame.PlayerType.player && changed)
+            if (role.playerType == Player.PlayerType.player && changed)
                 this.DiamondInCarChanged((Player)role, car, ref notifyMsg, this.diamondInCar);
         }
 
@@ -228,9 +230,9 @@ namespace HouseManager5_0
             //    this._costVolume = value;
             //}
         }
-        public AbilityAndState(RoleInGame roleInGame)
+        public AbilityAndState(Player Player)
         {
-            this.role = roleInGame;
+            this.role = Player;
             this.CreateTime = DateTime.Now;
             this.Data = new Dictionary<string, List<DateTime>>()
             {
@@ -262,7 +264,7 @@ namespace HouseManager5_0
         /// <summary>
         /// 刷新时，会更新宝石状况（diamondInCar=""）。
         /// </summary>
-        public void Refresh(RoleInGame player, Car car, ref List<string> notifyMsg)
+        public void Refresh(Player player, Car car, ref List<string> notifyMsg)
         {
 
             //this.Data["mile"].RemoveAll(item => (item - this.CreateTime).TotalMinutes > 120);
@@ -272,16 +274,16 @@ namespace HouseManager5_0
             this._costMiles = 0;
             this._costBusiness = 0;
             this._costVolume = 0;
-            if (player.playerType == RoleInGame.PlayerType.player)
+            if (player.playerType == Player.PlayerType.player)
             {
                 MileChanged((Player)player, car, ref notifyMsg, "mile");
-                BusinessChanged((Player)player, car, ref notifyMsg, "business");
+                //   BusinessChanged((Player)player, car, ref notifyMsg, "business");
                 VolumeChanged((Player)player, car, ref notifyMsg, "volume");
                 SpeedChanged((Player)player, car, ref notifyMsg, "speed");
             }
             this.setCostMiles(0, player, car, ref notifyMsg);
             // this.costMiles = 0;
-            this.setCostBusiness(0, player, car, ref notifyMsg);
+            //this.setCostBusiness(0, player, car, ref notifyMsg);
             //this.set
             //this.costBusiness = 0;
             this.setCostVolume(0, player, car, ref notifyMsg);
@@ -292,12 +294,12 @@ namespace HouseManager5_0
             //   this.subsidize = 0;
         }
 
-        public void RefreshAfterDriverArrived(RoleInGame player, Car car, ref List<string> notifyMsg)
+        public void RefreshAfterDriverArrived(Player player, Car car, ref List<string> notifyMsg)
         {
-            if (player.playerType == RoleInGame.PlayerType.player)
+            if (player.playerType == Player.PlayerType.player)
             {
                 MileChanged((Player)player, car, ref notifyMsg, "mile");
-                BusinessChanged((Player)player, car, ref notifyMsg, "business");
+                //  BusinessChanged((Player)player, car, ref notifyMsg, "business");
                 VolumeChanged((Player)player, car, ref notifyMsg, "volume");
                 SpeedChanged((Player)player, car, ref notifyMsg, "speed");
             }
@@ -305,37 +307,37 @@ namespace HouseManager5_0
 
         public delegate void AbilityChangedF(Player player, Car car, ref List<string> notifyMsgs, string pType);
         public AbilityChangedF MileChanged;
-        public void setCostMiles(long costMileInput, RoleInGame role, Car car, ref List<string> notifyMsg)
+        public void setCostMiles(long costMileInput, Player role, Car car, ref List<string> notifyMsg)
         {
             this._costMiles = costMileInput;
-            if (role.playerType == RoleInGame.PlayerType.player)
+            if (role.playerType == Player.PlayerType.player)
             {
                 MileChanged((Player)role, car, ref notifyMsg, "mile");
             }
         }
 
-        public AbilityChangedF BusinessChanged;
-        public void setCostBusiness(long costBusinessCostInput, RoleInGame player, Car car, ref List<string> notifyMsg)
-        {
-            this._costBusiness = costBusinessCostInput;
-            if (player.playerType == RoleInGame.PlayerType.player)
-            {
-                BusinessChanged((Player)player, car, ref notifyMsg, "business");
-            }
-        }
+        //public AbilityChangedF BusinessChanged;
+        //public void setCostBusiness(long costBusinessCostInput, Player player, Car car, ref List<string> notifyMsg)
+        //{
+        //    this._costBusiness = costBusinessCostInput;
+        //    if (player.playerType == Player.PlayerType.player)
+        //    {
+        //        //  BusinessChanged((Player)player, car, ref notifyMsg, "business");
+        //    }
+        //}
 
         public AbilityChangedF VolumeChanged;
-        public void setCostVolume(long costVolumeCostInput, RoleInGame role, Car car, ref List<string> notifyMsg)
+        public void setCostVolume(long costVolumeCostInput, Player role, Car car, ref List<string> notifyMsg)
         {
             this._costVolume = costVolumeCostInput;
-            if (role.playerType == RoleInGame.PlayerType.player)
+            if (role.playerType == Player.PlayerType.player)
                 VolumeChanged((Player)role, car, ref notifyMsg, "volume");
         }
 
         public AbilityChangedF SpeedChanged;
         internal Driver driver = null;
 
-        public delegate void DriverSelected(RoleInGame player, Car car, ref List<string> notifyMsgs);
+        public delegate void DriverSelected(Player player, Car car, ref List<string> notifyMsgs);
 
         public DriverSelected driverSelected;
         //internal delegate void AbilityChanged(Player player, Car car, ref List<string> notifyMsgs, string pType);
@@ -343,7 +345,7 @@ namespace HouseManager5_0
         /// 依次用辅助、business、volume来支付。
         /// </summary>
         /// <param name="needMoney"></param>
-        internal void payForPromote(long needMoney, RoleInGame player, Car car, ref List<string> notifyMsgs)
+        internal void payForPromote(long needMoney, Player player, Car car, ref List<string> notifyMsgs)
         {
             //var pay1 = needMoney;// Math.Min(needMoney, this.subsidize);
             // this.subsidize -= pay1;
@@ -361,7 +363,7 @@ namespace HouseManager5_0
             var costBusinessNew = this.costBusiness - pay2;
             if (costBusinessNew != this.costBusiness)
             {
-                this.setCostBusiness(costBusinessNew, player, car, ref notifyMsgs);
+                //  this.setCostBusiness(costBusinessNew, player, car, ref notifyMsgs);
             }
             needMoney -= pay2;
             if (pay2 > 0)
@@ -393,13 +395,13 @@ namespace HouseManager5_0
                 if (!string.IsNullOrEmpty(role.TheLargestHolderKey))
                 {
                     // this.role.rm
-                    if (this.role.rm._Players.ContainsKey(role.TheLargestHolderKey))
+                    if ((this.role).Group._PlayerInGroup.ContainsKey(role.TheLargestHolderKey))
                     {
-                        if (this.role.rm._Players[role.TheLargestHolderKey].playerType == RoleInGame.PlayerType.player)
+                        if (this.role.Group._PlayerInGroup[role.TheLargestHolderKey].playerType == Player.PlayerType.player)
                         {
-                            if (!this.role.rm._Players[role.TheLargestHolderKey].Bust)
+                            if (!this.role.Group._PlayerInGroup[role.TheLargestHolderKey].Bust)
                             {
-                                return Math.Max(selfValue, this.role.rm._Players[role.TheLargestHolderKey].getCar().ability.Data["mile"].Count * 7 + 350);
+                                return Math.Max(selfValue, this.role.Group._PlayerInGroup[role.TheLargestHolderKey].getCar().ability.Data["mile"].Count * 7 + 350);
                             }
                         }
                     }
@@ -446,13 +448,13 @@ namespace HouseManager5_0
                     var selfValue = (this.Data["business"].Count * 500 + 10000);
                     if (!string.IsNullOrEmpty(role.TheLargestHolderKey))
                     {
-                        if (Program.rm._Players.ContainsKey(role.TheLargestHolderKey))
+                        if (this.role.Group._PlayerInGroup.ContainsKey(role.TheLargestHolderKey))
                         {
-                            if (Program.rm._Players[role.TheLargestHolderKey].playerType == RoleInGame.PlayerType.player)
+                            if (this.role.Group._PlayerInGroup[role.TheLargestHolderKey].playerType == Player.PlayerType.player)
                             {
-                                if (!Program.rm._Players[role.TheLargestHolderKey].Bust)
+                                if (!this.role.Group._PlayerInGroup[role.TheLargestHolderKey].Bust)
                                 {
-                                    var bossValue = Program.rm._Players[role.TheLargestHolderKey].getCar().ability.Data["business"].Count * 500 + 10000;
+                                    var bossValue = this.role.Group._PlayerInGroup[role.TheLargestHolderKey].getCar().ability.Data["business"].Count * 500 + 10000;
                                     return Math.Max(selfValue, bossValue);
                                 }
                             }
@@ -465,13 +467,13 @@ namespace HouseManager5_0
                     var selfValue = driver.improveBusiness((this.Data["business"].Count * 500 + 10000));
                     if (!string.IsNullOrEmpty(role.TheLargestHolderKey))
                     {
-                        if (this.role.rm._Players.ContainsKey(role.TheLargestHolderKey))
+                        if (this.role.Group._PlayerInGroup.ContainsKey(role.TheLargestHolderKey))
                         {
-                            if (this.role.rm._Players[role.TheLargestHolderKey].playerType == RoleInGame.PlayerType.player)
+                            if (this.role.Group._PlayerInGroup[role.TheLargestHolderKey].playerType == Player.PlayerType.player)
                             {
-                                if (!this.role.rm._Players[role.TheLargestHolderKey].Bust)
+                                if (!this.role.Group._PlayerInGroup[role.TheLargestHolderKey].Bust)
                                 {
-                                    var bossValue = driver.improveBusiness(this.role.rm._Players[role.TheLargestHolderKey].getCar().ability.Data["business"].Count * 500 + 10000);
+                                    var bossValue = driver.improveBusiness(this.role.Group._PlayerInGroup[role.TheLargestHolderKey].getCar().ability.Data["business"].Count * 500 + 10000);
                                     return Math.Max(selfValue, bossValue);
                                 }
                             }
@@ -493,13 +495,13 @@ namespace HouseManager5_0
                     var selfValue = this.Data["volume"].Count * 500 + 10000;
                     if (!string.IsNullOrEmpty(role.TheLargestHolderKey))
                     {
-                        if (this.role.rm._Players.ContainsKey(role.TheLargestHolderKey))
+                        if (this.role.Group._PlayerInGroup.ContainsKey(role.TheLargestHolderKey))
                         {
-                            if (this.role.rm._Players[role.TheLargestHolderKey].playerType == RoleInGame.PlayerType.player)
+                            if (this.role.Group._PlayerInGroup[role.TheLargestHolderKey].playerType == Player.PlayerType.player)
                             {
-                                if (!this.role.rm._Players[role.TheLargestHolderKey].Bust)
+                                if (!this.role.Group._PlayerInGroup[role.TheLargestHolderKey].Bust)
                                 {
-                                    var bossValue = this.role.rm._Players[role.TheLargestHolderKey].getCar().ability.Data["volume"].Count * 500 + 10000;
+                                    var bossValue = this.role.Group._PlayerInGroup[role.TheLargestHolderKey].getCar().ability.Data["volume"].Count * 500 + 10000;
                                     return Math.Max(selfValue, bossValue);
                                 }
                             }
@@ -512,13 +514,13 @@ namespace HouseManager5_0
                     var selfValue = driver.improveVolume((this.Data["volume"].Count * 500 + 10000));
                     if (!string.IsNullOrEmpty(role.TheLargestHolderKey))
                     {
-                        if (this.role.rm._Players.ContainsKey(role.TheLargestHolderKey))
+                        if (this.role.Group._PlayerInGroup.ContainsKey(role.TheLargestHolderKey))
                         {
-                            if (this.role.rm._Players[role.TheLargestHolderKey].playerType == RoleInGame.PlayerType.player)
+                            if (this.role.Group._PlayerInGroup[role.TheLargestHolderKey].playerType == Player.PlayerType.player)
                             {
-                                if (!this.role.rm._Players[role.TheLargestHolderKey].Bust)
+                                if (!this.role.Group._PlayerInGroup[role.TheLargestHolderKey].Bust)
                                 {
-                                    var bossValue = driver.improveVolume(Program.rm._Players[role.TheLargestHolderKey].getCar().ability.Data["volume"].Count * 500 + 10000);
+                                    var bossValue = driver.improveVolume(this.role.Group._PlayerInGroup[role.TheLargestHolderKey].getCar().ability.Data["volume"].Count * 500 + 10000);
                                     return Math.Max(selfValue, bossValue);
                                 }
                             }
@@ -546,7 +548,7 @@ namespace HouseManager5_0
             reduceValue += reduceBusiness;
             reduceValue += reduceVolume;
             //this.setCostMiles(this.costMiles + this.mile / 20, player, car, ref notifyMsg);
-            this.setCostBusiness(this.costBusiness - reduceBusiness, player, car, ref notifyMsg);
+            //  this.setCostBusiness(this.costBusiness - reduceBusiness, player, car, ref notifyMsg);
             this.setCostVolume(this.costVolume - reduceVolume, player, car, ref notifyMsg);
             return reduceValue;
         }
@@ -577,13 +579,13 @@ namespace HouseManager5_0
                     if (!string.IsNullOrEmpty(role.TheLargestHolderKey))
                     {
                         //  if(role.TheLargestHolderKey)
-                        if (Program.rm._Players.ContainsKey(role.TheLargestHolderKey))
+                        if (this.role.Group._PlayerInGroup.ContainsKey(role.TheLargestHolderKey))
                         {
-                            if (Program.rm._Players[role.TheLargestHolderKey].playerType == RoleInGame.PlayerType.player)
+                            if (this.role.Group._PlayerInGroup[role.TheLargestHolderKey].playerType == Player.PlayerType.player)
                             {
-                                if (!Program.rm._Players[role.TheLargestHolderKey].Bust)
+                                if (!this.role.Group._PlayerInGroup[role.TheLargestHolderKey].Bust)
                                 {
-                                    var bossValue = Program.rm._Players[role.TheLargestHolderKey].getCar().ability.Data["speed"].Count * 2 + 50;
+                                    var bossValue = this.role.Group._PlayerInGroup[role.TheLargestHolderKey].getCar().ability.Data["speed"].Count * 2 + 50;
                                     return Math.Max(selfValue, bossValue);
                                 }
                             }
@@ -597,13 +599,13 @@ namespace HouseManager5_0
                     if (!string.IsNullOrEmpty(role.TheLargestHolderKey))
                     {
                         // this.role.rm
-                        if (this.role.rm._Players.ContainsKey(role.TheLargestHolderKey))
+                        if (this.role.Group._PlayerInGroup.ContainsKey(role.TheLargestHolderKey))
                         {
-                            if (this.role.rm._Players[role.TheLargestHolderKey].playerType == RoleInGame.PlayerType.player)
+                            if (this.role.Group._PlayerInGroup[role.TheLargestHolderKey].playerType == Player.PlayerType.player)
                             {
-                                if (!this.role.rm._Players[role.TheLargestHolderKey].Bust)
+                                if (!this.role.Group._PlayerInGroup[role.TheLargestHolderKey].Bust)
                                 {
-                                    var bossValue = driver.improveSpeed(this.role.rm._Players[role.TheLargestHolderKey].getCar().ability.Data["speed"].Count * 2 + 50);
+                                    var bossValue = driver.improveSpeed(this.role.Group._PlayerInGroup[role.TheLargestHolderKey].getCar().ability.Data["speed"].Count * 2 + 50);
                                     return Math.Max(selfValue, bossValue);
                                 }
                             }

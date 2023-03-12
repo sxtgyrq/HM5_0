@@ -16,7 +16,10 @@ namespace WsOfWebClient
         /// </summary>
         public string Key { get; internal set; }
         public string CommandStart { get; internal set; }
-
+        /// <summary>
+        /// groupKey
+        /// </summary>
+        public string GroupKey { get; internal set; }
 
         public int indexOfModelToTranstract = 0;
 

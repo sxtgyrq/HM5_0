@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using BitCoin;
+using CommonClass;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -164,7 +166,7 @@ namespace WsOfWebClient
 
                                 if (ws.State == WebSocketState.Open)
                                 {
-                                    try
+                                    //try
                                     {
 
                                         //ws.
@@ -172,7 +174,14 @@ namespace WsOfWebClient
 
                                         switch (c.c)
                                         {
-                                            case "": { }; break;
+                                            case "BradCastWhereToGoInSmallMap":
+                                                {
+                                                    BradCastWhereToGoInSmallMap smallMap = Newtonsoft.Json.JsonConvert.DeserializeObject<BradCastWhereToGoInSmallMap>(notifyJson);
+                                                    var base64 = Room.GetMapBase64(smallMap);
+                                                    smallMap.base64 = base64;
+                                                    notifyJson = Newtonsoft.Json.JsonConvert.SerializeObject(smallMap);
+                                                    CommonF.SendData(notifyJson, ws, timeOut);
+                                                }; break;
                                             default:
                                                 {
                                                     CommonF.SendData(notifyJson, ws, timeOut);
@@ -181,7 +190,7 @@ namespace WsOfWebClient
                                         }
 
                                     }
-                                    catch
+                                    // catch
                                     {
                                         //Consol.WriteLine("websocket 异常");
                                     }
@@ -246,7 +255,7 @@ namespace WsOfWebClient
                 catch (Exception e)
                 {
                     //throw e;
-                } 
+                }
             });
         }
 
@@ -323,6 +332,7 @@ namespace WsOfWebClient
                                         {
                                             s.Key = checkResult.Key;
                                             s.roomIndex = checkResult.roomIndex;
+                                            s.GroupKey = checkResult.GroupKey;
                                             s = Room.setOnLine(s, webSocket);
                                         }
                                         else
@@ -391,7 +401,7 @@ namespace WsOfWebClient
                                                 else if (returnResult.result == command_start + "exit")
                                                 {
                                                     s = Room.CancelAfterCreateTeam(s, webSocket, team, playerName, ct.RefererAddr);
-                                                } 
+                                                }
                                                 else
                                                 {
                                                     return;
@@ -444,7 +454,7 @@ namespace WsOfWebClient
                                                     s = Room.setState(s, webSocket, LoginState.selectSingleTeamJoin);
                                                     Room.Alert(webSocket, "该队伍已满员");
                                                 }
-                                                else if (result == "need to back") 
+                                                else if (result == "need to back")
                                                 {
                                                     s = Room.setState(s, webSocket, LoginState.selectSingleTeamJoin);
                                                 }
@@ -714,7 +724,7 @@ namespace WsOfWebClient
                                     if (s.Ls == LoginState.OnLine)
                                     {
                                         ViewAngle va = Newtonsoft.Json.JsonConvert.DeserializeObject<ViewAngle>(returnResult.result);
-                                        await Room.view(s, va);
+                                        Room.view(s, va);
                                     }
                                 }; break;
                             case "GetBuildings":
@@ -879,6 +889,16 @@ namespace WsOfWebClient
                                     if (s.Ls == LoginState.OnLine)
                                     {
                                         Room.GetOnLineState(s);
+                                    }
+                                }; break;
+                            case "WhetherGoNext":
+                                {
+                                    if (s.Ls == LoginState.OnLine)
+                                    {
+                                        Console.WriteLine(returnResult.result);
+                                        WsOfWebClient.WhetherGoNext wgn = Newtonsoft.Json.JsonConvert.DeserializeObject<WsOfWebClient.WhetherGoNext>(returnResult.result);
+                                        Room.WhetherGoNextF(s, wgn);
+                                        // Room.GetOnLineState(s);
                                     }
                                 }; break;
                         }

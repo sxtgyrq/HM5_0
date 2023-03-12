@@ -18,6 +18,7 @@ namespace WsOfWebClient.BLL
             /// 由AddPlayer 产生的key
             /// </summary>
             public string Key { get; set; }
+            public string GroupKey { get; internal set; }
         }
         internal static CheckIsOKResult checkIsOK(CheckSession checkSession, State s)
         {
@@ -41,7 +42,8 @@ namespace WsOfWebClient.BLL
                         {
                             CheckOK = true,
                             roomIndex = playerCheck.RoomIndex,
-                            Key = playerCheck.Key
+                            Key = playerCheck.Key,
+                            GroupKey = playerCheck.GroupKey,
                         };
                     }
                 }

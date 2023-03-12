@@ -586,18 +586,18 @@ namespace HouseManager5_0
         {
             string TaskName { get; }
 
-            void DriverSelected(taskcopy item, Player player, Action<RoleInGame, string> webNotify);
-            void DoCollect(taskcopy Item, Player player, Action<RoleInGame, string> WebNotify);
+            void DriverSelected(taskcopy item, Player player, Action<Player, string> webNotify);
+            void DoCollect(taskcopy Item, Player player, Action<Player, string> WebNotify);
             bool Add(string btcAddr);
             string GetTaskName(taskcopy Item);
-            void MagicReleased(taskcopy item, Player player, Action<RoleInGame, string> webNotify);
-            void UseDiamondSuccess(taskcopy item, Player player, Action<RoleInGame, string> webNotify);
-            void TakeApartF(taskcopy item, Player player, Action<RoleInGame, string> webNotify);
-            void DiamondSell(taskcopy item, Player player, Action<RoleInGame, string> webNotify);
-            void MoneySet(taskcopy item, Player player, Action<RoleInGame, string> webNotify);
-            void GetRewardFromBuildingF(taskcopy item, Player player, Action<RoleInGame, string> webNotify);
-            void OrderToUpdateLevel(taskcopy item, Player player, Action<RoleInGame, string> webNotify);
-            void TradeCoinF(string addrBussiness, string addrTo, long passCoin, taskcopy item, Player[] players, Action<RoleInGame, string> webNotify);
+            void MagicReleased(taskcopy item, Player player, Action<Player, string> webNotify);
+            void UseDiamondSuccess(taskcopy item, Player player, Action<Player, string> webNotify);
+            void TakeApartF(taskcopy item, Player player, Action<Player, string> webNotify);
+            void DiamondSell(taskcopy item, Player player, Action<Player, string> webNotify);
+            void MoneySet(taskcopy item, Player player, Action<Player, string> webNotify);
+            void GetRewardFromBuildingF(taskcopy item, Player player, Action<Player, string> webNotify);
+            void OrderToUpdateLevel(taskcopy item, Player player, Action<Player, string> webNotify);
+            void TradeCoinF(string addrBussiness, string addrTo, long passCoin, taskcopy item, Player[] players, Action<Player, string> webNotify);
             bool BindWordInfoF(taskcopy item);
             void ChargingF(taskcopy item);
             string Detail(taskcopy item);
@@ -740,7 +740,7 @@ namespace HouseManager5_0
                 //return "鼓楼股份获取";
             }
 
-            public void DriverSelected(taskcopy Item, Player player, Action<RoleInGame, string> WebNotify)
+            public void DriverSelected(taskcopy Item, Player player, Action<Player, string> WebNotify)
             {
                 if (this.GetCurrent(Item) == TaskCopyType.SelectDriver)
                 {
@@ -762,7 +762,7 @@ namespace HouseManager5_0
                 return Newtonsoft.Json.JsonConvert.DeserializeObject<StockAddrC>(item.Tag).BAddr;
             }
 
-            public void DoCollect(taskcopy Item, Player player, Action<RoleInGame, string> WebNotify)
+            public void DoCollect(taskcopy Item, Player player, Action<Player, string> WebNotify)
             {
                 if (this.GetCurrent(Item) == TaskCopyType.DiamondCollect)
                 {
@@ -811,7 +811,7 @@ namespace HouseManager5_0
             string _taskHappenPlaceName = "";
 
 
-            public void MagicReleased(taskcopy Item, Player player, Action<RoleInGame, string> WebNotify)
+            public void MagicReleased(taskcopy Item, Player player, Action<Player, string> WebNotify)
             {
                 if (this.GetCurrent(Item) == TaskCopyType.MagicRelease)
                 {
@@ -824,7 +824,7 @@ namespace HouseManager5_0
                 }
             }
 
-            public void UseDiamondSuccess(taskcopy Item, Player player, Action<RoleInGame, string> WebNotify)
+            public void UseDiamondSuccess(taskcopy Item, Player player, Action<Player, string> WebNotify)
             {
                 if (this.GetCurrent(Item) == TaskCopyType.DiamondUse)
                 {
@@ -837,7 +837,7 @@ namespace HouseManager5_0
                 }
             }
 
-            public void TakeApartF(taskcopy Item, Player player, Action<RoleInGame, string> WebNotify)
+            public void TakeApartF(taskcopy Item, Player player, Action<Player, string> WebNotify)
             {
                 if (this.GetCurrent(Item) == TaskCopyType.AbilityTakeApart)
                 {
@@ -850,7 +850,7 @@ namespace HouseManager5_0
                 }
             }
 
-            public void DiamondSell(taskcopy Item, Player player, Action<RoleInGame, string> WebNotify)
+            public void DiamondSell(taskcopy Item, Player player, Action<Player, string> WebNotify)
             {
                 if (this.GetCurrent(Item) == TaskCopyType.DiamondSell)
                 {
@@ -863,7 +863,7 @@ namespace HouseManager5_0
                 }
             }
 
-            public void MoneySet(taskcopy Item, Player player, Action<RoleInGame, string> WebNotify)
+            public void MoneySet(taskcopy Item, Player player, Action<Player, string> WebNotify)
             {
                 if (this.GetCurrent(Item) == TaskCopyType.MoneySave)
                 {
@@ -876,7 +876,7 @@ namespace HouseManager5_0
                 }
             }
 
-            public void GetRewardFromBuildingF(taskcopy Item, Player player, Action<RoleInGame, string> WebNotify)
+            public void GetRewardFromBuildingF(taskcopy Item, Player player, Action<Player, string> WebNotify)
             {
                 if (this.GetCurrent(Item) == TaskCopyType.GetBless)
                 {
@@ -890,7 +890,7 @@ namespace HouseManager5_0
                 }
             }
 
-            public void OrderToUpdateLevel(taskcopy Item, Player player, Action<RoleInGame, string> WebNotify)
+            public void OrderToUpdateLevel(taskcopy Item, Player player, Action<Player, string> WebNotify)
             {
                 if (this.GetCurrent(Item) == TaskCopyType.ChallengeNPCL2 && player.levelObj.Level >= 2)
                 {
@@ -959,8 +959,8 @@ namespace HouseManager5_0
                 var Index = DalOfAddress.TradeRecord.GetCount(addrBussiness, addrFrom);
                 return Index;
             }
-            // void TradeCoinF(string addrBussiness, string addrTo, long passCoin, taskcopy item, Player player, Action<RoleInGame, string> webNotify);
-            public void TradeCoinF(string addrBussiness, string addrTo, long passCoin, taskcopy Item, Player[] players, Action<RoleInGame, string> webNotify)
+            // void TradeCoinF(string addrBussiness, string addrTo, long passCoin, taskcopy item, Player player, Action<Player, string> webNotify);
+            public void TradeCoinF(string addrBussiness, string addrTo, long passCoin, taskcopy Item, Player[] players, Action<Player, string> webNotify)
             {
                 var bussinessAddr = this.GetItemBussinessAddr(Item);
                 if (this.GetCurrent(Item) == TaskCopyType.StockToStockAddr &&

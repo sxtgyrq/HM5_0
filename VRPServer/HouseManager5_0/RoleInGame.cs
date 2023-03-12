@@ -1,6 +1,7 @@
 ﻿using CommonClass;
 using CommonClass.databaseModel;
 using Google.Protobuf.WellKnownTypes;
+using HouseManager5_0.GroupClassF;
 using HouseManager5_0.interfaceOfEngine;
 using HouseManager5_0.RoomMainF;
 using Model;
@@ -11,11 +12,11 @@ using System.Text;
 
 namespace HouseManager5_0
 {
-    public abstract class RoleInGame : interfaceOfHM.GetFPIndex
+    public partial class Player : interfaceOfHM.GetFPIndex
     {
         public RoomMain rm;
 
-        public delegate void ShowLevelOfPlayer(Player player, int level, ref List<string> notifyMsg);
+        public delegate void ShowLevelOfPlayer(HouseManager5_0.Player player, int level, ref List<string> notifyMsg);
         public ShowLevelOfPlayer ShowLevelOfPlayerF = null;
         public void ShowLevelOfPlayerDetail(ref List<string> notifyMsg)
         {
@@ -80,6 +81,8 @@ namespace HouseManager5_0
         }
         public void SetLevel(int newLevel, ref List<string> notifyMsg)
         {
+            //  throw new Exception();
+
             if (this._level.Level == newLevel)
             {
 
@@ -88,25 +91,14 @@ namespace HouseManager5_0
             {
                 this._level.SetLevel(newLevel);
                 ShowLevelOfPlayerDetail(ref notifyMsg);
-                if (this.playerType == PlayerType.NPC)
-                {
-                    ((NPC)this).initializeCarOfNPC();
-                }
             }
-            //if (this._level == newLevel) { }
-            //else
-            //{
-            //    this._level = newLevel;
-            //    ShowLevelOfPlayerDetail(ref notifyMsg);
-
-            //}
         }
         public string Key { get; internal set; }
 
         public string PlayerName { get; internal set; }
         public DateTime CreateTime { get; internal set; }
         public DateTime ActiveTime { get; internal set; }
-        public int StartFPIndex { get; internal set; }
+        public int StartFPIndex { get { return this.Group.StartFPIndex; } }
         public Car getCar()
         {
             return this._Car;
@@ -143,7 +135,7 @@ namespace HouseManager5_0
             this._Car.setAnimateData(this, ref notifyMsg, null, DateTime.Now);
 
             this._Car.ability.MileChanged = roomMain.AbilityChanged2_0;
-            this._Car.ability.BusinessChanged = roomMain.AbilityChanged2_0;
+            //  this._Car.ability.BusinessChanged = roomMain.AbilityChanged2_0;
             this._Car.ability.VolumeChanged = roomMain.AbilityChanged2_0;
             this._Car.ability.SpeedChanged = roomMain.AbilityChanged2_0;
 
@@ -255,42 +247,44 @@ namespace HouseManager5_0
 
             get
             {
-                if (this.playerType == PlayerType.player)
-                {
-                    if (string.IsNullOrEmpty(_theLargestHolderKey))
-                    {
+                return this.Key;
+                //throw new Exception();
+                //if (this.playerType == PlayerType.player)
+                //{
+                //    if (string.IsNullOrEmpty(_theLargestHolderKey))
+                //    {
 
-                    }
-                    else if (this.rm._Players.ContainsKey(_theLargestHolderKey))
-                    {
-                        var boss = this.rm._Players[_theLargestHolderKey];
-                        {
-                            var playerBoss = (Player)boss;
-                            if (playerBoss.Bust)
-                            {
-                            }
-                            else if (playerBoss._theLargestHolderKey == playerBoss.Key)
-                            {
-                                return this._theLargestHolderKey;
-                            }
-                            else
-                            {
-                            }
-                        }
-                    }
-                    this._theLargestHolderKey = this.Key;
-                    return this.Key;
-                }
-                else if (this.playerType == PlayerType.NPC)
-                {
-                    if (!string.IsNullOrEmpty(_theLargestHolderKey))
-                    {
-                        return _theLargestHolderKey;
-                    }
-                    this._theLargestHolderKey = this.Key;
-                    return this.Key;
-                }
-                else return this.Key;
+                //    }
+                //    else if (this.rm._Players.ContainsKey(_theLargestHolderKey))
+                //    {
+                //        var boss = this.rm._Players[_theLargestHolderKey];
+                //        {
+                //            var playerBoss = (Player)boss;
+                //            if (playerBoss.Bust)
+                //            {
+                //            }
+                //            else if (playerBoss._theLargestHolderKey == playerBoss.Key)
+                //            {
+                //                return this._theLargestHolderKey;
+                //            }
+                //            else
+                //            {
+                //            }
+                //        }
+                //    }
+                //    this._theLargestHolderKey = this.Key;
+                //    return this.Key;
+                //}
+                //else if (this.playerType == PlayerType.NPC)
+                //{
+                //    if (!string.IsNullOrEmpty(_theLargestHolderKey))
+                //    {
+                //        return _theLargestHolderKey;
+                //    }
+                //    this._theLargestHolderKey = this.Key;
+                //    return this.Key;
+                //}
+                //else return this.Key;
             }
         }
 
@@ -312,7 +306,7 @@ namespace HouseManager5_0
             this._theLargestHolderKey = this.Key;
         }
 
-        internal void SetTheLargestHolder(RoleInGame boss, ref List<string> notifyMsg)
+        internal void SetTheLargestHolder(Player boss, ref List<string> notifyMsg)
         {
             var child = new List<Player>();
             SetTheLargestHolder(boss, ref notifyMsg, out child);
@@ -322,29 +316,31 @@ namespace HouseManager5_0
         /// 设置老大。
         /// </summary>
         /// <param name="boss"></param>
-        internal void SetTheLargestHolder(RoleInGame boss, ref List<string> notifyMsg, out List<Player> child)
+        internal void SetTheLargestHolder(Player boss, ref List<string> notifyMsg, out List<Player> child)
         {
-            child = new List<Player>();
-            foreach (var item in Program.rm._Players)
-            {
-                if (item.Value.Key != this.Key && item.Value.TheLargestHolderKey == this.Key && item.Value.playerType == PlayerType.player)
-                {
-                    child.Add((Player)item.Value);
-                }
-            }
-            this._theLargestHolderKey = boss.Key;
-            if (this.playerType == PlayerType.player)
-            {
-                ((Player)this).ValueChanged(ref notifyMsg);
-                for (int i = 0; i < child.Count; i++)
-                {
-                    child[i].InitializeTheLargestHolder(ref notifyMsg);
-                }
-            }
+            throw new Exception();
+
+            //child = new List<Player>();
+            //foreach (var item in Program.rm._Players)
+            //{
+            //    if (item.Value.Key != this.Key && item.Value.TheLargestHolderKey == this.Key && item.Value.playerType == PlayerType.player)
+            //    {
+            //        child.Add((Player)item.Value);
+            //    }
+            //}
+            //this._theLargestHolderKey = boss.Key;
+            //if (this.playerType == PlayerType.player)
+            //{
+            //    ((Player)this).ValueChanged(ref notifyMsg);
+            //    for (int i = 0; i < child.Count; i++)
+            //    {
+            //        child[i].InitializeTheLargestHolder(ref notifyMsg);
+            //    }
+            //}
 
         }
 
-        public bool HasTheBoss(Dictionary<string, RoleInGame> _Players, out RoleInGame boss)
+        public bool HasTheBoss(Dictionary<string, Player> _Players, out Player boss)
         {
             if (this.confuseRecord.IsBeingControlled())
             {
@@ -479,25 +475,25 @@ namespace HouseManager5_0
         {
             get; private set;
         }
-        public delegate void BustChanged(RoleInGame player, bool bustValue, ref List<string> msgsWithUrl);
+        public delegate void BustChanged(Player player, bool bustValue, ref List<string> msgsWithUrl);
         public BustChanged BustChangedF;
         internal void SetBust(bool v, ref List<string> notifyMsg)
         {
-            if (v)
-            {
-                if (this.playerType == PlayerType.NPC)
-                {
-                    ((NPC)this).afterBrokeM(ref notifyMsg);
-                }
-                else if (this.playerType == PlayerType.player)
-                {
+            //if (v)
+            //{
+            //    if (this.playerType == PlayerType.NPC)
+            //    {
+            //        ((NPC)this).afterBrokeM(ref notifyMsg);
+            //    }
+            //    else if (this.playerType == PlayerType.player)
+            //    {
 
-                    ((Player)this).beforeBrokeM(ref notifyMsg);
-                }
-            }
-            this.Bust = v;
-            BustChangedF(this, this.Bust, ref notifyMsg);
-            //if (this.Bust)
+            //        ((Player)this).beforeBrokeM(ref notifyMsg);
+            //    }
+            //}
+            //this.Bust = v;
+            //BustChangedF(this, this.Bust, ref notifyMsg);
+
 
 
         }
@@ -730,7 +726,7 @@ namespace HouseManager5_0
             this.playerType = t;
         }
 
-        public int GetFPIndex()
+        public int GetFPIndex(GroupClass group)
         {
             return this.StartFPIndex;
             // throw new NotImplementedException();
@@ -771,7 +767,7 @@ namespace HouseManager5_0
         /// </summary>
         public bool canGetReward { get; internal set; }
     }
-    public class Player : RoleInGame, interfaceTag.HasContactInfo
+    public partial class Player : interfaceTag.HasContactInfo
     {
         /// <summary>
         /// 能力提升宝石的状态，用于前台刷新
@@ -972,7 +968,7 @@ namespace HouseManager5_0
         internal void ValueChanged(ref List<string> notifyMsg)
         {
             this.getCar().ability.MileChanged(this, this.getCar(), ref notifyMsg, "mile");
-            this.getCar().ability.BusinessChanged(this, this.getCar(), ref notifyMsg, "business");
+            //   this.getCar().ability.BusinessChanged(this, this.getCar(), ref notifyMsg, "business");
             this.getCar().ability.VolumeChanged(this, this.getCar(), ref notifyMsg, "volume");
             this.getCar().ability.SpeedChanged(this, this.getCar(), ref notifyMsg, "speed");
         }
@@ -1023,147 +1019,152 @@ namespace HouseManager5_0
                 }
             }
         }
+
+        //public string GroupID { get; set; }
+        public GroupClass Group { get; set; }
+
+        public TargetForSelect Ts { get; set; }
     }
-    public class NPC : RoleInGame
-    {
-        //string keyOfAttacker, NPC npc, ref List<string> notifyMsg, interfaceOfHM.Car cf
-        public delegate void BeingAttacked(string keyOfAttacker, NPC npc, ref List<string> notifyMsg, interfaceOfHM.Car cf, GetRandomPos gp);
-        public BeingAttacked BeingAttackedM;
+    //public class NPC : Player
+    //{
+    //    //string keyOfAttacker, NPC npc, ref List<string> notifyMsg, interfaceOfHM.Car cf
+    //    public delegate void BeingAttacked(string keyOfAttacker, NPC npc, ref List<string> notifyMsg, interfaceOfHM.Car cf, GetRandomPos gp);
+    //    public BeingAttacked BeingAttackedM;
 
-        internal void CopyChanlleger(string challenger_)
-        {
-            this._challenger = challenger_;
-        }
+    //    internal void CopyChanlleger(string challenger_)
+    //    {
+    //        this._challenger = challenger_;
+    //    }
 
-        string _challenger = "";
-        /// <summary>
-        /// 挑战者，npc对挑战者的态度是不死方休
-        /// </summary>
-        public string challenger { get { return this._challenger; } }
+    //    string _challenger = "";
+    //    /// <summary>
+    //    /// 挑战者，npc对挑战者的态度是不死方休
+    //    /// </summary>
+    //    public string challenger { get { return this._challenger; } }
 
-        public void BeingAttackedF(string keyOfAttacker, ref List<string> notifyMsgs, interfaceOfHM.Car cf, GetRandomPos gp)
-        {
-            //string keyOfAttacker, NPC npc, ref List<string> notifyMsg, interfaceOfHM.Car cf, 
-            this.BeingAttackedM(keyOfAttacker, this, ref notifyMsgs, cf, gp);
-        }
+    //    public void BeingAttackedF(string keyOfAttacker, ref List<string> notifyMsgs, interfaceOfHM.Car cf, GetRandomPos gp)
+    //    {
+    //        //string keyOfAttacker, NPC npc, ref List<string> notifyMsg, interfaceOfHM.Car cf, 
+    //        this.BeingAttackedM(keyOfAttacker, this, ref notifyMsgs, cf, gp);
+    //    }
 
-        internal void setChallenger(string key, ref List<string> notifyMsg)
-        {
-            this._challenger = key;
-            this._molester = "";
-        }
+    //    internal void setChallenger(string key, ref List<string> notifyMsg)
+    //    {
+    //        this._challenger = key;
+    //        this._molester = "";
+    //    }
 
-        //NPC npc, ref List<string> notifyMsgs
-        public delegate void NPCOperateF(NPC npc, ref List<string> notifyMsgs, GetRandomPos grp);
-        public NPCOperateF afterWaitedM;
-        /// <summary>
-        ///  NPC的状态为CarState.waitOnRoad时，对NPC发布命令。
-        /// </summary>
-        /// <param name="notifyMsgs"></param>
-        public void dealWithWaitedNPC(ref List<string> notifyMsgs)
-        {
-            this.afterWaitedM(this, ref notifyMsgs, Program.dt);
-            //throw new NotImplementedException();
-        }
+    //    //NPC npc, ref List<string> notifyMsgs
+    //    public delegate void NPCOperateF(NPC npc, ref List<string> notifyMsgs, GetRandomPos grp);
+    //    public NPCOperateF afterWaitedM;
+    //    /// <summary>
+    //    ///  NPC的状态为CarState.waitOnRoad时，对NPC发布命令。
+    //    /// </summary>
+    //    /// <param name="notifyMsgs"></param>
+    //    public void dealWithWaitedNPC(ref List<string> notifyMsgs)
+    //    {
+    //        this.afterWaitedM(this, ref notifyMsgs, Program.dt);
+    //        //throw new NotImplementedException();
+    //    }
 
-        public NPCOperateF afterReturnedM;
-        internal void dealWithReturnedNPC(ref List<string> notifyMsg)
-        {
-            //if (!string.IsNullOrEmpty(this.molester)) { }
-            //else
-            if (!string.IsNullOrEmpty(this.challenger))
-            {
-                this.afterReturnedM(this, ref notifyMsg, Program.dt);
-            }
-        }
+    //    public NPCOperateF afterReturnedM;
+    //    internal void dealWithReturnedNPC(ref List<string> notifyMsg)
+    //    {
+    //        //if (!string.IsNullOrEmpty(this.molester)) { }
+    //        //else
+    //        if (!string.IsNullOrEmpty(this.challenger))
+    //        {
+    //            this.afterReturnedM(this, ref notifyMsg, Program.dt);
+    //        }
+    //    }
 
-        public NPCOperateF afterBroke;
-        public void afterBrokeM(ref List<string> notifyMsg)
-        {
-            this.afterBroke(this, ref notifyMsg, Program.dt);
-        }
+    //    public NPCOperateF afterBroke;
+    //    public void afterBrokeM(ref List<string> notifyMsg)
+    //    {
+    //        this.afterBroke(this, ref notifyMsg, Program.dt);
+    //    }
 
-        string _molester = "";
-        //internal void setMolester(string key, ref List<string> notifyMsg)
-        //{
-        //    if (string.IsNullOrEmpty(this._challenger))
-        //        this._molester = key;
-        //}
-        /// <summary>
-        /// 骚扰者，npc对待骚扰者的态度是教训一下即可！
-        /// </summary>
-       // public string molester { get { return this._molester; } }
+    //    string _molester = "";
+    //    //internal void setMolester(string key, ref List<string> notifyMsg)
+    //    //{
+    //    //    if (string.IsNullOrEmpty(this._challenger))
+    //    //        this._molester = key;
+    //    //}
+    //    /// <summary>
+    //    /// 骚扰者，npc对待骚扰者的态度是教训一下即可！
+    //    /// </summary>
+    //   // public string molester { get { return this._molester; } }
 
-        public NPCOperateF BeingMolestedM;
+    //    public NPCOperateF BeingMolestedM;
 
-        public class AttackTag
-        {
-            public string Target { get; set; }
-            public enum AttackType
-            {
-                attack,
-                electric,
-                fire,
-                water,
-                ambush,
-                confuse,
-                lose,
-                speed,
-                attackImprove,
-                defendImprove
-            }
-            public AttackType aType { get; set; }
-            public double HarmValue { get; internal set; }
-            public FastonPosition fpPass { get; internal set; }
-        }
-        internal AttackTag attackTag = null;
+    //    public class AttackTag
+    //    {
+    //        public string Target { get; set; }
+    //        public enum AttackType
+    //        {
+    //            attack,
+    //            electric,
+    //            fire,
+    //            water,
+    //            ambush,
+    //            confuse,
+    //            lose,
+    //            speed,
+    //            attackImprove,
+    //            defendImprove
+    //        }
+    //        public AttackType aType { get; set; }
+    //        public double HarmValue { get; internal set; }
+    //        public FastonPosition fpPass { get; internal set; }
+    //    }
+    //    internal AttackTag attackTag = null;
 
-        public bool BeingMolestedF(string keyOfMolester, ref List<string> notifyMsgs)
-        {
-            if (!this.Bust)
-                if (string.IsNullOrEmpty(this._challenger) && string.IsNullOrEmpty(this._molester))
-                {
-                    this._molester = keyOfMolester;
-                    this.BeingMolestedM(this, ref notifyMsgs, Program.dt);
-                    return true;
-                }
-            return false;
-            // this.BeingAttackedM(keyOfAttacker, this, ref notifyMsgs);
-        }
+    //    public bool BeingMolestedF(string keyOfMolester, ref List<string> notifyMsgs)
+    //    {
+    //        if (!this.Bust)
+    //            if (string.IsNullOrEmpty(this._challenger) && string.IsNullOrEmpty(this._molester))
+    //            {
+    //                this._molester = keyOfMolester;
+    //                this.BeingMolestedM(this, ref notifyMsgs, Program.dt);
+    //                return true;
+    //            }
+    //        return false;
+    //        // this.BeingAttackedM(keyOfAttacker, this, ref notifyMsgs);
+    //    }
 
-        internal void initializeCarOfNPC()
-        {
-            List<string> notifyMsg = new List<string>();
-            var car = this.getCar();
+    //    internal void initializeCarOfNPC()
+    //    {
+    //        List<string> notifyMsg = new List<string>();
+    //        var car = this.getCar();
 
-            for (var i = 2; i < this.levelObj.Level; i++)
-            {
-                for (var j = 0; j < 3; j++)
-                {
-                    switch (Program.rm.rm.Next(0, 4))
-                    {
-                        case 0:
-                            {
-                                car.ability.AbilityAdd("mile", 1, this, car, ref notifyMsg);
-                            }; break;
-                        case 1:
-                            {
-                                car.ability.AbilityAdd("business", 1, this, car, ref notifyMsg);
-                            }; break;
-                        case 2:
-                            {
-                                car.ability.AbilityAdd("volume", 1, this, car, ref notifyMsg);
-                            }; break;
-                        case 3:
-                            {
-                                car.ability.AbilityAdd("speed", 1, this, car, ref notifyMsg);
-                            }; break;
-                    }
-                }
-            }
-            notifyMsg = null;
-        }
-    }
+    //        for (var i = 2; i < this.levelObj.Level; i++)
+    //        {
+    //            for (var j = 0; j < 3; j++)
+    //            {
+    //                switch (Program.rm.rm.Next(0, 4))
+    //                {
+    //                    case 0:
+    //                        {
+    //                            car.ability.AbilityAdd("mile", 1, this, car, ref notifyMsg);
+    //                        }; break;
+    //                    case 1:
+    //                        {
+    //                            car.ability.AbilityAdd("business", 1, this, car, ref notifyMsg);
+    //                        }; break;
+    //                    case 2:
+    //                        {
+    //                            car.ability.AbilityAdd("volume", 1, this, car, ref notifyMsg);
+    //                        }; break;
+    //                    case 3:
+    //                        {
+    //                            car.ability.AbilityAdd("speed", 1, this, car, ref notifyMsg);
+    //                        }; break;
+    //                }
+    //            }
+    //        }
+    //        notifyMsg = null;
+    //    }
+    //}
 
     public class OtherPlayers
     {

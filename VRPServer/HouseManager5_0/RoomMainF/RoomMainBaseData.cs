@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HouseManager5_0.GroupClassF;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -19,7 +21,7 @@ namespace HouseManager5_0.RoomMainF
         /// <summary>
         /// 玩家字典
         /// </summary>
-        public Dictionary<string, RoleInGame> _Players;
+        public Dictionary<string, GroupClass> _Groups;
 
         /// <summary>
         /// 游戏官方市场
@@ -37,58 +39,63 @@ namespace HouseManager5_0.RoomMainF
         public BackGround bg;
 
 
-        int _promoteMilePosition = -1;
-        int _promoteBusinessPosition = -1;
-        int _promoteVolumePosition = -1;
-        int _promoteSpeedPosition = -1;
+        //int _promoteMilePosition = -1;
+        ////int _promoteBusinessPosition = -1;
+        //int _promoteVolumePosition = -1;
+        //int _promoteSpeedPosition = -1;
 
-        public int promoteMilePosition
-        {
-            get
-            {
-                return this._promoteMilePosition;
-            }
-            set
-            {
-                lock (this.PlayerLock)
-                {
-                    this._promoteMilePosition = value;
-                }
-            }
-        }
-        public int promoteBusinessPosition
-        {
-            get { return this._promoteBusinessPosition; }
-            set
-            {
-                lock (this.PlayerLock)
-                {
-                    this._promoteBusinessPosition = value;
-                }
-            }
-        }
-        public int promoteVolumePosition
-        {
-            get { return this._promoteVolumePosition; }
-            set
-            {
-                lock (this.PlayerLock)
-                {
-                    this._promoteVolumePosition = value;
-                }
-            }
-        }
-        public int promoteSpeedPosition
-        {
-            get { return this._promoteSpeedPosition; }
-            set
-            {
-                lock (this.PlayerLock)
-                {
-                    this._promoteSpeedPosition = value;
-                }
-            }
-        }
+        //public int promoteMilePosition
+        //{
+        //    get
+        //    {
+        //        return this._promoteMilePosition;
+        //    }
+        //    set
+        //    {
+        //        lock (this.PlayerLock)
+        //        {
+        //            this._promoteMilePosition = value;
+        //        }
+        //    }
+        //}
+        //public int promoteBusinessPosition
+        //{
+        //    get
+        //    {
+        //        throw new Exception();
+        //        //return this._promoteBusinessPosition;
+        //    }
+        //    set
+        //    {
+        //        lock (this.PlayerLock)
+        //        {
+        //            throw new Exception();
+        //            // this._promoteBusinessPosition = value;
+        //        }
+        //    }
+        //}
+        //public int promoteVolumePosition
+        //{
+        //    get { return this._promoteVolumePosition; }
+        //    set
+        //    {
+        //        lock (this.PlayerLock)
+        //        {
+        //            this._promoteVolumePosition = value;
+        //        }
+        //    }
+        //}
+        //public int promoteSpeedPosition
+        //{
+        //    get { return this._promoteSpeedPosition; }
+        //    set
+        //    {
+        //        lock (this.PlayerLock)
+        //        {
+        //            this._promoteSpeedPosition = value;
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// 宝石收集时间记录器
@@ -106,10 +113,11 @@ namespace HouseManager5_0.RoomMainF
         /// 获取所有角色
         /// </summary>
         /// <returns></returns>
-        protected List<RoleInGame> getGetAllRoles()
+        public List<Player> getGetAllRoles(GroupClass group)
         {
-            List<RoleInGame> players = new List<RoleInGame>();
-            foreach (var item in this._Players)
+            List<Player> players = new List<Player>();
+
+            foreach (var item in group._PlayerInGroup)
             {
                 players.Add(item.Value);
             }
@@ -160,24 +168,25 @@ namespace HouseManager5_0.RoomMainF
         /// <summary>
         /// 收集金钱的东西
         /// </summary>
-        public Dictionary<int, int> _collectPosition;
-        public bool FpIsUsing(int fpIndex)
+        //public Dictionary<int, int> _collectPosition;
+        public bool FpIsUsing(int fpIndex, GroupClass group)
         {
+            return group.FpIsUsing(fpIndex);
+            // throw new Exception();
+            //var A = false
+            //      || fpIndex == this._promoteMilePosition
+            //      || fpIndex == this._promoteBusinessPosition
+            //      || fpIndex == this._promoteVolumePosition
+            //      || fpIndex == this._promoteSpeedPosition
+            //      || this._collectPosition.ContainsValue(fpIndex);
+            //;
+            //foreach (var item in this._Players)
+            //{
 
-            var A = false
-                  || fpIndex == this._promoteMilePosition
-                  || fpIndex == this._promoteBusinessPosition
-                  || fpIndex == this._promoteVolumePosition
-                  || fpIndex == this._promoteSpeedPosition
-                  || this._collectPosition.ContainsValue(fpIndex);
-            ;
-            foreach (var item in this._Players)
-            {
-
-                A = item.Value.StartFPIndex == fpIndex || A;
-                A = item.Value.getCar().targetFpIndex == fpIndex || A;
-            }
-            return A;
+            //    A = item.Value.StartFPIndex == fpIndex || A;
+            //    A = item.Value.getCar().targetFpIndex == fpIndex || A;
+            //}
+            //return A;
         }
 
         public Engine_AttackEngine attackE;
@@ -202,7 +211,7 @@ namespace HouseManager5_0.RoomMainF
         //以上为Engine
         //以下为Manager
 
-        public Manager_NPC NPCM;
+        // public Manager_NPC NPCM;
         public Manager_Frequency frequencyM;
         public Manager_Driver driverM;
         public Manager_GoodsReward goodsM;

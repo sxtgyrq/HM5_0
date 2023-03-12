@@ -27,9 +27,9 @@ namespace HouseManager5_0.RoomMainF
         /// <param name="notifyMsg"></param>
         /// <param name="victimState"></param>
         /// <param name="reason"></param>
-        //        void attack(RoleInGame player, Car car, SetAttack sa, ref List<string> notifyMsg, out MileResultReason Mrr)
+        //        void attack(Player player, Car car, SetAttack sa, ref List<string> notifyMsg, out MileResultReason Mrr)
         //        {
-        //            RoleInGame boss;
+        //            Player boss;
         //            if (player.HasTheBoss(this._Players, out boss))
         //            {
         //                //    attackPassBossAddress(player, boss, car, sa, ref notifyMsg, out Mrr);
@@ -98,7 +98,7 @@ namespace HouseManager5_0.RoomMainF
 
 
 
-        //private void EditCarStateWhenAttackStartOK(RoleInGame player, ref Car car, int to, Model.FastonPosition fp1, SetAttack sa, List<Model.MapGo.nyrqPosition> goPath, out int startT, ref List<string> notifyMsg)
+        //private void EditCarStateWhenAttackStartOK(Player player, ref Car car, int to, Model.FastonPosition fp1, SetAttack sa, List<Model.MapGo.nyrqPosition> goPath, out int startT, ref List<string> notifyMsg)
         //{
         //    car.targetFpIndex = to;//A.更改小车目标，在其他地方引用。
 

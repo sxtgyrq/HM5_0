@@ -1,6 +1,7 @@
 ﻿using HouseManager5_0.RoomMainF;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.Xml;
 using static HouseManager5_0.RoomMainF.RoomMain.commandWithTime;
 
 namespace HouseManager5_0
@@ -29,103 +30,105 @@ namespace HouseManager5_0
 
         void collectTaxT(taxSet taxSet, GetRandomPos grp, notifyMsg n)
         {
-            var player = that._Players[taxSet.key];
-            lock (that.PlayerLock)
-            {
+            throw new Exception();
 
-                var boss = taxSet.returningOjb.Boss;
-                if (!boss.Bust)
-                {
-                    if (boss.StartFPIndex == taxSet.returningOjb.Boss.StartFPIndex)
-                    {
-                        if (player.confuseRecord.IsBeingControlled())
-                        {
-                            var cType = player.confuseRecord.getControlType();
-                            var car = player.getCar();
-                            long tax = 0;
-                            long indemnity = 0;
+            //var player = that._Players[taxSet.key];
+            //lock (that.PlayerLock)
+            //{
 
-                            indemnity = player.confuseRecord.getIndemnity();
+            //    var boss = taxSet.returningOjb.Boss;
+            //    if (!boss.Bust)
+            //    {
+            //        if (boss.StartFPIndex == taxSet.returningOjb.Boss.StartFPIndex)
+            //        {
+            //            if (player.confuseRecord.IsBeingControlled())
+            //            {
+            //                var cType = player.confuseRecord.getControlType();
+            //                var car = player.getCar();
+            //                long tax = 0;
+            //                long indemnity = 0;
 
-                            {
-                                long newCostBusiness;
-                                if (indemnity > car.ability.costBusiness)
-                                {
-                                    newCostBusiness = 0;
-                                }
-                                else
-                                {
-                                    newCostBusiness = car.ability.costBusiness - indemnity;
-                                }
-                                var reduceValue = car.ability.costBusiness - newCostBusiness;
-                                car.ability.setCostBusiness(newCostBusiness, player, car, ref n.notifyMsgs);
-                                player.confuseRecord.reduceValue(reduceValue);
-                                tax += reduceValue;
-                            }
-                            indemnity = player.confuseRecord.getIndemnity();
+            //                indemnity = player.confuseRecord.getIndemnity();
 
-                            if (indemnity > 0)
-                            {
-                                long newCostVolume;
-                                if (indemnity > car.ability.costVolume)
-                                {
-                                    newCostVolume = 0;
-                                }
-                                else
-                                    newCostVolume = car.ability.costVolume - indemnity;
-                                var reduceValue = car.ability.costVolume - newCostVolume;
-                                car.ability.setCostVolume(newCostVolume, player, car, ref n.notifyMsgs);
-                                player.confuseRecord.reduceValue(reduceValue);
-                                tax += reduceValue;
-                            }
-                            if (tax > 0)
-                                boss.MoneySet(boss.Money + tax, ref n.notifyMsgs);
-                            if (player.confuseRecord.IsBeingControlled())
-                            { }
-                            else
-                            {
-                                switch (cType)
-                                {
-                                    case Manager_Driver.ConfuseManger.ControlAttackType.Confuse:
-                                        {
-                                            player.confuseMagicChanged(player, ref n.notifyMsgs);
-                                        }; break;
-                                    case Manager_Driver.ConfuseManger.ControlAttackType.Lost:
-                                        {
-                                            player.loseMagicChanged(player, ref n.notifyMsgs);
-                                        }; break;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            var car = player.getCar();
-                            long tax = 0;
+            //                {
+            //                    long newCostBusiness;
+            //                    if (indemnity > car.ability.costBusiness)
+            //                    {
+            //                        newCostBusiness = 0;
+            //                    }
+            //                    else
+            //                    {
+            //                        newCostBusiness = car.ability.costBusiness - indemnity;
+            //                    }
+            //                    var reduceValue = car.ability.costBusiness - newCostBusiness;
+            //                    car.ability.setCostBusiness(newCostBusiness, player, car, ref n.notifyMsgs);
+            //                    player.confuseRecord.reduceValue(reduceValue);
+            //                    tax += reduceValue;
+            //                }
+            //                indemnity = player.confuseRecord.getIndemnity();
 
-                            var newCostBusiness = car.ability.costBusiness * 4 / 5;
-                            tax += (car.ability.costBusiness - newCostBusiness);
-                            car.ability.setCostBusiness(newCostBusiness, player, car, ref n.notifyMsgs);
+            //                if (indemnity > 0)
+            //                {
+            //                    long newCostVolume;
+            //                    if (indemnity > car.ability.costVolume)
+            //                    {
+            //                        newCostVolume = 0;
+            //                    }
+            //                    else
+            //                        newCostVolume = car.ability.costVolume - indemnity;
+            //                    var reduceValue = car.ability.costVolume - newCostVolume;
+            //                    car.ability.setCostVolume(newCostVolume, player, car, ref n.notifyMsgs);
+            //                    player.confuseRecord.reduceValue(reduceValue);
+            //                    tax += reduceValue;
+            //                }
+            //                if (tax > 0)
+            //                    boss.MoneySet(boss.Money + tax, ref n.notifyMsgs);
+            //                if (player.confuseRecord.IsBeingControlled())
+            //                { }
+            //                else
+            //                {
+            //                    switch (cType)
+            //                    {
+            //                        case Manager_Driver.ConfuseManger.ControlAttackType.Confuse:
+            //                            {
+            //                                player.confuseMagicChanged(player, ref n.notifyMsgs);
+            //                            }; break;
+            //                        case Manager_Driver.ConfuseManger.ControlAttackType.Lost:
+            //                            {
+            //                                player.loseMagicChanged(player, ref n.notifyMsgs);
+            //                            }; break;
+            //                    }
+            //                }
+            //            }
+            //            else
+            //            {
+            //                var car = player.getCar();
+            //                long tax = 0;
 
-                            var newCostVolume = car.ability.costVolume * 4 / 5;
-                            tax += (car.ability.costVolume - newCostVolume);
-                            car.ability.setCostVolume(newCostVolume, player, car, ref n.notifyMsgs);
+            //                var newCostBusiness = car.ability.costBusiness * 4 / 5;
+            //                tax += (car.ability.costBusiness - newCostBusiness);
+            //                car.ability.setCostBusiness(newCostBusiness, player, car, ref n.notifyMsgs);
 
-                            if (tax > 0)
-                                boss.MoneySet(boss.Money + tax, ref n.notifyMsgs);
-                        }
-                        //var boss =
-                    }
-                }
-                that.retutnE.SetReturnFromBoss(1000, boss, new returnning()
-                {
-                    c = "returnning",
-                    changeType = returnning.ChangeType.AfterTax,
-                    key = taxSet.key,
-                    returningOjb = taxSet.returningOjb,
-                    target = boss.StartFPIndex
-                }, grp);
-            }
-            n.send(this);
+            //                var newCostVolume = car.ability.costVolume * 4 / 5;
+            //                tax += (car.ability.costVolume - newCostVolume);
+            //                car.ability.setCostVolume(newCostVolume, player, car, ref n.notifyMsgs);
+
+            //                if (tax > 0)
+            //                    boss.MoneySet(boss.Money + tax, ref n.notifyMsgs);
+            //            }
+            //            //var boss =
+            //        }
+            //    }
+            //    that.retutnE.SetReturnFromBoss(1000, boss, new returnning()
+            //    {
+            //        c = "returnning",
+            //        changeType = returnning.ChangeType.AfterTax,
+            //        key = taxSet.key,
+            //        returningOjb = taxSet.returningOjb,
+            //        target = boss.StartFPIndex
+            //    }, grp);
+            //}
+            //n.send(this);
         }
     }
 }

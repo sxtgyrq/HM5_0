@@ -3,6 +3,7 @@ using HouseManager5_0.RoomMainF;
 using Model;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using static HouseManager5_0.Car;
 using static HouseManager5_0.RoomMainF.RoomMain;
 
@@ -25,7 +26,7 @@ namespace HouseManager5_0
             //throw new NotImplementedException();
         }
 
-        internal void StartDiamondOwnerThread(int startT, int step, RoleInGame player, Car car, SetPromote sp, RoomMainF.RoomMain.commandWithTime.ReturningOjb ro, int goMile, Node goPath, GetRandomPos grp)
+        internal void StartDiamondOwnerThread(int startT, int step, Player player, Car car, SetPromote sp, RoomMainF.RoomMain.commandWithTime.ReturningOjb ro, int goMile, Node goPath, GetRandomPos grp)
         {
 
             System.Threading.Thread th = new System.Threading.Thread(() =>
@@ -34,6 +35,7 @@ namespace HouseManager5_0
                     this.startNewThread(startT + 100, new commandWithTime.diamondOwner()
                     {
                         c = "diamondOwner",
+                        groupKey = sp.GroupKey,
                         key = sp.Key,
                         target = car.targetFpIndex,//新的起点
                         changeType = commandWithTime.returnning.ChangeType.BeforeTax,
@@ -66,7 +68,7 @@ namespace HouseManager5_0
 
                             car.setState(player, ref notifyMsg, CarState.working);
                             this.sendSeveralMsgs(notifyMsg);
-                            //string command, int startT, int step, RoleInGame player, Car car, MagicSkill ms, int goMile, Node goPath, commandWithTime.ReturningOjb ro
+                            //string command, int startT, int step, Player player, Car car, MagicSkill ms, int goMile, Node goPath, commandWithTime.ReturningOjb ro
                             StartDiamondOwnerThread(newStartT, step, player, car, sp, ro, goMile, goPath, grp);
 
                         };
@@ -88,84 +90,19 @@ namespace HouseManager5_0
         /// <param name="dor"></param>
         private void setDiamondOwner(commandWithTime.diamondOwner dor, GetRandomPos grp)
         {
-            List<string> notifyMsg = new List<string>();
-            bool needUpdatePromoteState = false;
+            //  throw new Exception();
             lock (that.PlayerLock)
             {
-                var player = that._Players[dor.key];
-                var car = that._Players[dor.key].getCar();
+                if (string.IsNullOrEmpty(dor.groupKey)) { }
+                else if (that._Groups.ContainsKey(dor.groupKey))
                 {
-                    if (car.state == CarState.working)
-                    {
-                        if (car.targetFpIndex == -1)
-                        {
-                            throw new Exception("居然来了一个没有目标的车！！！");
-                        }
-                        if (car.ability.diamondInCar != "")
-                        {
-                            /*
-                             * 重复收集，立即返回！
-                             */
-                            car.setState(player, ref notifyMsg, CarState.returning);
-                            that.retutnE.SetReturnT(0, new commandWithTime.returnning()
-                            {
-                                c = "returnning",
-                                changeType = commandWithTime.returnning.ChangeType.BeforeTax,
-                                key = dor.key,
-                                returningOjb = dor.returningOjb,
-                                target = dor.target
-                            }, grp);
-                        }
-                        else if (dor.target == that.getPromoteState(dor.diamondType))
-                        {
-                            that.setPromtePosition(dor.diamondType);
-                            //this.promoteMilePosition = GetRandomPosition();
-                            needUpdatePromoteState = true;
-                            car.ability.setDiamondInCar(dor.diamondType, player, car, ref notifyMsg);
-                            // car.ability.diamondInCar = dor.changeType;
-                            //car.setState(player, ref notifyMsg, CarState.waitOnRoad);
-                            //car.ability.setCostMiles(car.ability.costMiles + dor.costMile, player, car, ref notifyMsg);
-                            car.ability.setCostMiles(car.ability.costMiles + dor.costMile, player, car, ref notifyMsg);
-                            // carParkOnRoad(dor.target, ref car, player, ref notifyMsg);
-                            car.setState(player, ref notifyMsg, CarState.returning);
-                            that.retutnE.SetReturnT(0, new commandWithTime.returnning()
-                            {
-                                c = "returnning",
-                                changeType = commandWithTime.returnning.ChangeType.BeforeTax,
-                                key = dor.key,
-                                returningOjb = dor.returningOjb,
-                                target = dor.target
-                            }, grp);
-                            that._Players[dor.key].returningOjb = dor.returningOjb;
-                            if (player.playerType == RoleInGame.PlayerType.player)
-                                ((Player)player).RefererCount++;
-                        }
-                        else
-                        {
-                            WebNotify(player, "车来迟了，宝石被别人取走啦！");
-                            carParkOnRoad(dor.target, ref car, player, ref notifyMsg);
-                            car.setState(player, ref notifyMsg, CarState.waitOnRoad);
-                            that._Players[dor.key].returningOjb = dor.returningOjb;
-
-                            //player.
-
-                        }
-
-
-                    }
-                    else
-                    {
-                        throw new Exception("car.state == CarState.buying!或者 dor.changeType不是四种类型");
-                    }
+                    var group = that._Groups[dor.groupKey];
+                    group.setDiamondOwner(dor, grp);
                 }
-
+                { }
             }
-            this.sendSeveralMsgs(notifyMsg);
 
-            if (needUpdatePromoteState)
-            {
-                that.CheckAllPlayersPromoteState(dor.diamondType);
-            }
+            
         }
     }
 }

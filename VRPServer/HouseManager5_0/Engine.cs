@@ -12,120 +12,28 @@ namespace HouseManager5_0
 {
     public abstract class Engine : EngineAndManger
     {
-        internal string updateAction(interfaceOfEngine.tryCatchAction actionDo, Command c, GetRandomPos grp, string operateKey)
+        internal string updateAction(interfaceOfEngine.tryCatchAction actionDo, Command c, GetRandomPos grp, string operateKey, string groupKey)
         {
-            string conditionNotReason;
-            if (actionDo.conditionsOk(c, grp, out conditionNotReason))
+            // throw new Exception();
+
+            lock (that.PlayerLock)
             {
-                List<string> notifyMsg = new List<string>();
-                lock (that.PlayerLock)
+                if (string.IsNullOrEmpty(groupKey))
                 {
-                    if (that._Players.ContainsKey(operateKey))
-                    {
-                        if (that._Players[operateKey].Bust) { }
-                        else
-                        {
-                            var player = that._Players[operateKey];
-                            var car = that._Players[operateKey].getCar();
-                            switch (car.state)
-                            {
-                                case CarState.waitAtBaseStation:
-                                    {
-                                        car.DirectAttack = true;
-                                    }; break;
-                                case CarState.waitOnRoad:
-                                    {
-                                        car.DirectAttack = false;
-                                    }; break;
-                            }
-
-                            switch (car.state)
-                            {
-                                case CarState.waitAtBaseStation:
-                                case CarState.waitOnRoad:
-                                    {
-                                        if (actionDo.carAbilitConditionsOk(player, car, c, grp))
-                                        {
-
-                                            MileResultReason mrr;
-                                            RoomMainF.RoomMain.commandWithTime.ReturningOjb returningOjb;
-
-                                            returningOjb = actionDo.maindDo(player, car, c, grp, ref notifyMsg, out mrr);
-
-                                            switch (mrr)
-                                            {
-                                                case MileResultReason.Abundant:
-                                                    {
-                                                        player.returningOjb = returningOjb;
-                                                    }; break;
-                                                case MileResultReason.CanNotReach:
-                                                    {
-                                                        actionDo.failedThenDo(car, player, c, grp, ref notifyMsg);
-                                                        this.WebNotify(player, "小车不能到达目的地，被安排返回！");
-                                                    }
-                                                    break;
-                                                case MileResultReason.CanNotReturn:
-                                                    {
-                                                        actionDo.failedThenDo(car, player, c, grp, ref notifyMsg);
-                                                        this.WebNotify(player, "小车到达目的地后不能返回，在当前地点安排返回！");
-                                                    }; break;
-                                                case MileResultReason.MoneyIsNotEnougt:
-                                                    {
-                                                        actionDo.failedThenDo(car, player, c, grp, ref notifyMsg);
-                                                    }; break;
-                                                case MileResultReason.NearestIsMoneyWhenPromote: { }; break;
-                                                case MileResultReason.NearestIsMoneyWhenAttack:
-                                                    {
-                                                        if (mrr == MileResultReason.NearestIsMoneyWhenAttack)
-                                                        {
-                                                            if (player.playerType == RoleInGame.PlayerType.NPC)
-                                                            {
-                                                                actionDo.failedThenDo(car, player, c, grp, ref notifyMsg);
-                                                            }
-                                                            // this.WebNotify(player, $"离宝石最近的是钱，不是你的车。请离宝石再近点儿！");
-                                                        }
-                                                    }; break;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (player.playerType == RoleInGame.PlayerType.NPC)
-                                            {
-                                                actionDo.failedThenDo(car, player, c, grp, ref notifyMsg);
-                                            };
-                                            // 
-                                        }
-                                    }; break;
-                                case CarState.working:
-                                    {
-                                        this.WebNotify(player, "您的小车正在赶往目标！");
-                                    }; break;
-                                case CarState.returning:
-                                    {
-                                        WebNotify(player, "您的小车正在返回！");
-                                    }; break;
-                            }
-                            //  MeetWithNPC(sa); 
-                        }
-                    }
+                    return "not exit groupKey";
                 }
-                var msgL = this.sendSeveralMsgs(notifyMsg).Count;
-                msgL++;
-                //for (var i = 0; i < notifyMsg.Count; i += 2)
-                //{
-                //    var url = notifyMsg[i];
-                //    var sendMsg = notifyMsg[i + 1]; 
-                //    if (!string.IsNullOrEmpty(url))
-                //    {
-                //        Startup.sendMsg(url, sendMsg);
-                //    }
-                //}
-                return $"{msgL}".Length > 0 ? "" : "";
+                else if (that._Groups.ContainsKey(groupKey))
+                {
+                    var group = that._Groups[groupKey];
+                    return group.updateAction(actionDo, c, grp, operateKey);
+                }
+                else
+                {
+                    return "not exit groupKey";
+                }
             }
-            else
-            {
-                return conditionNotReason;
-            }
+
+
         }
         /// <summary>
         /// 这个方法主要针对去程，不针对回程。
@@ -138,7 +46,7 @@ namespace HouseManager5_0
         /// <param name="notifyMsg"></param>
         /// <param name="startT_FirstPath"></param>
         /// <exception cref="Exception"></exception>
-        public void EditCarStateWhenActionStartOK(RoleInGame player, ref Car car, int to, Model.FastonPosition fp1, Node goPath, GetRandomPos grp, ref List<string> notifyMsg, out int startT_FirstPath)
+        public void EditCarStateWhenActionStartOK(Player player, ref Car car, int to, Model.FastonPosition fp1, Node goPath, GetRandomPos grp, ref List<string> notifyMsg, out int startT_FirstPath)
         {
             car.targetFpIndexSet(to, ref notifyMsg);//A.更改小车目标，在其他地方引用。
 
@@ -206,7 +114,7 @@ namespace HouseManager5_0
             car.setAnimateData(player, ref notifyMsg, animations, DateTime.Now);
         }
 
-        //public void EditCarStateWhenActionStartOK_Last(RoleInGame player, ref Car car, int to, Model.FastonPosition fp1, Node goPath, ref List<string> notifyMsg, out int startT)
+        //public void EditCarStateWhenActionStartOK_Last(Player player, ref Car car, int to, Model.FastonPosition fp1, Node goPath, ref List<string> notifyMsg, out int startT)
         //{
         //    car.targetFpIndex = to;//A.更改小车目标，在其他地方引用。
 
@@ -257,7 +165,7 @@ namespace HouseManager5_0
         /// <param name="goPath"></param>
         /// <param name="notifyMsg"></param>
         /// <param name="startT"></param>
-        public void EditCarStateAfterSelect(int indexValue, RoleInGame player, ref Car car, ref List<string> notifyMsg, out int startT)
+        public void EditCarStateAfterSelect(int indexValue, Player player, ref Car car, ref List<string> notifyMsg, out int startT)
         {
             car.animateObj.LengthOfPrivateKeys = indexValue;
             car.setAnimateData(player, ref notifyMsg);
@@ -274,7 +182,7 @@ namespace HouseManager5_0
         ///// <param name="targetPosition"></param>
         ///// <param name="notifyMsg"></param>
         ///// <param name="startT"></param>
-        //public void EditCarStateAfterSelect(int indexValue, RoleInGame player, ref Car car, Node goPath, RoleInGame targetPlayer, int targetPosition, ref List<string> notifyMsg, out int startT)
+        //public void EditCarStateAfterSelect(int indexValue, Player player, ref Car car, Node goPath, Player targetPlayer, int targetPosition, ref List<string> notifyMsg, out int startT)
         //{
         //    //var speed = car.ability.Speed;
         //    //startT = 0;
@@ -291,7 +199,7 @@ namespace HouseManager5_0
         //    //car.setAnimateData(player, ref notifyMsg, new AnimateData2(startPosition, result, DateTime.Now, false));
         //}
 
-        protected void carParkOnRoad(int target, ref Car car, RoleInGame player, ref List<string> notifyMsgs)
+        public void carParkOnRoad(int target, ref Car car, Player player, ref List<string> notifyMsgs)
         {
             List<AnimateDataItem> animations = new List<AnimateDataItem>();
             var fp = Program.dt.GetFpByIndex(target);
@@ -315,7 +223,7 @@ namespace HouseManager5_0
             car.setAnimateData(player, ref notifyMsgs, animations, DateTime.Now);
         }
 
-        protected void carDoActionFailedThenMustReturn(Car car, RoleInGame player, GetRandomPos grp, ref List<string> notifyMsg)
+        protected void carDoActionFailedThenMustReturn(Car car, Player player, GetRandomPos grp, ref List<string> notifyMsg)
         {
 
             if (car.state == CarState.waitOnRoad)
@@ -330,13 +238,14 @@ namespace HouseManager5_0
                     c = "returnning",
                     changeType = commandWithTime.returnning.ChangeType.BeforeTax,
                     key = player.Key,
+                    groupKey = player.Group.GroupKey,
                     returningOjb = returnPath_Record,
                     target = from
                 }, grp);
             }
         }
 
-        protected int getFromWhenAction(RoleInGame role, Car car)
+        public int getFromWhenAction(Player role, Car car)
         {
             switch (car.state)
             {
@@ -497,7 +406,7 @@ namespace HouseManager5_0
         /// <param name="speed"></param>
         /// <param name="player"></param>
         /// <param name="animations"></param>
-        protected void EndWithRightPosition(Node node, int speed, RoleInGame player, RoleInGame targetPlayer, ref List<AnimateDataItem> animations, List<long> privateKeys)
+        protected void EndWithRightPosition(Node node, int speed, Player player, Player targetPlayer, ref List<AnimateDataItem> animations, List<long> privateKeys)
         {
             if (node.path.Count > 0)
             {
@@ -590,18 +499,18 @@ namespace HouseManager5_0
         /// <param name="startT"></param>
         /// <param name="player"></param>
         /// <param name="goPath"></param>
-        protected void loop(Action p, int step, int startT, RoleInGame player, Node goPath)
+        protected void loop(Action p, int step, int startT, Player player, Node goPath)
         {
             if (step == 0)
             {
                 this.ThreadSleep(startT + 50);
 
-                if (player.playerType == RoleInGame.PlayerType.NPC || player.Bust)//如果是NPC或者是破产用户，直接过，不选择。
+                if (player.playerType == Player.PlayerType.NPC || player.Bust)//如果是NPC或者是破产用户，直接过，不选择。
                 {
                     p();
                 }
                 else if (
-                  player.playerType == RoleInGame.PlayerType.player &&
+                  player.playerType == Player.PlayerType.player &&
                   player.improvementRecord.speedValue > 0)
                 {
                     if (that.rm.Next(0, 100) < 50)
@@ -623,13 +532,13 @@ namespace HouseManager5_0
             else
             {
                 this.ThreadSleep(Math.Max(5, startT));
-                if (player.playerType == RoleInGame.PlayerType.NPC || player.Bust)
+                if (player.playerType == Player.PlayerType.NPC || player.Bust)
                 {
                     this.ThreadSleep(50);
                     p();
                 }
                 else if (
-                    player.playerType == RoleInGame.PlayerType.player &&
+                    player.playerType == Player.PlayerType.player &&
                     player.improvementRecord.speedValue > 0)
                 {
                     if (that.rm.Next(0, 100) < 50)

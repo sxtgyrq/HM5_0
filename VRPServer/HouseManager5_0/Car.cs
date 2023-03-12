@@ -10,13 +10,13 @@ namespace HouseManager5_0
 
     public class Car
     {
-        RoleInGame role;
+        Player role;
         int _targetFpIndex = -1;
-        public Car(RoleInGame roleInGame)
+        public Car(Player Player)
         {
-            this.ability = new AbilityAndState(roleInGame);
+            this.ability = new AbilityAndState(Player);
             this._targetFpIndex = -1;
-            this.role = roleInGame;
+            this.role = Player;
             this.countStamp = 2;
         }
         public enum CarState
@@ -53,7 +53,7 @@ namespace HouseManager5_0
 
         public delegate void SendPurposeOfCarF(Player player, Car car, ref List<string> notifyMsg);
 
-        public delegate void SetAnimateChangedF(RoleInGame player, Car car, ref List<string> notifyMsg);
+        public delegate void SetAnimateChangedF(Player player, Car car, ref List<string> notifyMsg);
 
         //public string name { get; set; }
         public AbilityAndState ability { get; set; }
@@ -72,14 +72,14 @@ namespace HouseManager5_0
         }
         public int countStamp = 2;
 
-        public void setState(RoleInGame player, ref List<string> notifyMsg, CarState s)
+        public void setState(Player player, ref List<string> notifyMsg, CarState s)
         {
 
             /*
              * A.将状态发送至前台。
              */
             this._state = s;
-            if (player.playerType == RoleInGame.PlayerType.player)
+            if (player.playerType == Player.PlayerType.player)
             {
                 SendStateAndPurpose((Player)player, this, ref notifyMsg);
                 // this.countStamp++;
@@ -90,9 +90,9 @@ namespace HouseManager5_0
              */
             if (s == CarState.waitOnRoad)
             {
-                if (player.playerType == RoleInGame.PlayerType.NPC)
+                if (player.playerType == Player.PlayerType.NPC)
                 {
-                    ((NPC)player).dealWithWaitedNPC(ref notifyMsg);
+                    //((NPC)player).dealWithWaitedNPC(ref notifyMsg);
                 }
             }
             if (this._state != CarState.waitOnRoad)
@@ -130,7 +130,7 @@ namespace HouseManager5_0
             {
                 //this.role
                 this._targetFpIndex = to;
-                if (this.role.playerType == RoleInGame.PlayerType.player)
+                if (this.role.playerType == Player.PlayerType.player)
                 {
                     ((Player)this.role).DrawTarget(this._targetFpIndex, ref notifyMsg);
                 }
@@ -192,24 +192,24 @@ namespace HouseManager5_0
         }
         public SetAnimateChangedF SetAnimateChanged;
         public AnimateObj animateObj { get; private set; }
-        //internal void setAnimateData(RoleInGame player, ref List<string> notifyMsg, AnimateData2 data)
+        //internal void setAnimateData(Player player, ref List<string> notifyMsg, AnimateData2 data)
         //{
         //    this.animateData = data;
         //    this._changeState++;
         //    SetAnimateChanged(player, this, ref notifyMsg);
         //    //  throw new NotImplementedException();
         //}
-        internal void setAnimateData(RoleInGame player, ref List<string> notifyMsg)
+        internal void setAnimateData(Player player, ref List<string> notifyMsg)
         {
             SetAnimateChanged(player, this, ref notifyMsg);
         }
-        internal void setAnimateData(RoleInGame player, ref List<string> notifyMsg, List<AnimateDataItem> animations, DateTime recordTime)
+        internal void setAnimateData(Player player, ref List<string> notifyMsg, List<AnimateDataItem> animations, DateTime recordTime)
         {
             if (animations == null) { }
             else
             {
                 AnimateObj obj;
-                if (player.playerType == RoleInGame.PlayerType.player)
+                if (player.playerType == Player.PlayerType.player)
                 {
                     obj = new AnimateObj(animations, recordTime, animateObj, false);
                 }
@@ -250,7 +250,7 @@ namespace HouseManager5_0
             set { this._directAttack = value; }
         }
 
-        internal void Refresh(RoleInGame player, ref List<string> notifyMsg)
+        internal void Refresh(Player player, ref List<string> notifyMsg)
         {
             this.setState(player, ref notifyMsg, CarState.waitAtBaseStation);
             this._targetFpIndex = -1;
@@ -274,10 +274,10 @@ namespace HouseManager5_0
         //}
 
         //   public SendPurposeOfCarF SendPurposeOfCar;
-        //internal void setPurpose(RoleInGame role, ref List<string> notifyMsg, Purpose p)
+        //internal void setPurpose(Player role, ref List<string> notifyMsg, Purpose p)
         //{
         //    this.purpose = p;
-        //    if (role.playerType == RoleInGame.PlayerType.player)
+        //    if (role.playerType == Player.PlayerType.player)
         //        this.SendPurposeOfCar((Player)role, this, ref notifyMsg);
         //    //throw new NotImplementedException();
         //}
@@ -409,7 +409,7 @@ namespace HouseManager5_0
             public int privateKey { get; private set; }
         }
 
-        public void setControllingObj(RoleInGame player, Car car, Manager_Driver.ConfuseManger.ControlAttackType controlAttackType, string key, ref List<string> notifyMsg)
+        public void setControllingObj(Player player, Car car, Manager_Driver.ConfuseManger.ControlAttackType controlAttackType, string key, ref List<string> notifyMsg)
         {
             this._isControllingKey = key;
             if (!string.IsNullOrEmpty(this._isControllingKey))
@@ -437,7 +437,7 @@ namespace HouseManager5_0
         {
             if (this.state == CarState.selecting)
             {
-                if (this.role.playerType == RoleInGame.PlayerType.player)
+                if (this.role.playerType == Player.PlayerType.player)
                 {
                     if (((Player)this.role).ShowCrossAfterWebUpdate != null)
                     {

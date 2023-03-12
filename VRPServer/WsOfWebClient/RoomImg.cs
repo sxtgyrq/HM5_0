@@ -136,6 +136,17 @@ namespace WsOfWebClient
             }
             // throw new NotImplementedException();
         }
+
+
+        public static string GetMapBase64(BradCastWhereToGoInSmallMap smallMap)
+        {
+            CommonClass.Img.DrawSmallMap dsm = new CommonClass.Img.DrawSmallMap();
+            var base64 = dsm.GetBase64(smallMap);
+
+            byte[] imageArray = Convert.FromBase64String(base64);
+            File.WriteAllBytes("r22change.png", imageArray);
+            return "";
+        }
     }
 
 

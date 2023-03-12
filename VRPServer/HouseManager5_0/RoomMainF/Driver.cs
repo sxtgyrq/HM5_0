@@ -12,9 +12,9 @@ namespace HouseManager5_0.RoomMainF
         {
             this.driverM.SelectDriver(dm);
         }
-        public void DriverSelected(RoleInGame role, Car car, ref List<string> notifyMsg)
+        public void DriverSelected(Player role, Car car, ref List<string> notifyMsg)
         {
-            if (role.playerType == RoleInGame.PlayerType.player)
+            if (role.playerType == Player.PlayerType.player)
             {
                 var player = (Player)role;
                 if (car.ability.driver != null)

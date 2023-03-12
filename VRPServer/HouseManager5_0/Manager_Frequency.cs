@@ -79,7 +79,7 @@ namespace HouseManager5_0
 //                    ((Player)this).modelHasShowed.Add(cloesdMaterial[i].modelID, true);
 //                }
 //            }
-//            if (player.playerType == RoleInGame.PlayerType.player)
+//            if (player.playerType == Player.PlayerType.player)
 //            {
 
 //                //Dictionary<string, Dictionary<int, Model.SaveRoad.RoadInfo>> result;

@@ -215,7 +215,11 @@ namespace WsOfWebClient
 
     public class SetMaterial : CommonClass.Command
     {
-        public string Key { get; internal set; }
-        public string Base64 { get; internal set; }
+        public string Key { get;  set; }
+        public string Base64 { get;  set; }
+    }
+    public class WhetherGoNext : CommonClass.Command
+    {
+        public string cType { get;  set; }
     }
 }

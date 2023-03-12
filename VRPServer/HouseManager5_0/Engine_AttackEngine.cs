@@ -18,10 +18,11 @@ namespace HouseManager5_0
         }
         internal string updateAttack(SetAttack sa, GetRandomPos grp)
         {
-            return this.updateAction(this, sa, grp, sa.Key);
+            throw new Exception();
+           // return this.updateAction(this, sa, grp, sa.Key);
         }
 
-        public RoomMainF.RoomMain.commandWithTime.ReturningOjb maindDo(RoleInGame player, Car car, Command c, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason mrr)
+        public RoomMainF.RoomMain.commandWithTime.ReturningOjb maindDo(Player player, Car car, Command c, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason mrr)
         {
             
                 if (c.c == "SetAttack")
@@ -34,7 +35,7 @@ namespace HouseManager5_0
                     throw new Exception($"数据传输错误！(传出类型为{c.c})");
                 }
         }
-        public void failedThenDo(Car car, RoleInGame player, Command c, GetRandomPos grp, ref List<string> notifyMsg)
+        public void failedThenDo(Car car, Player player, Command c, GetRandomPos grp, ref List<string> notifyMsg)
         {
             if (c.c == "SetAttack")
             {
@@ -45,7 +46,7 @@ namespace HouseManager5_0
                     /*
                      * 在起始地点，攻击失败，说明最大里程内不能到达，故要重新换NPC.
                      */
-                    //                    if (player.playerType == RoleInGame.PlayerType.NPC)
+                    //                    if (player.playerType == Player.PlayerType.NPC)
                     //                    {
                     //#warning 这里要考虑是否直接提升玩家等级。
                     //                        ((NPC)player).SetBust(true, ref notifyMsg);
@@ -55,7 +56,7 @@ namespace HouseManager5_0
             }
         }
 
-        public bool carAbilitConditionsOk(RoleInGame player, Car car, Command c, GetRandomPos grp)
+        public bool carAbilitConditionsOk(Player player, Car car, Command c, GetRandomPos grp)
         {
             if (c.c == "SetAttack")
                 if (car.ability.leftBusiness > 0)
@@ -117,55 +118,55 @@ namespace HouseManager5_0
         }
         public bool conditionsOk(Command c, GetRandomPos grp, out string reason)
         {
-            if (c.c == "SetAttack")
-            {
-                SetAttack sa = (SetAttack)c;
-                if (!(that._Players.ContainsKey(sa.targetOwner)))
-                {
-                    reason = "";
-                    return false;
-                }
-                else if (that._Players[sa.targetOwner].StartFPIndex != sa.target)
-                {
-                    reason = "";
-                    return false;
-                }
-                else if (sa.targetOwner == sa.Key)
-                {
-#warning 这里要加日志，出现了自己攻击自己！！！
-                    reason = "";
-                    return false;
-                }
-                else if (that._Players[sa.targetOwner].TheLargestHolderKey != sa.targetOwner)
-                {
-                    if (that._Players[sa.Key].playerType == RoleInGame.PlayerType.NPC)
-                    {
-                        reason = "";
-                        return true;
-                    }
-                    else if (that._Players[sa.targetOwner].playerType == RoleInGame.PlayerType.NPC)
-                    {
-                        reason = "";
-                        return true;
-                    }
-                    else
-                    {
-                        var bossKey = that._Players[sa.targetOwner].TheLargestHolderKey;
-                        if (that._Players.ContainsKey(bossKey))
-                        {
-                            var boss = that._Players[bossKey];
-                            WebNotify(that._Players[sa.Key], $"不能攻击拜了老大的玩家，其老大为{boss.PlayerName}，你可以直接攻击其老大！");
-                            reason = "";
-                            return false;
-                        }
-                    }
-                }
-                else
-                {
-                    reason = "";
-                    return true;
-                }
-            }
+//            if (c.c == "SetAttack")
+//            {
+//                SetAttack sa = (SetAttack)c;
+//                if (!(that._Players.ContainsKey(sa.targetOwner)))
+//                {
+//                    reason = "";
+//                    return false;
+//                }
+//                else if (that._Players[sa.targetOwner].StartFPIndex != sa.target)
+//                {
+//                    reason = "";
+//                    return false;
+//                }
+//                else if (sa.targetOwner == sa.Key)
+//                {
+//#warning 这里要加日志，出现了自己攻击自己！！！
+//                    reason = "";
+//                    return false;
+//                }
+//                else if (that._Players[sa.targetOwner].TheLargestHolderKey != sa.targetOwner)
+//                {
+//                    if (that._Players[sa.Key].playerType == Player.PlayerType.NPC)
+//                    {
+//                        reason = "";
+//                        return true;
+//                    }
+//                    else if (that._Players[sa.targetOwner].playerType == Player.PlayerType.NPC)
+//                    {
+//                        reason = "";
+//                        return true;
+//                    }
+//                    else
+//                    {
+//                        var bossKey = that._Players[sa.targetOwner].TheLargestHolderKey;
+//                        if (that._Players.ContainsKey(bossKey))
+//                        {
+//                            var boss = that._Players[bossKey];
+//                            WebNotify(that._Players[sa.Key], $"不能攻击拜了老大的玩家，其老大为{boss.PlayerName}，你可以直接攻击其老大！");
+//                            reason = "";
+//                            return false;
+//                        }
+//                    }
+//                }
+//                else
+//                {
+//                    reason = "";
+//                    return true;
+//                }
+//            }
             reason = "";
             return false;
         }
@@ -180,78 +181,79 @@ namespace HouseManager5_0
             LevelIsLow,
             IsGroupMate,
         }
-        private CarStateForBeAttacked CheckTargetState(RoleInGame role, string targetOwner)
+        private CarStateForBeAttacked CheckTargetState(Player role, string targetOwner)
         {
-            if (role.playerType == RoleInGame.PlayerType.player)
-            {
-                var player = (Player)role;
-                if (roomMain._Players.ContainsKey(targetOwner))
-                {
-                    if (roomMain._Players[targetOwner].Bust)
-                    {
-                        return CarStateForBeAttacked.HasBeenBust;
-                    }
-                    else
-                    {
-                        if (roomMain._Players[targetOwner].playerType == RoleInGame.PlayerType.NPC)
-                        {
-                            var targetNPC = (NPC)roomMain._Players[targetOwner];
-                            if (string.IsNullOrEmpty(targetNPC.challenger))
-                            {
-                                if (player.TheLargestHolderKey == player.Key)
-                                {
-                                    if (player.levelObj.Level + 1 >= targetNPC.levelObj.Level)
-                                        return CarStateForBeAttacked.CanBeAttacked;
-                                    else
-                                        return CarStateForBeAttacked.LevelIsLow;
-                                }
-                                else
-                                {
-                                    return CarStateForBeAttacked.NotBoss;
-                                }
-                            }
-                            else
-                            {
-                                if (targetNPC.challenger == player.TheLargestHolderKey)
-                                    return CarStateForBeAttacked.CanBeAttacked;
-                                else
-                                    return CarStateForBeAttacked.IsBeingChallenged;
-                            }
-                        }
-                        else
-                        {
-                            var targetPlayer = (Player)roomMain._Players[targetOwner];
-                            if (targetPlayer.IsOnline())
-                            {
-                                if (that.isAtTheSameGroup(player.Key, targetPlayer.Key))
-                                {
-                                    return CarStateForBeAttacked.IsGroupMate;
-                                }
-                                else if (player.levelObj.Level >= targetPlayer.levelObj.Level)
-                                    return CarStateForBeAttacked.CanBeAttacked;
-                                else
-                                    return CarStateForBeAttacked.LevelIsLow;
-                            }
-                            else
-                            {
-                                return CarStateForBeAttacked.CanBeAttacked;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    return CarStateForBeAttacked.NotExisted;
-                }
-            }
-            else if (role.playerType == RoleInGame.PlayerType.NPC)
-            {
-                return CarStateForBeAttacked.CanBeAttacked;
-            }
-            else
-            {
-                throw new Exception("错误！");
-            }
+            return CarStateForBeAttacked.HasBeenBust;
+            //if (role.playerType == Player.PlayerType.player)
+            //{
+            //    var player = (Player)role;
+            //    if (roomMain._Players.ContainsKey(targetOwner))
+            //    {
+            //        if (roomMain._Players[targetOwner].Bust)
+            //        {
+            //            return CarStateForBeAttacked.HasBeenBust;
+            //        }
+            //        else
+            //        {
+            //            if (roomMain._Players[targetOwner].playerType == Player.PlayerType.NPC)
+            //            {
+            //                var targetNPC = (NPC)roomMain._Players[targetOwner];
+            //                if (string.IsNullOrEmpty(targetNPC.challenger))
+            //                {
+            //                    if (player.TheLargestHolderKey == player.Key)
+            //                    {
+            //                        if (player.levelObj.Level + 1 >= targetNPC.levelObj.Level)
+            //                            return CarStateForBeAttacked.CanBeAttacked;
+            //                        else
+            //                            return CarStateForBeAttacked.LevelIsLow;
+            //                    }
+            //                    else
+            //                    {
+            //                        return CarStateForBeAttacked.NotBoss;
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    if (targetNPC.challenger == player.TheLargestHolderKey)
+            //                        return CarStateForBeAttacked.CanBeAttacked;
+            //                    else
+            //                        return CarStateForBeAttacked.IsBeingChallenged;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                var targetPlayer = (Player)roomMain._Players[targetOwner];
+            //                if (targetPlayer.IsOnline())
+            //                {
+            //                    if (that.isAtTheSameGroup(player.Key, targetPlayer.Key))
+            //                    {
+            //                        return CarStateForBeAttacked.IsGroupMate;
+            //                    }
+            //                    else if (player.levelObj.Level >= targetPlayer.levelObj.Level)
+            //                        return CarStateForBeAttacked.CanBeAttacked;
+            //                    else
+            //                        return CarStateForBeAttacked.LevelIsLow;
+            //                }
+            //                else
+            //                {
+            //                    return CarStateForBeAttacked.CanBeAttacked;
+            //                }
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        return CarStateForBeAttacked.NotExisted;
+            //    }
+            //}
+            //else if (role.playerType == Player.PlayerType.NPC)
+            //{
+            //    return CarStateForBeAttacked.CanBeAttacked;
+            //}
+            //else
+            //{
+            //    throw new Exception("错误！");
+            //}
         }
 
 
@@ -306,7 +308,7 @@ namespace HouseManager5_0
         /// <param name="notifyMsg"></param>
         /// <param name="victimState"></param>
         /// <param name="reason"></param>
-        RoomMainF.RoomMain.commandWithTime.ReturningOjb attack(RoleInGame player, Car car, SetAttack sa, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
+        RoomMainF.RoomMain.commandWithTime.ReturningOjb attack(Player player, Car car, SetAttack sa, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
         {
             AttackObj ao = new AttackObj(sa,
                 (int startT, Car car, SetAttack sa, int goMile, Node goPath, commandWithTime.ReturningOjb ro) =>
@@ -321,7 +323,7 @@ namespace HouseManager5_0
             return this.contact(player, car, ao, grp, ref notifyMsg, out Mrr);
         }
 
-        internal commandWithTime.ReturningOjb randomWhenConfused(RoleInGame player, RoleInGame boss, Car car, SetAttack sa, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
+        internal commandWithTime.ReturningOjb randomWhenConfused(Player player, Player boss, Car car, SetAttack sa, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
         {
             AttackObj ao = new AttackObj(sa,
               (int startT, Car car, SetAttack sa, int goMile, Node goPath, commandWithTime.ReturningOjb ro) =>
@@ -335,7 +337,7 @@ namespace HouseManager5_0
             );
             return this.randomWhenConfused(player, boss, car, ao, grp, ref notifyMsg, out Mrr);
         }
-        private void SetAttackArrivalThread(int startT, int step, RoleInGame player, Car car, SetAttack sa, int goMile, Node goPath, commandWithTime.ReturningOjb ro, GetRandomPos grp)
+        private void SetAttackArrivalThread(int startT, int step, Player player, Car car, SetAttack sa, int goMile, Node goPath, commandWithTime.ReturningOjb ro, GetRandomPos grp)
         {
 
             System.Threading.Thread th = new System.Threading.Thread(() =>
@@ -366,7 +368,7 @@ namespace HouseManager5_0
 
                                 car.setState(player, ref notifyMsg, CarState.working);
                                 this.sendSeveralMsgs(notifyMsg);
-                                //string command, int startT, int step, RoleInGame player, Car car, MagicSkill ms, int goMile, Node goPath, commandWithTime.ReturningOjb ro
+                                //string command, int startT, int step, Player player, Car car, MagicSkill ms, int goMile, Node goPath, commandWithTime.ReturningOjb ro
                                 SetAttackArrivalThread(newStartT, step, player, car, sa, goMile, goPath, ro, grp);
                             };
                     loop(selectionIsRight, step, startT, player, goPath);

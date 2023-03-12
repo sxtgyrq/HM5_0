@@ -24,55 +24,55 @@ namespace HouseManager5_0
 
         internal void SelectDriver(SetSelectDriver dm)
         {
-            List<string> notifyMsg = new List<string>();
-            lock (that.PlayerLock)
-            {
-                if (that._Players.ContainsKey(dm.Key))
-                {
-                    var player = that._Players[dm.Key];
-                    if (player.Bust) { }
-                    else
-                    {
+            //List<string> notifyMsg = new List<string>();
+            //lock (that.PlayerLock)
+            //{
+            //    if (that._Players.ContainsKey(dm.Key))
+            //    {
+            //        var player = that._Players[dm.Key];
+            //        if (player.Bust) { }
+            //        else
+            //        {
 
-                        var car = player.getCar();
-                        const int CostMoney = 5000;
-                        if (car.state == Car.CarState.waitAtBaseStation)
-                            if (car.ability.driver == null)
-                            {
-                                this.setDriver(player, car, dm.Index, ref notifyMsg);
-                            }
-                            else if (car.ability.driver.Index == dm.Index)
-                            {
-                                this.WebNotify(player, $"你现在的司机就是{car.ability.driver.Name}.");
-                            }
-                            else if (player.Money > CostMoney)
-                            {
-                                player.MoneySet(player.Money - CostMoney, ref notifyMsg);
-                                //var recruit = player.buildingReward[0];
-                                if (that.rm.Next(100) < Manager_Driver.GetRecruit(player))
-                                {
-                                    this.setDriver(player, car, dm.Index, ref notifyMsg);
-                                    this.WebNotify(player, "招聘成功！");
-                                }
-                                else
-                                {
-                                    this.WebNotify(player, "招聘失败！到指定地点祈更多福可以提高成功率");
-                                }
-                            }
-                            else
-                            {
-                                this.WebNotify(player, "换司机最少要消耗50.00点积分！");
-                            }
+            //            var car = player.getCar();
+            //            const int CostMoney = 5000;
+            //            if (car.state == Car.CarState.waitAtBaseStation)
+            //                if (car.ability.driver == null)
+            //                {
+            //                    this.setDriver(player, car, dm.Index, ref notifyMsg);
+            //                }
+            //                else if (car.ability.driver.Index == dm.Index)
+            //                {
+            //                    this.WebNotify(player, $"你现在的司机就是{car.ability.driver.Name}.");
+            //                }
+            //                else if (player.Money > CostMoney)
+            //                {
+            //                    player.MoneySet(player.Money - CostMoney, ref notifyMsg);
+            //                    //var recruit = player.buildingReward[0];
+            //                    if (that.rm.Next(100) < Manager_Driver.GetRecruit(player))
+            //                    {
+            //                        this.setDriver(player, car, dm.Index, ref notifyMsg);
+            //                        this.WebNotify(player, "招聘成功！");
+            //                    }
+            //                    else
+            //                    {
+            //                        this.WebNotify(player, "招聘失败！到指定地点祈更多福可以提高成功率");
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    this.WebNotify(player, "换司机最少要消耗50.00点积分！");
+            //                }
 
-                    }
-                }
-            }
-            this.sendSeveralMsgs(notifyMsg); 
+            //        }
+            //    }
+            //}
+            //this.sendSeveralMsgs(notifyMsg); 
         }
 
 
 
-        private void setDriver(RoleInGame player, Car car, int index, ref List<string> notifyMsg)
+        private void setDriver(Player player, Car car, int index, ref List<string> notifyMsg)
         {
             switch (index)
             {
@@ -224,12 +224,12 @@ namespace HouseManager5_0
                     //    }; break;
 
             }
-            if (player.playerType == RoleInGame.PlayerType.player)
+            if (player.playerType == Player.PlayerType.player)
                 that.taskM.DriverSelected((Player)player);
         }
 
 
-        //private void SetRecruit(int recruit, ref RoleInGame player)
+        //private void SetRecruit(int recruit, ref Player player)
         //{
         //    /*
         //     * 不会衰减，只有重新求福，才会衰减。
@@ -237,41 +237,41 @@ namespace HouseManager5_0
         //    //player.buildingReward[0] -= 5;
         //    //player.buildingReward[0] = Math.Max(0, player.buildingReward[0]);
         //}
-        internal static int GetRecruit(RoleInGame player)
+        internal static int GetRecruit(Player player)
         {
             return player.buildingReward[0];
         }
 
-        internal void SetAsPeople(NPC npc, ref List<string> notifyMsg)
-        {
-            List<int> forSelect = new List<int>
-            { 137,190,150,149,134,133,132,131,128,124,115,110,536,506,515,513,312,504,179,162,157,146,141,136};
-            var selectIndex = forSelect[that.rm.Next(0, forSelect.Count)];
-            var car = npc.getCar();
-            setDriver(npc, car, selectIndex, ref notifyMsg);
-            // throw new NotImplementedException();
-        }
+        //internal void SetAsPeople(NPC npc, ref List<string> notifyMsg)
+        //{
+        //    List<int> forSelect = new List<int>
+        //    { 137,190,150,149,134,133,132,131,128,124,115,110,536,506,515,513,312,504,179,162,157,146,141,136};
+        //    var selectIndex = forSelect[that.rm.Next(0, forSelect.Count)];
+        //    var car = npc.getCar();
+        //    setDriver(npc, car, selectIndex, ref notifyMsg);
+        //    // throw new NotImplementedException();
+        //}
 
-        internal void SetAsDevil(NPC npc, ref List<string> notifyMsg)
-        {
-            List<int> forSelect = new List<int>
-            { 510,501,196,180,173,170,169,166,156,118,114,105,155,533,523,505,125,176,191,184,183,121,116,106};
-            var selectIndex = forSelect[that.rm.Next(0, forSelect.Count)];
-            var car = npc.getCar();
-            setDriver(npc, car, selectIndex, ref notifyMsg);
-            // throw new NotImplementedException();
-        }
+        //internal void SetAsDevil(NPC npc, ref List<string> notifyMsg)
+        //{
+        //    List<int> forSelect = new List<int>
+        //    { 510,501,196,180,173,170,169,166,156,118,114,105,155,533,523,505,125,176,191,184,183,121,116,106};
+        //    var selectIndex = forSelect[that.rm.Next(0, forSelect.Count)];
+        //    var car = npc.getCar();
+        //    setDriver(npc, car, selectIndex, ref notifyMsg);
+        //    // throw new NotImplementedException();
+        //}
 
         //immortal
-        internal void SetAsImmortal(NPC npc, ref List<string> notifyMsg)
-        {
-            List<int> forSelect = new List<int>
-            { 518,194,195,193,192,178,171,144,140,135,123,107,538,508,199,198,174,154,152,142,127,117,111,109};
-            var selectIndex = forSelect[that.rm.Next(0, forSelect.Count)];
-            var car = npc.getCar();
-            setDriver(npc, car, selectIndex, ref notifyMsg);
-            // throw new NotImplementedException();
-        }
+        //internal void SetAsImmortal(NPC npc, ref List<string> notifyMsg)
+        //{
+        //    List<int> forSelect = new List<int>
+        //    { 518,194,195,193,192,178,171,144,140,135,123,107,538,508,199,198,174,154,152,142,127,117,111,109};
+        //    var selectIndex = forSelect[that.rm.Next(0, forSelect.Count)];
+        //    var car = npc.getCar();
+        //    setDriver(npc, car, selectIndex, ref notifyMsg);
+        //    // throw new NotImplementedException();
+        //}
 
         public void newThreadDo(CommonClass.Command c, GetRandomPos grp)
         {
@@ -295,7 +295,7 @@ namespace HouseManager5_0
                 this.ambushInfomations = new List<AmbushInfomation>();
                 this.simulate = new Simulate(this);
             }
-            internal void Cancle(RoleInGame player_)
+            internal void Cancle(Player player_)
             {
                 this.controlInfomations.RemoveAll(item => item.player.Key == player_.Key);
                 this.ambushInfomations.RemoveAll(item => item.player.Key == player_.Key);
@@ -365,7 +365,7 @@ namespace HouseManager5_0
             List<ControlInfomation> controlInfomations = new List<ControlInfomation>();
             internal class ControlInfomation
             {
-                public RoleInGame player { get; set; }
+                public Player player { get; set; }
                 public OssModel.FastonPosition fpResult { get; set; }
                 public long volumeValue { get; set; }
                 public ControlAttackType attackType { get; set; }
@@ -375,7 +375,7 @@ namespace HouseManager5_0
 
             ControlInfomation _selectedControlItem = null;
 
-            public RoleInGame getBoss()
+            public Player getBoss()
             {
                 if (this._selectedControlItem == null)
                 {
@@ -387,7 +387,7 @@ namespace HouseManager5_0
                 }
             }
 
-            internal void AddControlInfo(RoleInGame player_, FastonPosition fastonPosition_, long volumeValue_, ControlAttackType attackType_)
+            internal void AddControlInfo(Player player_, FastonPosition fastonPosition_, long volumeValue_, ControlAttackType attackType_)
             {
                 this.Cancle(player_);
                 //this.AttackInfomations.
@@ -439,7 +439,7 @@ namespace HouseManager5_0
 
 
             internal enum programResult { runContinue, runReturn };
-            //programResult dealWithItem(RoleInGame self, ControlInfomation magicItem, RoomMain that, webnotify ex, Car enemyCar, RoleInGame enemy, ref List<string> notifyMsg, out bool protecedByDefendMagic)
+            //programResult dealWithItem(Player self, ControlInfomation magicItem, RoomMain that, webnotify ex, Car enemyCar, Player enemy, ref List<string> notifyMsg, out bool protecedByDefendMagic)
             //{
             //    int defensiveOfControl;
             //    if (self.getCar().ability.driver == null)
@@ -545,7 +545,7 @@ namespace HouseManager5_0
                     this._confuseManger = confuseManger;
                 }
 
-                internal bool dealWithItem_simulate(RoleInGame self, RoomMain that, Car enemyCar, RoleInGame enemy)
+                internal bool dealWithItem_simulate(Player self, RoomMain that, Car enemyCar, Player enemy)
                 {
                     int defensiveOfAmbush;
                     if (self.getCar().ability.driver == null)
@@ -620,14 +620,14 @@ namespace HouseManager5_0
                         // return magicE.ProtectedByLost();
                     }
                 }
-                internal bool confuse(RoleInGame self, RoomMain that, Car enemyCar, RoleInGame enemy)
+                internal bool confuse(Player self, RoomMain that, Car enemyCar, Player enemy)
                 {
                     confuseObj co = new confuseObj();
                     return control(self, that, enemyCar, enemy, co);
 
                 }
 
-                private bool control(RoleInGame self, RoomMain that, Car enemyCar, RoleInGame enemy, controlMagic cm)
+                private bool control(Player self, RoomMain that, Car enemyCar, Player enemy, controlMagic cm)
                 {
                     int defensiveOfControl;
                     if (self.getCar().ability.driver == null)
@@ -664,11 +664,11 @@ namespace HouseManager5_0
                     }
                 }
 
-                internal bool Lose(RoleInGame self, RoomMain that, Car enemyCar, NPC enemy)
-                {
-                    loseObj lo = new loseObj();
-                    return control(self, that, enemyCar, enemy, lo);
-                }
+                //internal bool Lose(Player self, RoomMain that, Car enemyCar, NPC enemy)
+                //{
+                //    loseObj lo = new loseObj();
+                //    return control(self, that, enemyCar, enemy, lo);
+                //}
 
                 interface improveMagic
                 {
@@ -679,37 +679,38 @@ namespace HouseManager5_0
                 {
 
                 }
-                internal void improveAttack(RoleInGame partner, RoomMain that, Car car, NPC npc_Operate)
-                {
-                    improveAttackMagic lo = new improveAttackMagic();
-                    improve(partner, that, car, npc_Operate, lo);
-                    // throw new NotImplementedException();
+                //internal void improveAttack(Player partner, RoomMain that, Car car, NPC npc_Operate)
+                //{
+                //    improveAttackMagic lo = new improveAttackMagic();
+                //    improve(partner, that, car, npc_Operate, lo);
+                //    // throw new NotImplementedException();
 
-                }
+                //}
 
-                private long improve(RoleInGame partner, RoomMain that, Car car, NPC npc_Operate, improveMagic im)
-                {
-                    if (that._Players.ContainsKey(partner.Key))
-                    {
-                        var beneficiary = that._Players[partner.Key];
-                        if (!beneficiary.Bust)
-                        {
+                //private long improve(Player partner, RoomMain that, Car car, NPC npc_Operate, improveMagic im)
+                //{
+                //    if (that._Players.ContainsKey(partner.Key))
+                //    {
+                //        var beneficiary = that._Players[partner.Key];
+                //        if (!beneficiary.Bust)
+                //        {
 
-                            long costVolumeValue;
-                            beneficiary.improvementRecord.simulateToAddSpeed(partner.getCar().ability.leftVolume, out costVolumeValue);
-                            return costVolumeValue;
-                        }
-                        else
-                        {
-                            return 0;
-                        }
+                //            long costVolumeValue;
+                //            beneficiary.improvementRecord.simulateToAddSpeed(partner.getCar().ability.leftVolume, out costVolumeValue);
+                //            return costVolumeValue;
+                //        }
+                //        else
+                //        {
+                //            return 0;
+                //        }
 
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                }
+                //    }
+                //    else
+                //    {
+                //        return 0;
+                //    }
+                //}
+           
             }
 
             //private int getBaseControlProbability(object controlType)
@@ -720,7 +721,7 @@ namespace HouseManager5_0
             public Simulate simulate { get; private set; }
             // this.
 
-            //            bool dealWithItem(RoleInGame self, AmbushInfomation magicItem, RoomMain that, webnotify ex, Car enemyCar, RoleInGame enemy, GetRandomPos grp, ref List<string> notifyMsg, out bool protecedByDefendMagic)
+            //            bool dealWithItem(Player self, AmbushInfomation magicItem, RoomMain that, webnotify ex, Car enemyCar, Player enemy, GetRandomPos grp, ref List<string> notifyMsg, out bool protecedByDefendMagic)
             //            {
             //#warning 这里没有Ignore
             //                int defensiveOfAmbush;
@@ -826,7 +827,7 @@ namespace HouseManager5_0
                 }
             }
 
-            internal void ControllSelf(RoleInGame self, RoomMain that, GetRandomPos grp, ref List<string> notifyMsg, interfaceOfEngine.webnotify ex)
+            internal void ControllSelf(Player self, RoomMain that, GetRandomPos grp, ref List<string> notifyMsg, interfaceOfEngine.webnotify ex)
             {
                 FastonPosition baseFp = Program.dt.GetFpByIndex(self.StartFPIndex);
                 this.controlInfomations.RemoveAll(item => item.player.Bust);
@@ -888,13 +889,13 @@ namespace HouseManager5_0
             #region 埋伏区 ambush
             public class AmbushInfomation
             {
-                public RoleInGame player { get; set; }
+                public Player player { get; set; }
                 public OssModel.FastonPosition fpResult { get; set; }
                 public long volumeValue { get; set; }
                 //public long bussinessValue { get; set; }
             }
 
-            internal void AddAmbushInfo(RoleInGame player_, FastonPosition fastonPosition_, long volumeValue_, string thisRoleKey, ref List<string> notifyMsg)
+            internal void AddAmbushInfo(Player player_, FastonPosition fastonPosition_, long volumeValue_, string thisRoleKey, ref List<string> notifyMsg)
             {
                 this.Cancle(player_);
                 //this.AttackInfomations.
@@ -913,8 +914,8 @@ namespace HouseManager5_0
             //}
             internal List<AmbushInfomation> ambushInfomations = new List<AmbushInfomation>();
 
-            // internal delegate void AmbushAttack(int i, ref List<string> notifyMsg, RoleInGame enemy, ref long reduceSumInput, bool protecedByDefendMagic);
-            internal void AmbushSelf(RoleInGame selfRole, RoomMain that, webnotify ex, ref List<string> notifyMsg, interfaceOfHM.AttackT at, GetRandomPos grp, ref long reduceSumInput)
+            // internal delegate void AmbushAttack(int i, ref List<string> notifyMsg, Player enemy, ref long reduceSumInput, bool protecedByDefendMagic);
+            internal void AmbushSelf(Player selfRole, RoomMain that, webnotify ex, ref List<string> notifyMsg, interfaceOfHM.AttackT at, GetRandomPos grp, ref long reduceSumInput)
             {
                 List<AmbushInfomation> newList = new List<AmbushInfomation>();
                 for (int i = 0; i < ambushInfomations.Count; i++)
@@ -944,7 +945,7 @@ namespace HouseManager5_0
                 }
             }
 
-            internal long AmbushSelf(RoleInGame selfRole, RoomMain that, Engine_MagicEngine.attackMagicTool at, GetRandomPos gp)
+            internal long AmbushSelf(Player selfRole, RoomMain that, Engine_MagicEngine.attackMagicTool at, GetRandomPos gp)
             {
                 List<AmbushInfomation> newList = new List<AmbushInfomation>();
                 for (int i = 0; i < ambushInfomations.Count; i++)
@@ -982,7 +983,7 @@ namespace HouseManager5_0
             /// <param name="enemyCar"></param>
             /// <param name="enemy"></param>
             /// <returns></returns>
-            private long dealWithItem(RoleInGame self, AmbushInfomation ambushInfomation, RoomMain that, Car enemyCar, RoleInGame enemy)
+            private long dealWithItem(Player self, AmbushInfomation ambushInfomation, RoomMain that, Car enemyCar, Player enemy)
             {
                 int defensiveOfAmbush;
                 if (self.getCar().ability.driver == null)
@@ -1029,20 +1030,20 @@ namespace HouseManager5_0
             /// <param name="victim"></param>
             /// <param name="v"></param>
             /// <returns></returns>
-            internal long SimulationToMagicAttack(Engine_MagicEngine.attackMagicTool amt, NPC npc_Operate, Car car, int longCollectMoney, RoleInGame victim, int v)
-            {
-                long harmValue;
-                //var car = npc_Operate.getCar();
-                if (victim.improvementRecord.defenceValue > 0)
-                {
-                    harmValue = ((amt.leftValue(car.ability) - longCollectMoney) * (100 - amt.GetDefensiveValue(victim.getCar().ability.driver, victim.improvementRecord.defenceValue > 0)) / 100);
-                }
-                else
-                {
-                    harmValue = ((amt.leftValue(car.ability) - longCollectMoney) * (100 - amt.GetDefensiveValue(victim.getCar().ability.driver)) / 100);
-                }
-                return harmValue;
-            }
+            //internal long SimulationToMagicAttack(Engine_MagicEngine.attackMagicTool amt, NPC npc_Operate, Car car, int longCollectMoney, Player victim, int v)
+            //{
+            //    long harmValue;
+            //    //var car = npc_Operate.getCar();
+            //    if (victim.improvementRecord.defenceValue > 0)
+            //    {
+            //        harmValue = ((amt.leftValue(car.ability) - longCollectMoney) * (100 - amt.GetDefensiveValue(victim.getCar().ability.driver, victim.improvementRecord.defenceValue > 0)) / 100);
+            //    }
+            //    else
+            //    {
+            //        harmValue = ((amt.leftValue(car.ability) - longCollectMoney) * (100 - amt.GetDefensiveValue(victim.getCar().ability.driver)) / 100);
+            //    }
+            //    return harmValue;
+            //}
 
 
 
@@ -1070,14 +1071,14 @@ namespace HouseManager5_0
             }
 
             const int speedImproveParameter = 7;
-            internal void addSpeed(RoleInGame role, long leftVolume, out long costVolumeValue, ref List<string> notifyMsg)
+            internal void addSpeed(Player role, long leftVolume, out long costVolumeValue, ref List<string> notifyMsg)
             {
                 if (add(ref this._speedValue, leftVolume, speedImproveParameter, out costVolumeValue))
                 {
                     role.speedMagicChanged(role, ref notifyMsg);
                 }
             }
-            internal void addDefence(RoleInGame role, long leftVolume, out long costVolumeValue, ref List<string> notifyMsg)
+            internal void addDefence(Player role, long leftVolume, out long costVolumeValue, ref List<string> notifyMsg)
             {
                 if (add(ref this._defenceValue, leftVolume, defenceImproveParameter, out costVolumeValue))
                 {
@@ -1100,7 +1101,7 @@ namespace HouseManager5_0
                 add(ref copySpeed, leftBusinessValue, speedImproveParameter, out costBusinessValue);
             }
 
-            internal void reduceSpeed(RoleInGame role, long changeValue, ref List<string> notifyMsg)
+            internal void reduceSpeed(Player role, long changeValue, ref List<string> notifyMsg)
             {
                 if (reduce(ref this._speedValue, changeValue))
                 {
@@ -1108,7 +1109,7 @@ namespace HouseManager5_0
                 }
             }
             const int attackImproveParameter = 7;
-            internal void addAttack(RoleInGame role, long leftBusiness, out long costBusinessValue, ref List<string> notifyMsg)
+            internal void addAttack(Player role, long leftBusiness, out long costBusinessValue, ref List<string> notifyMsg)
             {
                 if (add(ref this._attackValue, leftBusiness, attackImproveParameter, out costBusinessValue))
                 {
@@ -1116,7 +1117,7 @@ namespace HouseManager5_0
                 }
             }
 
-            internal void reduceAttack(RoleInGame role, long changeValue, ref List<string> notifyMsg)
+            internal void reduceAttack(Player role, long changeValue, ref List<string> notifyMsg)
             {
                 if (reduce(ref this._attackValue, changeValue))
                 {
@@ -1170,7 +1171,7 @@ namespace HouseManager5_0
             const int defenceImproveParameter = 7;
 
 
-            internal void reduceDefend(RoleInGame role, long changeValue, ref List<string> notifyMsg)
+            internal void reduceDefend(Player role, long changeValue, ref List<string> notifyMsg)
             {
                 if (reduce(ref this._defenceValue, changeValue))
                 {
@@ -1190,12 +1191,12 @@ namespace HouseManager5_0
 
                 interface improveMagic
                 {
-                    long getMoney(Simulate simulate, RoleInGame npc_Operate, long costVolume);
+                    long getMoney(Simulate simulate, Player npc_Operate, long costVolume);
                 }
 
                 class improveAttackMagic : improveMagic
                 {
-                    public long getMoney(Simulate simulate, RoleInGame npc_Operate, long costVolume)
+                    public long getMoney(Simulate simulate, Player npc_Operate, long costVolume)
                     {
                         long costBusinessValue;
                         simulate._improveManager.simulateToAddAttack(npc_Operate.getCar().ability.leftBusiness, out costBusinessValue);
@@ -1204,7 +1205,7 @@ namespace HouseManager5_0
                 }
                 class improveSpeedMagic : improveMagic
                 {
-                    public long getMoney(Simulate simulate, RoleInGame npc_Operate, long costVolume)
+                    public long getMoney(Simulate simulate, Player npc_Operate, long costVolume)
                     {
                         long costVolumeValue;
                         simulate._improveManager.simulateToAddSpeed(npc_Operate.getCar().ability.leftVolume - costVolume, out costVolumeValue);
@@ -1213,7 +1214,7 @@ namespace HouseManager5_0
                 }
                 class improveDefendMagic : improveMagic
                 {
-                    public long getMoney(Simulate simulate, RoleInGame npc_Operate, long costVolume)
+                    public long getMoney(Simulate simulate, Player npc_Operate, long costVolume)
                     {
                         long costVolumeValue;
                         simulate._improveManager.simulateToAddDefend(npc_Operate.getCar().ability.leftVolume - costVolume, out costVolumeValue);
@@ -1221,70 +1222,70 @@ namespace HouseManager5_0
                         // throw new NotImplementedException();
                     }
                 }
-                internal double improveAttack(RoleInGame partner, RoomMain that, Car car, NPC npc_Operate, GetRandomPos grp, out FastonPosition fp)
-                {
+                //internal double improveAttack(Player partner, RoomMain that, Car car, NPC npc_Operate, GetRandomPos grp, out FastonPosition fp)
+                //{
 
-                    improveAttackMagic lo = new improveAttackMagic();
-                    return improve(partner, that, car, npc_Operate, lo, grp, out fp);
+                //    improveAttackMagic lo = new improveAttackMagic();
+                //    return improve(partner, that, car, npc_Operate, lo, grp, out fp);
 
-                }
+                //}
 
-                private double improve(RoleInGame partner, RoomMain that, Car car, NPC npc_Operate, improveMagic im, GetRandomPos grp, out FastonPosition fp)
-                {
+                //private double improve(Player partner, RoomMain that, Car car, NPC npc_Operate, improveMagic im, GetRandomPos grp, out FastonPosition fp)
+                //{
 
-                    if (that._Players.ContainsKey(partner.Key))
-                    {
-                        var listIndexes = that.getCollectPositionsByDistance(grp.GetFpByIndex(partner.StartFPIndex), grp);
-                        fp = grp.GetFpByIndex(that._collectPosition[listIndexes[0]]);
-                        var longCollectMoney = that.GetCollectReWard(listIndexes[0]) * 100;
-                        double distance;
-                        RoleInGame boss;
-                        var fromTarget = grp.GetFpByIndex(npc_Operate.StartFPIndex);
-                        var endTarget = fp;
-                        if (npc_Operate.HasTheBoss(that._Players, out boss))
-                        {
-                            var bossPoint = grp.GetFpByIndex(boss.StartFPIndex);
-                            distance =
-                                CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fromTarget.Latitde, fromTarget.Longitude, fromTarget.Height, endTarget.Latitde, endTarget.Longitude, endTarget.Height)
-                                + CommonClass.Geography.getLengthOfTwoPoint.GetDistance(bossPoint.Latitde, bossPoint.Longitude, bossPoint.Height, endTarget.Latitde, endTarget.Longitude, endTarget.Height)
-                                + CommonClass.Geography.getLengthOfTwoPoint.GetDistance(bossPoint.Latitde, bossPoint.Longitude, bossPoint.Height, fromTarget.Latitde, fromTarget.Longitude, fromTarget.Height);
-                        }
-                        else
-                        {
-                            distance = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(endTarget.Latitde, endTarget.Longitude, endTarget.Height, fromTarget.Latitde, fromTarget.Longitude, fromTarget.Height) * 2;
-                        }
-                        var beneficiary = that._Players[partner.Key];
-                        if (!beneficiary.Bust)
-                        {
-                            long moneyGet = im.getMoney(this, npc_Operate, longCollectMoney) + longCollectMoney;
+                //    if (that._Players.ContainsKey(partner.Key))
+                //    {
+                //        var listIndexes = that.getCollectPositionsByDistance(grp.GetFpByIndex(partner.StartFPIndex), grp);
+                //        fp = grp.GetFpByIndex(that._collectPosition[listIndexes[0]]);
+                //        var longCollectMoney = that.GetCollectReWard(listIndexes[0]) * 100;
+                //        double distance;
+                //        Player boss;
+                //        var fromTarget = grp.GetFpByIndex(npc_Operate.StartFPIndex);
+                //        var endTarget = fp;
+                //        if (npc_Operate.HasTheBoss(that._Players, out boss))
+                //        {
+                //            var bossPoint = grp.GetFpByIndex(boss.StartFPIndex);
+                //            distance =
+                //                CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fromTarget.Latitde, fromTarget.Longitude, fromTarget.Height, endTarget.Latitde, endTarget.Longitude, endTarget.Height)
+                //                + CommonClass.Geography.getLengthOfTwoPoint.GetDistance(bossPoint.Latitde, bossPoint.Longitude, bossPoint.Height, endTarget.Latitde, endTarget.Longitude, endTarget.Height)
+                //                + CommonClass.Geography.getLengthOfTwoPoint.GetDistance(bossPoint.Latitde, bossPoint.Longitude, bossPoint.Height, fromTarget.Latitde, fromTarget.Longitude, fromTarget.Height);
+                //        }
+                //        else
+                //        {
+                //            distance = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(endTarget.Latitde, endTarget.Longitude, endTarget.Height, fromTarget.Latitde, fromTarget.Longitude, fromTarget.Height) * 2;
+                //        }
+                //        var beneficiary = that._Players[partner.Key];
+                //        if (!beneficiary.Bust)
+                //        {
+                //            long moneyGet = im.getMoney(this, npc_Operate, longCollectMoney) + longCollectMoney;
 
-                            return moneyGet / distance;
-                        }
-                        else
-                        {
-                            return 0;
-                        }
+                //            return moneyGet / distance;
+                //        }
+                //        else
+                //        {
+                //            return 0;
+                //        }
 
-                    }
-                    else
-                    {
-                        fp = null;
-                        return 0;
-                    }
-                }
+                //    }
+                //    else
+                //    {
+                //        fp = null;
+                //        return 0;
+                //    }
+                //}
 
-                internal double improveSpeed(RoleInGame partner, RoomMain that, Car car, NPC npc_Operate, GetRandomPos grp, out FastonPosition fp)
-                {
+                //internal double improveSpeed(Player partner, RoomMain that, Car car, NPC npc_Operate, GetRandomPos grp, out FastonPosition fp)
+                //{
 
-                    improveSpeedMagic ism = new improveSpeedMagic();
-                    return improve(partner, that, car, npc_Operate, ism, grp, out fp);
-                }
+                //    improveSpeedMagic ism = new improveSpeedMagic();
+                //    return improve(partner, that, car, npc_Operate, ism, grp, out fp);
+                //}
 
-                internal double improveDefend(RoleInGame partner, RoomMain that, Car car, NPC npc_Operate, GetRandomPos grp, out FastonPosition fp)
-                {
-                    improveDefendMagic idm = new improveDefendMagic();
-                    return improve(partner, that, car, npc_Operate, idm, grp, out fp);
-                }
+                //internal double improveDefend(Player partner, RoomMain that, Car car, NPC npc_Operate, GetRandomPos grp, out FastonPosition fp)
+                //{
+                //    improveDefendMagic idm = new improveDefendMagic();
+                //    return improve(partner, that, car, npc_Operate, idm, grp, out fp);
+                //}
             }
 
 
@@ -1292,7 +1293,7 @@ namespace HouseManager5_0
             public Simulate simulate { get; private set; }
         }
 
-        internal bool controlledByMagic(RoleInGame victim, Car car, GetRandomPos grp, ref List<string> notifyMsg)
+        internal bool controlledByMagic(Player victim, Car car, GetRandomPos grp, ref List<string> notifyMsg)
         {
             if (victim.confuseRecord.IsBeingControlled())
             {

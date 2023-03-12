@@ -27,212 +27,213 @@ namespace HouseManager5_0
             this.roomMain = roomMain;
         }
 
-        public bool carAbilitConditionsOk(RoleInGame player, Car car, Command c, GetRandomPos grp)
+        public bool carAbilitConditionsOk(Player player, Car car, Command c, GetRandomPos grp)
         {
-            if (c.c == "MagicSkill")
-            //  if (car.ability.leftVolume > 0)
-            {
-                MagicSkill ms = (MagicSkill)c;
-                CommonClass.driversource.Skill skill;
-                if (ms.selectIndex == 1)
-                {
-                    skill = car.ability.driver.skill1;
-                }
-                else
-                {
-                    skill = car.ability.driver.skill2;
-                }
+            return false;
+            //if (c.c == "MagicSkill")
+            ////  if (car.ability.leftVolume > 0)
+            //{
+            //    MagicSkill ms = (MagicSkill)c;
+            //    CommonClass.driversource.Skill skill;
+            //    if (ms.selectIndex == 1)
+            //    {
+            //        skill = car.ability.driver.skill1;
+            //    }
+            //    else
+            //    {
+            //        skill = car.ability.driver.skill2;
+            //    }
 
-                switch (skill.skillEnum)
-                {
-                    case SkillEnum.Electic:
-                    case SkillEnum.Water:
-                    case SkillEnum.Fire:
-                        {
-                            if (car.ability.leftVolume > 0)
-                            {
-                                var state = CheckTargetCanBeElecticMagiced(player, ms.targetOwner);
-                                switch (state)
-                                {
-                                    case CarStateForBeMagiced.CanBeMagiced:
-                                        {
-                                            return true;
-                                        };
-                                    case CarStateForBeMagiced.IsBeingChallenged:
-                                        {
-                                            this.WebNotify(player, "施法的对象正在被别的玩家挑战！可以加入挑战者队伍攻击NPC或攻击离线玩家，一方落败，刷新NPC。");
-                                            return false;
-                                        };
-                                    case CarStateForBeMagiced.HasBeenBust:
-                                        {
-                                            this.WebNotify(player, "施法的对象已破产！");
-                                            return false;
-                                        };
-                                    case CarStateForBeMagiced.IsGroupMate:
-                                        {
-                                            this.WebNotify(player, "不能对在线队友施法！");
-                                            return false;
-                                        };
-                                    case CarStateForBeMagiced.LevelIsLow:
-                                        {
-                                            this.WebNotify(player, "等级低被忽略");
-                                            return false;
-                                        };
-                                    case CarStateForBeMagiced.NotBoss:
-                                        {
-                                            this.WebNotify(player, "你又不是团队老大");
-                                            return false;
-                                        }
-                                    case CarStateForBeMagiced.NotExisted:
-                                        {
-                                            this.WebNotify(player, "目标不存在！");
-                                            return false;
-                                        };
-                                    default: return false;
-                                }
-                            }
-                            else
-                            {
-                                this.WebNotify(player, "小车已经没有多余业务容量！");
-                                return false;
-                            }
-                        };
-                    case SkillEnum.Ambush:
-                    case SkillEnum.Confusion:
-                    case SkillEnum.Lose:
-                        {
-                            if (car.ability.leftVolume > 0)
-                            {
-                                var state = CheckTargetCanBeControleMagiced(player, ms.targetOwner);
-                                switch (state)
-                                {
-                                    case CarStateForBeMagiced.CanBeMagiced:
-                                        {
-                                            return true;
-                                        };
-                                    case CarStateForBeMagiced.IsBeingChallenged:
-                                        {
-                                            this.WebNotify(player, "施法的对象正在被别的玩家挑战！可以加入挑战者队伍攻击NPC或攻击离线玩家，一方落败，刷新NPC。");
-                                            return false;
-                                        };
-                                    case CarStateForBeMagiced.HasBeenBust:
-                                        {
-                                            this.WebNotify(player, "施法的对象已破产！");
-                                            return false;
-                                        };
-                                    case CarStateForBeMagiced.IsGroupMate:
-                                        {
-                                            this.WebNotify(player, "不能对在线队友施法！");
-                                            return false;
-                                        };
-                                    case CarStateForBeMagiced.LevelIsLow:
-                                        {
-                                            this.WebNotify(player, "等级低被忽略");
-                                            return false;
-                                        };
-                                    case CarStateForBeMagiced.NotBoss:
-                                        {
-                                            this.WebNotify(player, "你又不是团队老大");
-                                            return false;
-                                        }
-                                    case CarStateForBeMagiced.NotExisted:
-                                        {
-                                            this.WebNotify(player, "目标不存在！");
-                                            return false;
-                                        };
-                                    default: return false;
-                                }
-                            }
-                            else
-                            {
-                                this.WebNotify(player, "小车已经没有多余业务容量！");
-                                return false;
-                            }
+            //    switch (skill.skillEnum)
+            //    {
+            //        case SkillEnum.Electic:
+            //        case SkillEnum.Water:
+            //        case SkillEnum.Fire:
+            //            {
+            //                if (car.ability.leftVolume > 0)
+            //                {
+            //                    var state = CheckTargetCanBeElecticMagiced(player, ms.targetOwner);
+            //                    switch (state)
+            //                    {
+            //                        case CarStateForBeMagiced.CanBeMagiced:
+            //                            {
+            //                                return true;
+            //                            };
+            //                        case CarStateForBeMagiced.IsBeingChallenged:
+            //                            {
+            //                                this.WebNotify(player, "施法的对象正在被别的玩家挑战！可以加入挑战者队伍攻击NPC或攻击离线玩家，一方落败，刷新NPC。");
+            //                                return false;
+            //                            };
+            //                        case CarStateForBeMagiced.HasBeenBust:
+            //                            {
+            //                                this.WebNotify(player, "施法的对象已破产！");
+            //                                return false;
+            //                            };
+            //                        case CarStateForBeMagiced.IsGroupMate:
+            //                            {
+            //                                this.WebNotify(player, "不能对在线队友施法！");
+            //                                return false;
+            //                            };
+            //                        case CarStateForBeMagiced.LevelIsLow:
+            //                            {
+            //                                this.WebNotify(player, "等级低被忽略");
+            //                                return false;
+            //                            };
+            //                        case CarStateForBeMagiced.NotBoss:
+            //                            {
+            //                                this.WebNotify(player, "你又不是团队老大");
+            //                                return false;
+            //                            }
+            //                        case CarStateForBeMagiced.NotExisted:
+            //                            {
+            //                                this.WebNotify(player, "目标不存在！");
+            //                                return false;
+            //                            };
+            //                        default: return false;
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    this.WebNotify(player, "小车已经没有多余业务容量！");
+            //                    return false;
+            //                }
+            //            };
+            //        case SkillEnum.Ambush:
+            //        case SkillEnum.Confusion:
+            //        case SkillEnum.Lose:
+            //            {
+            //                if (car.ability.leftVolume > 0)
+            //                {
+            //                    var state = CheckTargetCanBeControleMagiced(player, ms.targetOwner);
+            //                    switch (state)
+            //                    {
+            //                        case CarStateForBeMagiced.CanBeMagiced:
+            //                            {
+            //                                return true;
+            //                            };
+            //                        case CarStateForBeMagiced.IsBeingChallenged:
+            //                            {
+            //                                this.WebNotify(player, "施法的对象正在被别的玩家挑战！可以加入挑战者队伍攻击NPC或攻击离线玩家，一方落败，刷新NPC。");
+            //                                return false;
+            //                            };
+            //                        case CarStateForBeMagiced.HasBeenBust:
+            //                            {
+            //                                this.WebNotify(player, "施法的对象已破产！");
+            //                                return false;
+            //                            };
+            //                        case CarStateForBeMagiced.IsGroupMate:
+            //                            {
+            //                                this.WebNotify(player, "不能对在线队友施法！");
+            //                                return false;
+            //                            };
+            //                        case CarStateForBeMagiced.LevelIsLow:
+            //                            {
+            //                                this.WebNotify(player, "等级低被忽略");
+            //                                return false;
+            //                            };
+            //                        case CarStateForBeMagiced.NotBoss:
+            //                            {
+            //                                this.WebNotify(player, "你又不是团队老大");
+            //                                return false;
+            //                            }
+            //                        case CarStateForBeMagiced.NotExisted:
+            //                            {
+            //                                this.WebNotify(player, "目标不存在！");
+            //                                return false;
+            //                            };
+            //                        default: return false;
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    this.WebNotify(player, "小车已经没有多余业务容量！");
+            //                    return false;
+            //                }
 
-                        };
-                    case SkillEnum.Speed:
-                    case SkillEnum.Defense:
-                        {
-                            if (car.ability.leftVolume > 0)
-                            {
-                                var state = CheckTargetCanBeImprovedByMagic(player, ms.targetOwner);
-                                switch (state)
-                                {
-                                    case CarStateForBeMagiced.CanBeMagiced:
-                                        {
-                                            return true;
-                                        };
-                                    case CarStateForBeMagiced.IsNotGroupMate:
-                                        {
-                                            this.WebNotify(player, $"只能对自己或队友进行{skill.skillName}！");
-                                            return false;
-                                        };
-                                    case CarStateForBeMagiced.HasBeenBust:
-                                        {
-                                            this.WebNotify(player, "提升的对象已经破产！");
-                                            return false;
-                                        }
-                                    case CarStateForBeMagiced.NotExisted:
-                                        {
-                                            this.WebNotify(player, "提升的对象已经退出游戏！");
-                                            return false;
-                                        };
-                                    default: return false;
-                                }
-                            }
-                            else
-                            {
-                                this.WebNotify(player, "小车已经没有多余业务容量！");
-                                return false;
-                            }
-                        };
-                    case SkillEnum.Attack:
-                        {
-                            if (car.ability.leftBusiness > 0)
-                            {
-                                var state = CheckTargetCanBeImprovedByMagic(player, ms.targetOwner);
-                                switch (state)
-                                {
-                                    case CarStateForBeMagiced.CanBeMagiced:
-                                        {
-                                            return true;
-                                        };
-                                    case CarStateForBeMagiced.IsNotGroupMate:
-                                        {
-                                            this.WebNotify(player, $"只能对自己或队友进行{skill.skillName}！");
-                                            return false;
-                                        };
-                                    case CarStateForBeMagiced.HasBeenBust:
-                                        {
-                                            this.WebNotify(player, "提升的对象已经破产！");
-                                            return false;
-                                        }
-                                    case CarStateForBeMagiced.NotExisted:
-                                        {
-                                            this.WebNotify(player, "提升的对象已经退出游戏！");
-                                            return false;
-                                        };
-                                    default: return false;
-                                }
-                            }
-                            else
-                            {
-                                this.WebNotify(player, "小车已经没有多余普攻容量！");
-                                return false;
-                            }
-                        };
-                    default:
-                        {
-                            return false;
-                        }
-                }
+            //            };
+            //        case SkillEnum.Speed:
+            //        case SkillEnum.Defense:
+            //            {
+            //                if (car.ability.leftVolume > 0)
+            //                {
+            //                    var state = CheckTargetCanBeImprovedByMagic(player, ms.targetOwner);
+            //                    switch (state)
+            //                    {
+            //                        case CarStateForBeMagiced.CanBeMagiced:
+            //                            {
+            //                                return true;
+            //                            };
+            //                        case CarStateForBeMagiced.IsNotGroupMate:
+            //                            {
+            //                                this.WebNotify(player, $"只能对自己或队友进行{skill.skillName}！");
+            //                                return false;
+            //                            };
+            //                        case CarStateForBeMagiced.HasBeenBust:
+            //                            {
+            //                                this.WebNotify(player, "提升的对象已经破产！");
+            //                                return false;
+            //                            }
+            //                        case CarStateForBeMagiced.NotExisted:
+            //                            {
+            //                                this.WebNotify(player, "提升的对象已经退出游戏！");
+            //                                return false;
+            //                            };
+            //                        default: return false;
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    this.WebNotify(player, "小车已经没有多余业务容量！");
+            //                    return false;
+            //                }
+            //            };
+            //        case SkillEnum.Attack:
+            //            {
+            //                if (car.ability.leftBusiness > 0)
+            //                {
+            //                    var state = CheckTargetCanBeImprovedByMagic(player, ms.targetOwner);
+            //                    switch (state)
+            //                    {
+            //                        case CarStateForBeMagiced.CanBeMagiced:
+            //                            {
+            //                                return true;
+            //                            };
+            //                        case CarStateForBeMagiced.IsNotGroupMate:
+            //                            {
+            //                                this.WebNotify(player, $"只能对自己或队友进行{skill.skillName}！");
+            //                                return false;
+            //                            };
+            //                        case CarStateForBeMagiced.HasBeenBust:
+            //                            {
+            //                                this.WebNotify(player, "提升的对象已经破产！");
+            //                                return false;
+            //                            }
+            //                        case CarStateForBeMagiced.NotExisted:
+            //                            {
+            //                                this.WebNotify(player, "提升的对象已经退出游戏！");
+            //                                return false;
+            //                            };
+            //                        default: return false;
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    this.WebNotify(player, "小车已经没有多余普攻容量！");
+            //                    return false;
+            //                }
+            //            };
+            //        default:
+            //            {
+            //                return false;
+            //            }
+            //    }
 
 
-            }
-            else
-            {
-                return false;
-            }
+            //}
+            //else
+            //{
+            //    return false;
+            //}
         }
 
 
@@ -253,50 +254,51 @@ namespace HouseManager5_0
 
 
 
-        private CarStateForBeMagiced CheckTargetCanBeImprovedByMagic(RoleInGame role, string targetOwner)
-        {
-            if (role.playerType == RoleInGame.PlayerType.player)
-            {
-                var player = (Player)role;
-                if (roomMain._Players.ContainsKey(targetOwner))
-                {
-                    if (roomMain._Players[targetOwner].Bust)
-                    {
-                        return CarStateForBeMagiced.HasBeenBust;
-                    }
-                    else
-                    {
-                        if (roomMain._Players[targetOwner].playerType == RoleInGame.PlayerType.NPC)
-                        {
-                            return CarStateForBeMagiced.IsNotGroupMate;
-                        }
-                        else
-                        {
-                            var targetPlayer = (Player)roomMain._Players[targetOwner];
-                            if (that.isAtTheSameGroup(player.Key, targetPlayer.Key))
-                            {
-                                return CarStateForBeMagiced.CanBeMagiced;
-                            }
-                            else
-                                return CarStateForBeMagiced.IsNotGroupMate;
+        //private CarStateForBeMagiced CheckTargetCanBeImprovedByMagic(Player role, string targetOwner)
+        //{
+        //    if (role.playerType == Player.PlayerType.player)
+        //    {
+        //        var player = (Player)role;
 
-                        }
-                    }
-                }
-                else
-                {
-                    return CarStateForBeMagiced.NotExisted;
-                }
-            }
-            else if (role.playerType == RoleInGame.PlayerType.NPC)
-            {
-                return CarStateForBeMagiced.CanBeMagiced;
-            }
-            else
-            {
-                throw new Exception("错误！");
-            }
-        }
+        //        if (roomMain._Players.ContainsKey(targetOwner))
+        //        {
+        //            if (roomMain._Players[targetOwner].Bust)
+        //            {
+        //                return CarStateForBeMagiced.HasBeenBust;
+        //            }
+        //            else
+        //            {
+        //                if (roomMain._Players[targetOwner].playerType == Player.PlayerType.NPC)
+        //                {
+        //                    return CarStateForBeMagiced.IsNotGroupMate;
+        //                }
+        //                else
+        //                {
+        //                    var targetPlayer = (Player)roomMain._Players[targetOwner];
+        //                    if (that.isAtTheSameGroup(player.Key, targetPlayer.Key))
+        //                    {
+        //                        return CarStateForBeMagiced.CanBeMagiced;
+        //                    }
+        //                    else
+        //                        return CarStateForBeMagiced.IsNotGroupMate;
+
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            return CarStateForBeMagiced.NotExisted;
+        //        }
+        //    }
+        //    else if (role.playerType == Player.PlayerType.NPC)
+        //    {
+        //        return CarStateForBeMagiced.CanBeMagiced;
+        //    }
+        //    else
+        //    {
+        //        throw new Exception("错误！");
+        //    }
+        //}
 
         enum CarStateForBeMagiced
         {
@@ -312,62 +314,63 @@ namespace HouseManager5_0
 
         public bool conditionsOk(Command c, GetRandomPos grp, out string reason)
         {
-            if (c.c == "MagicSkill")
-            {
-                MagicSkill ms = (MagicSkill)c;
-                if (!(that._Players.ContainsKey(ms.targetOwner)))
-                {
-                    reason = "";
-                    return false;
-                }
-                else if (that._Players[ms.targetOwner].StartFPIndex != ms.target)
-                {
-                    reason = "";
-                    return false;
-                }
 
-                else if (that._Players[ms.Key].getCar().ability.driver == null)
-                {
-                    reason = "";
-                    return false;
-                }
-                else if (ms.selectIndex != 1 && ms.selectIndex != 2)
-                {
-                    reason = "";
-                    return false;
-                }
-                else if (that._Players[ms.Key].getCar().state != CarState.waitOnRoad)
-                {
-                    reason = "";
-                    return false;
-                }
-                else if (ms.targetOwner == ms.Key && (that._Players[ms.Key].getCar().ability.driver.race == Race.immortal))
-                {
+            //if (c.c == "MagicSkill")
+            //{
+            //    MagicSkill ms = (MagicSkill)c;
+            //    if (!(that._Players.ContainsKey(ms.targetOwner)))
+            //    {
+            //        reason = "";
+            //        return false;
+            //    }
+            //    else if (that._Players[ms.targetOwner].StartFPIndex != ms.target)
+            //    {
+            //        reason = "";
+            //        return false;
+            //    }
 
-                    reason = "";
-                    return false;
-                }
-                else if (ms.targetOwner == ms.Key && (that._Players[ms.Key].getCar().ability.driver.race == Race.people))
-                {
+            //    else if (that._Players[ms.Key].getCar().ability.driver == null)
+            //    {
+            //        reason = "";
+            //        return false;
+            //    }
+            //    else if (ms.selectIndex != 1 && ms.selectIndex != 2)
+            //    {
+            //        reason = "";
+            //        return false;
+            //    }
+            //    else if (that._Players[ms.Key].getCar().state != CarState.waitOnRoad)
+            //    {
+            //        reason = "";
+            //        return false;
+            //    }
+            //    else if (ms.targetOwner == ms.Key && (that._Players[ms.Key].getCar().ability.driver.race == Race.immortal))
+            //    {
 
-                    reason = "";
-                    return false;
-                }
-                //else if (that._Players[ms.Key].getCar().ability.driver.race == Race.immortal) 
-                //{
+            //        reason = "";
+            //        return false;
+            //    }
+            //    else if (ms.targetOwner == ms.Key && (that._Players[ms.Key].getCar().ability.driver.race == Race.people))
+            //    {
 
-                //}
-                else
-                {
-                    reason = "";
-                    return true;
-                }
-            }
+            //        reason = "";
+            //        return false;
+            //    }
+            //    //else if (that._Players[ms.Key].getCar().ability.driver.race == Race.immortal) 
+            //    //{
+
+            //    //}
+            //    else
+            //    {
+            //        reason = "";
+            //        return true;
+            //    }
+            //}
             reason = "";
             return false;
         }
 
-        public void failedThenDo(Car car, RoleInGame player, Command c, GetRandomPos grp, ref List<string> notifyMsg)
+        public void failedThenDo(Car car, Player player, Command c, GetRandomPos grp, ref List<string> notifyMsg)
         {
             if (c.c == "MagicSkill")
             {
@@ -378,9 +381,9 @@ namespace HouseManager5_0
 
 
 
-        public commandWithTime.ReturningOjb maindDo(RoleInGame player, Car car, Command c, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason mrr)
+        public commandWithTime.ReturningOjb maindDo(Player player, Car car, Command c, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason mrr)
         {
-            
+
             {
                 if (c.c == "MagicSkill")
                 {
@@ -414,14 +417,14 @@ namespace HouseManager5_0
             }
         }
 
-        private commandWithTime.ReturningOjb magic(RoleInGame player, Car car, MagicSkill ms, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
+        private commandWithTime.ReturningOjb magic(Player player, Car car, MagicSkill ms, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
         {
             if (player.confuseRecord.IsBeingControlled())
             {
 
             }
             {
-                if (player.playerType == RoleInGame.PlayerType.player)
+                if (player.playerType == Player.PlayerType.player)
                 {
                     that.taskM.MagicReleased((Player)player);
                 }
@@ -503,7 +506,7 @@ namespace HouseManager5_0
             attackSet,
             speedSet
         }
-        private void StartArriavalThread(startArriavalThreadCommand command, int startT, int step, RoleInGame player, Car car, MagicSkill ms, int goMile, Node goPath, commandWithTime.ReturningOjb ro, GetRandomPos grp)
+        private void StartArriavalThread(startArriavalThreadCommand command, int startT, int step, Player player, Car car, MagicSkill ms, int goMile, Node goPath, commandWithTime.ReturningOjb ro, GetRandomPos grp)
         {
             System.Threading.Thread th = new System.Threading.Thread(() =>
             {
@@ -567,7 +570,7 @@ namespace HouseManager5_0
 
                                car.setState(player, ref notifyMsg, CarState.working);
                                this.sendSeveralMsgs(notifyMsg);
-                               //string command, int startT, int step, RoleInGame player, Car car, MagicSkill ms, int goMile, Node goPath, commandWithTime.ReturningOjb ro
+                               //string command, int startT, int step, Player player, Car car, MagicSkill ms, int goMile, Node goPath, commandWithTime.ReturningOjb ro
                                StartArriavalThread(command, newStartT, step, player, car, ms, goMile, goPath, ro, grp);
                            };
                     this.loop(p, step, startT, player, goPath);
@@ -579,7 +582,7 @@ namespace HouseManager5_0
         }
 
 
-        private commandWithTime.ReturningOjb improveDefenseMagic(RoleInGame player, Car car, MagicSkill ms, Skill skill, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
+        private commandWithTime.ReturningOjb improveDefenseMagic(Player player, Car car, MagicSkill ms, Skill skill, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
         {
             DefenceObj dfo = new DefenceObj(ms, (int startT, Car car, MagicSkill ms2, int goMile, Node goPath, commandWithTime.ReturningOjb ro) =>
             {
@@ -601,7 +604,7 @@ namespace HouseManager5_0
             return this.contact(player, car, dfo, grp, ref notifyMsg, out Mrr);
         }
 
-        private commandWithTime.ReturningOjb improveAttackMagic(RoleInGame player, Car car, MagicSkill ms, Skill skill, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
+        private commandWithTime.ReturningOjb improveAttackMagic(Player player, Car car, MagicSkill ms, Skill skill, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
         {
             AttackObj ao = new AttackObj(ms, (int startT, Car car, MagicSkill ms1, int goMile, Node goPath, commandWithTime.ReturningOjb ro) =>
             {
@@ -723,7 +726,7 @@ namespace HouseManager5_0
         }
 
 
-        private commandWithTime.ReturningOjb improveSpeedMagic(RoleInGame player, Car car, MagicSkill ms, Skill skill, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
+        private commandWithTime.ReturningOjb improveSpeedMagic(Player player, Car car, MagicSkill ms, Skill skill, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
         {
             //  this.StartArriavalThread(startT, 1, player, car, ms2, goMile, goPath, ro);
             SpeedObj so = new SpeedObj(ms, (int startT, Car car, MagicSkill ms2, int goMile, Node goPath, commandWithTime.ReturningOjb ro) =>
@@ -736,7 +739,7 @@ namespace HouseManager5_0
             return this.contact(player, car, so, grp, ref notifyMsg, out Mrr);
         }
 
-        private commandWithTime.ReturningOjb ambushMagic(RoleInGame player, Car car, MagicSkill ms, Skill skill, ref List<string> notifyMsg, out MileResultReason Mrr)
+        private commandWithTime.ReturningOjb ambushMagic(Player player, Car car, MagicSkill ms, Skill skill, ref List<string> notifyMsg, out MileResultReason Mrr)
         {
             controlMagicTool ct = new controlMagicTool(skill);
             return controlMagic(player, car, ms, ct, ref notifyMsg, out Mrr);
@@ -797,153 +800,155 @@ namespace HouseManager5_0
                 }
             }
         }
-        private commandWithTime.ReturningOjb loseMagic(RoleInGame player, Car car, MagicSkill ms, Skill skill, ref List<string> notifyMsg, out MileResultReason Mrr)
+        private commandWithTime.ReturningOjb loseMagic(Player player, Car car, MagicSkill ms, Skill skill, ref List<string> notifyMsg, out MileResultReason Mrr)
         {
             controlMagicTool ct = new controlMagicTool(skill);
             return controlMagic(player, car, ms, ct, ref notifyMsg, out Mrr);
         }
 
-        private commandWithTime.ReturningOjb controlMagic(RoleInGame player, Car car, MagicSkill ms, interfaceOfHM.ControlMagic ct, ref List<string> notifyMsg, out MileResultReason Mrr)
+        private commandWithTime.ReturningOjb controlMagic(Player player, Car car, MagicSkill ms, interfaceOfHM.ControlMagic ct, ref List<string> notifyMsg, out MileResultReason Mrr)
         {
-            if (that._Players.ContainsKey(ms.targetOwner))
-            {
-                var victim = that._Players[ms.targetOwner];
-                OssModel.FastonPosition fpResult;
-                var distanceIsEnoughToStart = that.theNearestToPlayerIsCarNotMoney(player, car, victim, Program.dt, out fpResult);
-                if (distanceIsEnoughToStart)
-                {
-                    if (car.state == CarState.waitOnRoad)
-                    {
-                        switch (ct.GetAttackType())
-                        {
-                            case Manager_Driver.ConfuseManger.ControlAttackType.Confuse:
-                            case Manager_Driver.ConfuseManger.ControlAttackType.Lost:
-                                if (car.ability.leftVolume > 0)
-                                {
-                                    victim.confuseRecord.AddControlInfo(player, Program.dt.GetFpByIndex(car.targetFpIndex), car.ability.leftVolume, ct.GetAttackType());
-                                    car.setControllingObj(player, car, ct.GetAttackType(), victim.Key, ref notifyMsg);// = victim;
-                                    this.WebNotify(player, $"已经部署{ct.GetName()}计谋，等其车辆返回基地后开始实施！");
-                                    Mrr = MileResultReason.Abundant;
-                                    return player.returningOjb;
-                                }
-                                else
-                                {
-                                    Mrr = MileResultReason.MoneyIsNotEnougt;
-                                    this.WebNotify(player, "你身上的剩余空间不够啦！");
-                                    return player.returningOjb;
-                                }
-                            case Manager_Driver.ConfuseManger.ControlAttackType.Ambush:
-                                if (car.ability.leftVolume > 0)
-                                {
-                                    victim.confuseRecord.AddAmbushInfo(player, Program.dt.GetFpByIndex(car.targetFpIndex), car.ability.leftVolume, victim.Key, ref notifyMsg);
-                                    car.setControllingObj(player, car, ct.GetAttackType(), victim.Key, ref notifyMsg);
-                                    this.WebNotify(player, $"已经部署{ct.GetName()}计谋，等待其被攻击！");
-                                    Mrr = MileResultReason.Abundant;
-                                    return player.returningOjb;
-                                }
-                                else
-                                {
-                                    Mrr = MileResultReason.MoneyIsNotEnougt;
-                                    this.WebNotify(player, "你身上的剩余空间不够啦！");
-                                    return player.returningOjb;
-                                }
-                            default:
-                                throw new Exception("程序意料之外！");
-                        }
+            Mrr = MileResultReason.CanNotReturn;
+            return player.returningOjb;
+            //if (that._Players.ContainsKey(ms.targetOwner))
+            //{
+            //    var victim = that._Players[ms.targetOwner];
+            //    OssModel.FastonPosition fpResult;
+            //    var distanceIsEnoughToStart = that.theNearestToPlayerIsCarNotMoney(player, car, victim, Program.dt, out fpResult);
+            //    if (distanceIsEnoughToStart)
+            //    {
+            //        if (car.state == CarState.waitOnRoad)
+            //        {
+            //            switch (ct.GetAttackType())
+            //            {
+            //                case Manager_Driver.ConfuseManger.ControlAttackType.Confuse:
+            //                case Manager_Driver.ConfuseManger.ControlAttackType.Lost:
+            //                    if (car.ability.leftVolume > 0)
+            //                    {
+            //                        victim.confuseRecord.AddControlInfo(player, Program.dt.GetFpByIndex(car.targetFpIndex), car.ability.leftVolume, ct.GetAttackType());
+            //                        car.setControllingObj(player, car, ct.GetAttackType(), victim.Key, ref notifyMsg);// = victim;
+            //                        this.WebNotify(player, $"已经部署{ct.GetName()}计谋，等其车辆返回基地后开始实施！");
+            //                        Mrr = MileResultReason.Abundant;
+            //                        return player.returningOjb;
+            //                    }
+            //                    else
+            //                    {
+            //                        Mrr = MileResultReason.MoneyIsNotEnougt;
+            //                        this.WebNotify(player, "你身上的剩余空间不够啦！");
+            //                        return player.returningOjb;
+            //                    }
+            //                case Manager_Driver.ConfuseManger.ControlAttackType.Ambush:
+            //                    if (car.ability.leftVolume > 0)
+            //                    {
+            //                        victim.confuseRecord.AddAmbushInfo(player, Program.dt.GetFpByIndex(car.targetFpIndex), car.ability.leftVolume, victim.Key, ref notifyMsg);
+            //                        car.setControllingObj(player, car, ct.GetAttackType(), victim.Key, ref notifyMsg);
+            //                        this.WebNotify(player, $"已经部署{ct.GetName()}计谋，等待其被攻击！");
+            //                        Mrr = MileResultReason.Abundant;
+            //                        return player.returningOjb;
+            //                    }
+            //                    else
+            //                    {
+            //                        Mrr = MileResultReason.MoneyIsNotEnougt;
+            //                        this.WebNotify(player, "你身上的剩余空间不够啦！");
+            //                        return player.returningOjb;
+            //                    }
+            //                default:
+            //                    throw new Exception("程序意料之外！");
+            //            }
 
-                    }
-                    else
-                        throw new Exception("运行此方法，没有正确校验");
+            //        }
+            //        else
+            //            throw new Exception("运行此方法，没有正确校验");
 
-                }
-                else
-                {
-                    Mrr = MileResultReason.NearestIsMoneyWhenAttack;
-                    that.ViewPosition(player, fpResult, ref notifyMsg);
-                    this.WebNotify(player, $"离【{victim.PlayerName}】最近的是[{fpResult.FastenPositionName}]处的钱，不是你的车，{ct.GetName()}失败！");
-                    return player.returningOjb;
-                }
-            }
-            else
-            {
-                throw new Exception("准备运行条件里没有筛查？");
-            }
+            //    }
+            //    else
+            //    {
+            //        Mrr = MileResultReason.NearestIsMoneyWhenAttack;
+            //        that.ViewPosition(player, fpResult, ref notifyMsg);
+            //        this.WebNotify(player, $"离【{victim.PlayerName}】最近的是[{fpResult.FastenPositionName}]处的钱，不是你的车，{ct.GetName()}失败！");
+            //        return player.returningOjb;
+            //    }
+            //}
+            //else
+            //{
+            //    throw new Exception("准备运行条件里没有筛查？");
+            //}
         }
 
-        private commandWithTime.ReturningOjb confusionMagic(RoleInGame player, Car car, MagicSkill ms, Skill skill, ref List<string> notifyMsg, out MileResultReason Mrr)
+        private commandWithTime.ReturningOjb confusionMagic(Player player, Car car, MagicSkill ms, Skill skill, ref List<string> notifyMsg, out MileResultReason Mrr)
         {
             controlMagicTool ct = new controlMagicTool(skill);
             return controlMagic(player, car, ms, ct, ref notifyMsg, out Mrr);
         }
 
-        private commandWithTime.ReturningOjb fireMagic(RoleInGame player, Car car, MagicSkill ms, Skill skill, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
+        private commandWithTime.ReturningOjb fireMagic(Player player, Car car, MagicSkill ms, Skill skill, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
         {
             attackMagicTool et = new attackMagicTool(skill, player);
             return attackMagic(player, car, ms, et, grp, ref notifyMsg, out Mrr);
         }
 
-        private commandWithTime.ReturningOjb waterMagic(RoleInGame player, Car car, MagicSkill ms, Skill skill, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
+        private commandWithTime.ReturningOjb waterMagic(Player player, Car car, MagicSkill ms, Skill skill, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
         {
             attackMagicTool et = new attackMagicTool(skill, player);
             return attackMagic(player, car, ms, et, grp, ref notifyMsg, out Mrr);
         }
 
-        private commandWithTime.ReturningOjb electicMagic(RoleInGame player, Car car, MagicSkill ms, Skill skill, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
+        private commandWithTime.ReturningOjb electicMagic(Player player, Car car, MagicSkill ms, Skill skill, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
         {
             attackMagicTool et = new attackMagicTool(skill, player);
             return attackMagic(player, car, ms, et, grp, ref notifyMsg, out Mrr);
         }
-        private commandWithTime.ReturningOjb attackMagic(RoleInGame player, Car car, MagicSkill ms, interfaceOfHM.AttackMagic am, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
+        private commandWithTime.ReturningOjb attackMagic(Player player, Car car, MagicSkill ms, interfaceOfHM.AttackMagic am, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
         {
-            if (that._Players.ContainsKey(ms.targetOwner))
-            {
-                var victim = that._Players[ms.targetOwner];
-                //
-                // string msg;
-                bool distanceIsEnoughToStart;
-                OssModel.FastonPosition fpResult = null;
-                distanceIsEnoughToStart = true;
-                if (distanceIsEnoughToStart)
-                    if (car.ability.leftVolume > 0)
-                    {
-                        that.debtE.setDebt(new commandWithTime.debtOwner()
-                        {
-                            c = "debtOwner",
-                            changeType = commandWithTime.returnning.ChangeType.BeforeTax,
-                            costMile = 0,
-                            key = player.Key,
-                            returningOjb = player.returningOjb,
-                            target = player.getCar().targetFpIndex,
-                            victim = ms.targetOwner
-                        }, am, grp);
-                        Mrr = MileResultReason.Abundant;
-                        return player.returningOjb;
-                    }
-                    else
-                    {
-                        Mrr = MileResultReason.MoneyIsNotEnougt;
-                        this.WebNotify(player, "你身上的剩余能量空间不够啦！");
-                        return player.returningOjb;
-                    }
-                else
-                {
-                    if (fpResult == null)
-                    {
-                        throw new Exception("逻辑错误！！！");
-                    }
-                    Mrr = MileResultReason.NearestIsMoneyWhenAttack;
-                    that.ViewPosition(player, fpResult, ref notifyMsg);
-                    this.WebNotify(player, $"迷惑状态下只能近距离攻击，离【{victim.PlayerName}】最近的是[{fpResult.FastenPositionName}]处的钱，不是你的车，{am.GetSkillName()}失败！");
-                    return player.returningOjb;
-                }
-            }
-            else
+            //if (that._Players.ContainsKey(ms.targetOwner))
+            //{
+            //    var victim = that._Players[ms.targetOwner];
+            //    //
+            //    // string msg;
+            //    bool distanceIsEnoughToStart;
+            //    OssModel.FastonPosition fpResult = null;
+            //    distanceIsEnoughToStart = true;
+            //    if (distanceIsEnoughToStart)
+            //        if (car.ability.leftVolume > 0)
+            //        {
+            //            that.debtE.setDebt(new commandWithTime.debtOwner()
+            //            {
+            //                c = "debtOwner",
+            //                changeType = commandWithTime.returnning.ChangeType.BeforeTax,
+            //                costMile = 0,
+            //                key = player.Key,
+            //                returningOjb = player.returningOjb,
+            //                target = player.getCar().targetFpIndex,
+            //                victim = ms.targetOwner
+            //            }, am, grp);
+            //            Mrr = MileResultReason.Abundant;
+            //            return player.returningOjb;
+            //        }
+            //        else
+            //        {
+            //            Mrr = MileResultReason.MoneyIsNotEnougt;
+            //            this.WebNotify(player, "你身上的剩余能量空间不够啦！");
+            //            return player.returningOjb;
+            //        }
+            //    else
+            //    {
+            //        if (fpResult == null)
+            //        {
+            //            throw new Exception("逻辑错误！！！");
+            //        }
+            //        Mrr = MileResultReason.NearestIsMoneyWhenAttack;
+            //        that.ViewPosition(player, fpResult, ref notifyMsg);
+            //        this.WebNotify(player, $"迷惑状态下只能近距离攻击，离【{victim.PlayerName}】最近的是[{fpResult.FastenPositionName}]处的钱，不是你的车，{am.GetSkillName()}失败！");
+            //        return player.returningOjb;
+            //    }
+            //}
+            //else
             {
                 throw new Exception("准备运行条件里没有筛查？");
             }
         }
 
-        internal void AmbushSelf(RoleInGame victim, interfaceOfHM.AttackT at, GetRandomPos grp, ref List<string> notifyMsg, ref long reduceSumInput)
+        internal void AmbushSelf(Player victim, interfaceOfHM.AttackT at, GetRandomPos grp, ref List<string> notifyMsg, ref long reduceSumInput)
         {
             victim.confuseRecord.AmbushSelf(victim, that, this, ref notifyMsg, at, grp, ref reduceSumInput);
         }
@@ -956,28 +961,29 @@ namespace HouseManager5_0
         /// <param name="victim"></param>
         /// <param name="at"></param>
         /// <param name="harmValue"></param>
-        internal void AmbushSelf(RoleInGame victim, attackMagicTool at, ref long harmValue, GetRandomPos gp)
+        internal void AmbushSelf(Player victim, attackMagicTool at, ref long harmValue, GetRandomPos gp)
         {
             harmValue += victim.confuseRecord.AmbushSelf(victim, that, at, gp);
         }
         internal string updateMagic(MagicSkill ms, GetRandomPos grp)
         {
-            return this.updateAction(this, ms, grp, ms.Key);
+            throw new Exception("");
+            //   return this.updateAction(this, ms, grp, ms.Key);
         }
-        public delegate void SpeedMagicChanged(RoleInGame role, ref List<string> notifyMsgs);
-        public delegate void AttackMagicChanged(RoleInGame role, ref List<string> notifyMsgs);
-        public delegate void DefenceMagicChanged(RoleInGame role, ref List<string> notifyMsgs);
+        public delegate void SpeedMagicChanged(Player role, ref List<string> notifyMsgs);
+        public delegate void AttackMagicChanged(Player role, ref List<string> notifyMsgs);
+        public delegate void DefenceMagicChanged(Player role, ref List<string> notifyMsgs);
 
-        public delegate void ConfusePrepareMagicChanged(RoleInGame role, ref List<string> notifyMsgs);
-        public delegate void LostPrepareMagicChanged(RoleInGame role, ref List<string> notifyMsgs);
-        public delegate void AmbushPrepareMagicChanged(RoleInGame role, ref List<string> notifyMsgs);
-        public delegate void ControlPrepareMagicChanged(RoleInGame role, ref List<string> notifyMsgs);
+        public delegate void ConfusePrepareMagicChanged(Player role, ref List<string> notifyMsgs);
+        public delegate void LostPrepareMagicChanged(Player role, ref List<string> notifyMsgs);
+        public delegate void AmbushPrepareMagicChanged(Player role, ref List<string> notifyMsgs);
+        public delegate void ControlPrepareMagicChanged(Player role, ref List<string> notifyMsgs);
 
-        public delegate void ConfuseMagicChanged(RoleInGame role, ref List<string> notifyMsgs);
+        public delegate void ConfuseMagicChanged(Player role, ref List<string> notifyMsgs);
 
-        public delegate void FireMagicChanged(RoleInGame player, RoleInGame victim, ref List<string> notifyMsgs);
-        public delegate void WaterMagicChanged(RoleInGame player, RoleInGame victim, ref List<string> notifyMsgs);
-        public delegate void ElectricMagicChanged(RoleInGame player, RoleInGame victim, ref List<string> notifyMsgs);
+        public delegate void FireMagicChanged(Player player, Player victim, ref List<string> notifyMsgs);
+        public delegate void WaterMagicChanged(Player player, Player victim, ref List<string> notifyMsgs);
+        public delegate void ElectricMagicChanged(Player player, Player victim, ref List<string> notifyMsgs);
 
         public void newThreadDo(commandWithTime.baseC dObj, GetRandomPos grp)
         {
@@ -1010,7 +1016,7 @@ namespace HouseManager5_0
             Improved(it, grp);
         }
 
-        internal int GetIgnorePhysicsValue(RoleInGame role)
+        internal int GetIgnorePhysicsValue(Player role)
         {
             return Engine_DebtEngine.attackTool.GetIgnorePhysicsValue(role);
             //throw new NotImplementedException();
@@ -1026,9 +1032,9 @@ namespace HouseManager5_0
         public partial class attackMagicTool : interfaceOfHM.AttackT
         {
             public Skill skill;
-            RoleInGame oprateRole;
+            Player oprateRole;
 
-            public attackMagicTool(Skill skill_, RoleInGame role_)
+            public attackMagicTool(Skill skill_, Player role_)
             {
                 this.skill = skill_;
                 this.oprateRole = role_;
@@ -1068,18 +1074,18 @@ namespace HouseManager5_0
                 }
             }
 
-            internal static int GetIgnoreElectricMagicValue(RoleInGame role)
+            internal static int GetIgnoreElectricMagicValue(Player role)
             {
                 attackMagicTool at = new attackMagicTool(new Skill(SkillEnum.Electic), role);
                 return at.IgnoreValue;
                 //  at.
             }
-            internal static int GetIgnoreWaterMagicValue(RoleInGame role)
+            internal static int GetIgnoreWaterMagicValue(Player role)
             {
                 attackMagicTool at = new attackMagicTool(new Skill(SkillEnum.Water), role);
                 return at.IgnoreValue;
             }
-            internal static int GetIgnoreFireMagicValue(RoleInGame role)
+            internal static int GetIgnoreFireMagicValue(Player role)
             {
                 attackMagicTool at = new attackMagicTool(new Skill(SkillEnum.Fire), role);
                 return at.IgnoreValue;
@@ -1089,216 +1095,218 @@ namespace HouseManager5_0
             {
                 return car.state == CarState.waitOnRoad;
             }
-            public long DealWithPercentValue(long percentValue, RoleInGame player, RoleInGame victim, RoomMain that, GetRandomPos grp, ref List<string> notifyMsg)
+            public long DealWithPercentValue(long percentValue, Player player, Player victim, RoomMain that, GetRandomPos grp, ref List<string> notifyMsg)
             {
-                switch (this.skill.skillEnum)
-                {
-                    case SkillEnum.Water:
-                        {
-                            var carPosition = grp.GetFpByIndex(player.getCar().targetFpIndex);
-                            var basePosition = grp.GetFpByIndex(player.StartFPIndex);
-                            var targetPosition = grp.GetFpByIndex(victim.StartFPIndex);
-                            double carMX, carMY, carMZ;
-                            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(carPosition.Longitude, carPosition.Latitde, 0, out carMX, out carMY, out carMZ);
+                throw new Exception();
 
-                            double baseMX, baseMY, baseMZ;
-                            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(basePosition.Longitude, basePosition.Latitde, 0, out baseMX, out baseMY, out baseMZ);
+                //switch (this.skill.skillEnum)
+                //{
+                //    case SkillEnum.Water:
+                //        {
+                //            var carPosition = grp.GetFpByIndex(player.getCar().targetFpIndex);
+                //            var basePosition = grp.GetFpByIndex(player.StartFPIndex);
+                //            var targetPosition = grp.GetFpByIndex(victim.StartFPIndex);
+                //            double carMX, carMY, carMZ;
+                //            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(carPosition.Longitude, carPosition.Latitde, 0, out carMX, out carMY, out carMZ);
 
-                            double targetMX, targetMY, targetMZ;
-                            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(targetPosition.Longitude, targetPosition.Latitde, 0, out targetMX, out targetMY, out targetMZ);
+                //            double baseMX, baseMY, baseMZ;
+                //            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(basePosition.Longitude, basePosition.Latitde, 0, out baseMX, out baseMY, out baseMZ);
 
-                            var l1 = Math.Sqrt((carMX - baseMX) * (carMX - baseMX) + (carMY - baseMY) * (carMY - baseMY));
-                            if (l1 < 1e-6) break;
-                            var c1 = new System.Numerics.Complex((carMX - baseMX) / l1, (carMY - baseMY) / l1);
+                //            double targetMX, targetMY, targetMZ;
+                //            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(targetPosition.Longitude, targetPosition.Latitde, 0, out targetMX, out targetMY, out targetMZ);
 
-                            var l2 = Math.Sqrt((targetMX - baseMX) * (targetMX - baseMX) + (targetMY - baseMY) * (targetMY - baseMY));
-                            if (l2 < 1e-6) break;
-                            var c2 = new System.Numerics.Complex((targetMX - baseMX) / l2, (targetMY - baseMY) / l2);
+                //            var l1 = Math.Sqrt((carMX - baseMX) * (carMX - baseMX) + (carMY - baseMY) * (carMY - baseMY));
+                //            if (l1 < 1e-6) break;
+                //            var c1 = new System.Numerics.Complex((carMX - baseMX) / l1, (carMY - baseMY) / l1);
 
-                            var c3 = c2 / c1;
-                            double angle;
-                            if (c3.Real <= -1)
-                            {
-                                angle = 180;
-                            }
-                            else if (c3.Real < 1)
-                            {
+                //            var l2 = Math.Sqrt((targetMX - baseMX) * (targetMX - baseMX) + (targetMY - baseMY) * (targetMY - baseMY));
+                //            if (l2 < 1e-6) break;
+                //            var c2 = new System.Numerics.Complex((targetMX - baseMX) / l2, (targetMY - baseMY) / l2);
 
-                                //percentValue = Convert.ToInt64(-c3.Real * percentValue);
-                                angle = Math.Acos(c3.Real) / Math.PI * 180;
-                            }
-                            else angle = 0;
+                //            var c3 = c2 / c1;
+                //            double angle;
+                //            if (c3.Real <= -1)
+                //            {
+                //                angle = 180;
+                //            }
+                //            else if (c3.Real < 1)
+                //            {
 
-                            angle = 180 - angle;
-                            int efficiency = 0;
-                            if (angle < 90)
-                            {
-                                efficiency = Convert.ToInt32((90 - angle) / 90 * 100);
-                                percentValue = Convert.ToInt64(percentValue * (90 - angle) / 90);
-                            }
-                            else
-                            {
-                                efficiency = 0;
-                                percentValue = 1;
-                            }
-                            percentValue = Math.Max(1, percentValue);
-                            // if (player.playerType == RoleInGame.PlayerType.player)
-                            {
-                                that.WebNotify(player, $"水法攻击角度为{angle.ToString("F0")}°，攻击效力为{efficiency}%");
-                            }
-                            that.DrawMagicPolyLine(new double[] {
-                                 carMX,carMY,baseMX,baseMY,targetMX,targetMY,
-                            }, ref notifyMsg);
-                            return percentValue;
-                        };
-                    case SkillEnum.Electic:
-                        {
-                            OssModel.FastonPosition carPosition;
-                            OssModel.FastonPosition targetPosition;
-                            if (player.getCar().DirectAttack)
-                            {
-                                carPosition = grp.GetFpByIndex(player.StartFPIndex);
-                                targetPosition = grp.GetFpByIndex(victim.StartFPIndex);
-                            }
-                            else
-                            {
-                                carPosition = grp.GetFpByIndex(player.getCar().targetFpIndex);
-                                targetPosition = grp.GetFpByIndex(victim.StartFPIndex);
-                            }
-                            double carMX, carMY, carMZ;
-                            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(carPosition.Longitude, carPosition.Latitde, 0, out carMX, out carMY, out carMZ);
+                //                //percentValue = Convert.ToInt64(-c3.Real * percentValue);
+                //                angle = Math.Acos(c3.Real) / Math.PI * 180;
+                //            }
+                //            else angle = 0;
 
-                            //double baseMX, baseMY, baseMZ;
-                            //CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(basePosition.Longitude, basePosition.Latitde, 0, out baseMX, out baseMY, out baseMZ);
+                //            angle = 180 - angle;
+                //            int efficiency = 0;
+                //            if (angle < 90)
+                //            {
+                //                efficiency = Convert.ToInt32((90 - angle) / 90 * 100);
+                //                percentValue = Convert.ToInt64(percentValue * (90 - angle) / 90);
+                //            }
+                //            else
+                //            {
+                //                efficiency = 0;
+                //                percentValue = 1;
+                //            }
+                //            percentValue = Math.Max(1, percentValue);
+                //            // if (player.playerType == Player.PlayerType.player)
+                //            {
+                //                that.WebNotify(player, $"水法攻击角度为{angle.ToString("F0")}°，攻击效力为{efficiency}%");
+                //            }
+                //            that.DrawMagicPolyLine(new double[] {
+                //                 carMX,carMY,baseMX,baseMY,targetMX,targetMY,
+                //            }, ref notifyMsg);
+                //            return percentValue;
+                //        };
+                //    case SkillEnum.Electic:
+                //        {
+                //            OssModel.FastonPosition carPosition;
+                //            OssModel.FastonPosition targetPosition;
+                //            if (player.getCar().DirectAttack)
+                //            {
+                //                carPosition = grp.GetFpByIndex(player.StartFPIndex);
+                //                targetPosition = grp.GetFpByIndex(victim.StartFPIndex);
+                //            }
+                //            else
+                //            {
+                //                carPosition = grp.GetFpByIndex(player.getCar().targetFpIndex);
+                //                targetPosition = grp.GetFpByIndex(victim.StartFPIndex);
+                //            }
+                //            double carMX, carMY, carMZ;
+                //            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(carPosition.Longitude, carPosition.Latitde, 0, out carMX, out carMY, out carMZ);
 
-                            double targetMX, targetMY, targetMZ;
-                            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(targetPosition.Longitude, targetPosition.Latitde, 0, out targetMX, out targetMY, out targetMZ);
+                //            //double baseMX, baseMY, baseMZ;
+                //            //CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(basePosition.Longitude, basePosition.Latitde, 0, out baseMX, out baseMY, out baseMZ);
 
-                            //var l1 = Math.Sqrt((carMX - baseMX) * (carMX - baseMX) + (carMY - baseMY) * (carMY - baseMY));
-                            //if (l1 < 1e-6) break;
-                            //var c1 = new System.Numerics.Complex((carMX - baseMX) / l1, (carMY - baseMY) / l1);
+                //            double targetMX, targetMY, targetMZ;
+                //            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(targetPosition.Longitude, targetPosition.Latitde, 0, out targetMX, out targetMY, out targetMZ);
 
-                            //var l2 = Math.Sqrt((targetMX - baseMX) * (targetMX - baseMX) + (targetMY - baseMY) * (targetMY - baseMY));
-                            //if (l2 < 1e-6) break;
+                //            //var l1 = Math.Sqrt((carMX - baseMX) * (carMX - baseMX) + (carMY - baseMY) * (carMY - baseMY));
+                //            //if (l1 < 1e-6) break;
+                //            //var c1 = new System.Numerics.Complex((carMX - baseMX) / l1, (carMY - baseMY) / l1);
 
-                            var l3 = Math.Sqrt((carMX - targetMX) * (carMX - targetMX) + (carMY - targetMY) * (carMY - targetMY));
-                            // if (l2 < 1e-6) break;
+                //            //var l2 = Math.Sqrt((targetMX - baseMX) * (targetMX - baseMX) + (targetMY - baseMY) * (targetMY - baseMY));
+                //            //if (l2 < 1e-6) break;
 
-                            //  var p = (l1 + l2 + l3) / 2;
+                //            var l3 = Math.Sqrt((carMX - targetMX) * (carMX - targetMX) + (carMY - targetMY) * (carMY - targetMY));
+                //            // if (l2 < 1e-6) break;
 
-                            //  var s = Math.Sqrt(p * (p - l1) * (p - l2) * (p - l3));
-                            //if (s == double.NaN) break;
+                //            //  var p = (l1 + l2 + l3) / 2;
 
-                            //var d = s / l2;
-                            var d = l3 / 3;
+                //            //  var s = Math.Sqrt(p * (p - l1) * (p - l2) * (p - l3));
+                //            //if (s == double.NaN) break;
 
-
-                            var c2 = new System.Numerics.Complex((targetMX - carMX) / l3, (targetMY - carMY) / l3);
-                            var c3 = c2 * new System.Numerics.Complex(0, 1);
-
-                            var A = c3.Real;
-                            var B = c3.Imaginary;
-
-                            var x1 = carMX + d * c3.Real;
-                            var y1 = carMY + d * c3.Imaginary;
-
-                            var C1 = -(A * x1 + B * y1);
-
-                            var x2 = carMX - d * c3.Real;
-                            var y2 = carMY - d * c3.Imaginary;
-                            var C2 = -(A * x2 + B * y2);
-
-                            int containItem = 0;
-                            foreach (var item in that._collectPosition)
-                            {
-                                //  var from = Program.dt.GetFpByIndex(player.StartFPIndex);
-                                var calItem = Program.dt.GetFpByIndex(item.Value);
-                                double calMX, calMY, calMZ;
-                                //double targetMX, targetMY, targetMZ;
-                                CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(calItem.Longitude, calItem.Latitde, 0, out calMX, out calMY, out calMZ);
-                                if (A * calMX + B * calMY + C1 < 0 && A * calMX + B * calMY + C2 > 0)
-                                {
-                                    percentValue = percentValue * 80 / 100;
-                                    containItem++;
-                                }
-                            }
-                            percentValue = Math.Max(1, percentValue);
-                            {
-                                that.WebNotify(player, $"雷法攻击宽度度为{(d * 2).ToString("F0")}，有{containItem}个点减少雷法威力。");
-                            }
-                            that.DrawMagicDoubleLine(new double[] {
-                                x1 + c2.Real * 10000 ,y1+c2.Imaginary * 10000, x1 - c2.Real * 10000, y1 - c2.Imaginary * 10000,
-                                x2 - c2.Real * 10000 ,y2-c2.Imaginary * 10000, x2 + c2.Real * 10000, y2 + c2.Imaginary * 10000
-                            }, ref notifyMsg);
-                            return percentValue;
-
-                        };
-                    case SkillEnum.Fire:
-                        {
-                            OssModel.FastonPosition carPosition;
-                            OssModel.FastonPosition targetPosition;
-                            if (player.getCar().DirectAttack)
-                            {
-                                carPosition = grp.GetFpByIndex(player.StartFPIndex);
-                                targetPosition = grp.GetFpByIndex(victim.StartFPIndex);
-                            }
-                            else
-                            {
-                                carPosition = grp.GetFpByIndex(player.getCar().targetFpIndex); 
-                                targetPosition = grp.GetFpByIndex(victim.StartFPIndex);
-                            }
-                            double carMX, carMY, carMZ;
-                            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(carPosition.Longitude, carPosition.Latitde, 0, out carMX, out carMY, out carMZ);
-
-                            //double baseMX, baseMY, baseMZ;
-                            //CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(basePosition.Longitude, basePosition.Latitde, 0, out baseMX, out baseMY, out baseMZ);
-
-                            double targetMX, targetMY, targetMZ;
-                            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(targetPosition.Longitude, targetPosition.Latitde, 0, out targetMX, out targetMY, out targetMZ);
-
-                            var r = Math.Sqrt((carMX - targetMX) * (carMX - targetMX) + (carMY - targetMY) * (carMY - targetMY));
+                //            //var d = s / l2;
+                //            var d = l3 / 3;
 
 
-                            int containItem = 0;
-                            foreach (var item in that._collectPosition)
-                            {
-                                //  var from = Program.dt.GetFpByIndex(player.StartFPIndex);
-                                var calItem = Program.dt.GetFpByIndex(item.Value);
-                                double calMX, calMY, calMZ;
-                                //double targetMX, targetMY, targetMZ;
-                                CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(calItem.Longitude, calItem.Latitde, 0, out calMX, out calMY, out calMZ);
-                                if ((calMX - targetMX) * (calMX - targetMX) + (calMY - targetMY) * (calMY - targetMY) < r * r)
-                                {
-                                    percentValue = percentValue * 70 / 100;
-                                    containItem++;
-                                }
-                            }
-                            percentValue = Math.Max(1, percentValue);
-                            {
-                                that.WebNotify(player, $"火法攻击半径为{r.ToString("F0")}，有{containItem}个点减少火法威力。");
-                            }
+                //            var c2 = new System.Numerics.Complex((targetMX - carMX) / l3, (targetMY - carMY) / l3);
+                //            var c3 = c2 * new System.Numerics.Complex(0, 1);
 
-                            var circle = new List<double>();
-                            var singleAngle = Math.PI / 90;
-                            for (int i = 0; i < 181; i++)
-                            {
-                                var x = Math.Cos(i * singleAngle) * r + targetMX;
-                                var y = Math.Sin(i * singleAngle) * r + targetMY;
-                                circle.Add(x);
-                                circle.Add(y);
-                            }
-                            that.DrawMagicCircle(circle.ToArray(), ref notifyMsg);
-                            return percentValue;
-                        };
-                }
-                var car = player.getCar();
-                var rank = Program.rm.getPlayerClosestPositionRankNum(player, car, victim);
-                for (var i = 0; i < rank; i++)
-                {
-                    percentValue = percentValue * 70 / 100;
-                }
-                percentValue = Math.Max(1, percentValue);
-                return percentValue;
+                //            var A = c3.Real;
+                //            var B = c3.Imaginary;
+
+                //            var x1 = carMX + d * c3.Real;
+                //            var y1 = carMY + d * c3.Imaginary;
+
+                //            var C1 = -(A * x1 + B * y1);
+
+                //            var x2 = carMX - d * c3.Real;
+                //            var y2 = carMY - d * c3.Imaginary;
+                //            var C2 = -(A * x2 + B * y2);
+
+                //            int containItem = 0;
+                //            foreach (var item in that._collectPosition)
+                //            {
+                //                //  var from = Program.dt.GetFpByIndex(player.StartFPIndex);
+                //                var calItem = Program.dt.GetFpByIndex(item.Value);
+                //                double calMX, calMY, calMZ;
+                //                //double targetMX, targetMY, targetMZ;
+                //                CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(calItem.Longitude, calItem.Latitde, 0, out calMX, out calMY, out calMZ);
+                //                if (A * calMX + B * calMY + C1 < 0 && A * calMX + B * calMY + C2 > 0)
+                //                {
+                //                    percentValue = percentValue * 80 / 100;
+                //                    containItem++;
+                //                }
+                //            }
+                //            percentValue = Math.Max(1, percentValue);
+                //            {
+                //                that.WebNotify(player, $"雷法攻击宽度度为{(d * 2).ToString("F0")}，有{containItem}个点减少雷法威力。");
+                //            }
+                //            that.DrawMagicDoubleLine(new double[] {
+                //                x1 + c2.Real * 10000 ,y1+c2.Imaginary * 10000, x1 - c2.Real * 10000, y1 - c2.Imaginary * 10000,
+                //                x2 - c2.Real * 10000 ,y2-c2.Imaginary * 10000, x2 + c2.Real * 10000, y2 + c2.Imaginary * 10000
+                //            }, ref notifyMsg);
+                //            return percentValue;
+
+                //        };
+                //    case SkillEnum.Fire:
+                //        {
+                //            OssModel.FastonPosition carPosition;
+                //            OssModel.FastonPosition targetPosition;
+                //            if (player.getCar().DirectAttack)
+                //            {
+                //                carPosition = grp.GetFpByIndex(player.StartFPIndex);
+                //                targetPosition = grp.GetFpByIndex(victim.StartFPIndex);
+                //            }
+                //            else
+                //            {
+                //                carPosition = grp.GetFpByIndex(player.getCar().targetFpIndex);
+                //                targetPosition = grp.GetFpByIndex(victim.StartFPIndex);
+                //            }
+                //            double carMX, carMY, carMZ;
+                //            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(carPosition.Longitude, carPosition.Latitde, 0, out carMX, out carMY, out carMZ);
+
+                //            //double baseMX, baseMY, baseMZ;
+                //            //CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(basePosition.Longitude, basePosition.Latitde, 0, out baseMX, out baseMY, out baseMZ);
+
+                //            double targetMX, targetMY, targetMZ;
+                //            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(targetPosition.Longitude, targetPosition.Latitde, 0, out targetMX, out targetMY, out targetMZ);
+
+                //            var r = Math.Sqrt((carMX - targetMX) * (carMX - targetMX) + (carMY - targetMY) * (carMY - targetMY));
+
+
+                //            int containItem = 0;
+                //            foreach (var item in that._collectPosition)
+                //            {
+                //                //  var from = Program.dt.GetFpByIndex(player.StartFPIndex);
+                //                var calItem = Program.dt.GetFpByIndex(item.Value);
+                //                double calMX, calMY, calMZ;
+                //                //double targetMX, targetMY, targetMZ;
+                //                CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(calItem.Longitude, calItem.Latitde, 0, out calMX, out calMY, out calMZ);
+                //                if ((calMX - targetMX) * (calMX - targetMX) + (calMY - targetMY) * (calMY - targetMY) < r * r)
+                //                {
+                //                    percentValue = percentValue * 70 / 100;
+                //                    containItem++;
+                //                }
+                //            }
+                //            percentValue = Math.Max(1, percentValue);
+                //            {
+                //                that.WebNotify(player, $"火法攻击半径为{r.ToString("F0")}，有{containItem}个点减少火法威力。");
+                //            }
+
+                //            var circle = new List<double>();
+                //            var singleAngle = Math.PI / 90;
+                //            for (int i = 0; i < 181; i++)
+                //            {
+                //                var x = Math.Cos(i * singleAngle) * r + targetMX;
+                //                var y = Math.Sin(i * singleAngle) * r + targetMY;
+                //                circle.Add(x);
+                //                circle.Add(y);
+                //            }
+                //            that.DrawMagicCircle(circle.ToArray(), ref notifyMsg);
+                //            return percentValue;
+                //        };
+                //}
+                //var car = player.getCar();
+                //var rank = Program.rm.getPlayerClosestPositionRankNum(player, car, victim);
+                //for (var i = 0; i < rank; i++)
+                //{
+                //    percentValue = percentValue * 70 / 100;
+                //}
+                //percentValue = Math.Max(1, percentValue);
+                //return percentValue;
             }
 
             public Engine_DebtEngine.DebtCondition getCondition()
@@ -1410,7 +1418,7 @@ namespace HouseManager5_0
             //    return ambushInfomation.volumeValue;
             //}
 
-            public long ImproveAttack(RoleInGame role, long attackMoney, ref List<string> notifyMsgs)
+            public long ImproveAttack(Player role, long attackMoney, ref List<string> notifyMsgs)
             {
                 return attackMoney;
             }
@@ -1420,7 +1428,7 @@ namespace HouseManager5_0
                 return ability.leftVolume;
             }
 
-            public void MagicAnimateShow(RoleInGame player, RoleInGame victim, ref List<string> notifyMsgs)
+            public void MagicAnimateShow(Player player, Player victim, ref List<string> notifyMsgs)
             {
                 switch (this.skill.skillEnum)
                 {
@@ -1440,7 +1448,7 @@ namespace HouseManager5_0
                 //throw new NotImplementedException();
             }
 
-            public void setCost(long reduce, RoleInGame player, Car car, ref List<string> notifyMsg)
+            public void setCost(long reduce, Player player, Car car, ref List<string> notifyMsg)
             {
                 car.ability.setCostVolume(car.ability.costVolume + reduce, player, car, ref notifyMsg);
             }
@@ -1453,7 +1461,7 @@ namespace HouseManager5_0
             {
                 return _electricIsIgnored;
             }
-            public void IgnoreElectric(ref RoleInGame role, ref System.Random rm)
+            public void IgnoreElectric(ref Player role, ref System.Random rm)
             {
 
                 var driver = role.getCar().ability.driver;
@@ -1466,7 +1474,7 @@ namespace HouseManager5_0
             {
                 return this._fireIsIgnored;
             }
-            public void IgnoreFire(ref RoleInGame role, ref System.Random rm)
+            public void IgnoreFire(ref Player role, ref System.Random rm)
             {
                 var driver = role.getCar().ability.driver;
                 if (driver == null) _fireIsIgnored = false;
@@ -1478,14 +1486,14 @@ namespace HouseManager5_0
             {
                 return _waterIsIgnored;
             }
-            public void IgnoreWater(ref RoleInGame role, ref System.Random rm)
+            public void IgnoreWater(ref Player role, ref System.Random rm)
             {
                 var driver = role.getCar().ability.driver;
                 if (driver == null) _waterIsIgnored = false;
                 else if (role.buildingReward[4] > 0 && driver.race == Race.immortal) _waterIsIgnored = true;
                 else _waterIsIgnored = false;
             }
-            public int MagicImprovedProbabilityAndValue(RoleInGame role, ref System.Random rm)
+            public int MagicImprovedProbabilityAndValue(Player role, ref System.Random rm)
             {
                 if (role.getCar().ability.driver == null)
                 {
@@ -1511,7 +1519,7 @@ namespace HouseManager5_0
 
         public partial class attackMagicTool : interfaceOfHM.AttackIgnore
         {
-            public void Ignore(ref RoleInGame attacker, ref System.Random rm)
+            public void Ignore(ref Player attacker, ref System.Random rm)
             {
                 switch (this.skill.skillEnum)
                 {
@@ -1557,86 +1565,87 @@ namespace HouseManager5_0
                 }
             }
 
-            public void ReduceIgnore(ref RoleInGame player)
+            public void ReduceIgnore(ref Player player)
             {
 
             }
         }
-        private CarStateForBeMagiced CheckTargetCanBeElecticMagiced(RoleInGame role, string targetOwner)
-        {
-            if (role.playerType == RoleInGame.PlayerType.player)
-            {
-                var player = (Player)role;
-                if (roomMain._Players.ContainsKey(targetOwner))
-                {
-                    if (roomMain._Players[targetOwner].Bust)
-                    {
-                        return CarStateForBeMagiced.HasBeenBust;
-                    }
-                    else
-                    {
-                        if (roomMain._Players[targetOwner].playerType == RoleInGame.PlayerType.NPC)
-                        {
-                            var targetNPC = (NPC)roomMain._Players[targetOwner];
-                            if (string.IsNullOrEmpty(targetNPC.challenger))
-                            {
-                                if (player.TheLargestHolderKey == player.Key)
-                                {
-                                    if (player.Level + 1 >= targetNPC.Level)
-                                        return CarStateForBeMagiced.CanBeMagiced;
-                                    else
-                                        return CarStateForBeMagiced.LevelIsLow;
-                                }
-                                else
-                                {
-                                    return CarStateForBeMagiced.NotBoss;
-                                }
-                            }
-                            else
-                            {
-                                if (player.TheLargestHolderKey == targetNPC.challenger)
-                                {
-                                    return CarStateForBeMagiced.CanBeMagiced;
-                                }
-                                else
-                                    return CarStateForBeMagiced.IsBeingChallenged;
-                            }
-                        }
-                        else
-                        {
-                            var targetPlayer = (Player)roomMain._Players[targetOwner];
-                            if (targetPlayer.IsOnline())
-                            {
-                                if (that.isAtTheSameGroup(player.Key, targetPlayer.Key))
-                                {
-                                    return CarStateForBeMagiced.IsGroupMate;
-                                }
-                                else if (player.Level >= targetPlayer.Level)
-                                    return CarStateForBeMagiced.CanBeMagiced;
-                                else
-                                    return CarStateForBeMagiced.LevelIsLow;
-                            }
-                            else
-                            {
-                                return CarStateForBeMagiced.CanBeMagiced;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    return CarStateForBeMagiced.NotExisted;
-                }
-            }
-            else if (role.playerType == RoleInGame.PlayerType.NPC)
-            {
-                return CarStateForBeMagiced.CanBeMagiced;
-            }
-            else
-            {
-                throw new Exception("错误！");
-            }
-        }
+        //private CarStateForBeMagiced CheckTargetCanBeElecticMagiced(Player role, string targetOwner)
+        //{
+        //    return CarStateForBeMagiced.CanBeMagiced;
+        //    if (role.playerType == Player.PlayerType.player)
+        //    {
+        //        var player = (Player)role;
+        //        if (roomMain._Players.ContainsKey(targetOwner))
+        //        {
+        //            if (roomMain._Players[targetOwner].Bust)
+        //            {
+        //                return CarStateForBeMagiced.HasBeenBust;
+        //            }
+        //            else
+        //            {
+        //                if (roomMain._Players[targetOwner].playerType == Player.PlayerType.NPC)
+        //                {
+        //                    var targetNPC = (NPC)roomMain._Players[targetOwner];
+        //                    if (string.IsNullOrEmpty(targetNPC.challenger))
+        //                    {
+        //                        if (player.TheLargestHolderKey == player.Key)
+        //                        {
+        //                            if (player.Level + 1 >= targetNPC.Level)
+        //                                return CarStateForBeMagiced.CanBeMagiced;
+        //                            else
+        //                                return CarStateForBeMagiced.LevelIsLow;
+        //                        }
+        //                        else
+        //                        {
+        //                            return CarStateForBeMagiced.NotBoss;
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        if (player.TheLargestHolderKey == targetNPC.challenger)
+        //                        {
+        //                            return CarStateForBeMagiced.CanBeMagiced;
+        //                        }
+        //                        else
+        //                            return CarStateForBeMagiced.IsBeingChallenged;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    var targetPlayer = (Player)roomMain._Players[targetOwner];
+        //                    if (targetPlayer.IsOnline())
+        //                    {
+        //                        if (that.isAtTheSameGroup(player.Key, targetPlayer.Key))
+        //                        {
+        //                            return CarStateForBeMagiced.IsGroupMate;
+        //                        }
+        //                        else if (player.Level >= targetPlayer.Level)
+        //                            return CarStateForBeMagiced.CanBeMagiced;
+        //                        else
+        //                            return CarStateForBeMagiced.LevelIsLow;
+        //                    }
+        //                    else
+        //                    {
+        //                        return CarStateForBeMagiced.CanBeMagiced;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            return CarStateForBeMagiced.NotExisted;
+        //        }
+        //    }
+        //    else if (role.playerType == Player.PlayerType.NPC)
+        //    {
+        //        return CarStateForBeMagiced.CanBeMagiced;
+        //    }
+        //    else
+        //    {
+        //        throw new Exception("错误！");
+        //    }
+        //}
 
     }
     /// <summary>
@@ -1646,12 +1655,12 @@ namespace HouseManager5_0
     {
         internal partial class ambushMagicTool : controleMT, interfaceOfHM.ControlExpand
         {
-            //private RoleInGame enemy;
-            //private RoleInGame selfRole;
+            //private Player enemy;
+            //private Player selfRole;
             private interfaceOfHM.AttackT at;
             //  private RoomMain that;
             private long sumHarmValue = 0;
-            internal ambushMagicTool(RoleInGame enemy, RoleInGame selfRole, interfaceOfHM.AttackT at, RoomMain that_)
+            internal ambushMagicTool(Player enemy, Player selfRole, interfaceOfHM.AttackT at, RoomMain that_)
             {
                 this.enemy = enemy;
                 this.self = selfRole;
@@ -1661,7 +1670,7 @@ namespace HouseManager5_0
                 this.name = "潜伏";
                 this.index = 4;
             }
-            public ambushMagicTool(RoleInGame enemy_)
+            public ambushMagicTool(Player enemy_)
             {
                 this.enemy = enemy_;
                 this.index = 4;
@@ -1758,7 +1767,7 @@ namespace HouseManager5_0
                     }
                     if (this.at.isMagic)
                     {
-                        at.MagicAnimateShow(this.enemy, this.self, ref notifyMsg);
+                        //  at.MagicAnimateShow(this.enemy, this.self, ref notifyMsg);
                     }
 
                 }
@@ -1782,6 +1791,7 @@ namespace HouseManager5_0
                     c = "returnning",
                     changeType = commandWithTime.returnning.ChangeType.BeforeTax,
                     key = this.enemy.Key,
+                    groupKey = this.enemy.Group.GroupKey,
                     returningOjb = this.enemy.returningOjb,
                     target = this.enemy.getCar().targetFpIndex
                 }, grp);
@@ -1810,8 +1820,8 @@ namespace HouseManager5_0
                 int GetDriverDefence();
             }
 
-            protected RoleInGame self;
-            protected RoleInGame enemy;
+            protected Player self;
+            protected Player enemy;
             protected RoomMain that;
             protected ControlInfomation magicItem;
             protected bool protecedByDefendMagic = false;
@@ -1888,7 +1898,7 @@ namespace HouseManager5_0
                 }
             }
 
-            public void Ignore(ref RoleInGame role, ref System.Random rm)
+            public void Ignore(ref Player role, ref System.Random rm)
             {
                 //throw new Exception();
                 //var driver = role.getCar().ability.driver;
@@ -1937,7 +1947,7 @@ namespace HouseManager5_0
             {
                 //  this.ReduceIgnore(ref this.enemy);
             }
-            public void ReduceIgnore(ref RoleInGame role)
+            public void ReduceIgnore(ref Player role)
             {
             }
             public virtual void SetReturn(bool success, GetRandomPos grp, ref List<string> notifyMsg)
@@ -1950,6 +1960,7 @@ namespace HouseManager5_0
                         c = "returnning",
                         changeType = commandWithTime.returnning.ChangeType.BeforeTax,
                         key = magicItem.player.Key,
+                        groupKey = magicItem.player.Group.GroupKey,
                         returningOjb = magicItem.player.returningOjb,
                         target = enemyCar.targetFpIndex
                     }, grp);
@@ -1962,7 +1973,7 @@ namespace HouseManager5_0
         internal partial class confuseMagicTool : controleMT, interfaceOfHM.ControlExpand
         {
             //   private string name = "混乱"; 
-            public confuseMagicTool(ControlInfomation magicItem_, RoleInGame self_, RoleInGame enemy_, RoomMain that_)
+            public confuseMagicTool(ControlInfomation magicItem_, Player self_, Player enemy_, RoomMain that_)
             {
                 this.self = self_;
                 this.enemy = enemy_;
@@ -1971,7 +1982,7 @@ namespace HouseManager5_0
                 this.index = 2;
                 this.name = "混乱";
             }
-            public confuseMagicTool(RoleInGame enemy_)
+            public confuseMagicTool(Player enemy_)
             {
                 this.enemy = enemy_;
                 this.index = 2;
@@ -2029,7 +2040,7 @@ namespace HouseManager5_0
 
         internal partial class loseMagicTool : controleMT, interfaceOfHM.ControlExpand
         {
-            public loseMagicTool(ControlInfomation magicItem_, RoleInGame self_, RoleInGame enemy_, RoomMain that_)
+            public loseMagicTool(ControlInfomation magicItem_, Player self_, Player enemy_, RoomMain that_)
             {
                 this.magicItem = magicItem_;
                 this.self = self_;
@@ -2038,7 +2049,7 @@ namespace HouseManager5_0
                 this.index = 3;
                 this.name = "迷失";
             }
-            public loseMagicTool(RoleInGame enemy_)
+            public loseMagicTool(Player enemy_)
             {
                 this.enemy = enemy_;
                 this.index = 3;
@@ -2096,7 +2107,7 @@ namespace HouseManager5_0
             }
         }
 
-        internal Manager_Driver.ConfuseManger.programResult DealWithControlMagic(interfaceOfHM.ControlExpand ce, GetRandomPos grp, RoleInGame enemy, ref long reduceSumInput)
+        internal Manager_Driver.ConfuseManger.programResult DealWithControlMagic(interfaceOfHM.ControlExpand ce, GetRandomPos grp, Player enemy, ref long reduceSumInput)
         {
             List<string> notifyMsg = new List<string>();
             var magicDoublePlayed = ce.MagicDouble(ref Program.rm.rm);
@@ -2160,13 +2171,13 @@ namespace HouseManager5_0
                     }
             }
         }
-        private CarStateForBeMagiced CheckTargetCanBeControleMagiced(RoleInGame role, string targetOwner)
+        //private CarStateForBeMagiced CheckTargetCanBeControleMagiced(Player role, string targetOwner)
+        //{
+        //    return this.CheckTargetCanBeElecticMagiced(role, targetOwner);
+        //}
+        internal void TakeHalfMoneyWhenIsControlled(Player player, Car car, ref List<string> notifyMsg)
         {
-            return this.CheckTargetCanBeElecticMagiced(role, targetOwner);
-        }
-        internal void TakeHalfMoneyWhenIsControlled(RoleInGame player, Car car, ref List<string> notifyMsg)
-        {
-            if (player.playerType == RoleInGame.PlayerType.player)
+            if (player.playerType == Player.PlayerType.player)
                 if (player.confuseRecord.IsBeingControlled())
                     if (car.state == CarState.waitAtBaseStation)
                     {
@@ -2174,7 +2185,7 @@ namespace HouseManager5_0
                         if (player.Money > car.ability.Business / 2)
                         {
                             reduceMoney += car.ability.Business / 2;
-                            car.ability.setCostBusiness(car.ability.Business / 2, player, car, ref notifyMsg);
+                            //  car.ability.setCostBusiness(car.ability.Business / 2, player, car, ref notifyMsg);
                         }
                         if (player.Money - reduceMoney > car.ability.Volume / 2)
                         {
@@ -2234,9 +2245,10 @@ namespace HouseManager5_0
 
             public void AddValue(int improvedValue, out long costVolumeValue, ref List<string> notifyMsg)
             {
-                var beneficiary = Program.rm._Players[this.beneficiaryKey];
-                var player = Program.rm._Players[this.key];
-                beneficiary.improvementRecord.addSpeed(beneficiary, player.getCar().ability.leftVolume * (100 + improvedValue) / 100, out costVolumeValue, ref notifyMsg);
+                throw new Exception();
+                //var beneficiary = Program.rm._Players[this.beneficiaryKey];
+                //var player = Program.rm._Players[this.key];
+                //beneficiary.improvementRecord.addSpeed(beneficiary, player.getCar().ability.leftVolume * (100 + improvedValue) / 100, out costVolumeValue, ref notifyMsg);
             }
 
             //public void AddValue(out long costValue, ref List<string> notifyMsg)
@@ -2246,27 +2258,29 @@ namespace HouseManager5_0
 
             public void AddValueWithMaxV(out long costVolumeValue, ref List<string> notifyMsg)
             {
-                var beneficiary = Program.rm._Players[this.beneficiaryKey];
-                beneficiary.improvementRecord.addSpeed(beneficiary, beneficiary.Money / 4, out costVolumeValue, ref notifyMsg);
+                throw new Exception();
+                //var beneficiary = Program.rm._Players[this.beneficiaryKey];
+                //beneficiary.improvementRecord.addSpeed(beneficiary, beneficiary.Money / 4, out costVolumeValue, ref notifyMsg);
             }
 
             public void BalanceAccounts(ref List<string> notifyMsg, long costValue, out string[] msgToSelf, out string[] msgToBeneficiary)
             {
-                var beneficiary = Program.rm._Players[this.beneficiaryKey];
-                var player = Program.rm._Players[this.key];
-                var car = player.getCar();
-                //this.WebNotify(beneficiary, $"【{player.PlayerName}】提高了你的业务能力，你向其支付{(costBusinessValue / 100).ToString()}.{(costBusinessValue % 100).ToString()}银两。");
-                beneficiary.MoneySet(beneficiary.Money - costValue, ref notifyMsg);
-                car.ability.setCostVolume(car.ability.costVolume + costValue, player, car, ref notifyMsg);
-                //this.WebNotify(player, $"你提高了【{player.PlayerName}】的速度，其向你的司机支付{(costBusinessValue / 100).ToString()}.{(costBusinessValue % 100).ToString()}银两。");
-                msgToSelf = new string[1]
-                {
-                    $"你提高了【{player.PlayerName}】的速度，其向你的司机支付{(costValue / 100).ToString()}.{(costValue % 100).ToString("D2")}银两。"
-                };
-                msgToBeneficiary = new string[1]
-                {
-                    $"【{player.PlayerName}】提高了你的速度，你向其支付{(costValue / 100).ToString()}.{(costValue % 100).ToString("D2")}银两。"
-                };
+                throw new Exception();
+                //var beneficiary = Program.rm._Players[this.beneficiaryKey];
+                //var player = Program.rm._Players[this.key];
+                //var car = player.getCar();
+                ////this.WebNotify(beneficiary, $"【{player.PlayerName}】提高了你的业务能力，你向其支付{(costBusinessValue / 100).ToString()}.{(costBusinessValue % 100).ToString()}银两。");
+                //beneficiary.MoneySet(beneficiary.Money - costValue, ref notifyMsg);
+                //car.ability.setCostVolume(car.ability.costVolume + costValue, player, car, ref notifyMsg);
+                ////this.WebNotify(player, $"你提高了【{player.PlayerName}】的速度，其向你的司机支付{(costBusinessValue / 100).ToString()}.{(costBusinessValue % 100).ToString()}银两。");
+                //msgToSelf = new string[1]
+                //{
+                //    $"你提高了【{player.PlayerName}】的速度，其向你的司机支付{(costValue / 100).ToString()}.{(costValue % 100).ToString("D2")}银两。"
+                //};
+                //msgToBeneficiary = new string[1]
+                //{
+                //    $"【{player.PlayerName}】提高了你的速度，你向其支付{(costValue / 100).ToString()}.{(costValue % 100).ToString("D2")}银两。"
+                //};
             }
 
             public bool ConditionIsEnoughToReleaseAll(long money, long leftVolume, int ImprovedValue)
@@ -2275,7 +2289,7 @@ namespace HouseManager5_0
             }
 
             const int operateIndex = 2;
-            public int MagicImprovedProbabilityAndValue(RoleInGame role, ref System.Random rm)
+            public int MagicImprovedProbabilityAndValue(Player role, ref System.Random rm)
             {
                 if (role.getCar().ability.driver == null)
                 {
@@ -2296,7 +2310,7 @@ namespace HouseManager5_0
                 else return 0;
             }
 
-            public void ReduceMagicImprovedValue(RoleInGame role)
+            public void ReduceMagicImprovedValue(Player role)
             {
                 /*
                  * 这里不进行衰减。
@@ -2342,35 +2356,39 @@ namespace HouseManager5_0
 
             public void AddValue(int improvedValue, out long costValue, ref List<string> notifyMsg)
             {
-                var beneficiary = Program.rm._Players[this.beneficiaryKey];
-                var player = Program.rm._Players[this.key];
-                beneficiary.improvementRecord.addDefence(beneficiary, player.getCar().ability.leftVolume * (100 + improvedValue) / 100, out costValue, ref notifyMsg);
+                throw new Exception();
+                //var beneficiary = Program.rm._Players[this.beneficiaryKey];
+                //var player = Program.rm._Players[this.key];
+                //beneficiary.improvementRecord.addDefence(beneficiary, player.getCar().ability.leftVolume * (100 + improvedValue) / 100, out costValue, ref notifyMsg);
             }
 
             public void AddValueWithMaxV(out long costValue, ref List<string> notifyMsg)
             {
-                var beneficiary = Program.rm._Players[this.beneficiaryKey];
-                //   var player = Program.rm._Players[this.key];
-                beneficiary.improvementRecord.addDefence(beneficiary, beneficiary.Money / 4, out costValue, ref notifyMsg);
+                throw new Exception();
+                //var beneficiary = Program.rm._Players[this.beneficiaryKey];
+                ////   var player = Program.rm._Players[this.key];
+                //beneficiary.improvementRecord.addDefence(beneficiary, beneficiary.Money / 4, out costValue, ref notifyMsg);
             }
 
             public void BalanceAccounts(ref List<string> notifyMsg, long costValue, out string[] msgToSelf, out string[] msgToBeneficiary)
             {
-                var beneficiary = Program.rm._Players[this.beneficiaryKey];
-                var player = Program.rm._Players[this.key];
-                var car = player.getCar();
-                //this.WebNotify(beneficiary, $"【{player.PlayerName}】提高了你的业务能力，你向其支付{(costBusinessValue / 100).ToString()}.{(costBusinessValue % 100).ToString()}银两。");
-                beneficiary.MoneySet(beneficiary.Money - costValue, ref notifyMsg);
-                car.ability.setCostVolume(car.ability.costVolume + costValue, player, car, ref notifyMsg);
-                //this.WebNotify(player, $"你提高了【{player.PlayerName}】的速度，其向你的司机支付{(costBusinessValue / 100).ToString()}.{(costBusinessValue % 100).ToString()}银两。");
-                msgToSelf = new string[1]
-                {
-                    $"你提高了【{player.PlayerName}】的防御，其向你的司机支付{(costValue / 100).ToString()}.{(costValue % 100).ToString("D2")}银两。"
-                };
-                msgToBeneficiary = new string[1]
-                {
-                    $"【{player.PlayerName}】提高了你的防御，你向其支付{(costValue / 100).ToString()}.{(costValue % 100).ToString("D2")}银两。"
-                };
+                throw new Exception();
+
+                //var beneficiary = Program.rm._Players[this.beneficiaryKey];
+                //var player = Program.rm._Players[this.key];
+                //var car = player.getCar();
+                ////this.WebNotify(beneficiary, $"【{player.PlayerName}】提高了你的业务能力，你向其支付{(costBusinessValue / 100).ToString()}.{(costBusinessValue % 100).ToString()}银两。");
+                //beneficiary.MoneySet(beneficiary.Money - costValue, ref notifyMsg);
+                //car.ability.setCostVolume(car.ability.costVolume + costValue, player, car, ref notifyMsg);
+                ////this.WebNotify(player, $"你提高了【{player.PlayerName}】的速度，其向你的司机支付{(costBusinessValue / 100).ToString()}.{(costBusinessValue % 100).ToString()}银两。");
+                //msgToSelf = new string[1]
+                //{
+                //    $"你提高了【{player.PlayerName}】的防御，其向你的司机支付{(costValue / 100).ToString()}.{(costValue % 100).ToString("D2")}银两。"
+                //};
+                //msgToBeneficiary = new string[1]
+                //{
+                //    $"【{player.PlayerName}】提高了你的防御，你向其支付{(costValue / 100).ToString()}.{(costValue % 100).ToString("D2")}银两。"
+                //};
             }
 
             public bool ConditionIsEnoughToReleaseAll(long money, long leftVolume, int ImprovedValue)
@@ -2379,7 +2397,7 @@ namespace HouseManager5_0
             }
 
             const int operateIndex = 3;
-            public int MagicImprovedProbabilityAndValue(RoleInGame role, ref System.Random rm)
+            public int MagicImprovedProbabilityAndValue(Player role, ref System.Random rm)
             {
                 if (role.getCar().ability.driver == null)
                 {
@@ -2400,7 +2418,7 @@ namespace HouseManager5_0
                 else return 0;
             }
 
-            public void ReduceMagicImprovedValue(RoleInGame role)
+            public void ReduceMagicImprovedValue(Player role)
             {
                 /*
                  * 这里不会缩减
@@ -2439,34 +2457,40 @@ namespace HouseManager5_0
 
             public void AddValue(int improvedValue, out long costValue, ref List<string> notifyMsg)
             {
-                var beneficiary = Program.rm._Players[this.beneficiaryKey];
-                var player = Program.rm._Players[this.key];
-                beneficiary.improvementRecord.addAttack(beneficiary, player.getCar().ability.leftBusiness * (100 + improvedValue) / 100, out costValue, ref notifyMsg);
+                throw new Exception();
+
+                //var beneficiary = Program.rm._Players[this.beneficiaryKey];
+                //var player = Program.rm._Players[this.key];
+                //beneficiary.improvementRecord.addAttack(beneficiary, player.getCar().ability.leftBusiness * (100 + improvedValue) / 100, out costValue, ref notifyMsg);
             }
 
             public void AddValueWithMaxV(out long costValue, ref List<string> notifyMsg)
             {
-                var beneficiary = Program.rm._Players[this.beneficiaryKey];
-                beneficiary.improvementRecord.addAttack(beneficiary, beneficiary.Money / 4, out costValue, ref notifyMsg);
+                throw new Exception();
+                //var beneficiary = Program.rm._Players[this.beneficiaryKey];
+                //beneficiary.improvementRecord.addAttack(beneficiary, beneficiary.Money / 4, out costValue, ref notifyMsg);
             }
 
             public void BalanceAccounts(ref List<string> notifyMsg, long costValue, out string[] msgToSelf, out string[] msgToBeneficiary)
             {
-                var beneficiary = Program.rm._Players[this.beneficiaryKey];
-                var player = Program.rm._Players[this.key];
-                var car = player.getCar();
-                //this.WebNotify(beneficiary, $"【{player.PlayerName}】提高了你的业务能力，你向其支付{(costBusinessValue / 100).ToString()}.{(costBusinessValue % 100).ToString()}银两。");
-                beneficiary.MoneySet(beneficiary.Money - costValue, ref notifyMsg);
-                car.ability.setCostBusiness(car.ability.costBusiness + costValue, player, car, ref notifyMsg);
-                //this.WebNotify(player, $"你提高了【{player.PlayerName}】的速度，其向你的司机支付{(costBusinessValue / 100).ToString()}.{(costBusinessValue % 100).ToString()}银两。");
-                msgToSelf = new string[1]
-                {
-                    $"你提高了【{player.PlayerName}】的普攻能力，其向你的司机支付{(costValue / 100).ToString()}.{(costValue % 100).ToString("D2")}银两。"
-                };
-                msgToBeneficiary = new string[1]
-                {
-                    $"【{player.PlayerName}】提高了你的普攻能力，你向其支付{(costValue / 100).ToString()}.{(costValue % 100).ToString("D2")}银两。"
-                };
+                msgToSelf = new string[1] { "" };
+                msgToBeneficiary = new string[1] { "" };
+                //return CarStateForBeMagiced.CanBeMagiced;
+                //var beneficiary = Program.rm._Players[this.beneficiaryKey];
+                //var player = Program.rm._Players[this.key];
+                //var car = player.getCar();
+                ////this.WebNotify(beneficiary, $"【{player.PlayerName}】提高了你的业务能力，你向其支付{(costBusinessValue / 100).ToString()}.{(costBusinessValue % 100).ToString()}银两。");
+                //beneficiary.MoneySet(beneficiary.Money - costValue, ref notifyMsg);
+                //car.ability.setCostBusiness(car.ability.costBusiness + costValue, player, car, ref notifyMsg);
+                ////this.WebNotify(player, $"你提高了【{player.PlayerName}】的速度，其向你的司机支付{(costBusinessValue / 100).ToString()}.{(costBusinessValue % 100).ToString()}银两。");
+                //msgToSelf = new string[1]
+                //{
+                //    $"你提高了【{player.PlayerName}】的普攻能力，其向你的司机支付{(costValue / 100).ToString()}.{(costValue % 100).ToString("D2")}银两。"
+                //};
+                //msgToBeneficiary = new string[1]
+                //{
+                //    $"【{player.PlayerName}】提高了你的普攻能力，你向其支付{(costValue / 100).ToString()}.{(costValue % 100).ToString("D2")}银两。"
+                //};
             }
 
             public bool ConditionIsEnoughToReleaseAll(long money, long leftV, int ImprovedValue)
@@ -2479,7 +2503,7 @@ namespace HouseManager5_0
                 return ConditionIsEnoughToReleaseAll(money, ability.leftBusiness, improvedValue);
             }
             const int operateIndex = 4;
-            public int MagicImprovedProbabilityAndValue(RoleInGame role, ref System.Random rm)
+            public int MagicImprovedProbabilityAndValue(Player role, ref System.Random rm)
             {
                 if (role.getCar().ability.driver == null)
                 {
@@ -2500,7 +2524,7 @@ namespace HouseManager5_0
                 else return 0;
             }
 
-            public void ReduceMagicImprovedValue(RoleInGame role)
+            public void ReduceMagicImprovedValue(Player role)
             {
                 /*
                  * 这里不进行衰减
@@ -2515,128 +2539,8 @@ namespace HouseManager5_0
         }
         private void Improved(interfaceOfHM.ImproveT ss, GetRandomPos grp)
         {
-            if (ss == null) { return; }
-            const int startNewReturnThInteview = 50;
-            List<string> notifyMsg = new List<string>();
-            //  bool needUpdatePlayers = false;
-            lock (that.PlayerLock)
-            {
-                var player = that._Players[ss.key];
-                var car = that._Players[ss.key].getCar();
-                if (car.state == CarState.working)
-                {
-                    if (car.targetFpIndex == -1)
-                    {
-                        throw new Exception("居然来了一个没有目标的车！！！");
-                    }
-                    else
-                    {
-                        /*
-                         * 当到达地点时，有可能攻击对象不存在。
-                         * 也有可能攻击对象已破产。
-                         * 还有正常情况。
-                         * 这三种情况都要考虑到。
-                         */
-                        //attackTool at = new attackTool();
-                        // var attackMoney = car.ability.Business;
-                        if (that._Players.ContainsKey(ss.beneficiaryKey))
-                        {
-                            /*
-                             * 收益者
-                             */
-                            var beneficiary = that._Players[ss.beneficiaryKey];
-                            if (!beneficiary.Bust)
-                            {
-                                var improvedValue = ss.MagicImprovedProbabilityAndValue(player, ref that.rm);
-                                if (ss.ConditionIsEnoughToReleaseAll(beneficiary.Money, player.getCar().ability, improvedValue))
-                                {
-                                    long costValue;
-                                    ss.AddValue(improvedValue, out costValue, ref notifyMsg);
-                                    if (costValue > 0)
-                                    {
-                                        string[] msgToSelf, msgToBeneficiary;
-                                        ss.BalanceAccounts(ref notifyMsg, costValue, out msgToSelf, out msgToBeneficiary);
-                                        for (var i = 0; i < msgToSelf.Length; i++)
-                                        {
-                                            this.WebNotify(player, msgToSelf[i]);
-                                        }
-                                        for (var i = 0; i < msgToBeneficiary.Length; i++)
-                                        {
-                                            this.WebNotify(beneficiary, msgToBeneficiary[i]);
-                                        }
-                                        if (improvedValue > 0)
-                                        {
-                                            //ss.ReduceMagicImprovedValue(player);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        this.WebNotify(player, $"【{player.PlayerName}】状态已满！");
-                                    }
-                                }
-                                else
-                                {
-                                    long costValue;
-                                    ss.AddValueWithMaxV(out costValue, ref notifyMsg);
-                                    if (costValue > 0)
-                                    {
-                                        string[] msgToSelf, msgToBeneficiary;
-                                        ss.BalanceAccounts(ref notifyMsg, costValue, out msgToSelf, out msgToBeneficiary);
-                                        for (var i = 0; i < msgToSelf.Length; i++)
-                                        {
-                                            this.WebNotify(player, msgToSelf[i]);
-                                        }
-                                        for (var i = 0; i < msgToBeneficiary.Length; i++)
-                                        {
-                                            this.WebNotify(beneficiary, msgToBeneficiary[i]);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        this.WebNotify(player, $"你已尽最大努力提升【{player.PlayerName}】的能力！");
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                //这种情况也有可能存在。
-                            }
-
-                        }
-                        else
-                        {
-                            //这种情况有可能存在.
-                        }
-                        /*
-                         * 无论什么情况，直接返回。
-                         */
-                        //  if (car.ability.leftBusiness <= 0 && car.ability.leftVolume <= 0)
-                        {
-                            car.setState(player, ref notifyMsg, CarState.returning);
-                            that.retutnE.SetReturnT(startNewReturnThInteview, new commandWithTime.returnning()
-                            {
-                                c = "returnning",
-                                key = ss.key,
-                                // car = dOwner.car,
-                                //returnPath = dOwner.returnPath,//returnPath_Record,
-                                target = ss.target,
-                                changeType = ss.changeType,
-                                returningOjb = ss.returningOjb
-                            }, grp);
-
-                        }
-                        //else
-                        //{
-                        //    car.setState(player, ref notifyMsg, CarState.waitOnRoad);
-                        //}
-                    }
-                }
-                else
-                {
-                    throw new Exception("car.state == CarState.buying!或者 dor.changeType不是四种类型");
-                }
-            }
-            this.sendSeveralMsgs(notifyMsg);
+            //if (ss == null) { return; }
+            //const int startNewReturnThInteview = 50;
             //List<string> notifyMsg = new List<string>();
             ////  bool needUpdatePlayers = false;
             //lock (that.PlayerLock)
@@ -2659,22 +2563,35 @@ namespace HouseManager5_0
             //             */
             //            //attackTool at = new attackTool();
             //            // var attackMoney = car.ability.Business;
-            //            if (that._Players.ContainsKey(ss.beneficiary))
+            //            if (that._Players.ContainsKey(ss.beneficiaryKey))
             //            {
-            //                var beneficiary = that._Players[ss.beneficiary];
+            //                /*
+            //                 * 收益者
+            //                 */
+            //                var beneficiary = that._Players[ss.beneficiaryKey];
             //                if (!beneficiary.Bust)
             //                {
-            //                    if (beneficiary.Money >= 4 * player.getCar().ability.leftVolume)
+            //                    var improvedValue = ss.MagicImprovedProbabilityAndValue(player, ref that.rm);
+            //                    if (ss.ConditionIsEnoughToReleaseAll(beneficiary.Money, player.getCar().ability, improvedValue))
             //                    {
-            //                        long costVolumeValue;
-
-            //                        beneficiary.improvementRecord.addSpeed(beneficiary, player.getCar().ability.leftVolume, out costVolumeValue, ref notifyMsg);
-            //                        if (costVolumeValue > 0)
+            //                        long costValue;
+            //                        ss.AddValue(improvedValue, out costValue, ref notifyMsg);
+            //                        if (costValue > 0)
             //                        {
-            //                            this.WebNotify(beneficiary, $"【{player.PlayerName}】提高了你的速度，你向其支付{(costVolumeValue / 100).ToString()}.{(costVolumeValue % 100).ToString()}银两。");
-            //                            beneficiary.MoneySet(beneficiary.Money - costVolumeValue, ref notifyMsg);
-            //                            car.ability.setCostVolume(car.ability.costVolume + costVolumeValue, player, car, ref notifyMsg);
-            //                            this.WebNotify(player, $"你提高了【{player.PlayerName}】的速度，其向你的司机支付{(costVolumeValue / 100).ToString()}.{(costVolumeValue % 100).ToString()}银两。");
+            //                            string[] msgToSelf, msgToBeneficiary;
+            //                            ss.BalanceAccounts(ref notifyMsg, costValue, out msgToSelf, out msgToBeneficiary);
+            //                            for (var i = 0; i < msgToSelf.Length; i++)
+            //                            {
+            //                                this.WebNotify(player, msgToSelf[i]);
+            //                            }
+            //                            for (var i = 0; i < msgToBeneficiary.Length; i++)
+            //                            {
+            //                                this.WebNotify(beneficiary, msgToBeneficiary[i]);
+            //                            }
+            //                            if (improvedValue > 0)
+            //                            {
+            //                                //ss.ReduceMagicImprovedValue(player);
+            //                            }
             //                        }
             //                        else
             //                        {
@@ -2683,7 +2600,25 @@ namespace HouseManager5_0
             //                    }
             //                    else
             //                    {
-            //                        this.WebNotify(player, $"【{player.PlayerName}】资金匮乏！");
+            //                        long costValue;
+            //                        ss.AddValueWithMaxV(out costValue, ref notifyMsg);
+            //                        if (costValue > 0)
+            //                        {
+            //                            string[] msgToSelf, msgToBeneficiary;
+            //                            ss.BalanceAccounts(ref notifyMsg, costValue, out msgToSelf, out msgToBeneficiary);
+            //                            for (var i = 0; i < msgToSelf.Length; i++)
+            //                            {
+            //                                this.WebNotify(player, msgToSelf[i]);
+            //                            }
+            //                            for (var i = 0; i < msgToBeneficiary.Length; i++)
+            //                            {
+            //                                this.WebNotify(beneficiary, msgToBeneficiary[i]);
+            //                            }
+            //                        }
+            //                        else
+            //                        {
+            //                            this.WebNotify(player, $"你已尽最大努力提升【{player.PlayerName}】的能力！");
+            //                        }
             //                    }
             //                }
             //                else
@@ -2711,7 +2646,7 @@ namespace HouseManager5_0
             //                    target = ss.target,
             //                    changeType = ss.changeType,
             //                    returningOjb = ss.returningOjb
-            //                });
+            //                }, grp);
 
             //            }
             //            //else
@@ -2725,84 +2660,79 @@ namespace HouseManager5_0
             //        throw new Exception("car.state == CarState.buying!或者 dor.changeType不是四种类型");
             //    }
             //}
-            //for (var i = 0; i < notifyMsg.Count; i += 2)
-            //{
-            //    var url = notifyMsg[i];
-            //    var sendMsg = notifyMsg[i + 1];
-            //    //Consol.WriteLine($"url:{url}");
-            //    Startup.sendMsg(url, sendMsg);
-            //}
+            //this.sendSeveralMsgs(notifyMsg);
+
         }
     }
 
     public partial class Engine_MagicEngine
     {
-        //public int GetAttackImprove(RoleInGame role)
+        //public int GetAttackImprove(Player role)
         //{
         //    return role.buildingReward[4] / 5;
         //}
-        //public static int GetDefenseImprove(RoleInGame role)
+        //public static int GetDefenseImprove(Player role)
         //{
         //    return role.buildingReward[3] / 5;
         //}
-        public static int GetAttackMagicImproveProbability(RoleInGame role)
+        public static int GetAttackMagicImproveProbability(Player role)
         {
             return role.buildingReward[1];
         }
-        public static int GetAttackMagicImproveValue(RoleInGame role)
+        public static int GetAttackMagicImproveValue(Player role)
         {
             var value = 25 + role.buildingReward[1];
             return value;
         }
-        public static int GetAttackImproveProbability(RoleInGame role)
+        public static int GetAttackImproveProbability(Player role)
         {
             return role.buildingReward[4];
         }
-        public static int GetAttackImproveValue(RoleInGame role)
+        public static int GetAttackImproveValue(Player role)
         {
             var value = 25 + role.buildingReward[4];
             return value;
         }
-        public static int GetDefenseImproveProbability(RoleInGame role)
+        public static int GetDefenseImproveProbability(Player role)
         {
             return role.buildingReward[3];
         }
-        public static int GetDefenseImproveValue(RoleInGame role)
+        public static int GetDefenseImproveValue(Player role)
         {
             var value = 25 + role.buildingReward[3];
             return value;
         }
 
-        public static int GetSpeedImproveProbability(RoleInGame role)
+        public static int GetSpeedImproveProbability(Player role)
         {
             return role.buildingReward[2];
         }
-        public static int GetSpeedImproveValue(RoleInGame role)
+        public static int GetSpeedImproveValue(Player role)
         {
             var value = 25 + role.buildingReward[2];
             return value;
         }
 
-        public static int GetMagicDoubleProbability(RoleInGame role)
+        public static int GetMagicDoubleProbability(Player role)
         {
             return role.buildingReward[1];
         }
 
-        static int GetControlIgnore(RoleInGame role, int index)
+        static int GetControlIgnore(Player role, int index)
         {
             return 3 + 15 * role.buildingReward[index] / 75;
         }
-        public static int GetLoseIgnore(RoleInGame role)
+        public static int GetLoseIgnore(Player role)
         {
             loseMagicTool lmt = new loseMagicTool(role);
             return lmt.IgnoreValue;
         }
-        public static int GetAmbushIgnore(RoleInGame role)
+        public static int GetAmbushIgnore(Player role)
         {
             ambushMagicTool lmt = new ambushMagicTool(role);
             return lmt.IgnoreValue;
         }
-        public static int GetConfuseIgnore(RoleInGame role)
+        public static int GetConfuseIgnore(Player role)
         {
             confuseMagicTool lmt = new confuseMagicTool(role);
             return lmt.IgnoreValue;

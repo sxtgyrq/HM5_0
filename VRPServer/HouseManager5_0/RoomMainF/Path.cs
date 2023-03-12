@@ -19,7 +19,7 @@ namespace HouseManager5_0.RoomMainF
         /// <param name="player"></param>
         /// <param name="notifyMsgs"></param>
         /// <returns></returns>
-        List<OssModel.MapGo.nyrqPosition> GetAFromB_Path(int from, int to, RoleInGame player, GetRandomPos grp, ref List<string> notifyMsgs)
+        List<OssModel.MapGo.nyrqPosition> GetAFromB_Path(int from, int to, Player player, GetRandomPos grp, ref List<string> notifyMsgs)
         {
             var path = grp.GetAFromB(from, to);
             for (var i = 0; i < path.Count; i++)
@@ -73,7 +73,7 @@ namespace HouseManager5_0.RoomMainF
             public int calType { get; set; }
         }
 
-        public Node GetAFromB_v2(int from, int to, RoleInGame player, GetRandomPos grp, ref List<string> notifyMsgs)
+        public Node GetAFromB_v2(int from, int to, Player player, GetRandomPos grp, ref List<string> notifyMsgs)
         {
             //from = 209;
             //to = 444;
@@ -617,7 +617,7 @@ namespace HouseManager5_0.RoomMainF
             }
         }
 
-        //public Node GetAFromB_v3(int from, int to, RoleInGame player, ref List<string> notifyMsgs)
+        //public Node GetAFromB_v3(int from, int to, Player player, ref List<string> notifyMsgs)
         //{
         //    // throw new Exception("");
         //    int cursor = 0;//光标所在位置
@@ -1364,9 +1364,9 @@ namespace HouseManager5_0.RoomMainF
 
         }
 
-        internal void ViewPosition(RoleInGame role, FastonPosition fpResult, ref List<string> notifyMsg)
+        internal void ViewPosition(Player role, FastonPosition fpResult, ref List<string> notifyMsg)
         {
-            if (role.playerType == RoleInGame.PlayerType.player)
+            if (role.playerType == Player.PlayerType.player)
             {
                 var player = (Player)role;
                 var url = player.FromUrl;
@@ -1410,6 +1410,8 @@ namespace HouseManager5_0.RoomMainF
 
             }
             double positionX, positionY, positionZ;
+
+            direction = direction.OrderBy(item => Math.Sin(item)).ToList();
             CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(selectionCenter.longitude, selectionCenter.latitude, selectionCenter.height, out positionX, out positionY, out positionZ);
             var obj = new ShowDirectionOperator
             {

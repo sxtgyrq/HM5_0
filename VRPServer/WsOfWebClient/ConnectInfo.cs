@@ -111,9 +111,21 @@ namespace WsOfWebClient
         public static string DirectionObj = "";
         public static string DirectionMtl = "";
 
-        public static string DirectionArrowIconBase64 = "";
-        public static string DirectionArrowObj = "";
-        public static string DirectionArrowMtl = "";
+        //public static string DirectionArrowIconBase64 = "";
+        //public static string DirectionArrowObj = "";
+        //public static string DirectionArrowMtl = "";
+
+        public static string DirectionArrowIconABase64 = "";
+        public static string DirectionArrowAObj = "";
+        public static string DirectionArrowAMtl = "";
+
+        public static string DirectionArrowIconBBase64 = "";
+        public static string DirectionArrowBObj = "";
+        public static string DirectionArrowBMtl = "";
+
+        public static string DirectionArrowIconCBase64 = "";
+        public static string DirectionArrowCObj = "";
+        public static string DirectionArrowCMtl = "";
 
         public static string OpponentIconBase64 = "";
         public static string OpponentIconObj = "";

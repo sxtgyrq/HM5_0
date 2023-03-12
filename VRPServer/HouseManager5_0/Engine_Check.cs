@@ -16,27 +16,27 @@ namespace HouseManager5_0
         internal string CheckCarStateF(CheckCarState ccs)
         {
             List<string> notifyMsg = new List<string>();
-            {
-                if (that._Players.ContainsKey(ccs.Key))
-                {
-                    var role = that._Players[ccs.Key];
-                    if (role.playerType == RoleInGame.PlayerType.player)
-                    {
-                        var player = (Player)that._Players[ccs.Key];
-                        if (Enum.GetName(typeof(CarState), player.getCar().state) == ccs.State) { }
-                        else
-                        {
-                            lock (that.PlayerLock)
-                            {
-                                var car = player.getCar();
-                                var state = player.getCar().state;
-                                that.SendStateOfCar(player, car, ref notifyMsg);
-                            }
-                        }
-                    }
-                }
-            }
-            this.sendSeveralMsgs(notifyMsg);
+            //{
+            //    if (that._Players.ContainsKey(ccs.Key))
+            //    {
+            //        var role = that._Players[ccs.Key];
+            //        if (role.playerType == Player.PlayerType.player)
+            //        {
+            //            var player = (Player)that._Players[ccs.Key];
+            //            if (Enum.GetName(typeof(CarState), player.getCar().state) == ccs.State) { }
+            //            else
+            //            {
+            //                lock (that.PlayerLock)
+            //                {
+            //                    var car = player.getCar();
+            //                    var state = player.getCar().state;
+            //                    that.SendStateOfCar(player, car, ref notifyMsg);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //this.sendSeveralMsgs(notifyMsg);
             return "";
         }
     }

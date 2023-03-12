@@ -24,7 +24,7 @@ namespace HouseManager5_0
             Thread.Sleep(startT);
             objNeedToStartNewThread.newThreadDo(dOwner, grp);
         }
-        public void WebNotify(RoleInGame player, string Msg)
+        public void WebNotify(Player player, string Msg)
         {
 
             roomMain.WebNotify(player, Msg);

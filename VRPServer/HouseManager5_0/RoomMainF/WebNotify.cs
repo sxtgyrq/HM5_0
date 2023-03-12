@@ -7,10 +7,10 @@ namespace HouseManager5_0.RoomMainF
 {
     public partial class RoomMain
     {
-        public void WebNotify(RoleInGame role, string msg)
+        public void WebNotify(Player role, string msg)
         {
             //Consol.WriteLine($"{msg}");
-            if (role.playerType == RoleInGame.PlayerType.player)
+            if (role.playerType == Player.PlayerType.player)
             {
                 var player = ((Player)role);
                 var url = player.FromUrl;

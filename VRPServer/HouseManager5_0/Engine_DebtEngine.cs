@@ -30,12 +30,12 @@ namespace HouseManager5_0
                 }
             }
 
-            internal static int GetIgnorePhysicsProbability(RoleInGame role)
+            internal static int GetIgnorePhysicsProbability(Player role)
             {
                 return role.buildingReward[1];
             }
 
-            internal static int GetIgnorePhysicsValue(RoleInGame role)
+            internal static int GetIgnorePhysicsValue(Player role)
             {
                 return role.buildingReward[1];
             }
@@ -46,7 +46,7 @@ namespace HouseManager5_0
             }
 
 
-            public long DealWithPercentValue(long percentValue, RoleInGame player, RoleInGame victim, RoomMain that, GetRandomPos grp, ref List<string> notifyMsg)
+            public long DealWithPercentValue(long percentValue, Player player, Player victim, RoomMain that, GetRandomPos grp, ref List<string> notifyMsg)
             {
                 return percentValue;
             }
@@ -95,7 +95,7 @@ namespace HouseManager5_0
                 return "普攻";
             }
 
-            //public bool Ignore(ref RoleInGame role, ref System.Random rm)
+            //public bool Ignore(ref Player role, ref System.Random rm)
             //{
 
             //}
@@ -106,7 +106,7 @@ namespace HouseManager5_0
             //    // return ambushInfomation.bussinessValue;
             //}
 
-            public long ImproveAttack(RoleInGame role, long attackMoney, ref List<string> notifyMsgs)
+            public long ImproveAttack(Player role, long attackMoney, ref List<string> notifyMsgs)
             {
                 if (role.improvementRecord.attackValue > 0)
                 {
@@ -120,7 +120,7 @@ namespace HouseManager5_0
                 //throw new NotImplementedException();
             }
 
-            public long ImproveAttack(RoleInGame role, long attackMoney)
+            public long ImproveAttack(Player role, long attackMoney)
             {
                 if (role.improvementRecord.attackValue > 0)
                 {
@@ -136,30 +136,30 @@ namespace HouseManager5_0
                 return ability.leftBusiness;
             }
 
-            public void MagicAnimateShow(RoleInGame player, RoleInGame victim, ref List<string> notifyMsgs)
+            public void MagicAnimateShow(Player player, Player victim, ref List<string> notifyMsgs)
             {
                 // throw new NotImplementedException();
             }
 
-            public int MagicImprovedProbabilityAndValue(RoleInGame player, ref System.Random rm)
+            public int MagicImprovedProbabilityAndValue(Player player, ref System.Random rm)
             {
                 return 0;
             }
 
-            public int MagicImprovedValue(RoleInGame player)
+            public int MagicImprovedValue(Player player)
             {
                 return 0;
                 //throw new NotImplementedException();
             }
 
-            public void ReduceMagicImprovedValue(RoleInGame player)
+            public void ReduceMagicImprovedValue(Player player)
             {
                 // throw new NotImplementedException();
             }
 
-            public void setCost(long reduce, RoleInGame player, Car car, ref List<string> notifyMsg)
+            public void setCost(long reduce, Player player, Car car, ref List<string> notifyMsg)
             {
-                car.ability.setCostBusiness(car.ability.costBusiness + reduce, player, car, ref notifyMsg);
+                //  car.ability.setCostBusiness(car.ability.costBusiness + reduce, player, car, ref notifyMsg);
             }
         }
         internal partial class attackTool
@@ -170,8 +170,8 @@ namespace HouseManager5_0
                 return _physicsIsIgnored;
                 // throw new NotImplementedException();
             }
-            RoleInGame _role;
-            public void IgnorePhysics(ref RoleInGame role, ref System.Random rm)
+            Player _role;
+            public void IgnorePhysics(ref Player role, ref System.Random rm)
             {
                 var driver = role.getCar().ability.driver;
                 if (driver == null) _physicsIsIgnored = false;
@@ -182,7 +182,7 @@ namespace HouseManager5_0
                 this._role = role;
             }
 
-            public void ReduceIgnorePhysics(ref RoleInGame role)
+            public void ReduceIgnorePhysics(ref Player role)
             {
                 /*
                  * 这里不进行衰减了。一次祈福，属性即拥有。
@@ -192,7 +192,7 @@ namespace HouseManager5_0
 
         internal partial class attackTool : interfaceOfHM.AttackIgnore
         {
-            public void Ignore(ref RoleInGame role, ref System.Random rm)
+            public void Ignore(ref Player role, ref System.Random rm)
             {
                 this.IgnorePhysics(ref role, ref rm);
             }
@@ -202,7 +202,7 @@ namespace HouseManager5_0
                 return this.PhysicsIsIgnored();
             }
 
-            public void ReduceIgnore(ref RoleInGame role)
+            public void ReduceIgnore(ref Player role)
             {
                 this.ReduceIgnorePhysics(ref role);
             }
@@ -243,120 +243,122 @@ namespace HouseManager5_0
 
         internal void setDebt(commandWithTime.debtOwner dOwner, interfaceOfHM.AttackT at, GetRandomPos grp)
         {
-            List<string> notifyMsg = new List<string>();
-            //  bool needUpdatePlayers = false;
-            lock (that.PlayerLock)
-            {
-                var player = that._Players[dOwner.key];
-                var car = that._Players[dOwner.key].getCar();
-                // car.targetFpIndex = this._Players[dor.key].StartFPIndex;
-                ;
-                if (at.CheckCarState(car))
-                {
-                    if (car.targetFpIndex == -1)
-                    {
-                        throw new Exception("居然来了一个没有目标的车！！！");
-                    }
-                    else
-                    {
-                        /*
-                         * 当到达地点时，有可能攻击对象不存在。
-                         * 也有可能攻击对象已破产。
-                         * 还有正常情况。
-                         * 这三种情况都要考虑到。
-                         */
-                        //attackTool at = new attackTool();
-                        // var attackMoney = car.ability.Business;
-                        if (that._Players.ContainsKey(dOwner.victim))
-                        {
-                            var victim = that._Players[dOwner.victim];
-                            if (!victim.Bust)
-                            {
-                                var percentValue = getAttackPercentValue(player, victim);
-                                percentValue = at.DealWithPercentValue(percentValue, player, victim, this.that, grp, ref notifyMsg);
-                                //if(victim.Money*100/ car.ability.Business)
-                                long reduceSum = 0;
-                                var m = victim.Money - reduceSum;
-                                long reduce;
-                                if (m > 0)
-                                {
-                                    this.DealWithReduceWhenAttack(at, player, car, victim, percentValue, ref notifyMsg, out reduce, m, ref reduceSum);
-                                }
-                                else
-                                {
-                                    reduceSum = 0;
-                                    reduce = 0;
-                                }
-                                if (at.isMagic)
-                                {
-                                    that.magicE.AmbushSelf(victim, at, grp, ref notifyMsg, ref reduceSum);
-                                    at.MagicAnimateShow(player, victim, ref notifyMsg);
-                                }
+            throw new Exception();
 
-                                if (reduceSum > 0)
-                                    victim.MoneySet(victim.Money - reduceSum, ref notifyMsg);
-                                if (reduce > 0)
-                                    this.WebNotify(player, $"你对【{victim.PlayerName}】进行了{at.GetSkillName()}，获得{(reduce / 100.00).ToString("f2")}金币。其还有{(victim.Money / 100.00).ToString("f2")}金币。");
-                                if (victim.Money == 0)
-                                {
-                                    victim.SetBust(true, ref notifyMsg);
-                                }
-                                if (victim.playerType == RoleInGame.PlayerType.NPC)
-                                {
-                                    ((NPC)victim).BeingAttackedF(dOwner.key, ref notifyMsg, Program.rm, Program.dt);
-                                }
-                                if (player.playerType == RoleInGame.PlayerType.player)
-                                    ((Player)player).RefererCount++;
-                            }
-                            else
-                            {
-                                //这种情况也有可能存在。
-                            }
+            //List<string> notifyMsg = new List<string>();
+            ////  bool needUpdatePlayers = false;
+            //lock (that.PlayerLock)
+            //{
+            //    var player = that._Players[dOwner.key];
+            //    var car = that._Players[dOwner.key].getCar();
+            //    // car.targetFpIndex = this._Players[dor.key].StartFPIndex;
+            //    ;
+            //    if (at.CheckCarState(car))
+            //    {
+            //        if (car.targetFpIndex == -1)
+            //        {
+            //            throw new Exception("居然来了一个没有目标的车！！！");
+            //        }
+            //        else
+            //        {
+            //            /*
+            //             * 当到达地点时，有可能攻击对象不存在。
+            //             * 也有可能攻击对象已破产。
+            //             * 还有正常情况。
+            //             * 这三种情况都要考虑到。
+            //             */
+            //            //attackTool at = new attackTool();
+            //            // var attackMoney = car.ability.Business;
+            //            if (that._Players.ContainsKey(dOwner.victim))
+            //            {
+            //                var victim = that._Players[dOwner.victim];
+            //                if (!victim.Bust)
+            //                {
+            //                    var percentValue = getAttackPercentValue(player, victim);
+            //                    percentValue = at.DealWithPercentValue(percentValue, player, victim, this.that, grp, ref notifyMsg);
+            //                    //if(victim.Money*100/ car.ability.Business)
+            //                    long reduceSum = 0;
+            //                    var m = victim.Money - reduceSum;
+            //                    long reduce;
+            //                    if (m > 0)
+            //                    {
+            //                        this.DealWithReduceWhenAttack(at, player, car, victim, percentValue, ref notifyMsg, out reduce, m, ref reduceSum);
+            //                    }
+            //                    else
+            //                    {
+            //                        reduceSum = 0;
+            //                        reduce = 0;
+            //                    }
+            //                    if (at.isMagic)
+            //                    {
+            //                        that.magicE.AmbushSelf(victim, at, grp, ref notifyMsg, ref reduceSum);
+            //                        at.MagicAnimateShow(player, victim, ref notifyMsg);
+            //                    }
 
-                        }
-                        else
-                        {
-                            //这种情况有可能存在.
-                        }
-                        /*
-                         * 无论什么情况，直接返回。
-                         */
-                        //  if (car.ability.leftBusiness <= 0 && car.ability.leftVolume <= 0)
-                        {
-                            car.setState(player, ref notifyMsg, CarState.returning);
-                            that.retutnE.SetReturnT(5, new commandWithTime.returnning()
-                            {
-                                c = "returnning",
-                                key = dOwner.key,
-                                // car = dOwner.car,
-                                //returnPath = dOwner.returnPath,//returnPath_Record,
-                                target = dOwner.target,
-                                changeType = dOwner.changeType,
-                                returningOjb = dOwner.returningOjb
-                            }, grp);
+            //                    if (reduceSum > 0)
+            //                        victim.MoneySet(victim.Money - reduceSum, ref notifyMsg);
+            //                    if (reduce > 0)
+            //                        this.WebNotify(player, $"你对【{victim.PlayerName}】进行了{at.GetSkillName()}，获得{(reduce / 100.00).ToString("f2")}金币。其还有{(victim.Money / 100.00).ToString("f2")}金币。");
+            //                    if (victim.Money == 0)
+            //                    {
+            //                        victim.SetBust(true, ref notifyMsg);
+            //                    }
+            //                    if (victim.playerType == Player.PlayerType.NPC)
+            //                    {
+            //                        ((NPC)victim).BeingAttackedF(dOwner.key, ref notifyMsg, Program.rm, Program.dt);
+            //                    }
+            //                    if (player.playerType == Player.PlayerType.player)
+            //                        ((Player)player).RefererCount++;
+            //                }
+            //                else
+            //                {
+            //                    //这种情况也有可能存在。
+            //                }
 
-                        }
-                        //else
-                        //{
-                        //    car.setState(player, ref notifyMsg, CarState.waitOnRoad);
-                        //}
-                    }
-                }
-                else
-                {
-                    throw new Exception("car.state == CarState.buying!或者 dor.changeType不是四种类型");
-                }
-            }
-            this.sendSeveralMsgs(notifyMsg);
+            //            }
+            //            else
+            //            {
+            //                //这种情况有可能存在.
+            //            }
+            //            /*
+            //             * 无论什么情况，直接返回。
+            //             */
+            //            //  if (car.ability.leftBusiness <= 0 && car.ability.leftVolume <= 0)
+            //            {
+            //                car.setState(player, ref notifyMsg, CarState.returning);
+            //                that.retutnE.SetReturnT(5, new commandWithTime.returnning()
+            //                {
+            //                    c = "returnning",
+            //                    key = dOwner.key,
+            //                    // car = dOwner.car,
+            //                    //returnPath = dOwner.returnPath,//returnPath_Record,
+            //                    target = dOwner.target,
+            //                    changeType = dOwner.changeType,
+            //                    returningOjb = dOwner.returningOjb
+            //                }, grp);
+
+            //            }
+            //            //else
+            //            //{
+            //            //    car.setState(player, ref notifyMsg, CarState.waitOnRoad);
+            //            //}
+            //        }
+            //    }
+            //    else
+            //    {
+            //        throw new Exception("car.state == CarState.buying!或者 dor.changeType不是四种类型");
+            //    }
+            //}
+            //this.sendSeveralMsgs(notifyMsg);
         }
 
-        internal long DealWithReduceWhenSimulationWithoutDefendMagic(interfaceOfHM.AttackT at, RoleInGame player, Car car, RoleInGame victim, long percentValue)
+        internal long DealWithReduceWhenSimulationWithoutDefendMagic(interfaceOfHM.AttackT at, Player player, Car car, Player victim, long percentValue)
         {
             var attackMoneyBeforeDefend = (at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver)) / 100) * percentValue / 100;
             return attackMoneyBeforeDefend;
         }
 
-        internal void DealWithReduceWhenAttack(interfaceOfHM.AttackT at, RoleInGame player, Car car, RoleInGame victim, long percentValue, ref List<string> notifyMsg, out long reduce, long m, ref long reduceSum)
+        internal void DealWithReduceWhenAttack(interfaceOfHM.AttackT at, Player player, Car car, Player victim, long percentValue, ref List<string> notifyMsg, out long reduce, long m, ref long reduceSum)
         {
             /*
              * 1.这个方法中的Ignore针对普攻、雷法、火法、水法中的忽视
@@ -416,7 +418,7 @@ namespace HouseManager5_0
 
 
 
-        internal long getAttackPercentValue(RoleInGame player, RoleInGame victim)
+        internal long getAttackPercentValue(Player player, Player victim)
         {
             if (player.TheLargestHolderKey == victim.Key)
             {
@@ -439,91 +441,94 @@ namespace HouseManager5_0
         }
 
         //由于
-        internal void DirectAttackThenMagic(attackMagicTool at, RoleInGame player, RoleInGame victim, GetRandomPos grp)
+        internal void DirectAttackThenMagic(attackMagicTool at, Player player, Player victim, GetRandomPos grp)
         {
-            List<string> notifyMsg = new List<string>();
-            //  bool needUpdatePlayers = false;
-            lock (that.PlayerLock)
-            {
-                //   var player = that._Players[dOwner.key];
-                var car = player.getCar();
-                // car.targetFpIndex = this._Players[dor.key].StartFPIndex;
-                ;
-                if (car.state == CarState.working && car.DirectAttack)//这里要
-                {
-                    {
-                        /*
-                         * 当到达地点时，有可能攻击对象不存在。
-                         * 也有可能攻击对象已破产。
-                         * 还有正常情况。
-                         * 这三种情况都要考虑到。
-                         */
-                        //attackTool at = new attackTool();
-                        // var attackMoney = car.ability.Business;
-                        if (that._Players.ContainsKey(victim.Key))
-                        {
-                            // var victim = that._Players[dOwner.victim];
-                            if (!victim.Bust)
-                            {
-                                var percentValue = getAttackPercentValue(player, victim);
-                                percentValue = at.DealWithPercentValue(percentValue, player, victim, this.that, grp, ref notifyMsg);
-                                //if(victim.Money*100/ car.ability.Business)
-                                long reduceSum = 0;
-                                var m = victim.Money - reduceSum;
-                                long reduce;
-                                if (m > 0)
-                                {
-                                    this.DealWithReduceWhenAttack(at, player, car, victim, percentValue, ref notifyMsg, out reduce, m, ref reduceSum);
-                                }
-                                else
-                                {
-                                    reduceSum = 0;
-                                    reduce = 0;
-                                }
-                                if (at.isMagic)
-                                {
-                                    that.magicE.AmbushSelf(victim, at, grp, ref notifyMsg, ref reduceSum);
-                                    at.MagicAnimateShow(player, victim, ref notifyMsg);
-                                }
+            throw new Exception();
 
-                                if (reduceSum > 0)
-                                    victim.MoneySet(victim.Money - reduceSum, ref notifyMsg);
-                                if (reduce > 0)
-                                    this.WebNotify(player, $"你对【{victim.PlayerName}】进行了{at.GetSkillName()}，获得{(reduce / 100.00).ToString("f2")}金币。其还有{(victim.Money / 100.00).ToString("f2")}金币。");
-                                if (victim.Money == 0)
-                                {
-                                    victim.SetBust(true, ref notifyMsg);
-                                }
-                                if (victim.playerType == RoleInGame.PlayerType.NPC)
-                                {
-                                    ((NPC)victim).BeingAttackedF(player.Key, ref notifyMsg, Program.rm, Program.dt);
-                                }
-                                if (player.playerType == RoleInGame.PlayerType.player)
-                                    ((Player)player).RefererCount++;
-                            }
-                            else
-                            {
-                                //这种情况也有可能存在。
-                            }
 
-                        }
-                        else
-                        {
-                            //这种情况有可能存在.
-                        }
-                        /*
-                         * 无论什么情况，直接返回。
-                         */
+            //List<string> notifyMsg = new List<string>();
+            ////  bool needUpdatePlayers = false;
+            //lock (that.PlayerLock)
+            //{
+            //    //   var player = that._Players[dOwner.key];
+            //    var car = player.getCar();
+            //    // car.targetFpIndex = this._Players[dor.key].StartFPIndex;
+            //    ;
+            //    if (car.state == CarState.working && car.DirectAttack)//这里要
+            //    {
+            //        {
+            //            /*
+            //             * 当到达地点时，有可能攻击对象不存在。
+            //             * 也有可能攻击对象已破产。
+            //             * 还有正常情况。
+            //             * 这三种情况都要考虑到。
+            //             */
+            //            //attackTool at = new attackTool();
+            //            // var attackMoney = car.ability.Business;
+            //            if (that._Players.ContainsKey(victim.Key))
+            //            {
+            //                // var victim = that._Players[dOwner.victim];
+            //                if (!victim.Bust)
+            //                {
+            //                    var percentValue = getAttackPercentValue(player, victim);
+            //                    percentValue = at.DealWithPercentValue(percentValue, player, victim, this.that, grp, ref notifyMsg);
+            //                    //if(victim.Money*100/ car.ability.Business)
+            //                    long reduceSum = 0;
+            //                    var m = victim.Money - reduceSum;
+            //                    long reduce;
+            //                    if (m > 0)
+            //                    {
+            //                        this.DealWithReduceWhenAttack(at, player, car, victim, percentValue, ref notifyMsg, out reduce, m, ref reduceSum);
+            //                    }
+            //                    else
+            //                    {
+            //                        reduceSum = 0;
+            //                        reduce = 0;
+            //                    }
+            //                    if (at.isMagic)
+            //                    {
+            //                        that.magicE.AmbushSelf(victim, at, grp, ref notifyMsg, ref reduceSum);
+            //                        at.MagicAnimateShow(player, victim, ref notifyMsg);
+            //                    }
 
-                        //else
-                        //{
-                        //    car.setState(player, ref notifyMsg, CarState.waitOnRoad);
-                        //}
-                    }
-                }
+            //                    if (reduceSum > 0)
+            //                        victim.MoneySet(victim.Money - reduceSum, ref notifyMsg);
+            //                    if (reduce > 0)
+            //                        this.WebNotify(player, $"你对【{victim.PlayerName}】进行了{at.GetSkillName()}，获得{(reduce / 100.00).ToString("f2")}金币。其还有{(victim.Money / 100.00).ToString("f2")}金币。");
+            //                    if (victim.Money == 0)
+            //                    {
+            //                        victim.SetBust(true, ref notifyMsg);
+            //                    }
+            //                    if (victim.playerType == Player.PlayerType.NPC)
+            //                    {
+            //                        ((NPC)victim).BeingAttackedF(player.Key, ref notifyMsg, Program.rm, Program.dt);
+            //                    }
+            //                    if (player.playerType == Player.PlayerType.player)
+            //                        ((Player)player).RefererCount++;
+            //                }
+            //                else
+            //                {
+            //                    //这种情况也有可能存在。
+            //                }
 
-            }
-            this.sendSeveralMsgs(notifyMsg);
+            //            }
+            //            else
+            //            {
+            //                //这种情况有可能存在.
+            //            }
+            //            /*
+            //             * 无论什么情况，直接返回。
+            //             */
+
+            //            //else
+            //            //{
+            //            //    car.setState(player, ref notifyMsg, CarState.waitOnRoad);
+            //            //}
+            //        }
+            //    }
+
+            //}
+            //this.sendSeveralMsgs(notifyMsg);
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using CommonClass;
+using HouseManager5_0.GroupClassF;
 using HouseManager5_0.interfaceOfEngine;
 using HouseManager5_0.interfaceOfHM;
 using Model;
 using System;
 using System.Collections.Generic;
+using System.Net.WebSockets;
 using System.Numerics;
 using System.Text;
 using static CommonClass.ExitObj;
@@ -20,7 +22,7 @@ namespace HouseManager5_0.RoomMainF
         public RoomMain(GetRandomPos gp)
         {
             this.PlayerLock = new object();
-            this._collectPosition = new Dictionary<int, int>();
+
             this.rm = new System.Random(DateTime.Now.GetHashCode());
             this.Market = new Market(this.priceChanged);
             this.Music = new Music();
@@ -37,7 +39,7 @@ namespace HouseManager5_0.RoomMainF
             this.checkE = new Engine_Check(this);
             //  this.npcc = new NPCControle();
 
-            this.NPCM = new Manager_NPC(this);
+            // this.NPCM = new Manager_NPC(this);
             this.frequencyM = new Manager_Frequency(this);
             this.driverM = new Manager_Driver(this);
             this.goodsM = new Manager_GoodsReward(this, this.DrawGoodsSelection);
@@ -49,22 +51,22 @@ namespace HouseManager5_0.RoomMainF
 
             lock (PlayerLock)
             {
-                this._Players = new Dictionary<string, RoleInGame>();
+                this._Groups = new Dictionary<string, GroupClass>();
                 //    this._FpOwner = new Dictionary<int, string>();
                 //this._PlayerFp = new Dictionary<string, int>();
             }
-            LookFor(gp);
+            //  LookFor(gp);
             this.recordOfPromote = new Dictionary<string, List<DateTime>>()
             {
                 {  "mile" ,new List<DateTime>()},
-                {  "business" ,new List<DateTime>() },
+              //  {  "business" ,new List<DateTime>() },
                 {  "volume" ,new List<DateTime>() },
                 {  "speed" ,new List<DateTime>() },
             };
             this.promotePrice = new Dictionary<string, long>()
             {
                 {  "mile" ,10 * 100},
-                {  "business" ,10 * 100 },
+                //{  "business" ,10 * 100 },
                 {  "volume" ,10 * 100 },
                 {  "speed" ,10 * 100},
             };
@@ -77,140 +79,140 @@ namespace HouseManager5_0.RoomMainF
             return this.checkE.CheckCarStateF(ccs);
         }
 
-        public string GetFightSituationF(GetFightSituation fs)
-        {
-            List<string> parterns = new List<string>();
-            List<string> opponents = new List<string>();
+        //public string GetFightSituationF(GetFightSituation fs)
+        //{
+        //    List<string> parterns = new List<string>();
+        //    List<string> opponents = new List<string>();
 
-            lock (this.PlayerLock)
-            {
-                if (this._Players.ContainsKey(fs.Key))
-                {
-                    var player = this._Players[fs.Key];
-                    foreach (var item in this._Players)
-                    {
-                        if (item.Value.TheLargestHolderKey == player.Key)
-                        {
-                            parterns.Add(item.Key);
-                        }
-                        else if (item.Value.Key == player.TheLargestHolderKey)
-                        {
-                            parterns.Add(item.Key);
-                        }
-                        else if (item.Value.TheLargestHolderKey == player.TheLargestHolderKey)
-                        {
-                            parterns.Add(item.Key);
-                        }
-                        else if (item.Value.Key == player.Key)
-                        {
-                            parterns.Add(item.Key);
-                        }
-                        if (item.Value.playerType == RoleInGame.PlayerType.NPC)
-                        {
-                            var npc = (NPC)item.Value;
-                            if (this.CheckIsEnemy(npc, player))
-                            {
-                                opponents.Add(npc.Key);
-                            }
-                        }
-                    }
-                    if (player.playerType == RoleInGame.PlayerType.player)
-                    {
+        //    lock (this.PlayerLock)
+        //    {
+        //        if (this._Players.ContainsKey(fs.Key))
+        //        {
+        //            var player = this._Players[fs.Key];
+        //            foreach (var item in this._Players)
+        //            {
+        //                if (item.Value.TheLargestHolderKey == player.Key)
+        //                {
+        //                    parterns.Add(item.Key);
+        //                }
+        //                else if (item.Value.Key == player.TheLargestHolderKey)
+        //                {
+        //                    parterns.Add(item.Key);
+        //                }
+        //                else if (item.Value.TheLargestHolderKey == player.TheLargestHolderKey)
+        //                {
+        //                    parterns.Add(item.Key);
+        //                }
+        //                else if (item.Value.Key == player.Key)
+        //                {
+        //                    parterns.Add(item.Key);
+        //                }
+        //                if (item.Value.playerType == Player.PlayerType.NPC)
+        //                {
+        //                    var npc = (NPC)item.Value;
+        //                    if (this.CheckIsEnemy(npc, player))
+        //                    {
+        //                        opponents.Add(npc.Key);
+        //                    }
+        //                }
+        //            }
+        //            if (player.playerType == Player.PlayerType.player)
+        //            {
 
-                    }
+        //            }
 
-                }
-            }
-            var situation = new GetFightSituation.GetFightSituationResult()
-            {
-                c = "GetFightSituationResult",
-                Opponents = opponents.ToArray(),
-                Parters = parterns.ToArray(),
-            };
-            return Newtonsoft.Json.JsonConvert.SerializeObject(situation);
-        }
+        //        }
+        //    }
+        //    var situation = new GetFightSituation.GetFightSituationResult()
+        //    {
+        //        c = "GetFightSituationResult",
+        //        Opponents = opponents.ToArray(),
+        //        Parters = parterns.ToArray(),
+        //    };
+        //    return Newtonsoft.Json.JsonConvert.SerializeObject(situation);
+        //}
 
-        public string RemoveTaskCopyF(RemoveTaskCopyM gtd)
-        {
-            if (this._Players.ContainsKey(gtd.Key))
-            {
-                var role = this._Players[gtd.Key];
-                if (role.playerType == RoleInGame.PlayerType.player)
-                {
-                    var player = (Player)role;
-                    this.taskM.Delete(player, gtd.Code);
-                    //   player.initializeTaskCopy();
-                }
-            }
-            {
-                return "gg";
-            }
-        }
+        //public string RemoveTaskCopyF(RemoveTaskCopyM gtd)
+        //{
+        //    if (this._Players.ContainsKey(gtd.Key))
+        //    {
+        //        var role = this._Players[gtd.Key];
+        //        if (role.playerType == Player.PlayerType.player)
+        //        {
+        //            var player = (Player)role;
+        //            this.taskM.Delete(player, gtd.Code);
+        //            //   player.initializeTaskCopy();
+        //        }
+        //    }
+        //    {
+        //        return "gg";
+        //    }
+        //}
 
-        public string GetTaskCopyDetailF(GetTaskCopyDetail gtd)
-        {
+        //public string GetTaskCopyDetailF(GetTaskCopyDetail gtd)
+        //{
 
-            if (this._Players.ContainsKey(gtd.Key))
-            {
-                var role = this._Players[gtd.Key];
-                if (role.playerType == RoleInGame.PlayerType.player)
-                {
-                    var player = (Player)role;
-                    var list = this.taskM.Display(player);
-                    var obj = new GetTaskCopyDetail.GetTaskCopyResult()
-                    {
-                        c = "GetTaskCopyResult",
-                        Detail = list.ToArray(),
-                    };
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
-                }
-            }
-            {
-                var list = new List<string>().ToArray();
-                var obj = new GetTaskCopyDetail.GetTaskCopyResult()
-                {
-                    c = "GetTaskCopyResult",
-                    Detail = list,
-                };
-                return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
-            }
-        }
+        //    if (this._Players.ContainsKey(gtd.Key))
+        //    {
+        //        var role = this._Players[gtd.Key];
+        //        if (role.playerType == Player.PlayerType.player)
+        //        {
+        //            var player = (Player)role;
+        //            var list = this.taskM.Display(player);
+        //            var obj = new GetTaskCopyDetail.GetTaskCopyResult()
+        //            {
+        //                c = "GetTaskCopyResult",
+        //                Detail = list.ToArray(),
+        //            };
+        //            return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+        //        }
+        //    }
+        //    {
+        //        var list = new List<string>().ToArray();
+        //        var obj = new GetTaskCopyDetail.GetTaskCopyResult()
+        //        {
+        //            c = "GetTaskCopyResult",
+        //            Detail = list,
+        //        };
+        //        return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+        //    }
+        //}
 
         public string Statictis(ServerStatictis ss)
         {
             var r = new List<int>(4) { 0, 0, 0, 0 };
-            foreach (var item in this._Players)
-            {
-                r[0]++;
-                if (item.Value.playerType == RoleInGame.PlayerType.player)
-                {
-                    r[1]++;
-                    if (((Player)item.Value).IsOnline())
-                    {
-                        r[3]++;
-                    }
-                }
-                else
-                {
-                    r[2]++;
-                }
-            }
+            //foreach (var item in this._Players)
+            //{
+            //    r[0]++;
+            //    if (item.Value.playerType == Player.PlayerType.player)
+            //    {
+            //        r[1]++;
+            //        if (((Player)item.Value).IsOnline())
+            //        {
+            //            r[3]++;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        r[2]++;
+            //    }
+            //}
             return Newtonsoft.Json.JsonConvert.SerializeObject(r);
             //  throw new NotImplementedException();
         }
 
         public void SystemBradcast(SystemBradcast sb)
         {
-            foreach (var item in this._Players)
-            {
-                if (item.Value.playerType == RoleInGame.PlayerType.player)
-                {
-                    if (!item.Value.Bust)
-                    {
-                        WebNotify(item.Value, sb.msg);
-                    }
-                }
-            }
+            //foreach (var item in this._Players)
+            //{
+            //    if (item.Value.playerType == Player.PlayerType.player)
+            //    {
+            //        if (!item.Value.Bust)
+            //        {
+            //            WebNotify(item.Value, sb.msg);
+            //        }
+            //    }
+            //}
             // throw new NotImplementedException();
         }
 
@@ -218,21 +220,25 @@ namespace HouseManager5_0.RoomMainF
         {
             lock (this.PlayerLock)
             {
-                if (this._Players.ContainsKey(v.Key))
+                if (this._Groups.ContainsKey(v.GroupKey))
                 {
-                    var player = this._Players[v.Key];
-                    if (player.playerType == RoleInGame.PlayerType.player)
+                    var group = this._Groups[v.GroupKey];
+                    if (group._PlayerInGroup.ContainsKey(v.Key))
                     {
-                        ((Player)player).direciton = getComplex(v, ((Player)player).direciton);
-                        if (((Player)player).getCar().state == CarState.selecting)
+                        var player = group._PlayerInGroup[v.Key];
+                        if (player.playerType == Player.PlayerType.player)
                         {
-                            if (((Player)player).playerSelectDirectionTh != null)
+                            ((Player)player).direciton = getComplex(v, ((Player)player).direciton);
+                            if (((Player)player).getCar().state == CarState.selecting)
                             {
-                                if (!((Player)player).playerSelectDirectionTh.IsAlive)
+                                if (((Player)player).playerSelectDirectionTh != null)
                                 {
-                                    if (((Player)player).playerSelectDirectionTh.ThreadState == System.Threading.ThreadState.Unstarted)
+                                    if (!((Player)player).playerSelectDirectionTh.IsAlive)
                                     {
-                                        ((Player)player).playerSelectDirectionTh.Start();
+                                        if (((Player)player).playerSelectDirectionTh.ThreadState == System.Threading.ThreadState.Unstarted)
+                                        {
+                                            ((Player)player).playerSelectDirectionTh.Start();
+                                        }
                                     }
                                 }
                             }
@@ -248,50 +254,55 @@ namespace HouseManager5_0.RoomMainF
         {
             lock (this.PlayerLock)
             {
-                if (this._Players.ContainsKey(obj.Key))
+                if (this._Groups.ContainsKey(obj.GroupKey))
                 {
-                    var role = this._Players[obj.Key];
-                    if (role.playerType == RoleInGame.PlayerType.player)
+                    var group = this._Groups[obj.GroupKey];
+                    if (group._PlayerInGroup.ContainsKey(obj.Key))
                     {
-                        var player = (Player)role;
-                        var car = player.getCar();
-                        if (string.IsNullOrEmpty(player.BTCAddress))
+                        var role = group._PlayerInGroup[obj.Key];
+                        if (role.playerType == Player.PlayerType.player)
                         {
-                            ExitObjResult r = new ExitObjResult()
+                            var player = (Player)role;
+                            var car = player.getCar();
+                            if (string.IsNullOrEmpty(player.BTCAddress))
                             {
-                                Success = false,
-                            };
-                            this.WebNotify(player, "您还没有登录！");
-                            return Newtonsoft.Json.JsonConvert.SerializeObject(r);
-                        }
-                        else if (player.MoneyForSave > 0)
-                        {
-                            ExitObjResult r = new ExitObjResult()
+                                ExitObjResult r = new ExitObjResult()
+                                {
+                                    Success = false,
+                                };
+                                this.WebNotify(player, "您还没有登录！");
+                                return Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                            }
+                            else if (player.MoneyForSave > 0)
                             {
-                                Success = false,
-                            };
-                            this.WebNotify(player, "你的积分还没有存储！");
-                            return Newtonsoft.Json.JsonConvert.SerializeObject(r);
-                        }
-                        else if (car.ability.HasDiamond())
-                        {
-                            ExitObjResult r = new ExitObjResult()
+                                ExitObjResult r = new ExitObjResult()
+                                {
+                                    Success = false,
+                                };
+                                this.WebNotify(player, "你的积分还没有存储！");
+                                return Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                            }
+                            else if (car.ability.HasDiamond())
                             {
-                                Success = false,
-                            };
-                            this.WebNotify(player, "还有宝石没有释放！");
-                            return Newtonsoft.Json.JsonConvert.SerializeObject(r);
-                        }
-                        else
-                        {
-                            ExitObjResult r = new ExitObjResult()
+                                ExitObjResult r = new ExitObjResult()
+                                {
+                                    Success = false,
+                                };
+                                this.WebNotify(player, "还有宝石没有释放！");
+                                return Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                            }
+                            else
                             {
-                                Success = true,
-                            };
-                            return Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                ExitObjResult r = new ExitObjResult()
+                                {
+                                    Success = true,
+                                };
+                                return Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                            }
                         }
                     }
                 }
+
             }
             {
                 ExitObjResult r = new ExitObjResult()
@@ -305,59 +316,66 @@ namespace HouseManager5_0.RoomMainF
         public string GetOnLineStateF(GetOnLineState obj)
         {
             List<string> msgs = new List<string>();
-            if (this._Players.ContainsKey(obj.Key))
+            if (string.IsNullOrEmpty(obj.GroupKey)) { }
+            else
             {
-                var self = (Player)this._Players[obj.Key];
-                if (self.playerType == RoleInGame.PlayerType.player)
+                if (this._Groups.ContainsKey(obj.GroupKey))
                 {
-                    var selfPlayer = (Player)self;
-                    foreach (var roleI in _Players)
+                    var group = this._Groups[obj.GroupKey];
+                    var self = (Player)group._PlayerInGroup[obj.Key];
+                    if (self.playerType == Player.PlayerType.player)
                     {
-                        if (roleI.Key == selfPlayer.Key)
+                        var selfPlayer = (Player)self;
+                        foreach (var roleI in group._PlayerInGroup)
                         {
+                            if (roleI.Key == selfPlayer.Key)
+                            {
 
-                        }
-                        else
-                        {
-                            if (roleI.Value.playerType == RoleInGame.PlayerType.player)
-                            {
-                                SetOnLineState sols = new SetOnLineState()
-                                {
-                                    c = "SetOnLineState",
-                                    IsEnemy = false,
-                                    IsNPC = false,
-                                    IsPartner = roleI.Value.TheLargestHolderKey == selfPlayer.TheLargestHolderKey,
-                                    Key = roleI.Key,
-                                    OnLine = ((Player)roleI.Value).IsOnline(),
-                                    WebSocketID = selfPlayer.WebSocketID,
-                                };
-                                msgs.Add(selfPlayer.FromUrl);
-                                msgs.Add(Newtonsoft.Json.JsonConvert.SerializeObject(sols));
                             }
-                            else if (roleI.Value.playerType == RoleInGame.PlayerType.NPC)
+                            else
                             {
-                                var npc = (NPC)roleI.Value;
-                                SetOnLineState sols = new SetOnLineState()
+                                if (roleI.Value.playerType == Player.PlayerType.player)
                                 {
-                                    c = "SetOnLineState",
-                                    IsEnemy = this.CheckIsEnemy(npc, selfPlayer),
-                                    IsNPC = true,
-                                    IsPartner = false,
-                                    Key = roleI.Key,
-                                    OnLine = true,
-                                    WebSocketID = selfPlayer.WebSocketID,
-                                };
-                                msgs.Add(selfPlayer.FromUrl);
-                                msgs.Add(Newtonsoft.Json.JsonConvert.SerializeObject(sols));
+                                    SetOnLineState sols = new SetOnLineState()
+                                    {
+                                        c = "SetOnLineState",
+                                        IsEnemy = false,
+                                        IsNPC = false,
+                                        IsPartner = roleI.Value.TheLargestHolderKey == selfPlayer.TheLargestHolderKey,
+                                        Key = roleI.Key,
+                                        OnLine = ((Player)roleI.Value).IsOnline(),
+                                        WebSocketID = selfPlayer.WebSocketID,
+                                    };
+                                    msgs.Add(selfPlayer.FromUrl);
+                                    msgs.Add(Newtonsoft.Json.JsonConvert.SerializeObject(sols));
+                                }
+
                             }
                         }
                     }
                 }
-
             }
             Startup.sendSeveralMsgs(msgs);
             return "";
             // throw new NotImplementedException();
+        }
+
+        public string WhetherGoNextF(WhetherGoNext wgn)
+        {
+            GroupClass group = null;
+            lock (this.PlayerLock)
+            {
+                if (this._Groups.ContainsKey(wgn.GroupKey))
+                {
+                    group = this._Groups[wgn.GroupKey];
+                }
+            }
+            if (group != null)
+            {
+                group.WhetherGoNextF(wgn, this.GetRandomPosObj);
+            }
+            return "";
+            //  throw new NotImplementedException();
         }
 
         public class commandWithTime
@@ -366,6 +384,7 @@ namespace HouseManager5_0.RoomMainF
             {
                 public string c { get; set; }
                 public string key { get; set; }
+                public string groupKey { get; set; }
                 //public string car { get; set; }
             }
             public class ReturningOjb
@@ -373,12 +392,12 @@ namespace HouseManager5_0.RoomMainF
                 internal Node returnToBossAddrPath { get; private set; }
                 internal Node returnToSelfAddrPath { get; private set; }
                 public bool NeedToReturnBoss { get; private set; }
-                public RoleInGame Boss { get; private set; }
+                public Player Boss { get; private set; }
 
                 public static ReturningOjb ojbWithBoss(
                     Node returnToBossAddrPath,
                    Node returnToSelfAddrPath,
-                     RoleInGame Boss
+                     Player Boss
                     )
                 {
                     return new ReturningOjb()
@@ -516,7 +535,7 @@ namespace HouseManager5_0.RoomMainF
         ///// </summary>
         ///// <param name="target"></param>
         ///// <param name="car"></param>
-        //private void carParkOnRoad(int target, ref Car car, RoleInGame player, ref List<string> notifyMsgs)
+        //private void carParkOnRoad(int target, ref Car car, Player player, ref List<string> notifyMsgs)
         //{
         //    var fp = Program.dt.GetFpByIndex(target);
         //    double endX, endY;

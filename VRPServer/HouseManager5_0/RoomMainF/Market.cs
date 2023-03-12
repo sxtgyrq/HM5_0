@@ -13,29 +13,31 @@ namespace HouseManager5_0.RoomMainF
     {
         public void priceChanged(string priceType, long value)
         {
-            List<string> msgs = new List<string>();
-            lock (this.PlayerLock)
-            {
-                foreach (var item in this._Players)
-                {
-                    var role = item.Value;
-                    if (role.playerType == RoleInGame.PlayerType.player)
-                    {
-                        var player = (Player)role;
-                        var obj = new BradDiamondPrice
-                        {
-                            c = "BradDiamondPrice",
-                            WebSocketID = player.WebSocketID,
-                            priceType = priceType,
-                            price = value
-                        };
-                        var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
-                        msgs.Add(player.FromUrl);
-                        msgs.Add(json);
-                    }
-                }
-            }
-            Startup.sendSeveralMsgs(msgs); 
+            throw new Exception();
+
+            //List<string> msgs = new List<string>();
+            //lock (this.PlayerLock)
+            //{
+            //    foreach (var item in this._Players)
+            //    {
+            //        var role = item.Value;
+            //        if (role.playerType == Player.PlayerType.player)
+            //        {
+            //            var player = (Player)role;
+            //            var obj = new BradDiamondPrice
+            //            {
+            //                c = "BradDiamondPrice",
+            //                WebSocketID = player.WebSocketID,
+            //                priceType = priceType,
+            //                price = value
+            //            };
+            //            var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            //            msgs.Add(player.FromUrl);
+            //            msgs.Add(json);
+            //        }
+            //    }
+            //}
+            //Startup.sendSeveralMsgs(msgs); 
         }
 
         public void MarketUpdate(MarketPrice sa)
@@ -96,7 +98,7 @@ namespace HouseManager5_0.RoomMainF
                 return this.parent.Market.volume_Price;
             }
         }
-        void DoBuyTrade(Transaction t, SetBuyDiamond bd, RoleInGame role, ref List<string> notifyMsg)
+        void DoBuyTrade(Transaction t, SetBuyDiamond bd, Player role, ref List<string> notifyMsg)
         {
             if (t.Price(this) != null)
             {
@@ -122,7 +124,7 @@ namespace HouseManager5_0.RoomMainF
                 if (bd.count != oldCount)
                 {
                     role.MoneySet(roleMoney, ref notifyMsg);
-                    if (role.playerType == RoleInGame.PlayerType.player)
+                    if (role.playerType == Player.PlayerType.player)
                         SendPromoteCountOfPlayer(bd.pType, (Player)role, ref notifyMsg);
                     this.Market.Send(bd.pType, oldCount - bd.count);
                     Thread th = new Thread(() => this.Market.Send(bd.pType, oldCount - bd.count));
@@ -140,49 +142,48 @@ namespace HouseManager5_0.RoomMainF
 
         public void Buy(SetBuyDiamond bd)
         {
-            //   bd.count = Math.Max(bd.count, 50);
-            if (bd.count > 50 || bd.count < 0)
-            {
-                return;
-            }
-            else
-            {
-                List<string> notifyMsg = new List<string>();
-                lock (this.PlayerLock)
-                    if (this._Players.ContainsKey(bd.Key))
-                    {
-                        var role = this._Players[bd.Key];
-                        if (role.Bust) { }
-                        else
-                        {
-                            switch (bd.pType)
-                            {
-                                case "mile":
-                                    {
-                                        MileTrade mt = new MileTrade(this);
-                                        DoBuyTrade(mt, bd, role, ref notifyMsg);
-                                    }; break;
-                                case "business":
-                                    {
-                                        BusinessTrade bt = new BusinessTrade(this);
-                                        DoBuyTrade(bt, bd, role, ref notifyMsg);
-                                    }; break;
-                                case "volume":
-                                    {
-                                        VolumeTrade vt = new VolumeTrade(this);
-                                        DoBuyTrade(vt, bd, role, ref notifyMsg);
-                                    }; break;
-                                case "speed":
-                                    {
-                                        SpeedTrade st = new SpeedTrade(this);
-                                        DoBuyTrade(st, bd, role, ref notifyMsg);
-                                    }; break;
-                            }
-                        }
-                    }
+            //if (bd.count > 50 || bd.count < 0)
+            //{
+            //    return;
+            //}
+            //else
+            //{
+            //    List<string> notifyMsg = new List<string>();
+            //    lock (this.PlayerLock)
+            //        if (this._Players.ContainsKey(bd.Key))
+            //        {
+            //            var role = this._Players[bd.Key];
+            //            if (role.Bust) { }
+            //            else
+            //            {
+            //                switch (bd.pType)
+            //                {
+            //                    case "mile":
+            //                        {
+            //                            MileTrade mt = new MileTrade(this);
+            //                            DoBuyTrade(mt, bd, role, ref notifyMsg);
+            //                        }; break;
+            //                    case "business":
+            //                        {
+            //                            BusinessTrade bt = new BusinessTrade(this);
+            //                            DoBuyTrade(bt, bd, role, ref notifyMsg);
+            //                        }; break;
+            //                    case "volume":
+            //                        {
+            //                            VolumeTrade vt = new VolumeTrade(this);
+            //                            DoBuyTrade(vt, bd, role, ref notifyMsg);
+            //                        }; break;
+            //                    case "speed":
+            //                        {
+            //                            SpeedTrade st = new SpeedTrade(this);
+            //                            DoBuyTrade(st, bd, role, ref notifyMsg);
+            //                        }; break;
+            //                }
+            //            }
+            //        }
 
-                Startup.sendSeveralMsgs(notifyMsg);
-            }
+            //    Startup.sendSeveralMsgs(notifyMsg);
+            //}
         }
 
 
@@ -190,51 +191,51 @@ namespace HouseManager5_0.RoomMainF
         internal void ClearPlayers()
         {
             //   return;
-            List<string> notifyMsg = new List<string>();
-            lock (this.PlayerLock)
-            {
-                List<string> keysOfAll = new List<string>();
-                List<string> keysNeedToClear = new List<string>();
-                foreach (var item in this._Players)
-                {
+            //List<string> notifyMsg = new List<string>();
+            //lock (this.PlayerLock)
+            //{
+            //    List<string> keysOfAll = new List<string>();
+            //    List<string> keysNeedToClear = new List<string>();
+            //    foreach (var item in this._Players)
+            //    {
 
-                    if (item.Value.Bust)
-                    {
-                        if (item.Value.getCar().state == Car.CarState.waitAtBaseStation)
-                        {
-                            keysNeedToClear.Add(item.Key);
-                        }
-                        else
-                        {
-                            keysOfAll.Add(item.Key);
-                        }
-                    }
-                    else
-                    {
-                        keysOfAll.Add(item.Key);
-                    }
-                }
+            //        if (item.Value.Bust)
+            //        {
+            //            if (item.Value.getCar().state == Car.CarState.waitAtBaseStation)
+            //            {
+            //                keysNeedToClear.Add(item.Key);
+            //            }
+            //            else
+            //            {
+            //                keysOfAll.Add(item.Key);
+            //            }
+            //        }
+            //        else
+            //        {
+            //            keysOfAll.Add(item.Key);
+            //        }
+            //    }
 
-                for (var i = 0; i < keysNeedToClear.Count; i++)
-                {
-                    this._Players.Remove(keysNeedToClear[i]);
+            //    for (var i = 0; i < keysNeedToClear.Count; i++)
+            //    {
+            //        this._Players.Remove(keysNeedToClear[i]);
 
-                    for (var j = 0; j < keysOfAll.Count; j++)
-                    {
-                        if (this._Players[keysOfAll[j]].othersContainsKey(keysNeedToClear[i]))
-                        {
-                            this._Players[keysOfAll[j]].othersRemove(keysNeedToClear[i], ref notifyMsg);
-                        }
-                    }
-                }
+            //        for (var j = 0; j < keysOfAll.Count; j++)
+            //        {
+            //            if (this._Players[keysOfAll[j]].othersContainsKey(keysNeedToClear[i]))
+            //            {
+            //                this._Players[keysOfAll[j]].othersRemove(keysNeedToClear[i], ref notifyMsg);
+            //            }
+            //        }
+            //    }
 
-            }
+            //}
 
-            Startup.sendSeveralMsgs(notifyMsg); 
+            //Startup.sendSeveralMsgs(notifyMsg);
         }
 
 
-        void DoSellTrade(Transaction t, SetSellDiamond ss, RoleInGame role, ref List<string> notifyMsg)
+        void DoSellTrade(Transaction t, SetSellDiamond ss, Player role, ref List<string> notifyMsg)
         {
             if (t.Price(this) != null)
             {
@@ -246,7 +247,7 @@ namespace HouseManager5_0.RoomMainF
 
                 if (sellCount > 0)
                 {
-                    if (role.playerType == RoleInGame.PlayerType.player)
+                    if (role.playerType == Player.PlayerType.player)
                     {
                         SendPromoteCountOfPlayer(ss.pType, (Player)role, ref notifyMsg);
                         this.taskM.DiamondSell((Player)role);
@@ -263,86 +264,87 @@ namespace HouseManager5_0.RoomMainF
 
         public string TakeApartF(TakeApart t)
         {
-            List<string> notifyMsg = new List<string>();
-            lock (this.PlayerLock)
-                if (this._Players.ContainsKey(t.Key))
-                {
-                    var role = (Player)this._Players[t.Key];
-                    if (role.Bust) { }
-                    //else if(player.)
-                    else
-                    {
-                        if (role.getCar().state == Car.CarState.waitAtBaseStation)
-                        {
-                            if (role.getCar().ability.getDataCount("mile")[0] +
-                                role.getCar().ability.getDataCount("business")[0] +
-                                role.getCar().ability.getDataCount("volume")[0] +
-                                 role.getCar().ability.getDataCount("speed")[0] > 0)
-                            {
-                                taskM.TakeApartF(role);
-                            }
+            throw new Exception();
+            //List<string> notifyMsg = new List<string>();
+            //lock (this.PlayerLock)
+            //    if (this._Players.ContainsKey(t.Key))
+            //    {
+            //        var role = (Player)this._Players[t.Key];
+            //        if (role.Bust) { }
+            //        //else if(player.)
+            //        else
+            //        {
+            //            if (role.getCar().state == Car.CarState.waitAtBaseStation)
+            //            {
+            //                if (role.getCar().ability.getDataCount("mile")[0] +
+            //                    role.getCar().ability.getDataCount("business")[0] +
+            //                    role.getCar().ability.getDataCount("volume")[0] +
+            //                     role.getCar().ability.getDataCount("speed")[0] > 0)
+            //                {
+            //                    taskM.TakeApartF(role);
+            //                }
 
-                            role.PromoteDiamondCount["mile"] += role.getCar().ability.getDataCount("mile")[0];
-                            role.PromoteDiamondCount["business"] += role.getCar().ability.getDataCount("business")[0];
-                            role.PromoteDiamondCount["volume"] += role.getCar().ability.getDataCount("volume")[0];
-                            role.PromoteDiamondCount["speed"] += role.getCar().ability.getDataCount("speed")[0];
-                            // if (player.playerType == RoleInGame.PlayerType.player)
-                            this.SendPromoteCountOfPlayer("mile", role.PromoteDiamondCount["mile"], role, ref notifyMsg);
-                            this.SendPromoteCountOfPlayer("business", role.PromoteDiamondCount["business"], role, ref notifyMsg);
-                            this.SendPromoteCountOfPlayer("volume", role.PromoteDiamondCount["volume"], role, ref notifyMsg);
-                            this.SendPromoteCountOfPlayer("speed", role.PromoteDiamondCount["speed"], role, ref notifyMsg);
-                            role.getCar().ability.AbilityClear("mile", role, role.getCar(), ref notifyMsg);
-                            role.getCar().ability.AbilityClear("business", role, role.getCar(), ref notifyMsg);
-                            role.getCar().ability.AbilityClear("volume", role, role.getCar(), ref notifyMsg);
-                            role.getCar().ability.AbilityClear("speed", role, role.getCar(), ref notifyMsg);
-                        }
-                    }
-                }
-            Startup.sendSeveralMsgs(notifyMsg); 
-            return "";
+            //                role.PromoteDiamondCount["mile"] += role.getCar().ability.getDataCount("mile")[0];
+            //                role.PromoteDiamondCount["business"] += role.getCar().ability.getDataCount("business")[0];
+            //                role.PromoteDiamondCount["volume"] += role.getCar().ability.getDataCount("volume")[0];
+            //                role.PromoteDiamondCount["speed"] += role.getCar().ability.getDataCount("speed")[0];
+            //                // if (player.playerType == Player.PlayerType.player)
+            //                this.SendPromoteCountOfPlayer("mile", role.PromoteDiamondCount["mile"], role, ref notifyMsg);
+            //                this.SendPromoteCountOfPlayer("business", role.PromoteDiamondCount["business"], role, ref notifyMsg);
+            //                this.SendPromoteCountOfPlayer("volume", role.PromoteDiamondCount["volume"], role, ref notifyMsg);
+            //                this.SendPromoteCountOfPlayer("speed", role.PromoteDiamondCount["speed"], role, ref notifyMsg);
+            //                role.getCar().ability.AbilityClear("mile", role, role.getCar(), ref notifyMsg);
+            //                role.getCar().ability.AbilityClear("business", role, role.getCar(), ref notifyMsg);
+            //                role.getCar().ability.AbilityClear("volume", role, role.getCar(), ref notifyMsg);
+            //                role.getCar().ability.AbilityClear("speed", role, role.getCar(), ref notifyMsg);
+            //            }
+            //        }
+            //    }
+            //Startup.sendSeveralMsgs(notifyMsg);
+            //return "";
         }
         public void Sell(SetSellDiamond ss)
         {
-            if (ss.count > 50 || ss.count < 0)
-            {
-                return;
-            }
-            List<string> notifyMsg = new List<string>();
-            lock (this.PlayerLock)
-                if (this._Players.ContainsKey(ss.Key))
-                {
-                    var role = this._Players[ss.Key];
-                    if (role.Bust) { }
-                    //else if(player.)
-                    else
-                    {
-                        switch (ss.pType)
-                        {
-                            case "mile":
-                                {
-                                    MileTrade mt = new MileTrade(this);
-                                    DoSellTrade(mt, ss, role, ref notifyMsg);
-                                }; break;
-                            case "business":
-                                {
-                                    BusinessTrade bt = new BusinessTrade(this);
-                                    DoSellTrade(bt, ss, role, ref notifyMsg);
-                                }; break;
-                            case "volume":
-                                {
-                                    VolumeTrade vt = new VolumeTrade(this);
-                                    DoSellTrade(vt, ss, role, ref notifyMsg);
-                                }; break;
-                            case "speed":
-                                {
-                                    SpeedTrade st = new SpeedTrade(this);
-                                    DoSellTrade(st, ss, role, ref notifyMsg);
-                                }; break;
-                        }
-                    }
-                }
+            //if (ss.count > 50 || ss.count < 0)
+            //{
+            //    return;
+            //}
+            //List<string> notifyMsg = new List<string>();
+            //lock (this.PlayerLock)
+            //    if (this._Players.ContainsKey(ss.Key))
+            //    {
+            //        var role = this._Players[ss.Key];
+            //        if (role.Bust) { }
+            //        //else if(player.)
+            //        else
+            //        {
+            //            switch (ss.pType)
+            //            {
+            //                case "mile":
+            //                    {
+            //                        MileTrade mt = new MileTrade(this);
+            //                        DoSellTrade(mt, ss, role, ref notifyMsg);
+            //                    }; break;
+            //                case "business":
+            //                    {
+            //                        BusinessTrade bt = new BusinessTrade(this);
+            //                        DoSellTrade(bt, ss, role, ref notifyMsg);
+            //                    }; break;
+            //                case "volume":
+            //                    {
+            //                        VolumeTrade vt = new VolumeTrade(this);
+            //                        DoSellTrade(vt, ss, role, ref notifyMsg);
+            //                    }; break;
+            //                case "speed":
+            //                    {
+            //                        SpeedTrade st = new SpeedTrade(this);
+            //                        DoSellTrade(st, ss, role, ref notifyMsg);
+            //                    }; break;
+            //            }
+            //        }
+            //    }
 
-            Startup.sendSeveralMsgs(notifyMsg); 
+            //Startup.sendSeveralMsgs(notifyMsg);
         }
 
 

@@ -418,6 +418,36 @@ namespace CommonClass
         public int collectIndex { get; set; }
     }
 
+    public class BradCastWhetherGoTo : CommandNotify
+    {
+        public Model.FastonPosition Fp { get; set; }
+        public string msg { get; set; }
+        public int select { get; set; }
+        public string tsType { get; set; }
+    }
+
+    public class BradCastWhereToGoInSmallMap : CommandNotify
+    {
+        public float maxX { get; set; }
+        public float maxY { get; set; }
+        public float minX { get; set; }
+        public float minY { get; set; }
+        public List<DataItem> data { get; set; }
+        public float currentX { get; set; }
+        public float currentY { get; set; }
+        public string base64 { get; set; }
+
+        public class DataItem
+        {
+            public string DataType { get; set; }
+            public float[] Path { get; set; }
+        }
+        //public Model.FastonPosition Fp { get; set; }
+        //public string msg { get; set; }
+        //public int select { get; set; }
+        //public string tsType { get; set; }
+    }
+
     public class BradCastMusicTheme : CommandNotify
     {
         public string theme { get; set; }
@@ -452,6 +482,7 @@ namespace CommonClass
     public class PlayerAdd_V2 : Command
     {
         public string Key { get; set; }
+        public string GroupKey { get; set; }
         public string FromUrl { get; set; }
         public int RoomIndex { get; set; }
 
@@ -473,11 +504,13 @@ namespace CommonClass
     public class GetPosition : Command
     {
         public string Key { get; set; }
+        public string GroupKey { get; set; }
     }
 
     public class SetPromote : Command
     {
         public string Key { get; set; }
+        public string GroupKey { get; set; }
         /// <summary>
         /// 取值如mile
         /// </summary>
@@ -487,6 +520,7 @@ namespace CommonClass
     public class SetCollect : Command
     {
         public string Key { get; set; }
+        public string GroupKey { get; set; }
         /// <summary>
         /// 取值如findWork
         /// </summary>
@@ -521,6 +555,7 @@ namespace CommonClass
         /// camera X
         /// </summary>
         public double rotationY { get; set; }
+        public string GroupKey { get; set; }
     }
     public class TakeApart : Command
     {
@@ -554,6 +589,7 @@ namespace CommonClass
     public class OrderToReturn : Command
     {
         public string Key { get; set; }
+        public string GroupKey { get; set; }
         //public string car { get; set; }
     }
     public class OrderToReturnBySystem : OrderToReturn
@@ -704,6 +740,7 @@ namespace CommonClass
     public class GetRewardFromBuildingM : Command
     {
         public string Key { get; set; }
+        public string GroupKey { get; set; }
         public string selectObjName { get; set; }
     }
     /// <summary>
@@ -914,6 +951,7 @@ namespace CommonClass
     }
     public class ExitObj : Command
     {
+        public string GroupKey { get; set; }
         public string Key { get; set; }
         public class ExitObjResult
         {
@@ -925,6 +963,7 @@ namespace CommonClass
     public class GetOnLineState : Command
     {
         public string Key { get; set; }
+        public string GroupKey { get; set; }
         public class SetOnLineState : CommandNotify
         {
             public string Key { get; set; }
@@ -933,5 +972,11 @@ namespace CommonClass
             public bool IsPartner { get; set; }
             public bool IsEnemy { get; set; }
         }
+    }
+    public class WhetherGoNext : Command
+    {
+        public string Key { get; set; }
+        public string GroupKey { get; set; }
+        public string cType { get; set; }
     }
 }

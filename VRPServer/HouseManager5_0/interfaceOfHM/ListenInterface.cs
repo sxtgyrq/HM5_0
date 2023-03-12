@@ -114,11 +114,12 @@ namespace HouseManager5_0.interfaceOfHM
         string CheckCarStateF(CheckCarState ccs);
         void SystemBradcast(SystemBradcast sb);
         string Statictis(ServerStatictis ss);
-        string GetFightSituationF(GetFightSituation fs);
-        string GetTaskCopyDetailF(GetTaskCopyDetail gtd);
-        string RemoveTaskCopyF(RemoveTaskCopyM gtd);
+        //string GetFightSituationF(GetFightSituation fs);
+       // string GetTaskCopyDetailF(GetTaskCopyDetail gtd);
+       // string RemoveTaskCopyF(RemoveTaskCopyM gtd);
         string ExitF(ExitObj obj);
         string GetOnLineStateF(GetOnLineState obj);
+        string WhetherGoNextF(WhetherGoNext wgn);
     }
 
     interface MapEditor

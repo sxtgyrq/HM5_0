@@ -8,7 +8,7 @@ namespace HouseManager5_0.RoomMainF
 {
     public partial class RoomMain
     {
-        private void NoNeedToLogin(Player player)
+        public void NoNeedToLogin(Player player)
         {
             SetParameterIsLogin spil = new SetParameterIsLogin()
             {
@@ -16,9 +16,9 @@ namespace HouseManager5_0.RoomMainF
                 WebSocketID = player.WebSocketID
                 //  TimeOut
             };
-            Startup.sendSingleMsg(player.FromUrl, Newtonsoft.Json.JsonConvert.SerializeObject(spil)); 
+            Startup.sendSingleMsg(player.FromUrl, Newtonsoft.Json.JsonConvert.SerializeObject(spil));
         }
-        private void HasNewTaskToShow(Player player)
+        public void HasNewTaskToShow(Player player)
         {
             //SetParameterHasNewTask
             SetParameterHasNewTask spil = new SetParameterHasNewTask()

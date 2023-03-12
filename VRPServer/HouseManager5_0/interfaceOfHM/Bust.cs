@@ -12,6 +12,6 @@ namespace HouseManager5_0.interfaceOfHM
         /// <param name="role"></param>
         /// <param name="bustValue"></param>
         /// <param name="msgsWithUrl"></param>
-        void BustChangedF(RoleInGame role, bool bustValue, ref List<string> msgsWithUrl);
+        void BustChangedF(HouseManager5_0.Player role, bool bustValue, ref List<string> msgsWithUrl);
     }
 }

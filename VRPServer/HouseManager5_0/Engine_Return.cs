@@ -24,34 +24,46 @@ namespace HouseManager5_0
 
         void setReturn(commandWithTime.returnning rObj, GetRandomPos grp)
         {
-            List<string> notifyMsg = new List<string>();
+            //throw new Exception();
+
             lock (that.PlayerLock)
             {
-                var player = that._Players[rObj.key];
-                var car = that._Players[rObj.key].getCar();
-                //if(rObj.returningOjb.be)
-                //  car.targetFpIndexSet(that._Players[rObj.key].StartFPIndex, ref notifyMsg);
-                if (player.playerType == RoleInGame.PlayerType.player)
-                {
-                    if (rObj.returningOjb.NeedToReturnBoss)
-                    {
-                        car.targetFpIndexSet(that._Players[rObj.returningOjb.Boss.Key].StartFPIndex, ref notifyMsg);
-                    }
-                    else
-                    {
-                        car.targetFpIndexSet(that._Players[rObj.key].StartFPIndex, ref notifyMsg);
-                    }
-                }
+                if (string.IsNullOrEmpty(rObj.groupKey)) { }
                 else
                 {
-                    car.targetFpIndexSet(that._Players[rObj.key].StartFPIndex, ref notifyMsg);
+                    var group = that._Groups[rObj.groupKey];
+                    group.setReturn(rObj, grp);
                 }
-                ReturnThenSetComeBack(player, car, rObj, grp, ref notifyMsg);
             }
-            this.sendSeveralMsgs(notifyMsg);
+
+            //List<string> notifyMsg = new List<string>();
+            //lock (that.PlayerLock)
+            //{
+            //    var player = that._Players[rObj.key];
+            //    var car = that._Players[rObj.key].getCar();
+            //    //if(rObj.returningOjb.be)
+            //    //  car.targetFpIndexSet(that._Players[rObj.key].StartFPIndex, ref notifyMsg);
+            //    if (player.playerType == Player.PlayerType.player)
+            //    {
+            //        if (rObj.returningOjb.NeedToReturnBoss)
+            //        {
+            //            car.targetFpIndexSet(that._Players[rObj.returningOjb.Boss.Key].StartFPIndex, ref notifyMsg);
+            //        }
+            //        else
+            //        {
+            //            car.targetFpIndexSet(that._Players[rObj.key].StartFPIndex, ref notifyMsg);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        car.targetFpIndexSet(that._Players[rObj.key].StartFPIndex, ref notifyMsg);
+            //    }
+            //    ReturnThenSetComeBack(player, car, rObj, grp, ref notifyMsg);
+            //}
+            //this.sendSeveralMsgs(notifyMsg);
         }
 
-        private void ReturnThenSetComeBack(RoleInGame player, Car car, commandWithTime.returnning cmp, GetRandomPos grp, ref List<string> notifyMsg)
+        public void ReturnThenSetComeBack(Player player, Car car, commandWithTime.returnning cmp, GetRandomPos grp, ref List<string> notifyMsg)
         {
             if (cmp.returningOjb.NeedToReturnBoss)
             {
@@ -64,7 +76,7 @@ namespace HouseManager5_0
             }
         }
 
-        private void ReturnToSelf(RoleInGame player, Car car, returnning cmp, GetRandomPos grp, ref List<string> notifyMsg)
+        private void ReturnToSelf(Player player, Car car, returnning cmp, GetRandomPos grp, ref List<string> notifyMsg)
         {
             var privateKeys = BitCoin.GamePathEncryption.PathEncryption.MainC.GetPrivateKeys(ref Program.rm.rm, cmp.returningOjb.returnToSelfAddrPath.path.Count);
             List<AnimateDataItem> animations = new List<AnimateDataItem>();
@@ -73,7 +85,7 @@ namespace HouseManager5_0
                 var speed = car.ability.Speed;
 
                 var result = new List<int>();
-                //RoleInGame boss = cmp.returningOjb.Boss;
+                //Player boss = cmp.returningOjb.Boss;
                 //  that.getStartPositon(Program.dt.GetFpByIndex(cmp.target), (boss.positionInStation + 1) % 5, ref startT);
                 var boss = cmp.returningOjb.Boss;
 
@@ -87,7 +99,7 @@ namespace HouseManager5_0
                 //  that.getEndPositon(Program.dt.GetFpByIndex(self.StartFPIndex), self.positionInStation, ref result, ref startT, player.improvementRecord.speedValue > 0);
                 // result.RemoveAll(item => item.t == 0);
 
-                car.setState(that._Players[cmp.key], ref notifyMsg, CarState.returning);
+                car.setState(player, ref notifyMsg, CarState.returning);
                 car.targetFpIndexSet(self.StartFPIndex, ref notifyMsg);
 
                 Data.PathStartPoint3 startPosition;
@@ -140,14 +152,16 @@ namespace HouseManager5_0
                     {
                         c = "comeBack",
                         //car = cmp.car,
+                        groupKey = cmp.groupKey,
                         key = cmp.key
                     }, this, grp);
                 }, player);
 
         }
 
-        private void ReturnToBoss(RoleInGame player, Car car, returnning cmp, GetRandomPos grp, ref List<string> notifyMsg)
+        private void ReturnToBoss(Player player, Car car, returnning cmp, GetRandomPos grp, ref List<string> notifyMsg)
         {
+
             switch (cmp.changeType)
             {
                 case returnning.ChangeType.AfterTax:
@@ -161,7 +175,7 @@ namespace HouseManager5_0
                             var speed = car.ability.Speed;
                             startT_FirstPath = 0;
                             var result = new List<int>();
-                            //RoleInGame boss = cmp.returningOjb.Boss;
+                            //Player boss = cmp.returningOjb.Boss;
                             //  that.getStartPositon(Program.dt.GetFpByIndex(cmp.target), (boss.positionInStation + 1) % 5, ref startT);
                             var boss = cmp.returningOjb.Boss;
 
@@ -174,7 +188,7 @@ namespace HouseManager5_0
                             // that.getEndPositon(Program.dt.GetFpByIndex(self.StartFPIndex), self.positionInStation, ref result, ref startT, player.improvementRecord.speedValue > 0);
                             // result.RemoveAll(item => item.t == 0);
 
-                            car.setState(that._Players[cmp.key], ref notifyMsg, CarState.returning);
+                            car.setState(self, ref notifyMsg, CarState.returning);
                             car.targetFpIndexSet(self.StartFPIndex, ref notifyMsg);
                             var animation = new AnimateDataItem(startPosition, result, false, startT_FirstPath, cmp.returningOjb.returnToSelfAddrPath.path.Count > 0 ? privateKeys[0] : 255, ref that.rm);
                             animations.Add(animation);
@@ -205,6 +219,7 @@ namespace HouseManager5_0
                             {
                                 c = "comeBack",
                                 //car = cmp.car,
+                                groupKey = cmp.groupKey,
                                 key = cmp.key
                             }, this, grp);
                         }, self);
@@ -221,7 +236,7 @@ namespace HouseManager5_0
                         {
                             startT_FirstPath = 0;
                             var result = new List<int>();
-                            //RoleInGame boss = cmp.returningOjb.Boss;
+                            //Player boss = cmp.returningOjb.Boss;
                             //  that.getStartPositon(Program.dt.GetFpByIndex(cmp.target), (boss.positionInStation + 1) % 5, ref startT);
 
 
@@ -230,7 +245,7 @@ namespace HouseManager5_0
                             //  that.getEndPositon(Program.dt.GetFpByIndex(boss.StartFPIndex), boss.positionInStation + 1, ref result, ref startT, player.improvementRecord.speedValue > 0);
                             // result.RemoveAll(item => item.t == 0);
 
-                            car.setState(that._Players[cmp.key], ref notifyMsg, CarState.returning);
+                            car.setState(player, ref notifyMsg, CarState.returning);
                             car.targetFpIndexSet(boss.StartFPIndex, ref notifyMsg);
 
                             /* 
@@ -294,7 +309,7 @@ namespace HouseManager5_0
 
         }
         delegate void ArriavalF(int newStartT);
-        private void StartArriavalThread(int startT, int step, RoleInGame player, Car car, Node goPath, ArriavalF f, RoleInGame targetPlayer)
+        private void StartArriavalThread(int startT, int step, Player player, Car car, Node goPath, ArriavalF f, Player targetPlayer)
         {
 
             System.Threading.Thread th = new System.Threading.Thread(() =>
@@ -368,79 +383,76 @@ namespace HouseManager5_0
 
         private void setBack(commandWithTime.comeBack comeBack, GetRandomPos grp)
         {
-            List<string> notifyMsg = new List<string>();
+            //throw new Exception();
+
+
             lock (that.PlayerLock)
             {
-                var player = that._Players[comeBack.key];
-                var car = player.getCar();
-                if (car.state == CarState.returning)
+                if (string.IsNullOrEmpty(comeBack.groupKey))
                 {
-                    //  var moneyCanSave1 = player.GetMoneyCanSave();
-
-                    player.MoneySet(player.Money + car.ability.costBusiness + car.ability.costVolume, ref notifyMsg);
-
-                    player.improvementRecord.reduceSpeed(player, car.ability.costBusiness + car.ability.costVolume, ref notifyMsg);
-                    //player.Money += car.ability.costBusiness;
-                    //player.Money += car.ability.costVolume;
-
-                    //if (car.ability.subsidize > 0)
-                    //{
-                    //    player.setSupportToPlayMoney(player.SupportToPlayMoney + car.ability.subsidize, ref notifyMsg);
-                    //    //player.SupportToPlay.Money += car.ability.subsidize;
-                    //}
-                    if (!string.IsNullOrEmpty(car.ability.diamondInCar))
-                    {
-                        player.PromoteDiamondCount[car.ability.diamondInCar]++;
-                        if (player.playerType == RoleInGame.PlayerType.player)
-                        {
-                            that.SendPromoteCountOfPlayer(car.ability.diamondInCar, player.PromoteDiamondCount[car.ability.diamondInCar], (Player)player, ref notifyMsg);
-                            that.taskM.DiamondCollected((Player)player);
-                        }
-                    }
-                    car.ability.Refresh(player, car, ref notifyMsg);
-                    car.Refresh(player, ref notifyMsg);
-
-                    if (that.driverM.controlledByMagic(player, car, grp, ref notifyMsg))
-                    {
-
-                    }
-                    if (player.playerType == RoleInGame.PlayerType.NPC)
-                    {
-                        //that.
-                        that.GetMaxHarmInfomation((NPC)player, Program.dt);
-                        ///  NPC
-                        ((NPC)player).dealWithReturnedNPC(ref notifyMsg);
-                    }
-
-                    //AbilityChanged(player, car, ref notifyMsg, "business");
-                    //AbilityChanged(player, car, ref notifyMsg, "volume");
-                    //AbilityChanged(player, car, ref notifyMsg, "mile");
-
-                    //  printState(player, car, "执行了归位");
-                    //  var moneyCanSave2 = player.GetMoneyCanSave();
-                    //if (moneyCanSave1 != moneyCanSave2)
-                    {
-                        // MoneyCanSaveChanged(player, moneyCanSave2, ref notifyMsg);
-                    }
-                    //if (player.playerType == RoleInGame.PlayerType.NPC)
-                    //{
-                    //    this.SetNPCToDoSomeThing((NPC)player, NPCAction.Bust);
-                    //}
                 }
-                else
+                else if (that._Groups.ContainsKey(comeBack.groupKey))
                 {
-                    throw new Exception($"小车返回是状态为{that._Players[comeBack.key].getCar().state}");
+                    var group = that._Groups[comeBack.groupKey];
+                    group.setBack(comeBack, grp);
                 }
             }
-            this.sendSeveralMsgs(notifyMsg);
+            //List<string> notifyMsg = new List<string>();
+            //lock (that.PlayerLock)
+            //{
+            //    var player = that._Players[comeBack.key];
+            //    var car = player.getCar();
+            //    if (car.state == CarState.returning)
+            //    { 
+            //        player.MoneySet(player.Money + car.ability.costBusiness + car.ability.costVolume, ref notifyMsg);
+
+            //        player.improvementRecord.reduceSpeed(player, car.ability.costBusiness + car.ability.costVolume, ref notifyMsg);
+
+            //        if (!string.IsNullOrEmpty(car.ability.diamondInCar))
+            //        {
+            //            player.PromoteDiamondCount[car.ability.diamondInCar]++;
+            //            if (player.playerType == Player.PlayerType.player)
+            //            {
+            //                that.SendPromoteCountOfPlayer(car.ability.diamondInCar, player.PromoteDiamondCount[car.ability.diamondInCar], (Player)player, ref notifyMsg);
+            //                that.taskM.DiamondCollected((Player)player);
+            //            }
+            //        }
+            //        car.ability.Refresh(player, car, ref notifyMsg);
+            //        car.Refresh(player, ref notifyMsg);
+
+            //        if (that.driverM.controlledByMagic(player, car, grp, ref notifyMsg))
+            //        {
+
+            //        }
+            //        if (player.playerType == Player.PlayerType.NPC)
+            //        {
+            //            //that.
+            //            that.GetMaxHarmInfomation((NPC)player, Program.dt);
+            //            ///  NPC
+            //            ((NPC)player).dealWithReturnedNPC(ref notifyMsg);
+            //        } 
+            //        {
+
+            //        } 
+            //    }
+            //    else
+            //    {
+            //        throw new Exception($"小车返回是状态为{that._Players[comeBack.key].getCar().state}");
+            //    }
+            //}
+            //this.sendSeveralMsgs(notifyMsg);
         }
 
         internal string OrderToReturn(OrderToReturn otr, GetRandomPos grp)
         {
 
             if (otr.c == "OrderToReturn")
-                //   return this.
-                return this.updateAction(this, otr, grp, otr.Key);
+            //   return this.{}
+            {
+                //throw new Exception("");
+                return this.updateAction(this, otr, grp, otr.Key, otr.GroupKey);
+            }
+            //  return this.updateAction(this, otr, grp, otr.Key);
             else if (otr.c == "OrderToReturnBySystem")
             {
                 OrderToReturnBySystem otrbs = (OrderToReturnBySystem)otr;
@@ -455,53 +467,55 @@ namespace HouseManager5_0
 
         string updateActionBySys(interfaceOfEngine.tryCatchAction actionDo, OrderToReturnBySystem c, GetRandomPos grp, string operateKey)
         {
-            string conditionNotReason;
-            if (actionDo.conditionsOk(c, grp, out conditionNotReason))
-            {
-                List<string> notifyMsg = new List<string>();
-                lock (that.PlayerLock)
-                {
-                    if (that._Players.ContainsKey(operateKey))
-                    {
-                        if (that._Players[operateKey].Bust)
-                        {
-                            var player = that._Players[operateKey];
-                            var car = that._Players[operateKey].getCar();
-                            switch (car.state)
-                            {
-                                case CarState.waitOnRoad:
-                                    {
-                                        if (actionDo.carAbilitConditionsOk(player, car, c, grp))
-                                        {
-                                            car.setState(player, ref notifyMsg, CarState.returning);
-                                            setReturn(new returnning()
-                                            {
-                                                c = "returnning",
-                                                changeType = returnning.ChangeType.BeforeTax,
-                                                key = player.Key,
-                                                returningOjb = player.returningOjb,
-                                                target = car.targetFpIndex
-                                            }, grp);
-                                        }
-                                    }; break;
-                            }
-                        }
-                    }
-                }
+            throw new Exception();
 
-                this.sendSeveralMsgs(notifyMsg);
-                return "";
-            }
-            else
-            {
-                return conditionNotReason;
-            }
+            //string conditionNotReason;
+            //if (actionDo.conditionsOk(c, grp, out conditionNotReason))
+            //{
+            //    List<string> notifyMsg = new List<string>();
+            //    lock (that.PlayerLock)
+            //    {
+            //        if (that._Players.ContainsKey(operateKey))
+            //        {
+            //            if (that._Players[operateKey].Bust)
+            //            {
+            //                var player = that._Players[operateKey];
+            //                var car = that._Players[operateKey].getCar();
+            //                switch (car.state)
+            //                {
+            //                    case CarState.waitOnRoad:
+            //                        {
+            //                            if (actionDo.carAbilitConditionsOk(player, car, c, grp))
+            //                            {
+            //                                car.setState(player, ref notifyMsg, CarState.returning);
+            //                                setReturn(new returnning()
+            //                                {
+            //                                    c = "returnning",
+            //                                    changeType = returnning.ChangeType.BeforeTax,
+            //                                    key = player.Key,
+            //                                    returningOjb = player.returningOjb,
+            //                                    target = car.targetFpIndex
+            //                                }, grp);
+            //                            }
+            //                        }; break;
+            //                }
+            //            }
+            //        }
+            //    }
+
+            //    this.sendSeveralMsgs(notifyMsg);
+            //    return "";
+            //}
+            //else
+            //{
+            //    return conditionNotReason;
+            //}
         }
 
 
-        public ReturningOjb maindDo(RoleInGame player, Car car, Command c, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason mrr)
+        public ReturningOjb maindDo(Player player, Car car, Command c, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason mrr)
         {
-           
+
             {
                 //throw new NotImplementedException();
                 //    car.state = CarState.returning;
@@ -512,6 +526,7 @@ namespace HouseManager5_0
                     c = "returnning",
                     changeType = returnning.ChangeType.BeforeTax,
                     key = otr.Key,
+                    groupKey = player.Group.GroupKey,
                     returningOjb = player.returningOjb,
                     target = car.targetFpIndex
                 }, grp);
@@ -520,7 +535,7 @@ namespace HouseManager5_0
             }
         }
 
-        public void failedThenDo(Car car, RoleInGame player, Command c, GetRandomPos grp, ref List<string> notifyMsg)
+        public void failedThenDo(Car car, Player player, Command c, GetRandomPos grp, ref List<string> notifyMsg)
         {
         }
 
@@ -543,12 +558,12 @@ namespace HouseManager5_0
             }
         }
 
-        public bool carAbilitConditionsOk(RoleInGame player, Car car, Command c, GetRandomPos grp)
+        public bool carAbilitConditionsOk(Player player, Car car, Command c, GetRandomPos grp)
         {
             return car.state == CarState.waitOnRoad;
         }
 
-        internal void SetReturnFromBoss(int v, RoleInGame boss, returnning returnning, GetRandomPos grp)
+        internal void SetReturnFromBoss(int v, Player boss, returnning returnning, GetRandomPos grp)
         {
             this.startNewThread(v, returnning, this, grp);
             //this.newt

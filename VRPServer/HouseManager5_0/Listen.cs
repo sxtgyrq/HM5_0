@@ -20,18 +20,18 @@ namespace HouseManager5_0
         }
         private static string DealWith(string notifyJson, int port)
         {
-            try
+            // try
             {
                 CommonClass.Command c = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.Command>(notifyJson);
                 return DealWithInterfaceAndObj(Program.rm, c, notifyJson);
 
             }
-            catch
-            {
-                //Consol.WriteLine($"notify receive:{notifyJson}");
-                File.AppendAllText($"log/d{port}.txt", $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}-{notifyJson}{Environment.NewLine}");
-                return "haveNothingToReturn";
-            }
+            //catch
+            //{
+            //    //Consol.WriteLine($"notify receive:{notifyJson}");
+            //    File.AppendAllText($"log/d{port}.txt", $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}-{notifyJson}{Environment.NewLine}");
+            //    return "haveNothingToReturn";
+            //}
         }
 
         static string DealWithInterfaceAndObj(interfaceOfHM.ListenInterface objI, CommonClass.Command c, string notifyJson)
@@ -442,17 +442,18 @@ namespace HouseManager5_0
                     case "GetFightSituation":
                         {
                             GetFightSituation fs = Newtonsoft.Json.JsonConvert.DeserializeObject<GetFightSituation>(notifyJson);
-                            outPut = objI.GetFightSituationF(fs);
+
+                            // outPut = objI.GetFightSituationF(fs);
                         }; break;
                     case "GetTaskCopyDetail":
                         {
                             GetTaskCopyDetail gtd = Newtonsoft.Json.JsonConvert.DeserializeObject<GetTaskCopyDetail>(notifyJson);
-                            outPut = objI.GetTaskCopyDetailF(gtd);
+                            //   outPut = objI.GetTaskCopyDetailF(gtd);
                         }; break;
                     case "RemoveTaskCopyM":
                         {
                             RemoveTaskCopyM gtd = Newtonsoft.Json.JsonConvert.DeserializeObject<RemoveTaskCopyM>(notifyJson);
-                            outPut = objI.RemoveTaskCopyF(gtd);
+                            //outPut = objI.RemoveTaskCopyF(gtd);
                         }; break;
                     case "LookForTaskCopy":
                         {
@@ -469,11 +470,16 @@ namespace HouseManager5_0
                             ExitObj obj = Newtonsoft.Json.JsonConvert.DeserializeObject<ExitObj>(notifyJson);
                             outPut = objI.ExitF(obj);
                         }; break;
-                    case "GetOnLineState": 
+                    case "GetOnLineState":
                         {
                             GetOnLineState obj = Newtonsoft.Json.JsonConvert.DeserializeObject<GetOnLineState>(notifyJson);
                             outPut = objI.GetOnLineStateF(obj);
-                        };break;
+                        }; break;
+                    case "WhetherGoNext":
+                        {
+                            WhetherGoNext wgn = Newtonsoft.Json.JsonConvert.DeserializeObject<WhetherGoNext>(notifyJson);
+                            outPut = objI.WhetherGoNextF(wgn);
+                        }; break;
                         //case "CopyTaskDisplay": 
                         //    {
 

@@ -3,6 +3,11 @@
     "WSL": {
       "commandName": "WSL2",
       "distributionName": ""
+    },
+    "配置文件 1": {
+      "commandName": "Executable",
+      "executablePath": "E:\\Project\\HouseManager5_0\\VRPServer\\ConsoleTestAPP\\bin\\Debug\\net6.0\\ConsoleTestAPP.exe",
+      "nativeDebugging": true
     }
   }
 }

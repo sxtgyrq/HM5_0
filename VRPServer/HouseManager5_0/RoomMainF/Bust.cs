@@ -7,12 +7,13 @@ namespace HouseManager5_0.RoomMainF
 {
     public partial class RoomMain : interfaceOfHM.Bust
     {
-        public void BustChangedF(RoleInGame role, bool bustValue, ref List<string> msgsWithUrl)
+        public void BustChangedF(Player role, bool bustValue, ref List<string> msgsWithUrl)
         {
-            // if (role.playerType == RoleInGame.PlayerType.player)
-            foreach (var item in this._Players)
+            // if (role.playerType == Player.PlayerType.player)
+            var group = role.Group;
+            foreach (var item in group._PlayerInGroup)
             {
-                if (item.Value.playerType == RoleInGame.PlayerType.player)
+                if (item.Value.playerType == Player.PlayerType.player)
                 {
                     var player = (Player)item.Value;
                     msgsWithUrl.Add(player.FromUrl);

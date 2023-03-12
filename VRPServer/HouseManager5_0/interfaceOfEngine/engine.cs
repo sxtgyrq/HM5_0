@@ -15,7 +15,7 @@ namespace HouseManager5_0.interfaceOfEngine
     }
     interface webnotify : sendMsg, wait
     {
-        void WebNotify(RoleInGame player, string Msg);
+        void WebNotify(Player player, string Msg);
     }
 
     interface sendMsg
@@ -26,8 +26,8 @@ namespace HouseManager5_0.interfaceOfEngine
 
     interface tryCatchAction
     {
-        RoomMainF.RoomMain.commandWithTime.ReturningOjb maindDo(RoleInGame player, Car car, Command c, GetRandomPos grp, ref List<string> notifyMsg, out RoomMainF.RoomMain.MileResultReason mrr);
-        void failedThenDo(Car car, RoleInGame player, Command c, GetRandomPos grp, ref List<string> notifyMsg);
+        RoomMainF.RoomMain.commandWithTime.ReturningOjb maindDo(Player player, Car car, Command c, GetRandomPos grp, ref List<string> notifyMsg, out RoomMainF.RoomMain.MileResultReason mrr);
+        void failedThenDo(Car car, Player player, Command c, GetRandomPos grp, ref List<string> notifyMsg);
         /// <summary>
         /// 返回为真/假，但不一定要执行返回
         /// </summary>
@@ -43,7 +43,7 @@ namespace HouseManager5_0.interfaceOfEngine
         /// <param name="car"></param>
         /// <param name="c"></param>
         /// <returns></returns>
-        bool carAbilitConditionsOk(RoleInGame player, Car car, Command c, GetRandomPos grp);
+        bool carAbilitConditionsOk(Player player, Car car, Command c, GetRandomPos grp);
         //  Command get
     }
 

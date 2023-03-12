@@ -14,44 +14,45 @@ namespace HouseManager5_0
 
         public bool OrderToUpdateLevel(string key, string addr, string signature)
         {
+            throw new Exception();
             // ots.
-            List<string> notifyMsg = new List<string>();
-            if (BitCoin.Sign.checkSign(signature, key, addr))
-            {
+            //List<string> notifyMsg = new List<string>();
+            //if (BitCoin.Sign.checkSign(signature, key, addr))
+            //{
 
-                lock (that.PlayerLock)
-                    if (that._Players.ContainsKey(key))
-                    {
-                        if (!that._Players[key].Bust)
-                        {
-                            var role = that._Players[key];
-                            if (role.playerType == RoleInGame.PlayerType.player)
-                            {
-                                var player = (Player)role;
-                                if (string.IsNullOrEmpty(player.levelObj.BtcAddr))
-                                {
-                                    player.levelObj.SetAddr(addr);
-                                }
-                                else if (player.levelObj.BtcAddr == addr)
-                                {
-                                }
-                                else
-                                {
-                                    this.WebNotify(player, $"只能设置一次积分存储地址，且你的积分存储地址为{player.levelObj.BtcAddr}");
-                                    return false;
-                                }
-                                this.synchronize(player, ref notifyMsg);
-                            }
-                        }
-                    }
-            }
-            else
-            {
-                return false;
-                //Consol.WriteLine($"检验签名失败,{ots.Key},{ots.signature},{ots.address}");
-            }
-            this.sendSeveralMsgs(notifyMsg); 
-            return true;
+            //    lock (that.PlayerLock)
+            //        if (that._Players.ContainsKey(key))
+            //        {
+            //            if (!that._Players[key].Bust)
+            //            {
+            //                var role = that._Players[key];
+            //                if (role.playerType == Player.PlayerType.player)
+            //                {
+            //                    var player = (Player)role;
+            //                    if (string.IsNullOrEmpty(player.levelObj.BtcAddr))
+            //                    {
+            //                        player.levelObj.SetAddr(addr);
+            //                    }
+            //                    else if (player.levelObj.BtcAddr == addr)
+            //                    {
+            //                    }
+            //                    else
+            //                    {
+            //                        this.WebNotify(player, $"只能设置一次积分存储地址，且你的积分存储地址为{player.levelObj.BtcAddr}");
+            //                        return false;
+            //                    }
+            //                    this.synchronize(player, ref notifyMsg);
+            //                }
+            //            }
+            //        }
+            //}
+            //else
+            //{
+            //    return false;
+            //    //Consol.WriteLine($"检验签名失败,{ots.Key},{ots.signature},{ots.address}");
+            //}
+            //this.sendSeveralMsgs(notifyMsg); 
+            //return true;
         }
 
         private void synchronize(Player player, ref List<string> notifyMsg)
@@ -63,7 +64,7 @@ namespace HouseManager5_0
                 player.levelObj.SetLevel(result.Level);
                 player.levelObj.SetTimeStamp(result.TimeStampStr);
 
-               
+
             }
             else if (remarkI == DalOfAddress.LevelForSave.UpdateResultInDB.WrongTimeStr)
             {
@@ -76,9 +77,9 @@ namespace HouseManager5_0
 
         }
 
-        public void OrderToUpdateLevel(RoleInGame role, ref List<string> notifyMsgs)
+        public void OrderToUpdateLevel(Player role, ref List<string> notifyMsgs)
         {
-            if (role.playerType == RoleInGame.PlayerType.player)
+            if (role.playerType == Player.PlayerType.player)
             {
                 var player = (Player)role;
                 if (!string.IsNullOrEmpty(player.levelObj.BtcAddr))

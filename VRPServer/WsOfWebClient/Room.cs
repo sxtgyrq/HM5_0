@@ -106,10 +106,16 @@ namespace WsOfWebClient
             }
             // var  
             var key = CommonClass.Random.GetMD5HashFromStr(ConnectInfo.HostIP + websocketID + DateTime.Now.ToString("yyyyMMddHHmmssffff") + ConnectInfo.tcpServerPort + "_" + ConnectInfo.webSocketPort);
+            //var mid = key.Substring(7, 24);
+            //key = $"nyrq123{mid}2";//前7为是log，中间为GroupID，
+            //key = "nyrq123" + key;
+            //key = key.Substring(0, 31);
+            // key=key
             var roomUrl = roomUrls[roomIndex];
             return new PlayerAdd_V2()
             {
                 Key = key,
+                GroupKey = key,
                 c = "PlayerAdd_V2",
                 FromUrl = $"{ConnectInfo.HostIP}:{ConnectInfo.tcpServerPort}",// ConnectInfo.ConnectedInfo + "/notify",
                 RoomIndex = roomIndex,
@@ -173,6 +179,7 @@ namespace WsOfWebClient
             {
                 WriteSession(roomInfo, webSocket);
                 s.roomIndex = roomIndex;
+                s.GroupKey = roomInfo.GroupKey;
                 s = setOnLine(s, webSocket);
 
             }
@@ -393,8 +400,26 @@ namespace WsOfWebClient
                 {
                     return null;
                 }
-                ModelConfig.directionArrowIcon da = new ModelConfig.directionArrowIcon();
+                //ModelConfig.directionArrowIcon da = new ModelConfig.directionArrowIcon();
+                //if (SetModelCopy(da, webSocket)) { }
+                //else
+                //{
+                //    return null;
+                //}
+                ModelConfig.directionArrowIconA da = new ModelConfig.directionArrowIconA();
                 if (SetModelCopy(da, webSocket)) { }
+                else
+                {
+                    return null;
+                }
+                ModelConfig.directionArrowIconB db = new ModelConfig.directionArrowIconB();
+                if (SetModelCopy(db, webSocket)) { }
+                else
+                {
+                    return null;
+                }
+                ModelConfig.directionArrowIconC dc = new ModelConfig.directionArrowIconC();
+                if (SetModelCopy(dc, webSocket)) { }
                 else
                 {
                     return null;
@@ -1132,12 +1157,13 @@ namespace WsOfWebClient
             }
             return "";
         }
-        internal static async Task<string> view(State s, ViewAngle va)
+        internal static string view(State s, ViewAngle va)
         {
             var ms = new View()
             {
                 c = "View",
                 Key = s.Key,
+                GroupKey = s.GroupKey,
                 //car = "car" + m.Groups["car"].Value,
                 rotationY = va.rotationY,
             };
@@ -1330,6 +1356,7 @@ namespace WsOfWebClient
                     {
                         c = "OrderToReturn",
                         Key = s.Key,
+                        GroupKey = s.GroupKey,
                         //  car = "car" + m.Groups["car"].Value,
                     };
                     var msg = Newtonsoft.Json.JsonConvert.SerializeObject(getPosition);
@@ -1479,7 +1506,8 @@ namespace WsOfWebClient
             var getPosition = new GetPosition()
             {
                 c = "GetPosition",
-                Key = s.Key
+                Key = s.Key,
+                GroupKey = s.GroupKey
             };
             var msg = Newtonsoft.Json.JsonConvert.SerializeObject(getPosition);
             var result = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
@@ -1713,12 +1741,13 @@ namespace WsOfWebClient
         }
         internal static string setPromote(State s, Promote promote)
         {
-            if (promote.pType == "mile" || promote.pType == "business" || promote.pType == "volume" || promote.pType == "speed")
+            if (promote.pType == "mile" || promote.pType == "volume" || promote.pType == "speed")
             {
                 var getPosition = new SetPromote()
                 {
                     c = "SetPromote",
                     Key = s.Key,
+                    GroupKey = s.GroupKey,
                     pType = promote.pType
                 };
                 var msg = Newtonsoft.Json.JsonConvert.SerializeObject(getPosition);
@@ -1731,7 +1760,8 @@ namespace WsOfWebClient
             var getPosition = new GetOnLineState
             {
                 c = "GetOnLineState",
-                Key = s.Key
+                Key = s.Key,
+                GroupKey = s.GroupKey,
             };
             var msg = Newtonsoft.Json.JsonConvert.SerializeObject(getPosition);
             Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
@@ -1782,6 +1812,7 @@ namespace WsOfWebClient
                         {
                             c = "SetCollect",
                             Key = s.Key,
+                            GroupKey = s.GroupKey,
                             //car = "car" + m.Groups["car"].Value,
                             cType = collect.cType,
                             fastenpositionID = collect.fastenpositionID,
@@ -1794,7 +1825,18 @@ namespace WsOfWebClient
             }
             return "";
         }
-
+        internal static void WhetherGoNextF(State s, WhetherGoNext wgn)
+        {
+            CommonClass.WhetherGoNext gfs = new CommonClass.WhetherGoNext()
+            {
+                c = "WhetherGoNext",
+                Key = s.Key,
+                GroupKey = s.GroupKey,
+                cType = wgn.cType
+            };
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gfs);
+            Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+        }
         internal static State GetFightSituation(State s, WebSocket webSocket)
         {
             string respon;
@@ -1952,5 +1994,6 @@ namespace WsOfWebClient
             var result = Startup.sendInmationToUrlAndGetRes($"{teamUrl}", msg);
             return result;
         }
+
     }
 }

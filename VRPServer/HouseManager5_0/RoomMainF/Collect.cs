@@ -19,45 +19,37 @@ namespace HouseManager5_0.RoomMainF
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        private void CheckCollectState(string key)
+        private void CheckCollectState(string key, string groupKey)
         {
-
-            //string url = "";
-            //string sendMsg = "";
-            List<string> sendMsgs = new List<string>();
-            lock (this.PlayerLock)
-                if (this._Players.ContainsKey(key))
-                    for (var i = 0; i < 38; i++)
-                    {
-                        if (this._Players[key].CollectPosition[i] == this._collectPosition[i])
-                        { }
-                        else
-                        {
-                            if (this._Players[key].playerType == RoleInGame.PlayerType.player)
-                            {
-                                var infomation = Program.rm.GetCollectInfomation(((Player)this._Players[key]).WebSocketID, i);
-                                var url = ((Player)this._Players[key]).FromUrl;
-                                var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(infomation);
-                                sendMsgs.Add(url);
-                                sendMsgs.Add(sendMsg);
-                            }
-                            this._Players[key].CollectPosition[i] = this._collectPosition[i];
-                        }
-                    }
-
-            Startup.sendSeveralMsgs(sendMsgs); 
-        }
-        private BradCastCollectInfoDetail_v2 GetCollectInfomation(int webSocketID, int collectIndex)
-        {
-            var obj = new BradCastCollectInfoDetail_v2
+            if (this._Groups.ContainsKey(groupKey))
             {
-                c = "BradCastCollectInfoDetail_v2",
-                WebSocketID = webSocketID,
-                Fp = Program.dt.GetFpByIndex(this._collectPosition[collectIndex]),
-                collectMoney = this.GetCollectReWard(collectIndex),
-                collectIndex = collectIndex
-            };
-            return obj;
+                var group = this._Groups[groupKey];
+                group.CheckCollectState(key);
+            }
+            //  throw new Exception();
+
+            //List<string> sendMsgs = new List<string>();
+            //lock (this.PlayerLock)
+            //    if (this._Players.ContainsKey(key))
+            //        for (var i = 0; i < 38; i++)
+            //        {
+            //            if (this._Players[key].CollectPosition[i] == this._collectPosition[i])
+            //            { }
+            //            else
+            //            {
+            //                if (this._Players[key].playerType == Player.PlayerType.player)
+            //                {
+            //                    var infomation = Program.rm.GetCollectInfomation(((Player)this._Players[key]).WebSocketID, i);
+            //                    var url = ((Player)this._Players[key]).FromUrl;
+            //                    var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(infomation);
+            //                    sendMsgs.Add(url);
+            //                    sendMsgs.Add(sendMsg);
+            //                }
+            //                this._Players[key].CollectPosition[i] = this._collectPosition[i];
+            //            }
+            //        }
+
+            //Startup.sendSeveralMsgs(sendMsgs); 
         }
 
         public int GetCollectReWard(int collectIndex)
@@ -66,12 +58,12 @@ namespace HouseManager5_0.RoomMainF
             {
                 case 0:
                     {
-                        return 100;
+                        return 1;
                     };
                 case 1:
                 case 2:
                     {
-                        return 50;
+                        return 1;
                     }
                 case 3:
                 case 4:
@@ -79,7 +71,7 @@ namespace HouseManager5_0.RoomMainF
                 case 6:
                 case 7:
                     {
-                        return 20;
+                        return 1;
                     }
                 case 8:
                 case 9:
@@ -92,7 +84,7 @@ namespace HouseManager5_0.RoomMainF
                 case 16:
                 case 17:
                     {
-                        return 10;
+                        return 1;
                     }
                 case 18:
                 case 19:
@@ -114,20 +106,24 @@ namespace HouseManager5_0.RoomMainF
                 case 35:
                 case 36:
                 case 37:
-                    { return 5; }
+                    { return 1; }
                 default:
                     {
                         throw new NotImplementedException();
                     }
             }
         }
-        public void CheckAllPlayersCollectState()
+
+        public void CheckAllPlayersCollectState(GroupClassF.GroupClass group)
         {
-            var all = getGetAllRoles();
-            for (var i = 0; i < all.Count; i++)
-            {
-                CheckCollectState(all[i].Key);
-            }
+            group.CheckAllPlayersCollectState();
+            //throw new Exception("");
+
+            //var all = getGetAllRoles();
+            //for (var i = 0; i < all.Count; i++)
+            //{
+            //    CheckCollectState(all[i].Key);
+            //}
         }
         public enum MileResultReason
         {
@@ -145,7 +141,8 @@ namespace HouseManager5_0.RoomMainF
             CanNotReturn,
             MoneyIsNotEnougt,
             NearestIsMoneyWhenPromote,
-            NearestIsMoneyWhenAttack
+            NearestIsMoneyWhenAttack,
+            NotHasGroup
         }
         public string updateCollect(SetCollect sc, GetRandomPos grp)
         {
@@ -162,15 +159,17 @@ namespace HouseManager5_0.RoomMainF
         /// <returns>返回的值为0至37的排序</returns>
         internal List<int> getCollectPositionsByDistance(FastonPosition target, GetRandomPos grp)
         {
-            List<int> positions = new List<int>();
-            for (int i = 0; i < 38; i++)
-            {
-                positions.Add(i);
-                //var collectP = Program.dt.GetFpByIndex(this._collectPosition[i]);
-                //positions.Add(collectP);
-            }
-            positions = (from item in positions orderby CommonClass.Geography.getLengthOfTwoPoint.GetDistance(target.Latitde, target.Longitude, target.Height, grp.GetFpByIndex(this._collectPosition[item]).Latitde, grp.GetFpByIndex(this._collectPosition[item]).Longitude, grp.GetFpByIndex(this._collectPosition[item]).Height) select item).ToList();
-            return positions;
+            throw new Exception();
+
+            //List<int> positions = new List<int>();
+            //for (int i = 0; i < 38; i++)
+            //{
+            //    positions.Add(i);
+            //    //var collectP = Program.dt.GetFpByIndex(this._collectPosition[i]);
+            //    //positions.Add(collectP);
+            //}
+            //positions = (from item in positions orderby CommonClass.Geography.getLengthOfTwoPoint.GetDistance(target.Latitde, target.Longitude, target.Height, grp.GetFpByIndex(this._collectPosition[item]).Latitde, grp.GetFpByIndex(this._collectPosition[item]).Longitude, grp.GetFpByIndex(this._collectPosition[item]).Height) select item).ToList();
+            //return positions;
         }
 
         //private long getCollectReWardByReward(int target)
@@ -193,7 +192,7 @@ namespace HouseManager5_0.RoomMainF
         ///// <param name="fp1"></param>
         ///// <param name="sc"></param>
         ///// <param name="goPath"></param>
-        //private void EditCarStateWhenCollectStartOK(RoleInGame player, ref Car car, int to, Model.FastonPosition fp1, SetCollect sc, List<Model.MapGo.nyrqPosition> goPath, ref List<string> notifyMsg, out int startT)
+        //private void EditCarStateWhenCollectStartOK(Player player, ref Car car, int to, Model.FastonPosition fp1, SetCollect sc, List<Model.MapGo.nyrqPosition> goPath, ref List<string> notifyMsg, out int startT)
         //{
 
         //    car.targetFpIndex = to;//A.更改小车目标，在其他地方引用。
@@ -241,12 +240,14 @@ namespace HouseManager5_0.RoomMainF
 
         private int getCollectPositionTo(int collectIndex)
         {
-            if (collectIndex >= 0 && collectIndex < 38)
-            {
-                return this._collectPosition[collectIndex];
-            }
-            else
-                throw new Exception("parameter is wrong!");
+            throw new Exception();
+
+            //if (collectIndex >= 0 && collectIndex < 38)
+            //{
+            //    return this._collectPosition[collectIndex];
+            //}
+            //else
+            //    throw new Exception("parameter is wrong!");
         }
 
 

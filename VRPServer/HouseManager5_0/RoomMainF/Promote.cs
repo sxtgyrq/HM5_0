@@ -1,4 +1,5 @@
 ﻿using CommonClass;
+using HouseManager5_0.GroupClassF;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,10 @@ namespace HouseManager5_0.RoomMainF
     {
         public void SetLookForPromote(GetRandomPos gp)
         {
-            this.promoteMilePosition = GetRandomPosition(true, gp);
-            this.promoteBusinessPosition = GetRandomPosition(true, gp);
-            this.promoteVolumePosition = GetRandomPosition(true, gp);
-            this.promoteSpeedPosition = GetRandomPosition(true, gp);
+            //this.promoteMilePosition = GetRandomPosition(true, gp);
+            //this.promoteBusinessPosition = GetRandomPosition(true, gp);
+            //this.promoteVolumePosition = GetRandomPosition(true, gp);
+            //this.promoteSpeedPosition = GetRandomPosition(true, gp);
         }
 
         public string updatePromote(SetPromote sp, GetRandomPos grp)
@@ -31,7 +32,7 @@ namespace HouseManager5_0.RoomMainF
         ///// <param name="car"></param>
         ///// <param name="pType"></param>
         ///// <returns></returns>
-        //public bool giveMoneyFromPlayerToCarForPromoting(RoleInGame player, Car car, string pType, ref List<string> notifyMsg)
+        //public bool giveMoneyFromPlayerToCarForPromoting(Player player, Car car, string pType, ref List<string> notifyMsg)
         //{
         //    var needMoney = this.promotePrice[pType];
         //    if (player.MoneyToPromote < needMoney)
@@ -59,7 +60,7 @@ namespace HouseManager5_0.RoomMainF
 
 
 
-        //private void EditCarStateWhenPromoteStartOK(RoleInGame role, ref Car car, int to, Model.FastonPosition fp1, int to2, SetPromote sp, List<Model.MapGo.nyrqPosition> goPath, ref List<string> nofityMsgs, out int startT)
+        //private void EditCarStateWhenPromoteStartOK(Player role, ref Car car, int to, Model.FastonPosition fp1, int to2, SetPromote sp, List<Model.MapGo.nyrqPosition> goPath, ref List<string> nofityMsgs, out int startT)
         //{
         //    car.targetFpIndex = to;//A.更改小车目标，在其他地方引用。
         //                           //  car.changeState++;//B.更改状态用去前台更新动画    
@@ -133,81 +134,87 @@ namespace HouseManager5_0.RoomMainF
             {
                 this._pType = pType;
             }
-            public int GetFPIndex()
+            public int GetFPIndex(GroupClass group)
             {
-                return Program.rm.GetPromotePositionTo(this._pType);
+                //  if (this._)
+                return Program.rm.GetPromotePositionTo(this._pType, group);
                 //  throw new NotImplementedException();
             }
         }
-        public int getPlayerClosestPositionRankNum(RoleInGame player, Car car, RoleInGame victim)
+        public int getPlayerClosestPositionRankNum(Player player, Car car, Player victim)
         {
             return getAttackerClosestPositionRankNum(player, car, victim);
         }
-        int getAttackerClosestPositionRankNum(RoleInGame player, Car car, interfaceOfHM.GetFPIndex getF)
+        int getAttackerClosestPositionRankNum(Player player, Car car, interfaceOfHM.GetFPIndex getF)
         {
-            int rank = 0;
-            if (car.state == CarState.waitAtBaseStation)
-            {
-                double distanceToDiamond;
-                var from = Program.dt.GetFpByIndex(getF.GetFPIndex());
-                {
-                    var fpTo = Program.dt.GetFpByIndex(player.StartFPIndex); ;//this.GetPromotePositionTo(pType);
+            throw new Exception();
 
-                    distanceToDiamond = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(from.Latitde, from.Longitude, from.Height, fpTo.Latitde, fpTo.Longitude, fpTo.Height);
-                }
-                foreach (var item in this._collectPosition)
-                {
-                    //  var from = Program.dt.GetFpByIndex(player.StartFPIndex);
-                    var fpTo = Program.dt.GetFpByIndex(item.Value);
-                    var distanceToMoney = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(from.Latitde, from.Longitude, from.Height, fpTo.Latitde, fpTo.Longitude, fpTo.Height);
-                    if (distanceToMoney <= distanceToDiamond)
-                    {
-                        rank++;
-                    }
-                }
-                return rank;
-            }
-            else if (car.state == CarState.waitOnRoad)
-            {
-                var from = Program.dt.GetFpByIndex(getF.GetFPIndex());
-                double distanceToDiamond;
-                {
-                    var fpTo = Program.dt.GetFpByIndex(car.targetFpIndex);
-                    distanceToDiamond = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(from.Latitde, from.Longitude, from.Height, fpTo.Latitde, fpTo.Longitude, fpTo.Height);
-                }
-                foreach (var item in this._collectPosition)
-                {
-                    var fpTo = Program.dt.GetFpByIndex(item.Value);
-                    var distanceToMoney = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(from.Latitde, from.Longitude, from.Height, fpTo.Latitde, fpTo.Longitude, fpTo.Height);
-                    if (distanceToMoney <= distanceToDiamond)
-                    {
-                        rank++;
-                    }
-                }
-                return rank;
-            }
-            else
-            {
-                throw new Exception("非法调用");
-            }
+            //int rank = 0;
+            //if (car.state == CarState.waitAtBaseStation)
+            //{
+            //    double distanceToDiamond;
+            //    var from = Program.dt.GetFpByIndex(getF.GetFPIndex());
+            //    {
+            //        var fpTo = Program.dt.GetFpByIndex(player.StartFPIndex); ;//this.GetPromotePositionTo(pType);
+
+            //        distanceToDiamond = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(from.Latitde, from.Longitude, from.Height, fpTo.Latitde, fpTo.Longitude, fpTo.Height);
+            //    }
+            //    foreach (var item in this._collectPosition)
+            //    {
+            //        //  var from = Program.dt.GetFpByIndex(player.StartFPIndex);
+            //        var fpTo = Program.dt.GetFpByIndex(item.Value);
+            //        var distanceToMoney = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(from.Latitde, from.Longitude, from.Height, fpTo.Latitde, fpTo.Longitude, fpTo.Height);
+            //        if (distanceToMoney <= distanceToDiamond)
+            //        {
+            //            rank++;
+            //        }
+            //    }
+            //    return rank;
+            //}
+            //else if (car.state == CarState.waitOnRoad)
+            //{
+            //    var from = Program.dt.GetFpByIndex(getF.GetFPIndex());
+            //    double distanceToDiamond;
+            //    {
+            //        var fpTo = Program.dt.GetFpByIndex(car.targetFpIndex);
+            //        distanceToDiamond = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(from.Latitde, from.Longitude, from.Height, fpTo.Latitde, fpTo.Longitude, fpTo.Height);
+            //    }
+            //    foreach (var item in this._collectPosition)
+            //    {
+            //        var fpTo = Program.dt.GetFpByIndex(item.Value);
+            //        var distanceToMoney = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(from.Latitde, from.Longitude, from.Height, fpTo.Latitde, fpTo.Longitude, fpTo.Height);
+            //        if (distanceToMoney <= distanceToDiamond)
+            //        {
+            //            rank++;
+            //        }
+            //    }
+            //    return rank;
+            //}
+            //else
+            //{
+            //    throw new Exception("非法调用");
+            //}
         }
-        public bool theNearestToDiamondIsCarNotMoney(RoleInGame player, Car car, string pType, GetRandomPos grp, out OssModel.FastonPosition fp)
+        public bool theNearestToDiamondIsCarNotMoney(Player player, Car car, string pType, GetRandomPos grp, out OssModel.FastonPosition fp)
         {
 
             return theNearestToObjIsCarNotMoney(player, car, new PromoteObj(pType), grp, out fp);
         }
-        bool theNearestToObjIsCarNotMoney(RoleInGame player, Car car, interfaceOfHM.GetFPIndex getF, GetRandomPos grp, out OssModel.FastonPosition fp)
+        bool theNearestToObjIsCarNotMoney(Player player, Car car, interfaceOfHM.GetFPIndex getF, GetRandomPos grp, out OssModel.FastonPosition fp)
         {
+            // throw new Exception();
+            var group = player.Group;
+
             fp = null;
             if (car.state == CarState.waitAtBaseStation)
             {
                 double distanceToDiamond;
-                var from = grp.GetFpByIndex(getF.GetFPIndex());
+                var from = grp.GetFpByIndex(getF.GetFPIndex(player.Group));
                 {
                     var fpTo = grp.GetFpByIndex(player.StartFPIndex); ;//this.GetPromotePositionTo(pType);
                     distanceToDiamond = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(from.Latitde, from.Longitude, from.Height, fpTo.Latitde, fpTo.Longitude, fpTo.Height);
                 }
-                foreach (var item in this._collectPosition)
+                foreach (var item in group._collectPosition)
                 {
                     //  var from = Program.dt.GetFpByIndex(player.StartFPIndex);
                     var fpTo = grp.GetFpByIndex(item.Value);
@@ -227,13 +234,13 @@ namespace HouseManager5_0.RoomMainF
             }
             else if (car.state == CarState.waitOnRoad)
             {
-                var from = grp.GetFpByIndex(getF.GetFPIndex());
+                var from = grp.GetFpByIndex(getF.GetFPIndex(player.Group));
                 double distanceToDiamond;
                 {
                     var fpTo = grp.GetFpByIndex(car.targetFpIndex);
                     distanceToDiamond = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(from.Latitde, from.Longitude, from.Height, fpTo.Latitde, fpTo.Longitude, fpTo.Height);
                 }
-                foreach (var item in this._collectPosition)
+                foreach (var item in group._collectPosition)
                 {
                     var fpTo = grp.GetFpByIndex(item.Value);
                     var distanceToMoney = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(from.Latitde, from.Longitude, from.Height, fpTo.Latitde, fpTo.Longitude, fpTo.Height);
@@ -252,18 +259,18 @@ namespace HouseManager5_0.RoomMainF
             }
         }
 
-        public bool theNearestToPlayerIsCarNotMoney(RoleInGame player, Car car, RoleInGame victim, GetRandomPos grp, out OssModel.FastonPosition fp)
+        public bool theNearestToPlayerIsCarNotMoney(Player player, Car car, Player victim, GetRandomPos grp, out OssModel.FastonPosition fp)
         {
             return theNearestToObjIsCarNotMoney(player, car, victim, grp, out fp);
         }
-        public int GetPromotePositionTo(string pType)
+        public int GetPromotePositionTo(string pType, GroupClass group)
         {
             switch (pType)
             {
-                case "mile": { return this.promoteMilePosition; }; ;
-                case "business": { return this.promoteBusinessPosition; };
-                case "volume": { return this.promoteVolumePosition; };
-                case "speed": { return this.promoteSpeedPosition; };
+                case "mile": { return group.promoteMilePosition; }; ;
+                // case "business": { return this.promoteBusinessPosition; };
+                case "volume": { return group.promoteVolumePosition; };
+                case "speed": { return group.promoteSpeedPosition; };
                 default:
                     {
                         throw new Exception($"{pType}没有定义");
@@ -280,45 +287,51 @@ namespace HouseManager5_0.RoomMainF
         /// </summary>
         /// <param name="pType"></param>
         /// <returns></returns>
-        public void CheckAllPlayersPromoteState(string pType)
+        public void CheckAllPlayersPromoteState(string pType, GroupClass group)
         {
-            var all = getGetAllRoles();
+            var all = group.getGetAllRoles();
             for (var i = 0; i < all.Count; i++)
             {
-                CheckPromoteState(all[i].Key, pType);
+                CheckPromoteState(all[i].Key, group.GroupKey, pType);
             }
         }
 
-        private void CheckPromoteState(string key, string promoteType)
+        private void CheckPromoteState(string key, string groupKey, string promoteType)
         {
-            string url = "";
-            string sendMsg = "";
-            lock (this.PlayerLock)
-                if (this._Players.ContainsKey(key))
-                    if (this._Players[key].playerType == RoleInGame.PlayerType.player)
-                        if (((Player)this._Players[key]).PromoteState[promoteType] == this.getPromoteState(promoteType))
-                        {
-                        }
-                        else
-                        {
-                            var infomation = Program.rm.GetPromoteInfomation(((Player)this._Players[key]).WebSocketID, promoteType);
-                            url = ((Player)this._Players[key]).FromUrl;
-                            sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(infomation);
-                            ((Player)this._Players[key]).PromoteState[promoteType] = this.getPromoteState(promoteType);
-                        }
-            if (!string.IsNullOrEmpty(url))
+            if (this._Groups.ContainsKey(groupKey))
             {
-                Startup.sendSingleMsg(url, sendMsg);
+                var group = this._Groups[groupKey];
+                group.CheckPromoteState(key, promoteType);
             }
+            //string url = "";
+            //string sendMsg = "";
+            //lock (this.PlayerLock)
+            //    if (this._Players.ContainsKey(key))
+            //        if (this._Players[key].playerType == Player.PlayerType.player)
+            //            if (((Player)this._Players[key]).PromoteState[promoteType] == this.getPromoteState(promoteType))
+            //            {
+            //            }
+            //            else
+            //            {
+            //                var infomation = Program.rm.GetPromoteInfomation(((Player)this._Players[key]).WebSocketID, promoteType);
+            //                url = ((Player)this._Players[key]).FromUrl;
+            //                sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(infomation);
+            //                ((Player)this._Players[key]).PromoteState[promoteType] = this.getPromoteState(promoteType);
+            //            }
+            //if (!string.IsNullOrEmpty(url))
+            //{
+            //    Startup.sendSingleMsg(url, sendMsg);
+            //}
         }
 
 
 
         public void DiamondInCarChanged(Player player, Car car, ref List<string> notifyMsgs, string value)
         {
-            foreach (var item in this._Players)
+
+            foreach (var item in player.Group._PlayerInGroup)
             {
-                if (item.Value.playerType == RoleInGame.PlayerType.player)
+                if (item.Value.playerType == Player.PlayerType.player)
                 {
                     var playerNeedToTold = (Player)item.Value;
                     var obj = new BradCastPromoteDiamondInCar
@@ -335,104 +348,81 @@ namespace HouseManager5_0.RoomMainF
             }
         }
 
-        private BradCastPromoteInfoDetail GetPromoteInfomation(int webSocketID, string resultType)
+        public BradCastPromoteInfoDetail GetPromoteInfomation(int webSocketID, string resultType, GroupClass group)
         {
-            switch (resultType)
-            {
-                case "mile":
-                    {
-                        var obj = new BradCastPromoteInfoDetail
-                        {
-                            c = "BradCastPromoteInfoDetail",
-                            WebSocketID = webSocketID,
-                            resultType = resultType,
-                            Fp = Program.dt.GetFpByIndex(this.promoteMilePosition),
-                            Price = this.promotePrice[resultType]
-                        };
-                        return obj;
-                    };
-                case "business":
-                    {
-                        var obj = new BradCastPromoteInfoDetail
-                        {
-                            c = "BradCastPromoteInfoDetail",
-                            WebSocketID = webSocketID,
-                            resultType = resultType,
-                            Fp = Program.dt.GetFpByIndex(this.promoteBusinessPosition),
-                            Price = this.promotePrice[resultType]
-                        };
-                        return obj;
-                    };
-                case "volume":
-                    {
-                        var obj = new BradCastPromoteInfoDetail
-                        {
-                            c = "BradCastPromoteInfoDetail",
-                            WebSocketID = webSocketID,
-                            resultType = resultType,
-                            Fp = Program.dt.GetFpByIndex(this.promoteVolumePosition),
-                            Price = this.promotePrice[resultType]
-                        };
-                        return obj;
-                    };
-                case "speed":
-                    {
-                        var obj = new BradCastPromoteInfoDetail
-                        {
-                            c = "BradCastPromoteInfoDetail",
-                            WebSocketID = webSocketID,
-                            resultType = resultType,
-                            Fp = Program.dt.GetFpByIndex(this.promoteSpeedPosition),
-                            Price = this.promotePrice[resultType]
-                        };
-                        return obj;
-                    };
-                default: { }; break;
-            }
-            throw new Exception("");
-        }
-        public int getPromoteState(string pType)
-        {
-            switch (pType)
-            {
-                case "mile":
-                    {
-                        return this.promoteMilePosition;
-                    }
-                case "business":
-                    {
-                        return this.promoteBusinessPosition;
-                    }; ;
-                case "volume":
-                    {
-                        return this.promoteVolumePosition;
-                    };
-                case "speed":
-                    {
-                        return this.promoteSpeedPosition;
-                    };
-                default:
-                    {
-                        throw new Exception($"{pType}是什么类型");
-                    };
-            }
+            return group.GetPromoteInfomation(webSocketID, resultType);
+            //switch (resultType)
+            //{
+            //    case "mile":
+            //        {
+            //            var obj = new BradCastPromoteInfoDetail
+            //            {
+            //                c = "BradCastPromoteInfoDetail",
+            //                WebSocketID = webSocketID,
+            //                resultType = resultType,
+            //                Fp = Program.dt.GetFpByIndex(this.promoteMilePosition),
+            //                Price = this.promotePrice[resultType]
+            //            };
+            //            return obj;
+            //        };
+            //    case "business":
+            //        {
+            //            var obj = new BradCastPromoteInfoDetail
+            //            {
+            //                c = "BradCastPromoteInfoDetail",
+            //                WebSocketID = webSocketID,
+            //                resultType = resultType,
+            //                Fp = Program.dt.GetFpByIndex(this.promoteBusinessPosition),
+            //                Price = this.promotePrice[resultType]
+            //            };
+            //            return obj;
+            //        };
+            //    case "volume":
+            //        {
+            //            var obj = new BradCastPromoteInfoDetail
+            //            {
+            //                c = "BradCastPromoteInfoDetail",
+            //                WebSocketID = webSocketID,
+            //                resultType = resultType,
+            //                Fp = Program.dt.GetFpByIndex(this.promoteVolumePosition),
+            //                Price = this.promotePrice[resultType]
+            //            };
+            //            return obj;
+            //        };
+            //    case "speed":
+            //        {
+            //            var obj = new BradCastPromoteInfoDetail
+            //            {
+            //                c = "BradCastPromoteInfoDetail",
+            //                WebSocketID = webSocketID,
+            //                resultType = resultType,
+            //                Fp = Program.dt.GetFpByIndex(this.promoteSpeedPosition),
+            //                Price = this.promotePrice[resultType]
+            //            };
+            //            return obj;
+            //        };
+            //    default: { }; break;
+            //}
+            //throw new Exception("");
         }
 
-        public void setPromtePosition(string changeType)
+
+        public void setPromtePosition(string changeType, GroupClass group)
         {
-            if (changeType == "mile")
-                this.promoteMilePosition = GetRandomPosition(true, Program.dt);
-            else if (changeType == "business")
-                this.promoteBusinessPosition = GetRandomPosition(true, Program.dt);
-            else if (changeType == "volume")
-                this.promoteVolumePosition = GetRandomPosition(true, Program.dt);
-            else if (changeType == "speed")
-                this.promoteSpeedPosition = GetRandomPosition(true, Program.dt);
-            else
-            {
-                throw new Exception($"{changeType}是什么类型？");
-            }
-            this.promotePrice[changeType] = this.GetPriceOfPromotePosition(changeType);
+            group.setPromtePosition(changeType);
+            //if (changeType == "mile")
+            //    this.promoteMilePosition = GetRandomPosition(true, Program.dt);
+            //else if (changeType == "business")
+            //    this.promoteBusinessPosition = GetRandomPosition(true, Program.dt);
+            //else if (changeType == "volume")
+            //    this.promoteVolumePosition = GetRandomPosition(true, Program.dt);
+            //else if (changeType == "speed")
+            //    this.promoteSpeedPosition = GetRandomPosition(true, Program.dt);
+            //else
+            //{
+            //    throw new Exception($"{changeType}是什么类型？");
+            //}
+            //this.promotePrice[changeType] = this.GetPriceOfPromotePosition(changeType);
         }
 
         /// <summary>
@@ -440,7 +430,7 @@ namespace HouseManager5_0.RoomMainF
         /// </summary>
         /// <param name="role"></param>
         /// <param name="car"></param>
-        private void giveMoneyFromCarToPlayer(RoleInGame role, Car car, ref List<string> notifyMsg)
+        private void giveMoneyFromCarToPlayer(Player role, Car car, ref List<string> notifyMsg)
         {
             //   var m1 = player.GetMoneyCanSave();
             role.MoneySet(role.Money + car.ability.leftBusiness + car.ability.leftVolume, ref notifyMsg);
@@ -503,12 +493,12 @@ namespace HouseManager5_0.RoomMainF
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        private void CheckAllPromoteState(string key)
+        private void CheckAllPromoteState(string key, string groupKey)
         {
-            CheckPromoteState(key, "mile");
-            CheckPromoteState(key, "business");
-            CheckPromoteState(key, "volume");
-            CheckPromoteState(key, "speed");
+            CheckPromoteState(key, groupKey, "mile");
+            //   CheckPromoteState(key, "business");
+            CheckPromoteState(key, groupKey, "volume");
+            CheckPromoteState(key, groupKey, "speed");
         }
     }
 }

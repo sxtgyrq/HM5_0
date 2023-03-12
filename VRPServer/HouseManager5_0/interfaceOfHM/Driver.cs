@@ -11,16 +11,16 @@ namespace HouseManager5_0.interfaceOfHM
     {
 
         //bool ElectricIsIgnored();
-        //void IgnoreElectric(ref RoleInGame role, ref System.Random rm);
-        //void ReduceIgnoreElectric(ref RoleInGame player);
+        //void IgnoreElectric(ref Player role, ref System.Random rm);
+        //void ReduceIgnoreElectric(ref Player player);
 
         //bool FireIsIgnored();
-        //void IgnoreFire(ref RoleInGame role, ref System.Random rm);
-        //void ReduceIgnoreFire(ref RoleInGame player);
+        //void IgnoreFire(ref Player role, ref System.Random rm);
+        //void ReduceIgnoreFire(ref Player player);
 
         //bool WaterIsIgnored();
-        //void IgnoreWater(ref RoleInGame role, ref System.Random rm);
-        //void ReduceIgnoreWater(ref RoleInGame player);
+        //void IgnoreWater(ref Player role, ref System.Random rm);
+        //void ReduceIgnoreWater(ref Player player);
         //int GetDefensiveValue(CommonClass.driversource.Driver driver);
         //string GetSkillName();
         //Manager_Driver.AmbushMagicType GetAmbushType();
@@ -44,9 +44,9 @@ namespace HouseManager5_0.interfaceOfHM
     }
     interface SkillImproveT
     {
-        int MagicImprovedProbabilityAndValue(RoleInGame player, ref Random rm);
-        // void IgnoreWater(ref RoleInGame role, ref System.Random rm);
-        //  void ReduceMagicImprovedValue(RoleInGame player);
+        int MagicImprovedProbabilityAndValue(HouseManager5_0.Player player, ref Random rm);
+        // void IgnoreWater(ref Player role, ref System.Random rm);
+        //  void ReduceMagicImprovedValue(Player player);
     }
     interface AttackT : AttackIgnore, SkillImproveT
     {
@@ -57,15 +57,15 @@ namespace HouseManager5_0.interfaceOfHM
         int GetDefensiveValue(CommonClass.driversource.Driver driver, bool defened);
         string GetSkillName();
         long leftValue(AbilityAndState ability);
-        void setCost(long reduce, RoleInGame player, HouseManager5_0.Car car, ref List<string> notifyMsg);
+        void setCost(long reduce, HouseManager5_0.Player player, HouseManager5_0.Car car, ref List<string> notifyMsg);
         Engine_DebtEngine.DebtCondition getCondition();
         // long getVolumeOrBussiness(Manager_Driver.ConfuseManger.AmbushInfomation ambushInfomation);
         bool CheckCarState(HouseManager5_0.Car car);
-        public long ImproveAttack(RoleInGame role, long attackMoney, ref List<string> notifyMsgs);
-        long DealWithPercentValue(long percentValue, RoleInGame player, RoleInGame victim, RoomMainF.RoomMain that, GetRandomPos grp, ref List<string> notifyMsg);
-        void MagicAnimateShow(RoleInGame player, RoleInGame victim, ref List<string> notifyMsgs);
-        //bool Ignore(ref RoleInGame role, ref System.Random rm);
-        //long DealWithPercentValue(long percentValue, RoleInGame player, RoleInGame victim, Engine_DebtEngine engine_DebtEngine);
+        public long ImproveAttack(HouseManager5_0.Player role, long attackMoney, ref List<string> notifyMsgs);
+        long DealWithPercentValue(long percentValue, HouseManager5_0.Player player, HouseManager5_0.Player victim, RoomMainF.RoomMain that, GetRandomPos grp, ref List<string> notifyMsg);
+        // void MagicAnimateShow(Player player, Player victim, ref List<string> notifyMsgs);
+        //bool Ignore(ref Player role, ref System.Random rm);
+        //long DealWithPercentValue(long percentValue, Player player, Player victim, Engine_DebtEngine engine_DebtEngine);
 
 
 
@@ -93,8 +93,8 @@ namespace HouseManager5_0.interfaceOfHM
     interface AttackIgnore
     {
         bool Ignored();
-        void Ignore(ref RoleInGame role, ref System.Random rm);
-        void ReduceIgnore(ref RoleInGame player);
+        void Ignore(ref HouseManager5_0.Player role, ref System.Random rm);
+        void ReduceIgnore(ref HouseManager5_0.Player player);
     }
     interface SkillDouble
     {
@@ -104,8 +104,8 @@ namespace HouseManager5_0.interfaceOfHM
     //interface AttackTByPhysics : AttackT
     //{
     //    //bool PhysicsIsIgnored();
-    //    //void IgnorePhysics(ref RoleInGame role, ref System.Random rm);
-    //    //void ReduceIgnorePhysics(ref RoleInGame player);
+    //    //void IgnorePhysics(ref Player role, ref System.Random rm);
+    //    //void ReduceIgnorePhysics(ref Player player);
     //}
 
     interface ControlMagic

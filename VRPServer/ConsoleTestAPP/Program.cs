@@ -24,7 +24,8 @@ namespace ConsoleTestAPP
             // Console.WriteLine(a);
             //Console.Read();
             //Console.Read();
-            var c = new CommonClass.Img.Combine("Car_01.png", "105.jpg");
+            FileStream imageFs = File.OpenRead("Car_01.png");
+            var c = new CommonClass.Img.Combine(imageFs, "105.jpg");
             var base64 = c.GetBase64();
             byte[] imageArray = Convert.FromBase64String(base64);
             File.WriteAllBytes("r22change.png", imageArray);
@@ -32,7 +33,7 @@ namespace ConsoleTestAPP
             //   CommonClass.Img.DrawFont.Draw("你");
             var data = CommonClass.Img.DrawFont.FontCodeResult.Data.Get(Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.Img.DrawFont.FontCodeResult.Data.objTff2>);
             CommonClass.Img.DrawFont.Initialize(data);
-            var dr = new CommonClass.Img.DrawFont("膩", data,"red");
+            var dr = new CommonClass.Img.DrawFont("膩", data, "red");
             dr.SaveAsImg();
             // CommonClass.Img.DrawFont.Draw("你", data);
 

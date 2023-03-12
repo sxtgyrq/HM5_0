@@ -19,54 +19,54 @@ namespace HouseManager5_0.RoomMainF
         /// </summary>
         internal void SetReturn(GetRandomPos grp)
         {
-            List<string> notifyMsg = new List<string>();
-            lock (this.PlayerLock)
-            {
-                List<string> keysNeedToSetReturn = new List<string>();
-                foreach (var item in this._Players)
-                {
-                    if (item.Value.Bust)
-                    {
-                        keysNeedToSetReturn.Add(item.Key);
-                    }
-                }
-                for (var i = 0; i < keysNeedToSetReturn.Count; i++)
-                {
-                    if (this._Players[keysNeedToSetReturn[i]].getCar().state == CarState.waitOnRoad)
-                    {
+            //List<string> notifyMsg = new List<string>();
+            //lock (this.PlayerLock)
+            //{
+            //    List<string> keysNeedToSetReturn = new List<string>();
+            //    foreach (var item in this._Players)
+            //    {
+            //        if (item.Value.Bust)
+            //        {
+            //            keysNeedToSetReturn.Add(item.Key);
+            //        }
+            //    }
+            //    for (var i = 0; i < keysNeedToSetReturn.Count; i++)
+            //    {
+            //        if (this._Players[keysNeedToSetReturn[i]].getCar().state == CarState.waitOnRoad)
+            //        {
 
-                        var key = keysNeedToSetReturn[i];
+            //            var key = keysNeedToSetReturn[i];
 
-                        this.retutnE.OrderToReturn(new CommonClass.OrderToReturnBySystem()
-                        {
-                            c = "OrderToReturnBySystem",
-                            Key = keysNeedToSetReturn[i]
-                        }, grp);
-                    }
-                    else if (this._Players[keysNeedToSetReturn[i]].getCar().state == CarState.selecting)
-                    {
-                        if (this._Players[keysNeedToSetReturn[i]].playerType == RoleInGame.PlayerType.player)
-                        {
-                            var player = (Player)this._Players[keysNeedToSetReturn[i]];
-                            if ((player).getCar().state == CarState.selecting)
-                            {
-                                if ((player).playerSelectDirectionTh != null)
-                                {
-                                    if (!player.playerSelectDirectionTh.IsAlive)
-                                    {
-                                        if (player.playerSelectDirectionTh.ThreadState == System.Threading.ThreadState.Unstarted)
-                                        {
-                                            player.playerSelectDirectionTh.Start();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            //            this.retutnE.OrderToReturn(new CommonClass.OrderToReturnBySystem()
+            //            {
+            //                c = "OrderToReturnBySystem",
+            //                Key = keysNeedToSetReturn[i]
+            //            }, grp);
+            //        }
+            //        else if (this._Players[keysNeedToSetReturn[i]].getCar().state == CarState.selecting)
+            //        {
+            //            if (this._Players[keysNeedToSetReturn[i]].playerType == Player.PlayerType.player)
+            //            {
+            //                var player = (Player)this._Players[keysNeedToSetReturn[i]];
+            //                if ((player).getCar().state == CarState.selecting)
+            //                {
+            //                    if ((player).playerSelectDirectionTh != null)
+            //                    {
+            //                        if (!player.playerSelectDirectionTh.IsAlive)
+            //                        {
+            //                            if (player.playerSelectDirectionTh.ThreadState == System.Threading.ThreadState.Unstarted)
+            //                            {
+            //                                player.playerSelectDirectionTh.Start();
+            //                            }
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
 
-            }
-            Startup.sendSeveralMsgs(notifyMsg); 
+            //}
+            //Startup.sendSeveralMsgs(notifyMsg); 
         }
 
         //        /// <summary>
@@ -163,7 +163,7 @@ namespace HouseManager5_0.RoomMainF
         //        }
 
 
-        //private void ReturnThenSetComeBack(RoleInGame player, Car car, commandWithTime.returnning cmp, ref List<string> notifyMsg)
+        //private void ReturnThenSetComeBack(Player player, Car car, commandWithTime.returnning cmp, ref List<string> notifyMsg)
         //{
         //    var speed = car.ability.Speed;
         //    int startT = 0;
@@ -225,7 +225,7 @@ namespace HouseManager5_0.RoomMainF
         //            if (!string.IsNullOrEmpty(car.ability.diamondInCar))
         //            {
         //                player.PromoteDiamondCount[car.ability.diamondInCar]++;
-        //                if (player.playerType == RoleInGame.PlayerType.player)
+        //                if (player.playerType == Player.PlayerType.player)
         //                    SendPromoteCountOfPlayer(car.ability.diamondInCar, (Player)player, ref notifyMsg);
         //            }
         //            car.ability.Refresh(player, car, ref notifyMsg);
@@ -241,7 +241,7 @@ namespace HouseManager5_0.RoomMainF
         //            {
         //                // MoneyCanSaveChanged(player, moneyCanSave2, ref notifyMsg);
         //            }
-        //            if (player.playerType == RoleInGame.PlayerType.NPC)
+        //            if (player.playerType == Player.PlayerType.NPC)
         //            {
         //                this.SetNPCToDoSomeThing((NPC)player, NPCAction.Bust);
         //            }
