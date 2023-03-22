@@ -143,10 +143,12 @@ namespace WsOfWebClient
             CommonClass.Img.DrawSmallMap dsm = new CommonClass.Img.DrawSmallMap();
             var base64 = dsm.GetBase64(smallMap);
 
-            byte[] imageArray = Convert.FromBase64String(base64);
-            File.WriteAllBytes("r22change.png", imageArray);
-            return "";
+            //byte[] imageArray = Convert.FromBase64String(base64);
+           // File.WriteAllBytes("r22change.png", imageArray);
+            return base64;
         }
+
+        
     }
 
 

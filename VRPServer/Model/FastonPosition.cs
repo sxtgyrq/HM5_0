@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Model
 {
-    public class FastonPosition
+    public class FastonPosition : HasPosition
     {
         public string FastenPositionID { get; set; }
         public string FastenPositionName { get; set; }
@@ -24,5 +24,13 @@ namespace Model
         public int MacatuoY { get; set; }
         public int Weight { get; set; }
         public string region { get; set; }
+    }
+    public interface HasPosition
+    {
+        public double Longitude { get; }
+        public double Latitde { get; }
+        public double Height { get; }
+        double positionLongitudeOnRoad { get; }
+        double positionLatitudeOnRoad { get; }
     }
 }

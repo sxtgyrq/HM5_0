@@ -38,7 +38,7 @@ namespace HouseManager5_0
                     reason = $"wrong pType:{sp.pType}";
                     return false;
                 }
-                else if (!(sp.pType == "mile" || sp.pType == "business" || sp.pType == "volume" || sp.pType == "speed"))
+                else if (!(sp.pType == "mile" || sp.pType == "volume" || sp.pType == "speed"))
                 {
                     reason = $"wrong pType:{sp.pType}";
                     return false;
@@ -144,7 +144,7 @@ namespace HouseManager5_0
         {
             switch (sp.pType)
             {
-                case "mile": 
+                case "mile":
                 case "volume":
                 case "speed":
                     {
@@ -214,7 +214,7 @@ namespace HouseManager5_0
                                     if (distanceIsEnoughToStart)
                                     {
                                         var from = this.getFromWhenAction(player, car);
-                                        var to = that.GetPromotePositionTo(sp.pType,player.Group);//  this.promoteMilePosition;
+                                        var to = that.GetPromotePositionTo(sp.pType, player.Group);//  this.promoteMilePosition;
 
                                         var fp1 = Program.dt.GetFpByIndex(from);
                                         var fp2 = Program.dt.GetFpByIndex(to);

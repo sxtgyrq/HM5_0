@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading;
 using static HouseManager5_0.Car;
@@ -352,6 +353,12 @@ namespace HouseManager5_0
                         }
                         player.playerSelectDirectionTh = new Thread(() => StartSelectThreadB(selections, selectionCenter, player, oldState, selectionIsRight));
                         player.NavigationData = navigationData;
+                        //  player.GetConnectionF(player);
+                        List<string> notifyMsg = new List<string>();
+                        if (player.playerType == Player.PlayerType.player)
+                        {
+                            that.goodsM.ShowConnectionModels(player, selectionCenter, ref notifyMsg);
+                        }
                     }
                     return true;
                 }

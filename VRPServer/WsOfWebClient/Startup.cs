@@ -166,7 +166,7 @@ namespace WsOfWebClient
 
                                 if (ws.State == WebSocketState.Open)
                                 {
-                                    //try
+                                    try
                                     {
 
                                         //ws.
@@ -190,9 +190,9 @@ namespace WsOfWebClient
                                         }
 
                                     }
-                                    // catch
+                                    catch
                                     {
-                                        //Consol.WriteLine("websocket 异常");
+                                        // Consol.WriteLine("websocket 异常");
                                     }
                                 }
                             }
@@ -891,14 +891,21 @@ namespace WsOfWebClient
                                         Room.GetOnLineState(s);
                                     }
                                 }; break;
-                            case "WhetherGoNext":
+                            case "SmallMapClick":
                                 {
                                     if (s.Ls == LoginState.OnLine)
                                     {
                                         Console.WriteLine(returnResult.result);
-                                        WsOfWebClient.WhetherGoNext wgn = Newtonsoft.Json.JsonConvert.DeserializeObject<WsOfWebClient.WhetherGoNext>(returnResult.result);
-                                        Room.WhetherGoNextF(s, wgn);
+                                        WsOfWebClient.SmallMapClick wgn = Newtonsoft.Json.JsonConvert.DeserializeObject<WsOfWebClient.SmallMapClick>(returnResult.result);
+                                        Room.SmallMapClickF(s, wgn);
                                         // Room.GetOnLineState(s);
+                                    }
+                                }; break;
+                            case "NotWantToGoNeedToBack":
+                                {
+                                    if (s.Ls == LoginState.OnLine)
+                                    {
+                                        Room.NotWantToGoNeedToBackF(s);
                                     }
                                 }; break;
                         }

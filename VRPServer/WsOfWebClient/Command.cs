@@ -215,11 +215,14 @@ namespace WsOfWebClient
 
     public class SetMaterial : CommonClass.Command
     {
-        public string Key { get;  set; }
-        public string Base64 { get;  set; }
+        public string Key { get; set; }
+        public string Base64 { get; set; }
     }
-    public class WhetherGoNext : CommonClass.Command
+    public class SmallMapClick : CommonClass.Command
     {
-        public string cType { get;  set; }
+        //  public string cType { get;  set; }
+        public double lon { get; set; }
+        public double lat { get; set; }
+        public double radius { get; set; }
     }
 }

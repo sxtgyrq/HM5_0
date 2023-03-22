@@ -119,7 +119,8 @@ namespace HouseManager5_0.interfaceOfHM
        // string RemoveTaskCopyF(RemoveTaskCopyM gtd);
         string ExitF(ExitObj obj);
         string GetOnLineStateF(GetOnLineState obj);
-        string WhetherGoNextF(WhetherGoNext wgn);
+        string SmallMapClickF(SmallMapClick smc);
+        string NotWantToGoNeedToBackF(NotWantToGoNeedToBack nwtgntb);
     }
 
     interface MapEditor

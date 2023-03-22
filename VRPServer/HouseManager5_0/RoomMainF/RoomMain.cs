@@ -360,22 +360,39 @@ namespace HouseManager5_0.RoomMainF
             // throw new NotImplementedException();
         }
 
-        public string WhetherGoNextF(WhetherGoNext wgn)
+        public string SmallMapClickF(SmallMapClick smc)
         {
             GroupClass group = null;
             lock (this.PlayerLock)
             {
-                if (this._Groups.ContainsKey(wgn.GroupKey))
+                if (this._Groups.ContainsKey(smc.GroupKey))
                 {
-                    group = this._Groups[wgn.GroupKey];
+                    group = this._Groups[smc.GroupKey];
                 }
             }
             if (group != null)
             {
-                group.WhetherGoNextF(wgn, this.GetRandomPosObj);
+                group.SmallMapClickF(smc, this.GetRandomPosObj);
             }
             return "";
             //  throw new NotImplementedException();
+        }
+
+        public string NotWantToGoNeedToBackF(NotWantToGoNeedToBack nwtgntb)
+        {
+            GroupClass group = null;
+            lock (this.PlayerLock)
+            {
+                if (this._Groups.ContainsKey(nwtgntb.GroupKey))
+                {
+                    group = this._Groups[nwtgntb.GroupKey];
+                }
+            }
+            if (group != null)
+            {
+                group.NotWantToGoNeedToBackF(nwtgntb, this.GetRandomPosObj);
+            }
+            return "";
         }
 
         public class commandWithTime

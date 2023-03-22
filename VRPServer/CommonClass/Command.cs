@@ -973,10 +973,17 @@ namespace CommonClass
             public bool IsEnemy { get; set; }
         }
     }
-    public class WhetherGoNext : Command
+    public class SmallMapClick : Command
     {
         public string Key { get; set; }
         public string GroupKey { get; set; }
-        public string cType { get; set; }
+        public double lon { get; set; }
+        public double lat { get; set; }
+        public double radius { get; set; }
+    }
+    public class NotWantToGoNeedToBack : Command
+    {
+        public string Key { get; set; }
+        public string GroupKey { get; set; } 
     }
 }

@@ -475,10 +475,15 @@ namespace HouseManager5_0
                             GetOnLineState obj = Newtonsoft.Json.JsonConvert.DeserializeObject<GetOnLineState>(notifyJson);
                             outPut = objI.GetOnLineStateF(obj);
                         }; break;
-                    case "WhetherGoNext":
+                    case "SmallMapClick":
                         {
-                            WhetherGoNext wgn = Newtonsoft.Json.JsonConvert.DeserializeObject<WhetherGoNext>(notifyJson);
-                            outPut = objI.WhetherGoNextF(wgn);
+                            SmallMapClick smc = Newtonsoft.Json.JsonConvert.DeserializeObject<SmallMapClick>(notifyJson);
+                            outPut = objI.SmallMapClickF(smc);
+                        }; break;
+                    case "NotWantToGoNeedToBack":
+                        {
+                            NotWantToGoNeedToBack nwtgntb = Newtonsoft.Json.JsonConvert.DeserializeObject<NotWantToGoNeedToBack>(notifyJson);
+                            outPut = objI.NotWantToGoNeedToBackF(nwtgntb);
                         }; break;
                         //case "CopyTaskDisplay": 
                         //    {

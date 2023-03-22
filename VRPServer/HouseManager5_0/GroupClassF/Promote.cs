@@ -235,6 +235,7 @@ namespace HouseManager5_0.GroupClassF
                                         {
                                             that.WebNotify(player, $"去程{goMile}km，回程{returnMile}km,去了回不来");
                                             mrr = MileResultReason.CanNotReturn;
+                                            this.askWhetherGoToPositon(player.Key, grp);
                                             return player.returningOjb;
                                         }
                                         else
@@ -242,6 +243,7 @@ namespace HouseManager5_0.GroupClassF
                                             that.WebNotify(player, $"去程{goMile}km，回程{returnMile}km,去不了");
                                             // printState(player, car, $"去程{goMile}，回程{returnMile},去不了");
                                             mrr = MileResultReason.CanNotReach;
+                                            this.askWhetherGoToPositon(player.Key, grp);
                                             return player.returningOjb;
                                         }
                                     }
@@ -249,6 +251,7 @@ namespace HouseManager5_0.GroupClassF
                                     {
                                         mrr = MileResultReason.NearestIsMoneyWhenPromote;
                                         that.WebNotify(player, $"离宝石最近的是[{fpResult.FastenPositionName}]处的钱，不是你的车。请离宝石再近点儿！");
+                                        this.askWhetherGoToPositon(player.Key, grp);
                                         return player.returningOjb;
                                     }
                                 };
@@ -287,12 +290,14 @@ namespace HouseManager5_0.GroupClassF
                                         {
                                             that.WebNotify(player, $"去程{goMile}km，回程{returnMile}km,去了回不来");
                                             mrr = MileResultReason.CanNotReturn;
+                                            this.askWhetherGoToPositon(player.Key, grp);
                                             return player.returningOjb;
                                         }
                                         else
                                         {
                                             that.WebNotify(player, $"去程{goMile}km，回程{returnMile}km,去不了");
                                             mrr = MileResultReason.CanNotReach;
+                                            this.askWhetherGoToPositon(player.Key, grp);
                                             return player.returningOjb;
                                         }
                                     }
@@ -300,6 +305,7 @@ namespace HouseManager5_0.GroupClassF
                                     {
                                         mrr = MileResultReason.NearestIsMoneyWhenPromote;
                                         that.WebNotify(player, $"离宝石最近的是[{fpResult.FastenPositionName}]处的钱，不是你的车。请离宝石再近点儿！");
+                                        this.askWhetherGoToPositon(player.Key, grp);
                                         return player.returningOjb;
                                     }
                                 };

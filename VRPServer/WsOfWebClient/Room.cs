@@ -1825,18 +1825,32 @@ namespace WsOfWebClient
             }
             return "";
         }
-        internal static void WhetherGoNextF(State s, WhetherGoNext wgn)
+        internal static void SmallMapClickF(State s, SmallMapClick wgn)
         {
-            CommonClass.WhetherGoNext gfs = new CommonClass.WhetherGoNext()
+            CommonClass.SmallMapClick gfs = new CommonClass.SmallMapClick()
             {
-                c = "WhetherGoNext",
+                c = "SmallMapClick",
                 Key = s.Key,
                 GroupKey = s.GroupKey,
-                cType = wgn.cType
+                lat = wgn.lat,
+                lon = wgn.lon,
+                radius = wgn.radius,
             };
             var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gfs);
             Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
         }
+        internal static void NotWantToGoNeedToBackF(State s)
+        {
+            CommonClass.NotWantToGoNeedToBack gfs = new CommonClass.NotWantToGoNeedToBack()
+            {
+                c = "NotWantToGoNeedToBack",
+                Key = s.Key,
+                GroupKey = s.GroupKey
+            };
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gfs);
+            Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+        }
+
         internal static State GetFightSituation(State s, WebSocket webSocket)
         {
             string respon;

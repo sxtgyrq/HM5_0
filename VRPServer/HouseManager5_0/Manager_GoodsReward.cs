@@ -18,37 +18,41 @@ namespace HouseManager5_0
             this.drawLine = d;
         }
 
-        internal void ShowConnectionModels(Player player, int target, ref List<string> notifyMsg)
+        internal void ShowConnectionModels(Player player, Model.HasPosition hp, ref List<string> notifyMsg)
         {
-            //var models = Program.dt.models; 
-            //Dictionary<string, double> minLength = new Dictionary<string, double>();
-            //foreach (var model in models)
-            //{
-            //    minLength.Add(model.modelID, double.MaxValue);
-            //    foreach (var fpIndex in that._collectPosition)
-            //    {
-            //        var fp = Program.dt.GetFpByIndex(fpIndex.Value);
-            //        var length = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fp.Latitde, fp.Longitude, fp.Height, model.lat, model.lon, 0);
-            //        if (length < minLength[model.modelID])
-            //        {
-            //            minLength[model.modelID] = length;
-            //        }
-            //    }
-            //}
-            //ShowOneConnectionModel(minLength, player, target, ref notifyMsg);
-            //ShowOneConnectionLines(minLength, player, target, ref notifyMsg);
+
+            var models = Program.dt.models;
+            Dictionary<string, double> minLength = new Dictionary<string, double>();
+            var _collectPosition = player.Group._collectPosition;
+            foreach (var model in models)
+            {
+                minLength.Add(model.modelID, double.MaxValue);
+                foreach (var fpIndex in _collectPosition)
+                {
+                    var fp = Program.dt.GetFpByIndex(fpIndex.Value);
+                    var length = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fp.Latitde, fp.Longitude, fp.Height, model.lat, model.lon, 0);
+                    if (length < minLength[model.modelID])
+                    {
+                        minLength[model.modelID] = length;
+                    }
+                }
+            } 
+            {
+                ShowOneConnectionModel(minLength, player, hp, ref notifyMsg);
+            }
+            ShowOneConnectionLines(minLength, player, hp, ref notifyMsg);
 
         }
 
-        private void ShowOneConnectionLines(Dictionary<string, double> minLength, Player player, int target, ref List<string> notifyMsg)
+        private void ShowOneConnectionLines(Dictionary<string, double> minLength, Player player, Model.HasPosition hp, ref List<string> notifyMsg)
         {
             var models = Program.dt.models;
-            var fp = Program.dt.GetFpByIndex(target);
+            // var fp = Program.dt.GetFpByIndex(target);
             List<Data.detailmodel> modelsNeedToSelect = new List<Data.detailmodel>();
             for (int i = 0; i < models.Count; i++)
             {
                 var model = models[i];
-                var length = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fp.Latitde, fp.Longitude, fp.Height, model.lat, model.lon, 0);
+                var length = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(hp.Latitde, hp.Longitude, hp.Height, model.lat, model.lon, 0);
                 // model.
                 if (length < minLength[model.modelID])
                 {
@@ -61,43 +65,48 @@ namespace HouseManager5_0
 
             }
             if (player.canGetReward)
-                Program.rm.goodsM.drawSelect(player, fp, modelsNeedToSelect, ref notifyMsg);
+                Program.rm.goodsM.drawSelect(player, hp, modelsNeedToSelect, ref notifyMsg);
             else
-                Program.rm.goodsM.drawSelect(player, fp, new List<Data.detailmodel>(), ref notifyMsg);
+                Program.rm.goodsM.drawSelect(player, hp, new List<Data.detailmodel>(), ref notifyMsg);
 
         }
 
-        internal void ShowOneConnectionModel(Dictionary<string, double> minLength, Player player, int target, ref List<string> notifyMsg)
+        internal void ShowOneConnectionModel(Dictionary<string, double> minLength, Player player, Model.HasPosition target, ref List<string> notifyMsg)
         {
 
-            var fp = Program.dt.GetFpByIndex(target);
-            var models = Program.dt.models.OrderBy(item => CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fp.Latitde, fp.Longitude, fp.Height, item.lat, item.lon, 0)).ToList();
+            int AddCount = 0;
+            // var fp = Program.dt.GetFpByIndex(target);
+            var models = Program.dt.models.OrderBy(item => CommonClass.Geography.getLengthOfTwoPoint.GetDistance(target.Latitde, target.Longitude, target.Height, item.lat, item.lon, 0)).ToList();
             Data.detailmodel modelNeedToShow = null;
             {
                 for (int i = 0; i < models.Count; i++)
                 {
                     var model = models[i];
-                    var length = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fp.Latitde, fp.Longitude, fp.Height, model.lat, model.lon, 0);
+                    var length = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(target.Latitde, target.Longitude, target.Height, model.lat, model.lon, 0);
                     if (length < minLength[model.modelID])
                     {
                         //  player.modelHasShowed.con
                         modelNeedToShow = model;
                         if (Program.rm.modelM.setModel(player, modelNeedToShow, ref notifyMsg))
                         {
-                            return;
+                            AddCount++;
                         }
+                    }
+                    if (AddCount > 3)
+                    {
+                        return;
                     }
                 }
                 return;
             }
         }
 
-        private void drawSelect(Player player, Model.FastonPosition fp, List<Data.detailmodel> modelsNeedToShow, ref List<string> notifyMsg)
+        private void drawSelect(Player player, Model.HasPosition hp, List<Data.detailmodel> modelsNeedToShow, ref List<string> notifyMsg)
         {
-            this.drawLine(player, fp, modelsNeedToShow, ref notifyMsg);
+            this.drawLine(player, hp, modelsNeedToShow, ref notifyMsg);
         }
 
-        public delegate void DrawLine(Player player, Model.FastonPosition fp, List<Data.detailmodel> modelsNeedToShow, ref List<string> notifyMsg);
+        public delegate void DrawLine(Player player, Model.HasPosition hp, List<Data.detailmodel> modelsNeedToShow, ref List<string> notifyMsg);
         DrawLine drawLine;
 
         internal List<Data.detailmodel> GetConnectionModels(int startFPIndex, Player role)
@@ -235,5 +244,30 @@ namespace HouseManager5_0
             //return notifyMsg;
             // Program.rm.modelM.setModels(player, modelsNeedToShow, ref notifyMsg);
         }
+
+        //internal void ShowConnectionModels(Player player, List<RoomMain.Node.direction> selections, ref List<string> notifyMsg)
+        //{
+        //    var models = Program.dt.models;
+        //    Dictionary<string, double> minLength = new Dictionary<string, double>();
+        //    var _collectPosition = player.Group._collectPosition;
+        //    foreach (var model in models)
+        //    {
+        //        minLength.Add(model.modelID, double.MaxValue);
+        //        foreach (var fpIndex in _collectPosition)
+        //        {
+        //            var fp = Program.dt.GetFpByIndex(fpIndex.Value);
+        //            var length = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fp.Latitde, fp.Longitude, fp.Height, model.lat, model.lon, 0);
+        //            if (length < minLength[model.modelID])
+        //            {
+        //                minLength[model.modelID] = length;
+        //            }
+        //        }
+        //    }
+        //    //   for (int i = 0; i < 4; i++)
+        //    {
+        //        ShowOneConnectionModel(minLength, player, target, ref notifyMsg);
+        //    }
+        //    ShowOneConnectionLines(minLength, player, target, ref notifyMsg);
+        //}
     }
 }

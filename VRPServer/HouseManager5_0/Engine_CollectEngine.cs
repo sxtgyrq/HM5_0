@@ -429,7 +429,7 @@ namespace HouseManager5_0
             {
                 if (role.playerType == Player.PlayerType.player)
                 {
-                    that.goodsM.ShowConnectionModels((Player)role, pa.target, ref notifyMsg);
+                    that.goodsM.ShowConnectionModels((Player)role, that.GetRandomPosObj.GetFpByIndex(pa.target), ref notifyMsg);
                 }
                 else if (role.playerType == Player.PlayerType.NPC)
                 {
@@ -457,6 +457,14 @@ namespace HouseManager5_0
             {
                 group.askWhetherGoToPositon(role.Key, that.GetRandomPosObj);
             }
+
+            //that.GetRewardFromBuildingF(new GetRewardFromBuildingM() 
+            //{
+            //     c= "GetRewardFromBuildingM",
+            //      GroupKey=role.Key,
+            //       Key=role.Key,
+            //        selectObjName=role.Key,
+            //});
         }
 
         private void setCollectPosition(int target, GroupClassF.GroupClass group)

@@ -8,7 +8,7 @@ namespace HouseManager5_0.RoomMainF
 {
     public partial class RoomMain
     {
-        private void DrawGoodsSelection(Player player, FastonPosition fp, List<Data.detailmodel> modelsNeedToShow, ref List<string> notifyMsg)
+        private void DrawGoodsSelection(Player player, HasPosition hp, List<Data.detailmodel> modelsNeedToShow, ref List<string> notifyMsg)
         {
             //    throw new NotImplementedException();
             var url = player.FromUrl;
@@ -22,7 +22,7 @@ namespace HouseManager5_0.RoomMainF
                 positions.Add(modelsNeedToShow[i].z);
             }
             double x, y, z;
-            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(fp.positionLongitudeOnRoad, fp.positionLatitudeOnRoad, fp.Height, out x, out y, out z);
+            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(hp.positionLongitudeOnRoad, hp.positionLatitudeOnRoad, hp.Height, out x, out y, out z);
             GoodsSelectionNotify tn = new GoodsSelectionNotify()
             {
                 c = "GoodsSelectionNotify",

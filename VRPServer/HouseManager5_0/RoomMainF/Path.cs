@@ -41,11 +41,19 @@ namespace HouseManager5_0.RoomMainF
             public List<pathItem> path { get; set; }
             public class pathItem
             {
-                public class Postion
+                public class Postion : Model.HasPosition
                 {
+                    public double Longitude { get { return this.longitude; } }
+                    public double Latitde { get { return this.latitude; } }
+                    public double Height { get { return this.height; } }
+                    public double positionLongitudeOnRoad { get { return this.longitude; } } 
+                    public double positionLatitudeOnRoad { get { return this.latitude; } }
+
                     public double longitude { get; set; }
+
                     public double latitude { get; set; }
                     public double height { get; set; }
+
                     public string crossKey { get; set; }
 
                     public string postionCrossKey { get { return $"{longitude.ToString("F5")},{latitude.ToString("F5")}"; } }
