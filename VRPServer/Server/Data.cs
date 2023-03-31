@@ -66,9 +66,9 @@ namespace Server
             //var fpConfig = Config.map.getFastonPositionConfigInfo(city, false);
             List<OssModel.FastonPosition> result = new List<OssModel.FastonPosition>();
             var index = 0;
-            while (File.Exists($"{fpDictionary}fpindex\\fp_{index }.txt"))
+            while (File.Exists($"{fpDictionary}fpindex\\fp_{index}.txt"))
             {
-                var json = File.ReadAllText($"{fpDictionary}fpindex\\fp_{index }.txt");
+                var json = File.ReadAllText($"{fpDictionary}fpindex\\fp_{index}.txt");
                 var item = Newtonsoft.Json.JsonConvert.DeserializeObject<OssModel.FastonPosition>(json);
                 result.Add(item);
                 index++;
@@ -218,7 +218,7 @@ namespace Server
             data.ReadRoadInfo(this._road, this._allFp);
             bool findObjSuccess;
             var dataResult = data.FindPlace(this._allFp.FindLast(item => item.FastenPositionID == fpID1), fpID2, out findObjSuccess);
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(dataResult); 
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(dataResult);
             return json;
         }
 

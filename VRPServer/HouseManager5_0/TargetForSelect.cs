@@ -9,23 +9,41 @@ namespace HouseManager5_0
 {
     public class TargetForSelect
     {
-        public int select { get; set; }
+        public TargetForSelect(int select_, string tsType_, int rank_, bool hasValueToImproveSpeed_)
+        {
+            this.select = select_;
+            this.tsType = tsType_;
+            this.rank = rank_;
+            HasValueToImproveSpeed = hasValueToImproveSpeed_;
+        }
 
-        public string tsType { get; set; }
-        public int rank { get; set; }
-        public int costPrice { get { return this.rank * 500; } }
-        public string costPriceStr { get { return $"{this.costPrice / 100}.{(this.costPrice % 100).ToString("D2")}"; } }
-        //public int defaultSelect { get; set; }
+        public int select { get; private set; }
 
-        //public int price
-        //{
-        //    get
-        //    {
-        //        var value1 = Math.Abs(this.defaultSelect - this.select);
-        //        var value2 = 41 - value1;
-        //        return Math.Min(value1, value2);
-        //        //  return Math.Min(Math.Abs(this.defaultSelect - this.select), Math.Abs(this.select - this.defaultSelect));
-        //    }
-        //}
+        public string tsType { get; private set; }
+        public int rank { get; private set; }
+        public int costPrice
+        {
+            get
+            {
+                if (this.HasValueToImproveSpeed)
+                {
+                    return (this.rank / 5) * 500;
+                }
+                else
+                {
+                    return this.rank * 500;
+                }
+            }
+        }
+        public string costPriceStr
+        {
+
+            get
+            {
+                return $"{this.costPrice / 100}.{(this.costPrice % 100).ToString("D2")}";
+            }
+        }
+
+        public bool HasValueToImproveSpeed { get; private set; }
     }
 }

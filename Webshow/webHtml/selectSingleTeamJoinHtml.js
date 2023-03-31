@@ -254,6 +254,7 @@
             document.getElementById('setNameBtn').onclick = function () {
                 //  alert('设置名字！');
                 that.ChangeName();
+                that.canBtnClick = true;
             }
             //  onclick = "selectSingleTeamJoinHtmlF.ChangeName();"
             //frag.onclick = function ()
@@ -379,5 +380,6 @@
             document.getElementById(that.setCarsNameHtmlID).remove();
             objMain.receivedState = 'selectSingleTeamJoin';
         }
-    }
+    },
+    canBtnClick: false
 }

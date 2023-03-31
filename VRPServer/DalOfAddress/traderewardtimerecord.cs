@@ -61,7 +61,22 @@ namespace DalOfAddress
         public static List<CommonClass.databaseModel.traderewardtimerecordShow> GetByStartDate(int startDate, int raceMember, bool limited)
         {
             List<CommonClass.databaseModel.traderewardtimerecordShow> list = new List<CommonClass.databaseModel.traderewardtimerecordShow>();
-            var sQL = $"SELECT raceRecordIndex,startDate,raceMember,applyAddr,raceEndTime-raceStartTime as raceTime,rewardGiven  FROM traderewardtimerecord WHERE startDate={startDate} AND raceMember={raceMember} ORDER BY raceTime ASC,raceRecordIndex ASC {(limited ? "LIMIT 0,100" : "")};";
+            //var sQL = $"SELECT raceRecordIndex,startDate,raceMember,applyAddr,raceEndTime-raceStartTime as raceTime,rewardGiven  FROM traderewardtimerecord WHERE startDate={startDate} AND raceMember={raceMember} ORDER BY raceTime ASC,raceRecordIndex ASC {(limited ? "LIMIT 0,100" : "")};";
+            var sQL = $@"
+SELECT
+	raceRecordIndex,
+	startDate,
+	raceMember,
+	applyAddr,
+	TIMESTAMPDIFF( MICROSECOND, raceStartTime, raceEndTime ) AS raceTime,
+	rewardGiven,
+	raceStartTime,
+	raceEndTime 
+FROM
+	traderewardtimerecord 
+WHERE
+	startDate={startDate} AND raceMember={raceMember} ORDER BY raceTime ASC {(limited ? "LIMIT 0,100" : "")}
+";
 
             using (var r = MySqlHelper.ExecuteReader(Connection.ConnectionStr, sQL))
             {
@@ -75,6 +90,9 @@ namespace DalOfAddress
                         raceTime = Convert.ToDouble(r["raceTime"]),
                         rewardGiven = Convert.ToInt32(r["rewardGiven"]),
                         startDate = Convert.ToInt32(r["startDate"]),
+                        endTime = Convert.ToDateTime(r["raceEndTime"]),
+                        startTime = Convert.ToDateTime(r["raceStartTime"]),
+
                     };
                     list.Add(apply);
                 }

@@ -9,8 +9,38 @@ namespace HouseManager5_0.RoomMainF
     {
         public void SendMsg(DialogMsg dm)
         {
-            throw new Exception("");
+            // throw new Exception("");
 
+            var Group = getGroup(dm.GroupKey);
+            if (Group != null)
+            {
+                List<string> notifyMsg = new List<string>();
+                lock (Group.PlayerLock)
+                {
+                    if (Group._PlayerInGroup.ContainsKey(dm.Key))
+                    {
+                        if (Group._PlayerInGroup.ContainsKey(dm.To))
+                        {
+
+                            {
+                                if (Group._PlayerInGroup[dm.Key].playerType == Player.PlayerType.player)
+                                {
+                                    notifyMsg.Add(((Player)Group._PlayerInGroup[dm.Key]).FromUrl);
+                                    dm.WebSocketID = ((Player)Group._PlayerInGroup[dm.Key]).WebSocketID;
+                                    notifyMsg.Add(Newtonsoft.Json.JsonConvert.SerializeObject(dm));
+                                }
+                                if (Group._PlayerInGroup[dm.To].playerType == Player.PlayerType.player)
+                                {
+                                    notifyMsg.Add(((Player)Group._PlayerInGroup[dm.To]).FromUrl);
+                                    dm.WebSocketID = ((Player)Group._PlayerInGroup[dm.To]).WebSocketID;
+                                    notifyMsg.Add(Newtonsoft.Json.JsonConvert.SerializeObject(dm));
+                                }
+                            }
+                        }
+                    }
+                }
+                Startup.sendSeveralMsgs(notifyMsg);
+            }
             //List<string> notifyMsg = new List<string>();
             //lock (this.PlayerLock)
             //    if (this._Players.ContainsKey(dm.Key))
@@ -51,6 +81,21 @@ namespace HouseManager5_0.RoomMainF
             //    }
             //Startup.sendSeveralMsgs(notifyMsg);
         }
+
+        private GroupClassF.GroupClass getGroup(string groupKey)
+        {
+            if (string.IsNullOrEmpty(groupKey))
+            {
+                return null;
+            }
+            else if (this._Groups.ContainsKey(groupKey))
+            {
+                return this._Groups[groupKey];
+            }
+            else return null;
+            //  throw new NotImplementedException();
+        }
+
         /// <summary>
         /// 发送时，采用Key的URL与WebSocekt
         /// </summary>

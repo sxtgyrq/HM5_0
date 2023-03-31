@@ -771,6 +771,7 @@ namespace CommonClass
         /// ResponMsg 采用Key的URl与WebsocketID To=表示谁的消息，实际上相当于From
         /// </summary>
         public string Key { get; set; }
+        public string GroupKey { get; set; }
         /// <summary>
         /// Reques时，采用To的URl与WebsocketID To=表示谁的消息。To=Self，表示自己的消息。
         /// </summary>

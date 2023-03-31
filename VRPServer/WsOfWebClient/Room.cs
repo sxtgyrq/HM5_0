@@ -1343,7 +1343,7 @@ namespace WsOfWebClient
             //    return s;
             //}
         }
-        internal static async Task<string> setOffLine(State s)
+        internal static string setOffLine(State s)
         {
 #warning 这里要优化！！！
             return "";
@@ -1525,6 +1525,7 @@ namespace WsOfWebClient
                 Key = s.Key,
                 Msg = msg.MsgPass,
                 To = msg.To,
+                GroupKey = s.GroupKey,
             };
             var msgString = Newtonsoft.Json.JsonConvert.SerializeObject(dialogMsg);
             var result = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msgString);

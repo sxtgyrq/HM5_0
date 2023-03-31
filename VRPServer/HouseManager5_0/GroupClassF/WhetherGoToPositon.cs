@@ -291,38 +291,6 @@ namespace HouseManager5_0.GroupClassF
                                                     orderby this.getLength(gp.GetFpByIndex(item.Value), gp.GetFpByIndex(player.StartFPIndex)) ascending
                                                     select gp.GetFpByIndex(item.Value)).ToList();
                                         CollectFunction(player, fps, collectSelect, gp, rank);
-                                        //List<string> sendMsgs = new List<string>();
-                                        //var Fp = fps[0];
-
-                                        //var rank = (from item in this._collectPosition
-                                        //            orderby this.getLength(gp.GetFpByIndex(item.Value), gp.GetFpByIndex(player.StartFPIndex)) ascending
-                                        //            select gp.GetFpByIndex(item.Value)).ToList();
-                                        //var rankNum = rank.FindIndex(item => item.FastenPositionID == Fp.FastenPositionID);
-                                        //// var price = rankNum * 100 * 2;
-
-
-                                        //player.Ts = new TargetForSelect()
-                                        //{
-                                        //    tsType = "collect",
-                                        //    select = collectSelect,
-                                        //    rank = rankNum,
-                                        //};
-                                        //var msg = "";
-                                        //var priceStr = player.Ts.costPriceStr;
-                                        //if (string.IsNullOrEmpty(Fp.region))
-                                        //{
-                                        //    msg = $"<b>是否花费{priceStr}到【{Fp.FastenPositionName}】收集1.00元？</b>";
-                                        //}
-                                        //else
-                                        //{
-                                        //    msg = $"<b>是否花费{priceStr}到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00元？</b>";
-                                        //}
-                                        //var obj = GetConfirmInfomation(player.WebSocketID, Fp, msg, player.Ts);
-                                        //var url = player.FromUrl;
-                                        //var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
-                                        //sendMsgs.Add(url);
-                                        //sendMsgs.Add(sendMsg);
-                                        //Startup.sendSeveralMsgs(sendMsgs);
                                     }; break;
                                 case "mile":
                                     {
@@ -503,15 +471,16 @@ namespace HouseManager5_0.GroupClassF
             List<string> sendMsgs = new List<string>();
             var Fp = fps[0];
             var rankNum = rank.FindIndex(item => item.FastenPositionID == Fp.FastenPositionID);
-            player.Ts = new TargetForSelect()
-            {
-                tsType = "collect",
-                select = collectSelect,
-                rank = rankNum,
-            };
+            player.Ts = new TargetForSelect(collectSelect, "collect", rankNum, player.improvementRecord.HasValueToImproveSpeed);
+            //{
+            //    tsType = "collect",
+            //    select = collectSelect,
+            //    rank = rankNum,
+            //    HasValueToImproveSpeed = player.improvementRecord.HasValueToImproveSpeed
+            //};
             var msg = "";
 
-            if (player.Ts.rank == 0)
+            if (player.Ts.costPrice == 0)
             {
                 if (string.IsNullOrEmpty(Fp.region))
                 {

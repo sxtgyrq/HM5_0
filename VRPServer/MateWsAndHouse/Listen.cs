@@ -174,7 +174,7 @@ namespace MateWsAndHouse
                                     {
                                         if (Program.allTeams.ContainsKey(teamIndex))
                                         {
-                                            if (Program.allTeams[teamIndex].member.Count > 4)
+                                            if (Program.allTeams[teamIndex].member.Count > 3)
                                             {
                                                 memberIsFull = true;
                                             }

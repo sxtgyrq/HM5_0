@@ -61,21 +61,10 @@
     'tradeIndex': -1,
     'passCoin': 1,
     'run': function () {
-        //var addr = prompt('输入建筑物打赏地址');
-        //this.bussinessAddr = addr;
-        //this.tradeAddress = prompt('输入奖赏颁布地址');
-        //this.tradeIndex = Number.parseInt(prompt('输入交易号'));
-        //this.passCoin = Number.parseInt(prompt('输入聪值'));
-        //var msg = `${this.tradeIndex}@${this.tradeAddress}@${this.bussinessAddr}->SetAsReward:${this.passCoin}Satoshi`;
-        //console.log('msgNeedToSign', msg);
         var that = reward;
         if (document.getElementById(that.id) == null) {
-
-
-            // var obj = new DOMParser().parseFromString(that.html, 'text/html');
             var frag = document.createRange().createContextualFragment(that.htmlValue);
             frag.id = that.id;
-
             document.body.appendChild(frag);
             var getFormatDate = function () {
                 var dt = new Date();
@@ -92,12 +81,9 @@
             console.log('passStr', JSON.stringify(passObj));
             objMain.ws.send(JSON.stringify(passObj));
             document.getElementById('GetRewardAddrBtn').onclick = function () {
-                //  alert('设置名字！');
-                //that.ChangeName();
                 var bAddr = document.getElementById('buidingAddrForAddReward').value;
                 var obj = { 'bAddr': bAddr, 'c': 'AllStockAddr', "administratorAddr": that.administratorAddr, "signOfAdministrator": that.signOfAdministrator };
                 objMain.ws.send(JSON.stringify(obj));
-                // objMain.ws.send('{"c":"AllStockAddr"}')
             }
             document.getElementById('stockAddrForAddReward').onchange = function () {
                 //alert('stockAddrForAddReward！');
@@ -131,23 +117,11 @@
                 };
                 console.log('sendMsg', JSON.stringify(obj));
                 objMain.ws.send(JSON.stringify(obj));
-                //alert('stockAddrForAddReward！');
-                //var bAddr = document.getElementById('buidingAddrForAddReward').value;
-                //var addrAndValue = document.getElementById('stockAddrForAddReward').value.split(':')[0];
-                //var passCoin = document.getElementById('rewardSantoshi').value;
-                //var obj = { 'c': 'GenerateRewardAgreement', 'addrFrom': addrAndValue, 'addrBussiness': bAddr, 'tranNum': passCoin, "administratorAddr": that.administratorAddr, "signOfAdministrator": that.signOfAdministrator };
-                //objMain.ws.send(JSON.stringify(obj));
             }
-            //  onclick = "selectSingleTeamJoinHtmlF.ChangeName();"
-            //frag.onclick = function ()
-            //{
-            //    alert('提醒你！！！');
-            //};
-            //that.updateSocialResponsibility();
 
         }
         else {
-            //that.updateSocialResponsibility();
+
         }
     },
     'showAgreement': function (v) {
@@ -191,14 +165,10 @@
         var that = reward;
         if (document.getElementById(that.id) == null) {
             document.getElementById('rootContainer').innerHTML = '';
-
-            // var obj = new DOMParser().parseFromString(that.html, 'text/html');
             var frag = document.createRange().createContextualFragment(that.htmlHasNoData);
             frag.id = that.htmlHasNoDataDOMID;
-
             document.getElementById('rootContainer').appendChild(frag);
             document.getElementById('rewardTimeTitle').innerText = title;
-
             that.navigationAdd();
             that.msgToApply = '';
         }
@@ -272,7 +242,6 @@
         if (document.getElementById(that.id) == null) {
             document.getElementById('rootContainer').innerHTML = '';
 
-            // var obj = new DOMParser().parseFromString(that.html, 'text/html');
             var frag = document.createRange().createContextualFragment(that.htmlHasData);
             frag.id = that.htmlHasDataDOMID;
 
@@ -295,12 +264,10 @@
             }
             document.getElementById('rewardInfomationBuildingAddrSign').innerText = data.signOfBussinessAddr;
             document.getElementById('rewardInfomationRewardAddrSign').innerText = data.signOfTradeAddress;
-             
+
             that.navigationAdd();
-<<<<<<< HEAD
-            that.msgToApply = data.orderMessage; 
-=======
             that.msgToApply = data.orderMessage;
+            //  that.msgToApply = data.orderMessage;
             //list = [];
             //for (var i = 0; i < list.length; i++) {
             //    var itemHtml = `<table border="1" style="margin-top:1em;">
@@ -328,8 +295,7 @@
             //    </table>`
             //    var tableFrag = document.createRange().createContextualFragment(itemHtml);
             //    document.getElementById('rewardAppleItemContainer').appendChild(tableFrag);
-            //}
->>>>>>> 73a3b0864a6aff95d85522f8577086a82dd5777d
+            //} 
             for (var indexOfArray = 0; indexOfArray < array.length; indexOfArray++) {
                 var list = array[indexOfArray];
                 var tableCenter = '';
@@ -338,25 +304,58 @@
                     if (i % 2 == 0) {
                         bgColor = '#00ff0020';
                     }
+                    //tableCenter += `<tr style="background:${bgColor}">
+                    //    <th colspan="5">申请地址</th>
+                    //</tr>
+                    //<tr style="background:${bgColor}">
+                    //    <td style="word-break:break-all;word-wrap:anywhere;" colspan="5">${list[i].applyAddr}</td>
+                    //</tr>
+                    //<tr style="background:${bgColor}">
+                    //    <th>任务</th>
+                    //    <th>时间</th>
+                    //    <th>名次</th>
+                    //    <th>比例</th>
+                    //    <th>奖励</th>
+                    //</tr>
+                    //<tr style="background:${bgColor}">
+                    //    <td style="text-align:center;">${list[i].TaskValue}</td>
+                    //    <td style="text-align:center;">${list[i].raceTimeStr}</td>
+                    //    <td style="text-align:center;">${list[i].rank}</td>
+                    //    <td style="text-align:center;">${list[i].percentStr}</td>
+                    //    <td style="text-align:center;">${list[i].rewardGiven}satoshi</td>
+                    //</tr>`;
                     tableCenter += `<tr style="background:${bgColor}">
-                        <th colspan="5">申请地址</th>
+                        <th colspan="1">任务↓</th>
+                        <th colspan="5">申请地址↓</th>
                     </tr>
                     <tr style="background:${bgColor}">
+                        <td style="text-align:center;vertical-align:middle;">${list[i].TaskValue}</td>
                         <td style="word-break:break-all;word-wrap:anywhere;" colspan="5">${list[i].applyAddr}</td>
                     </tr>
                     <tr style="background:${bgColor}">
-                        <th>任务</th>
-                        <th>时间</th>
-                        <th>名次</th>
-                        <th>比例</th>
-                        <th>奖励</th>
+                        <th>名次↓</th>
+                        <th colspan="5">起始↓</th>
                     </tr>
                     <tr style="background:${bgColor}">
-                        <td style="text-align:center;">${list[i].TaskValue}</td>
-                        <td style="text-align:center;">${list[i].raceTimeStr}</td>
-                        <td style="text-align:center;">${list[i].rank}</td>
-                        <td style="text-align:center;">${list[i].percentStr}</td>
-                        <td style="text-align:center;">${list[i].rewardGiven}satoshi</td>
+                        <td style="text-align:center;vertical-align:middle;">${list[i].rank}</td>
+                        <td colspan="5" style="text-align:center;">${list[i].startTimeStr}</td>
+                    </tr>
+                    <tr style="background:${bgColor}">
+                        <th>比例↓</th>
+                        <th colspan="5">结束↓</th>
+                    </tr>
+                    <tr style="background:${bgColor}">
+                        <td style="text-align:center;vertical-align:middle;">${list[i].percentStr}</td>
+                        <td colspan="5" style="text-align:center;">${list[i].endTimeStr}</td>
+                    </tr>
+
+                    <tr style="background:${bgColor}">
+                        <th td colspan="3">奖励</th>
+                        <th td colspan="3">耗时</th> 
+                    </tr>
+                    <tr style="background:${bgColor}">
+                        <td style="text-align:center;" colspan="3">${list[i].rewardGiven}satoshi</td> 
+                        <td style="text-align:center;" colspan="3">${list[i].raceTimeStr}</td>   
                     </tr>`;
                 }
                 var itemHtml = `<table border="1" style="margin-top:1em;">${tableCenter}</table>`;
@@ -596,12 +595,4 @@
 
     }
 }
-
-//    function () {
-//    var tradeAddress = prompt('输入tradeAddress,即建筑物股东', '');
-//    var bussinessAddr = prompt('输入bussinessAddr,即建筑物打赏地址', '');
-//    var passCoin = prompt('passCoin，即要作为奖励的钱(聪)', '');
-//    // var passIndex = prompt('输入要传递的index', '');
-//    // var passMsg=`{}`
-//};
 

@@ -309,14 +309,65 @@ namespace WsOfWebClient
 
                 do
                 {
+                    var returnResult = ReceiveStringAsync(connectInfoDetail, webWsSize);
+                    wResult = returnResult.wr;
+                    while (s.Ls == LoginState.WaitingToGetTeam)
+                    {
+                        CommonClass.Command c = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.Command>(returnResult.result);
+                        switch (c.c)
+                        {
+                            case "LeaveTeam":
+                                {
+                                    if (s.Ls == LoginState.WaitingToGetTeam)
+                                    {
+#warning 这里因该先从房价判断，房主有没有点开始！
+
+                                        var r = Team.leaveTeam(s.teamID, s.WebsocketID);
+                                        if (r)
+                                            s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                                    }
+                                }; break;
+                            case "TeamNumWithSecret":
+                                {
+                                    if (s.Ls == LoginState.WaitingToGetTeam)
+                                    {
+                                        var command_start = s.CommandStart;
+                                        CommonClass.MateWsAndHouse.RoomInfo roomInfo;
+                                        string refererAddr;
+                                        if (Room.CheckSecret(returnResult.result, command_start, out roomInfo, out refererAddr))
+                                        {
+                                            //   Consoe.WriteLine("secret 正确");
+                                            s = Room.GetRoomThenStartAfterJoinTeam(s, connectInfoDetail, roomInfo, playerName, refererAddr);
+                                            //exitTeam
+                                        }
+                                        else if (Room.CheckSecretIsExit(returnResult.result, command_start, out refererAddr))
+                                        {
+                                            s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                                            // s = Room.setOnLine(s, webSocket);
+                                        }
+                                        else
+                                        {
+                                            return;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //Consoe.WriteLine("错误的状态");
+                                        return;
+                                    }
+                                }; break;
+                        }
+                        if (wResult.CloseStatus.HasValue)
+                        {
+                            break;
+                        }
+                        // continue;
+                    }
+
+
                     try
                     {
                         {
-
-                            var returnResult = ReceiveStringAsync(connectInfoDetail, webWsSize);
-
-                            wResult = returnResult.wr;
-                            // Consoe.WriteLine(returnResult.result);
                             CommonClass.Command c = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.Command>(returnResult.result);
                             switch (c.c)
                             {
@@ -472,46 +523,8 @@ namespace WsOfWebClient
                                             }
                                         }
                                     }; break;
-                                case "TeamNumWithSecret":
-                                    {
-                                        if (s.Ls == LoginState.WaitingToGetTeam)
-                                        {
-                                            var command_start = s.CommandStart;
-                                            CommonClass.MateWsAndHouse.RoomInfo roomInfo;
-                                            string refererAddr;
-                                            if (Room.CheckSecret(returnResult.result, command_start, out roomInfo, out refererAddr))
-                                            {
-                                                //   Consoe.WriteLine("secret 正确");
-                                                s = Room.GetRoomThenStartAfterJoinTeam(s, connectInfoDetail, roomInfo, playerName, refererAddr);
-                                                //exitTeam
-                                            }
-                                            else if (Room.CheckSecretIsExit(returnResult.result, command_start, out refererAddr))
-                                            {
-                                                s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
-                                                // s = Room.setOnLine(s, webSocket);
-                                            }
-                                            else
-                                            {
-                                                return;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            //Consoe.WriteLine("错误的状态");
-                                            return;
-                                        }
-                                    }; break;
-                                case "LeaveTeam":
-                                    {
-                                        if (s.Ls == LoginState.WaitingToGetTeam)
-                                        {
-#warning 这里因该先从房价判断，房主有没有点开始！
 
-                                            var r = Team.leaveTeam(s.teamID, s.WebsocketID);
-                                            if (r)
-                                                s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
-                                        }
-                                    }; break;
+
                                 case "SetCarsName":
                                     {
                                         if (s.Ls == LoginState.selectSingleTeamJoin)
@@ -688,16 +701,16 @@ namespace WsOfWebClient
                                     {
                                         if (s.Ls == LoginState.OnLine)
                                         {
-                                            BuyDiamond bd = Newtonsoft.Json.JsonConvert.DeserializeObject<BuyDiamond>(returnResult.result);
-                                            await Room.buyDiamond(s, bd);
+                                            //BuyDiamond bd = Newtonsoft.Json.JsonConvert.DeserializeObject<BuyDiamond>(returnResult.result);
+                                            //await Room.buyDiamond(s, bd);
                                         }
                                     }; break;
                                 case "SellDiamond":
                                     {
                                         if (s.Ls == LoginState.OnLine)
                                         {
-                                            BuyDiamond bd = Newtonsoft.Json.JsonConvert.DeserializeObject<BuyDiamond>(returnResult.result);
-                                            await Room.sellDiamond(s, bd);
+                                            //BuyDiamond bd = Newtonsoft.Json.JsonConvert.DeserializeObject<BuyDiamond>(returnResult.result);
+                                            //await Room.sellDiamond(s, bd);
                                         }
                                     }; break;
                                 case "DriverSelect":
@@ -712,16 +725,16 @@ namespace WsOfWebClient
                                     {
                                         if (s.Ls == LoginState.OnLine)
                                         {
-                                            Skill1 s1 = Newtonsoft.Json.JsonConvert.DeserializeObject<Skill1>(returnResult.result);
-                                            await Room.magic(s, s1);
+                                            //Skill1 s1 = Newtonsoft.Json.JsonConvert.DeserializeObject<Skill1>(returnResult.result);
+                                            //await Room.magic(s, s1);
                                         }
                                     }; break;
                                 case "Skill2":
                                     {
                                         if (s.Ls == LoginState.OnLine)
                                         {
-                                            Skill2 s2 = Newtonsoft.Json.JsonConvert.DeserializeObject<Skill2>(returnResult.result);
-                                            Room.magic(s, s2);
+                                            //Skill2 s2 = Newtonsoft.Json.JsonConvert.DeserializeObject<Skill2>(returnResult.result);
+                                            //Room.magic(s, s2);
                                         }
                                     }; break;
                                 case "ViewAngle":
@@ -932,27 +945,15 @@ namespace WsOfWebClient
                     catch (Exception e)
                     {
 
-                        await Room.setOffLine(s);
+                        Room.setOffLine(s);
                         removeWs(s.WebsocketID);
 #warning 这里用log做记录
-                        throw e;
+                        // throw e;
                     }
                 }
                 while (!wResult.CloseStatus.HasValue);
-                await Room.setOffLine(s);
+                Room.setOffLine(s);
                 removeWs(s.WebsocketID);
-                //try
-                //{
-                //    // await webSocket.CloseAsync(wResult.CloseStatus.Value, wResult.CloseStatusDescription, CancellationToken.None);
-                //    // ConnectInfo.connectedWs.Remove(c.WebSocketID);
-
-                //}
-                //catch (Exception e)
-                //{
-                //    throw e;
-                //    // ConnectInfo.connectedWs.Remove(c.WebSocketID);
-                //    //  return;
-                //}
             };
         }
 

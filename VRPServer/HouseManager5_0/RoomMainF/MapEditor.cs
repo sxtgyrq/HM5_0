@@ -1338,7 +1338,7 @@ namespace HouseManager5_0.RoomMainF
             }
             else
             {
-                var chargingValue = Convert.ToInt32(chargingObj.ChargingNum * 100m) * 500;
+                var chargingValue = Convert.ToInt32(chargingObj.ChargingNum * 100m) * 100;
                 DalOfAddress.MoneyAdd.AddMoney(bitcoinAddr, chargingValue);
                 {
                     var copyTasks = DalOfAddress.TaskCopy.GetALLItem(bitcoinAddr);

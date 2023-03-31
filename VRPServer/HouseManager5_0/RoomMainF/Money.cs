@@ -111,7 +111,7 @@ namespace HouseManager5_0.RoomMainF
                                 {
                                     if (BitCoin.CheckAddress.CheckAddressIsUseful(player.RefererAddr))
                                     {
-                                        DalOfAddress.MoneyRefererAdd.AddMoney(player.RefererAddr, player.RefererCount * 100);
+                                        DalOfAddress.MoneyRefererAdd.AddMoney(player.RefererAddr, player.RefererCount * 10);
                                         var tasks = DalOfAddress.TaskCopy.GetALLItem(player.RefererAddr);
                                         this.taskM.AddReferer(player.RefererCount, tasks);
                                         player.RefererCount = 0;
@@ -175,9 +175,8 @@ namespace HouseManager5_0.RoomMainF
                                         player.MoneySet(player.Money + subsidizeGet + Referer, ref notifyMsg);
                                         if (Referer > 0)
                                         {
-                                            this.WebNotify(player, $"您的热心分享使您获得了额外的{Referer / 100}.{(Referer % 100) / 10}{(Referer % 100) % 10}积分。");
-                                        }
-                                        //  player.setSupportToPlayMoney(player.SupportToPlayMoney + subsidizeGet, ref notifyMsg);
+                                            this.WebNotify(player, $"热心的分享使您获得了额外的{Referer / 100}.{(Referer % 100) / 10}{(Referer % 100) % 10}积分。");
+                                        };
                                         if (player.playerType == Player.PlayerType.player)
                                             this.SendLeftMoney((Player)player, subsidizeLeft, ots.address, ref notifyMsg);
                                     }

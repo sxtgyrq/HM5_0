@@ -25,34 +25,46 @@ namespace WsOfWebClient.BLL
             //
             try
             {
-                var playerCheck = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerCheck>(checkSession.session);
-                playerCheck.c = "PlayerCheck";
-                playerCheck.FromUrl = $"{ConnectInfo.HostIP}:{ConnectInfo.tcpServerPort}";//ConnectInfo.ConnectedInfo + "/notify";
-                // pl
-                playerCheck.WebSocketID = s.WebsocketID;
-
-                if (Room.CheckSign(playerCheck))
+                if (string.IsNullOrEmpty(checkSession.session))
                 {
-                    var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(playerCheck);
-                    var reqResult = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[playerCheck.RoomIndex], sendMsg);
-                    if (reqResult.ToLower() == "ok")
+                    return new CheckIsOKResult()
                     {
-                        s.roomIndex = playerCheck.RoomIndex;
-                        return new CheckIsOKResult()
-                        {
-                            CheckOK = true,
-                            roomIndex = playerCheck.RoomIndex,
-                            Key = playerCheck.Key,
-                            GroupKey = playerCheck.GroupKey,
-                        };
-                    }
+                        CheckOK = false,
+                        roomIndex = -1,
+                        Key = "不存在"
+                    };
                 }
-                return new CheckIsOKResult()
+                else
                 {
-                    CheckOK = false,
-                    roomIndex = -1,
-                    Key = "不存在"
-                };
+                    var playerCheck = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerCheck>(checkSession.session);
+                    playerCheck.c = "PlayerCheck";
+                    playerCheck.FromUrl = $"{ConnectInfo.HostIP}:{ConnectInfo.tcpServerPort}";//ConnectInfo.ConnectedInfo + "/notify";
+                                                                                              // pl
+                    playerCheck.WebSocketID = s.WebsocketID;
+
+                    if (Room.CheckSign(playerCheck))
+                    {
+                        var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(playerCheck);
+                        var reqResult = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[playerCheck.RoomIndex], sendMsg);
+                        if (reqResult.ToLower() == "ok")
+                        {
+                            s.roomIndex = playerCheck.RoomIndex;
+                            return new CheckIsOKResult()
+                            {
+                                CheckOK = true,
+                                roomIndex = playerCheck.RoomIndex,
+                                Key = playerCheck.Key,
+                                GroupKey = playerCheck.GroupKey,
+                            };
+                        }
+                    }
+                    return new CheckIsOKResult()
+                    {
+                        CheckOK = false,
+                        roomIndex = -1,
+                        Key = "不存在"
+                    };
+                }
             }
             catch
             {

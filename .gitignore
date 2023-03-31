@@ -23,6 +23,7 @@
 /Webshow/webHtml/bin/
 /VRPServer/ConsoleTestAPP/bin/
 /VRPServer/AppCheckConnection/bin/
+/VRPServer/AppCheckConnection/obj/
 /VRPServer/ConsoleBitcoinChainApp/bin/
 /VRPServer/CubeImageTool/bin/
 /VRPServer/Server/.vs/
@@ -56,4 +57,15 @@
 /Webshow/WebApplication1/bin/
 /Webshow/WebApplication1/obj/
 /Webshow/WebApplication1/.vs/
- 
+/VRPServer/CityRunFunction/obj/
+/VRPServer/CityRunFunction/bin/
+/VRPServer/BitCoin/obj/
+/VRPServer/BitCoin/bin/
+/VRPServer/Geometry/obj/
+/VRPServer/Geometry/bin/
+/VRPServer/LogClass/obj/
+/VRPServer/LogClass/bin/
+/VRPServer/Model/obj/
+/VRPServer/Model/bin/
+/VRPServer/Server/obj/
+/VRPServer/Server/bin/
