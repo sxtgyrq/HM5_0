@@ -112,7 +112,8 @@ namespace HouseManager5_0.GroupClassF
                 TimeStr = FinishedMsg,
                 ResultMsg = this.recordErrorMsgs.ContainsKey(key) ? this.recordErrorMsgs[key] : "",
                 RecordedInDB = this.records.ContainsKey(key),
-                base64 = ""
+                base64 = "",
+                groupNumber = player.Group.groupNumber
             };
             if (player.getCar().targetFpIndex >= 0)
             {

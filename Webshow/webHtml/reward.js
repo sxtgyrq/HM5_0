@@ -297,7 +297,39 @@
             document.getElementById('rewardInfomationRewardAddrSign').innerText = data.signOfTradeAddress;
              
             that.navigationAdd();
+<<<<<<< HEAD
             that.msgToApply = data.orderMessage; 
+=======
+            that.msgToApply = data.orderMessage;
+            //list = [];
+            //for (var i = 0; i < list.length; i++) {
+            //    var itemHtml = `<table border="1" style="margin-top:1em;">
+
+            //        <tr>
+            //            <th>申请地址</th>
+            //            <th>申请等级</th>
+            //            <th>获得点数</th>
+            //            <th>比例</th>
+            //        </tr>
+            //        <tr>
+            //            <td style="word-break:break-all;word-wrap:anywhere;">${list[i].applyAddr}</td>
+            //            <td style="word-break:break-all;word-wrap:anywhere;">${list[i].applyLevel}级</td>
+            //            <td style="word-break:break-all;word-wrap:anywhere;">${list[i].satoshiShouldGet}satoshi</td>
+            //            <td style="word-break:break-all;word-wrap:anywhere;">${list[i].percentStr}</td>
+            //        </tr>
+            //        <tr>
+            //            <th colspan="1" style="word-break:break-all;word-wrap:anywhere;">消息→</th>
+            //            <td colspan="2" style="word-break:break-all;word-wrap:anywhere;">${list[i].startDate}</td>
+            //            <th colspan="1" style="word-break:break-all;word-wrap:anywhere;">↓签名↓</th>
+            //        </tr>
+            //        <tr>
+            //            <td colspan="4" style="word-break:break-all;word-wrap:anywhere;">${list[i].applySign}</td>
+            //        </tr>
+            //    </table>`
+            //    var tableFrag = document.createRange().createContextualFragment(itemHtml);
+            //    document.getElementById('rewardAppleItemContainer').appendChild(tableFrag);
+            //}
+>>>>>>> 73a3b0864a6aff95d85522f8577086a82dd5777d
             for (var indexOfArray = 0; indexOfArray < array.length; indexOfArray++) {
                 var list = array[indexOfArray];
                 var tableCenter = '';

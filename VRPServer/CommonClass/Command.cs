@@ -441,6 +441,7 @@ namespace CommonClass
         public string TimeStr { get; set; }
         public string ResultMsg { get; set; }
         public bool RecordedInDB { get; set; }
+        public int groupNumber { get; set; }
 
         public class DataItem
         {

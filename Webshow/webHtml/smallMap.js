@@ -8,9 +8,23 @@
 
         const img = new Image();
 
-        img.src = "Pic/taskImage/taskFor1.png";
+
+        //  img.src = "Pic/taskImage/taskFor1.png";
         if (smallMap.isFineshed) {
             img.src = 'data:image/jpeg;base64,' + smallMap.base64;
+        }
+        else {
+            switch (smallMap.groupNumber) {
+                case 1: { img.src = "Pic/taskImage/taskFor1.png"; }; break;
+                case 2: { img.src = "Pic/taskImage/taskFor2.png"; }; break;
+                case 3: { img.src = "Pic/taskImage/taskFor3.png"; }; break;
+                case 4: { img.src = "Pic/taskImage/taskFor4.png"; }; break;
+                case 5: { img.src = "Pic/taskImage/taskFor5.png"; }; break;
+                default:
+                    {
+                        img.src = "Pic/taskImage/taskFor1.png";
+                    }; break;
+            }
         }
         img.onload = () => {
 
