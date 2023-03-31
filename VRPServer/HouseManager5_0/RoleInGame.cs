@@ -135,7 +135,7 @@ namespace HouseManager5_0
             this._Car.setAnimateData(this, ref notifyMsg, null, DateTime.Now);
 
             this._Car.ability.MileChanged = roomMain.AbilityChanged2_0;
-            //  this._Car.ability.BusinessChanged = roomMain.AbilityChanged2_0;
+            this._Car.ability.BusinessChanged = roomMain.AbilityChanged2_0;
             this._Car.ability.VolumeChanged = roomMain.AbilityChanged2_0;
             this._Car.ability.SpeedChanged = roomMain.AbilityChanged2_0;
 
@@ -910,6 +910,7 @@ namespace HouseManager5_0
                     {
                         this.bTCAddressValue = value;
                         this.nntl(this);
+                        this.Group.recordRaceTime(this.Key);
                     }
                 }
             }

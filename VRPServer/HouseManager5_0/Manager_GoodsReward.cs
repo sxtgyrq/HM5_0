@@ -36,11 +36,12 @@ namespace HouseManager5_0
                         minLength[model.modelID] = length;
                     }
                 }
-            } 
+            }
             {
                 ShowOneConnectionModel(minLength, player, hp, ref notifyMsg);
             }
-            ShowOneConnectionLines(minLength, player, hp, ref notifyMsg);
+            if (hp.ClassType == "FastonPosition")
+                ShowOneConnectionLines(minLength, player, hp, ref notifyMsg);
 
         }
 
@@ -111,89 +112,50 @@ namespace HouseManager5_0
 
         internal List<Data.detailmodel> GetConnectionModels(int startFPIndex, Player role)
         {
-            throw new Exception();
+            //throw new Exception();
 
-            //if (role.playerType == Player.PlayerType.player)
-            //{
-            //    var player = (Player)role;
-            //    List<Data.detailmodel> modelsNeedToShow = new List<Data.detailmodel>();
-            //    var models = Program.dt.models; 
-            //    Dictionary<string, double> minLength = new Dictionary<string, double>();
-            //    foreach (var model in models)
-            //    {
-            //        if (Program.dt.material[model.amodel].modelType.Trim() == "building")
-            //        {
-            //            minLength.Add(model.modelID, double.MaxValue);
-            //            foreach (var fpIndex in that._collectPosition)
-            //            {
-            //                var fp = Program.dt.GetFpByIndex(fpIndex.Value);
-            //                var length = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fp.Latitde, fp.Longitude, fp.Height, model.lat, model.lon, 0);
-            //                if (length < minLength[model.modelID])
-            //                {
-            //                    minLength[model.modelID] = length;
-            //                }
-            //            }
-            //        }
-            //    }
-            //    {
-            //        var fp = Program.dt.GetFpByIndex(startFPIndex);
-            //        {
-            //            foreach (var model in models)
-            //            {
-            //                if (Program.dt.material[model.amodel].modelType.Trim() == "building")
-            //                {
-            //                    var length = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fp.Latitde, fp.Longitude, fp.Height, model.lat, model.lon, 0);
-            //                    // model.
-            //                    if (length < minLength[model.modelID])
-            //                        if (player.modelHasShowed.ContainsKey(model.modelID))
-            //                            modelsNeedToShow.Add(model);
-            //                }
-            //            }
-            //        }
-            //    }
-            //    return modelsNeedToShow;
-            //}
-            //else if (role.playerType == Player.PlayerType.NPC)
-            //{
-            //    List<Data.detailmodel> modelsNeedToShow = new List<Data.detailmodel>();
-            //    var models = Program.dt.models;
-            //    //var fp = Program.dt.GetFpByIndex(target);
-            //    Dictionary<string, double> minLength = new Dictionary<string, double>();
-            //    foreach (var model in models)
-            //    {
-            //        if (Program.dt.material[model.amodel].modelType.Trim() == "building")
-            //        {
-            //            minLength.Add(model.modelID, double.MaxValue);
-            //            foreach (var fpIndex in that._collectPosition)
-            //            {
-            //                var fp = Program.dt.GetFpByIndex(fpIndex.Value);
-            //                var length = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fp.Latitde, fp.Longitude, fp.Height, model.lat, model.lon, 0);
-            //                if (length < minLength[model.modelID])
-            //                {
-            //                    minLength[model.modelID] = length;
-            //                }
-            //            }
-            //        }
-            //    }
-            //    {
-            //        var fp = Program.dt.GetFpByIndex(startFPIndex);
-            //        {
-            //            foreach (var model in models)
-            //            {
-            //                if (Program.dt.material[model.amodel].modelType.Trim() == "building")
-            //                {
-            //                    var length = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fp.Latitde, fp.Longitude, fp.Height, model.lat, model.lon, 0);
-            //                    // model.
-            //                    if (length < minLength[model.modelID])
-            //                        //if(  model.amodel)
-            //                        modelsNeedToShow.Add(model);
-            //                }
-            //            }
-            //        }
-            //    }
-            //    return modelsNeedToShow;
-            //}
-            //else return new List<Data.detailmodel>();
+            if (role.playerType == Player.PlayerType.player)
+            {
+                var group = role.Group;
+                var player = (Player)role;
+                List<Data.detailmodel> modelsNeedToShow = new List<Data.detailmodel>();
+                var models = Program.dt.models;
+                Dictionary<string, double> minLength = new Dictionary<string, double>();
+                foreach (var model in models)
+                {
+                    if (Program.dt.material[model.amodel].modelType.Trim() == "building")
+                    {
+                        minLength.Add(model.modelID, double.MaxValue);
+                        foreach (var fpIndex in group._collectPosition)
+                        {
+                            var fp = Program.dt.GetFpByIndex(fpIndex.Value);
+                            var length = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fp.Latitde, fp.Longitude, fp.Height, model.lat, model.lon, 0);
+                            if (length < minLength[model.modelID])
+                            {
+                                minLength[model.modelID] = length;
+                            }
+                        }
+                    }
+                }
+                {
+                    var fp = Program.dt.GetFpByIndex(startFPIndex);
+                    {
+                        foreach (var model in models)
+                        {
+                            if (Program.dt.material[model.amodel].modelType.Trim() == "building")
+                            {
+                                var length = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fp.Latitde, fp.Longitude, fp.Height, model.lat, model.lon, 0);
+                                // model.
+                                if (length < minLength[model.modelID])
+                                    if (player.modelHasShowed.ContainsKey(model.modelID))
+                                        modelsNeedToShow.Add(model);
+                            }
+                        }
+                    }
+                }
+                return modelsNeedToShow;
+            }
+            else return new List<Data.detailmodel>();
 
         }
 

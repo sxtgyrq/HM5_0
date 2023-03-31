@@ -41,13 +41,13 @@ namespace HouseManager5_0.RoomMainF
             public List<pathItem> path { get; set; }
             public class pathItem
             {
-                public class Postion : Model.HasPosition
+                public class Postion
                 {
-                    public double Longitude { get { return this.longitude; } }
-                    public double Latitde { get { return this.latitude; } }
-                    public double Height { get { return this.height; } }
-                    public double positionLongitudeOnRoad { get { return this.longitude; } } 
-                    public double positionLatitudeOnRoad { get { return this.latitude; } }
+                    //public double Longitude { get { return this.longitude; } }
+                    //public double Latitde { get { return this.latitude; } }
+                    //public double Height { get { return this.height; } }
+                    //public double positionLongitudeOnRoad { get { return this.longitude; } }
+                    //public double positionLatitudeOnRoad { get { return this.latitude; } }
 
                     public double longitude { get; set; }
 
@@ -59,6 +59,21 @@ namespace HouseManager5_0.RoomMainF
                     public string postionCrossKey { get { return $"{longitude.ToString("F5")},{latitude.ToString("F5")}"; } }
 
 
+                }
+                public class PostionForHP : Model.HasPosition
+                {
+                    public PostionForHP(Postion postion_)
+                    {
+                        this.postion = postion_;
+                    }
+                    public Postion postion { get; private set; }
+                    public double Longitude { get { return this.postion.longitude; } }
+                    public double Latitde { get { return this.postion.latitude; } }
+                    public double Height { get { return this.postion.height; } }
+                    public double positionLongitudeOnRoad { get { return this.postion.longitude; } }
+                    public double positionLatitudeOnRoad { get { return this.postion.latitude; } }
+
+                    public string ClassType { get { return "Postion"; } }
                 }
                 /// <summary>
                 /// 供选择的矢量，这里的start是矢量的起点，并不是选择的起点。end为矢量的终点。

@@ -1,8 +1,10 @@
 ﻿using CommonClass;
+//using HouseManager5_0.interfaceOfHM;
 using HouseManager5_0.RoomMainF;
 using Microsoft.AspNetCore.Server.IIS.Core;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using static HouseManager5_0.Car;
 using static HouseManager5_0.RoomMainF.RoomMain;
 
@@ -45,7 +47,18 @@ namespace HouseManager5_0
                 }
                 else
                 {
-                    this.WebNotify(player, "小车已经没有多余手机容量了！");
+
+                    this.WebNotify(player, "小车已经没有多余容量了！可以返回基地或者去收集宝石！");
+                    SetCollect sc = (SetCollect)c;
+                    if (string.IsNullOrEmpty(sc.GroupKey))
+                    {
+
+                    }
+                    if (that._Groups.ContainsKey(sc.GroupKey))
+                    {
+                        var group = that._Groups[sc.GroupKey];
+                        group.askWhetherGoToPositon2(sc.Key, grp);
+                    }
                     return false;
                 }
             else
@@ -94,6 +107,16 @@ namespace HouseManager5_0
                     }
                     else if (grp.GetFpByIndex(group._collectPosition[sc.collectIndex]).FastenPositionID != sc.fastenpositionID)
                     {
+                        this.WebNotify(group._PlayerInGroup[sc.Key], "确认慢了，所选已被别人收集！");
+                        group.askWhetherGoToPositon2(sc.Key, grp);
+                        reason = "";
+                        return false;
+                    }
+                    else if (!group.MoneyIsEnoughForSelect(sc.Key))
+                    {
+                        var costPriceStr = group._PlayerInGroup[sc.Key].Ts.costPriceStr;
+                        this.WebNotify(group._PlayerInGroup[sc.Key], $"身上的钱不够路费{costPriceStr}元，未能出发！");
+                        group.askWhetherGoToPositon2(sc.Key, grp);
                         reason = "";
                         return false;
                     }
@@ -145,119 +168,57 @@ namespace HouseManager5_0
 
         RoomMainF.RoomMain.commandWithTime.ReturningOjb collect(Player player, Car car, SetCollect sc, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason Mrr)
         {
-            // throw new Exception("");
-            if (player.confuseRecord.IsBeingControlled())
+
+            if (car.ability.leftVolume > 0)
             {
-                if (player.confuseRecord.getControlType() == Manager_Driver.ConfuseManger.ControlAttackType.Lost)
+                var from = this.GetFromWhenUpdateCollect(player, sc.cType, car);
+                var to = getCollectPositionTo(sc.collectIndex, player.Group);//  this.promoteMilePosition;
+                var fp1 = grp.GetFpByIndex(from);
+                var goPath = that.GetAFromB_v2(from, to, player, grp, ref notifyMsg);
+                var returnPath = that.GetAFromB_v2(to, player.StartFPIndex, player, grp, ref notifyMsg);
+                var goMile = that.GetMile(goPath);
+                var returnMile = that.GetMile(returnPath);
+                if (car.ability.leftMile >= goMile + returnMile || IsNPCsFirstCollect(player))
                 {
-                    Model.FastonPosition target;
-                    if (car.state == CarState.waitOnRoad)
+                    int startT;
+                    this.EditCarStateWhenActionStartOK(player, ref car, to, fp1, goPath, grp, ref notifyMsg, out startT);
+                    var ro = commandWithTime.ReturningOjb.ojbWithoutBoss(returnPath);
+                    car.setState(player, ref notifyMsg, CarState.working);
+                    StartArriavalThread(startT, 0, player, car, sc, ro, goMile, goPath, grp);
+                    Mrr = MileResultReason.Abundant;//返回原因
+                    if (player.Money - player.Ts.costPrice > 0)
                     {
-                        target = grp.GetFpByIndex(car.targetFpIndex);
-
-                    }
-                    else if (car.state == CarState.waitAtBaseStation)
-                    {
-                        target = grp.GetFpByIndex(player.StartFPIndex);
-
-                        // that.magicE.TakeHalfMoneyWhenIsControlled(player, car, ref notifyMsg);
+                        player.MoneySet(player.Money - player.Ts.costPrice, ref notifyMsg);
                     }
                     else
                     {
-                        throw new Exception("");
+                        player.MoneySet(0, ref notifyMsg);
                     }
-                    var positions = that.getCollectPositionsByDistance(target, Program.dt);
-                    if (sc.collectIndex == positions[0] || sc.collectIndex == positions[1])
-                    {
-
-                    }
-                    else
-                    {
-                        var group = player.Group;
-                        var position0 = grp.GetFpByIndex(group._collectPosition[positions[0]]);
-                        var position1 = grp.GetFpByIndex(group._collectPosition[positions[1]]);
-                        var distance0 = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(target.Latitde, target.Longitude, target.Height, position0.Latitde, position0.Longitude, position0.Height);
-                        var distance1 = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(target.Latitde, target.Longitude, target.Height, position1.Latitde, position1.Longitude, position1.Height);
-                        if (distance0 < distance1)
-                        {
-                            this.WebNotify(player, $"您处于迷失状态，未能到达远方！只能先到附近的[{position0.FastenPositionName}]执行收集任务！");
-                            var newSc = new SetCollect()
-                            {
-                                c = "SetCollect",
-                                collectIndex = positions[0],
-                                fastenpositionID = position0.FastenPositionID,
-                                cType = "findWork",
-                                Key = sc.Key
-                            };
-                            return collect(player, car, newSc, grp, ref notifyMsg, out Mrr);
-                        }
-                        else
-                        {
-                            this.WebNotify(player, $"您处于迷失状态，未能到达远方！只能先到附近的[{position1.FastenPositionName}]执行收集任务！");
-                            var newSc = new SetCollect()
-                            {
-                                c = "SetCollect",
-                                collectIndex = positions[1],
-                                fastenpositionID = position1.FastenPositionID,
-                                cType = "findWork",
-                                Key = sc.Key
-                            };
-                            return collect(player, car, newSc, grp, ref notifyMsg, out Mrr);
-                        }
-                    }
-                    //var target = Program.dt.GetFpByIndex(victim.StartFPIndex);
-                    //var collectIndexTarget = that.getCollectPositionsByDistance(target)[randomValue];
+                    return ro;
                 }
 
-                //if (car.state == CarState.waitAtBaseStation)
-                //{
-                //    // that.magicE.TakeMoneyWhenIsControlled(player,car,);
-                //}
-            }
-
-            {
-                if (car.ability.leftVolume > 0)
+                else if (car.ability.leftMile >= goMile)
                 {
-                    var from = this.GetFromWhenUpdateCollect(player, sc.cType, car);
-                    var to = getCollectPositionTo(sc.collectIndex, player.Group);//  this.promoteMilePosition;
-                    var fp1 = grp.GetFpByIndex(from);
-                    var goPath = that.GetAFromB_v2(from, to, player, grp, ref notifyMsg);
-                    var returnPath = that.GetAFromB_v2(to, player.StartFPIndex, player, grp, ref notifyMsg);
-                    var goMile = that.GetMile(goPath);
-                    var returnMile = that.GetMile(returnPath);
-                    if (car.ability.leftMile >= goMile + returnMile || IsNPCsFirstCollect(player))
-                    {
-                        int startT;
-                        this.EditCarStateWhenActionStartOK(player, ref car, to, fp1, goPath, grp, ref notifyMsg, out startT);
-                        var ro = commandWithTime.ReturningOjb.ojbWithoutBoss(returnPath);
-                        car.setState(player, ref notifyMsg, CarState.working);
-                        StartArriavalThread(startT, 0, player, car, sc, ro, goMile, goPath, grp);
-                        Mrr = MileResultReason.Abundant;//返回原因
-                        return ro;
-                    }
-
-                    else if (car.ability.leftMile >= goMile)
-                    {
-                        //  printState(player, car, $"剩余里程为{car.ability.leftMile}去程{goMile}，回程{returnMile},你去了回不来。所以安排返回");
-                        Mrr = MileResultReason.CanNotReturn;
-                        return player.returningOjb;
-                    }
-                    else
-                    {
-                        // printState(player, car, $"剩余里程为{car.ability.leftMile}去程{goMile}，回程{returnMile},去不了。所以安排返回");
-                        Mrr = MileResultReason.CanNotReach;
-                        return player.returningOjb;
-                        //   return false;
-                    }
+                    //  printState(player, car, $"剩余里程为{car.ability.leftMile}去程{goMile}，回程{returnMile},你去了回不来。所以安排返回");
+                    Mrr = MileResultReason.CanNotReturn;
+                    return player.returningOjb;
                 }
                 else
                 {
-                    Mrr = MileResultReason.MoneyIsNotEnougt;
-                    this.WebNotify(player, "你身上的剩余收集空间不够啦！");
+                    // printState(player, car, $"剩余里程为{car.ability.leftMile}去程{goMile}，回程{returnMile},去不了。所以安排返回");
+                    Mrr = MileResultReason.CanNotReach;
                     return player.returningOjb;
+                    //   return false;
                 }
             }
+            else
+            {
+                Mrr = MileResultReason.MoneyIsNotEnougt;
+                this.WebNotify(player, "你身上的剩余收集空间不够啦！");
+                return player.returningOjb;
+            }
         }
+
         // 这种状态是为了防止NPC陷入死循环，就是NPC距离不够，也能保持收集
         private bool IsNPCsFirstCollect(Player player)
         {
@@ -429,7 +390,9 @@ namespace HouseManager5_0
             {
                 if (role.playerType == Player.PlayerType.player)
                 {
-                    that.goodsM.ShowConnectionModels((Player)role, that.GetRandomPosObj.GetFpByIndex(pa.target), ref notifyMsg);
+                    that.goodsM.ShowConnectionModels((Player)role,
+                        new Model.FastonPositionHP(that.GetRandomPosObj.GetFpByIndex(pa.target)),
+                        ref notifyMsg);
                 }
                 else if (role.playerType == Player.PlayerType.NPC)
                 {
@@ -457,14 +420,12 @@ namespace HouseManager5_0
             {
                 group.askWhetherGoToPositon(role.Key, that.GetRandomPosObj);
             }
-
-            //that.GetRewardFromBuildingF(new GetRewardFromBuildingM() 
-            //{
-            //     c= "GetRewardFromBuildingM",
-            //      GroupKey=role.Key,
-            //       Key=role.Key,
-            //        selectObjName=role.Key,
-            //});
+            that.GetRewardFromBuildingF(new GetRewardFromBuildingM()
+            {
+                c = "GetRewardFromBuildingM",
+                GroupKey = group.GroupKey,
+                Key = role.Key
+            });
         }
 
         private void setCollectPosition(int target, GroupClassF.GroupClass group)
@@ -635,7 +596,16 @@ namespace HouseManager5_0
             //  throw new NotImplementedException();
         }
 
-
+        //internal void SingleColect(SetCollect sc, GetRandomPos grp)
+        //{
+        //    if (string.IsNullOrEmpty(sc.GroupKey)) { }
+        //    else if (that._Groups.ContainsKey(sc.GroupKey))
+        //    {
+        //        var group = that._Groups[sc.GroupKey];
+        //    group.SingleColect(sc, grp);
+        //    }
+        //    //   throw new NotImplementedException();
+        //}
     }
 }
 

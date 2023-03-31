@@ -529,7 +529,7 @@ namespace DalOfAddress
         }
         public static void Add(ModelTranstraction.AwardsGivingPass agp, out AddResult r)
         {
-            var tr = DalOfAddress.TradeReward.GetByStartDate(int.Parse(agp.time));
+            var tr = DalOfAddress.TradeReward.GetByStartDate(int.Parse(agp.Time));
             if (tr == null)
             {
                 r = AddResult.HasNoData;
@@ -541,12 +541,12 @@ namespace DalOfAddress
                 using (MySqlTransaction tran = con.BeginTransaction())
                 {
 
-                    if (agp.msgs.Count == 0)
+                    if (agp.Msgs.Count == 0)
                     {
-                        if (traderewardapply.Count(con, tran, Convert.ToInt32(agp.time)) == 0)
+                        if (traderewardtimerecord.Count(con, tran, Convert.ToInt32(agp.Time)) == 0)
                         {
                             int updateRow;
-                            string sQL = $"UPDATE tradereward SET waitingForAddition=0 WHERE startDate={agp.time} AND waitingForAddition=1;";
+                            string sQL = $"UPDATE tradereward SET waitingForAddition=0 WHERE startDate={agp.Time} AND waitingForAddition=1;";
                             using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                             {
                                 updateRow = command.ExecuteNonQuery();
@@ -573,25 +573,25 @@ namespace DalOfAddress
                     }
                     else
                     {
-                        int count;
-                        {
-                            string sQL = $"SELECT COUNT(*) FROM traderewardapply WHERE startDate={agp.time};";
-                            using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
-                            {
-                                count = Convert.ToInt32(command.ExecuteScalar());
-                            }
-                        }
-                        if (count == agp.msgs.Count)
+                        int count = traderewardtimerecord.Count(con, tran, Convert.ToInt32(agp.Time));
+                        //{
+                        //    string sQL = $"SELECT COUNT(*) FROM traderewardapply WHERE startDate={agp.time};";
+                        //    using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                        //    {
+                        //        count = Convert.ToInt32(command.ExecuteScalar());
+                        //    }
+                        //}
+                        if (count == agp.Msgs.Count)
                         {
                             //   CommonClass.Agreement
                             //  var splitChars = new char[] { '@', '-' };
                             int sumPassCoin = 0;
-                            for (int i = 0; i < agp.msgs.Count; i++)
+                            for (int i = 0; i < agp.Msgs.Count; i++)
                             {
                                 // var msgItem = agp.msgs[i].Split();
                                 int index, passValue;
                                 string tradeAddr, businessAddr, acceptAddr;
-                                var formatIsWrite = CommonClass.Agreement.IsUseful(agp.msgs[i], out index, out tradeAddr, out businessAddr, out acceptAddr, out passValue);
+                                var formatIsWrite = CommonClass.Agreement.IsUseful(agp.Msgs[i], out index, out tradeAddr, out businessAddr, out acceptAddr, out passValue);
                                 sumPassCoin += passValue;
                                 if (formatIsWrite)
                                 {
@@ -624,7 +624,7 @@ namespace DalOfAddress
                                         tran.Rollback();
                                         return;
                                     }
-                                    else if (traderewardapply.UpdateItem(con, tran, Convert.ToInt32(agp.time), agp.ranks[i], acceptAddr, passValue) != 1)
+                                    else if (traderewardtimerecord.UpdateItem(con, tran, Convert.ToInt32(agp.Time), agp.IDs[i], acceptAddr, passValue) != 1)
                                     {
                                         r = AddResult.DataError;
                                         tran.Rollback();
@@ -639,8 +639,8 @@ namespace DalOfAddress
                                             using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                                             {
                                                 DateTime TimeStamping = DateTime.Now;
-                                                command.Parameters.AddWithValue("@msg", agp.msgs[i]);
-                                                command.Parameters.AddWithValue("@sign", agp.list[i]);
+                                                command.Parameters.AddWithValue("@msg", agp.Msgs[i]);
+                                                command.Parameters.AddWithValue("@sign", agp.List[i]);
                                                 command.Parameters.AddWithValue("@bussinessAddr", tr.bussinessAddr);
                                                 command.Parameters.AddWithValue("@tradeIndex", tradeIndexInDB);
                                                 command.Parameters.AddWithValue("@addrFrom", tr.tradeAddress);
@@ -670,14 +670,14 @@ namespace DalOfAddress
                             if (sumPassCoin == tr.passCoin)
                             {
                                 int updateRow;
-                                string sQL = $"UPDATE tradereward SET waitingForAddition=0 WHERE startDate={agp.time} AND waitingForAddition=1 AND passCoin={sumPassCoin};";
+                                string sQL = $"UPDATE tradereward SET waitingForAddition=0 WHERE startDate={agp.Time} AND waitingForAddition=1 AND passCoin={sumPassCoin};";
                                 using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                                 {
                                     updateRow = command.ExecuteNonQuery();
                                 }
                                 if (updateRow == 1)
                                 {
-                                    if (traderewardapply.HasAddrGetNoReward(tran, con, Convert.ToInt32(agp.time)))
+                                    if (traderewardtimerecord.HasAddrGetNoReward(tran, con, Convert.ToInt32(agp.Time)))
                                     {
                                         r = AddResult.DataError;
                                         tran.Rollback();
@@ -714,5 +714,7 @@ namespace DalOfAddress
                 }
             }
         }
+
+
     }
 }

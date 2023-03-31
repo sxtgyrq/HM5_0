@@ -31,11 +31,11 @@ namespace HouseManager5_0.RoomMainF
                         costValue = car.ability.costMiles;
                         sumValue = car.ability.mile;
                     }; break;
-                //case "business":
-                //    {
-                //        costValue = car.ability.costBusiness;
-                //        sumValue = car.ability.Business;
-                //    }; break;
+                case "business":
+                    {
+                        costValue = car.ability.costBusiness;
+                        sumValue = car.ability.Business;
+                    }; break;
                 case "volume":
                     {
                         costValue = car.ability.costVolume;
@@ -83,17 +83,25 @@ namespace HouseManager5_0.RoomMainF
                 else if (this._Groups.ContainsKey(addItem.GroupKey))
                 {
                     // success = false;
-                    return "ng";
+                    GroupClassF.GroupClass group;
+                    group = this._Groups[addItem.GroupKey];
+                    if (group._PlayerInGroup.Count < group.groupNumber && group._PlayerInGroup.Count < 5)
+                    {
+                        group.AddPlayer(addItem, cf, gp);
+                        return "ok";
+                    }
+                    else
+                        return "ng";
                 }
                 else
                 {
-                    var group = new GroupClassF.GroupClass(addItem.GroupKey, this);
+                    GroupClassF.GroupClass group;
+                    group = new GroupClassF.GroupClass(addItem.GroupKey, this);
                     group.LookFor(gp);
-
+                    group.groupNumber = addItem.groupMemberCount;
                     group.AddPlayer(addItem, cf, gp);
-
-
                     this._Groups.Add(addItem.GroupKey, group);
+
                 }
 
             }

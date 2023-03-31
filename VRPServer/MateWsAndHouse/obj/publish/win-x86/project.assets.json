@@ -1995,7 +1995,7 @@
       },
       "CommonClass/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
+        "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
           "FontStashSharp.Rasterizers.SixLabors.Fonts": "1.1.5",
           "Model": "1.0.0",
@@ -2023,7 +2023,7 @@
       },
       "TcpFunction/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
+        "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
           "CommonClass": "1.0.0",
           "SuperSocket.ClientEngine.Core": "0.10.0"
@@ -4185,7 +4185,7 @@
       },
       "CommonClass/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
+        "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
           "FontStashSharp.Rasterizers.SixLabors.Fonts": "1.1.5",
           "Model": "1.0.0",
@@ -4213,7 +4213,7 @@
       },
       "TcpFunction/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
+        "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
           "CommonClass": "1.0.0",
           "SuperSocket.ClientEngine.Core": "0.10.0"
@@ -9328,11 +9328,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Project\\VRPGame\\VRPServer\\MateWsAndHouse\\MateWsAndHouse.csproj",
+      "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\MateWsAndHouse\\MateWsAndHouse.csproj",
       "projectName": "MateWsAndHouse",
-      "projectPath": "E:\\Project\\VRPGame\\VRPServer\\MateWsAndHouse\\MateWsAndHouse.csproj",
+      "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\MateWsAndHouse\\MateWsAndHouse.csproj",
       "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-      "outputPath": "E:\\Project\\VRPGame\\VRPServer\\MateWsAndHouse\\obj\\publish\\win-x86\\",
+      "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\MateWsAndHouse\\obj\\publish\\win-x86\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -9354,11 +9354,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj": {
-              "projectPath": "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj"
             },
-            "E:\\Project\\VRPGame\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
-              "projectPath": "E:\\Project\\VRPGame\\VRPServer\\TcpFunction\\TcpFunction.csproj"
+            "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
+              "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj"
             }
           }
         }

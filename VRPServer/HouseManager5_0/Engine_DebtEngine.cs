@@ -108,27 +108,29 @@ namespace HouseManager5_0
 
             public long ImproveAttack(Player role, long attackMoney, ref List<string> notifyMsgs)
             {
-                if (role.improvementRecord.attackValue > 0)
-                {
-                    var larger = Program.rm.magicE.enlarge(attackMoney);
-                    if (larger - attackMoney > 0)
-                        role.improvementRecord.reduceAttack(role, larger, ref notifyMsgs);
-                    return larger;
-                }
-                else
-                    return attackMoney;
+                throw new Exception("");
+                //if (role.improvementRecord.attackValue > 0)
+                //{
+                //    var larger = Program.rm.magicE.enlarge(attackMoney);
+                //    if (larger - attackMoney > 0)
+                //        role.improvementRecord.reduceAttack(role, larger, ref notifyMsgs);
+                //    return larger;
+                //}
+                //else
+                //    return attackMoney;
                 //throw new NotImplementedException();
             }
 
             public long ImproveAttack(Player role, long attackMoney)
             {
-                if (role.improvementRecord.attackValue > 0)
-                {
-                    var larger = Program.rm.magicE.enlarge(attackMoney);
-                    return larger;
-                }
-                else
-                    return attackMoney;
+                throw new Exception("");
+                //if (role.improvementRecord.attackValue > 0)
+                //{
+                //    var larger = Program.rm.magicE.enlarge(attackMoney);
+                //    return larger;
+                //}
+                //else
+                //    return attackMoney;
             }
 
             public long leftValue(AbilityAndState ability)
@@ -360,60 +362,61 @@ namespace HouseManager5_0
 
         internal void DealWithReduceWhenAttack(interfaceOfHM.AttackT at, Player player, Car car, Player victim, long percentValue, ref List<string> notifyMsg, out long reduce, long m, ref long reduceSum)
         {
-            /*
-             * 1.这个方法中的Ignore针对普攻、雷法、火法、水法中的忽视
-             * 2.这个方法中的Improve针对雷法、火法、水法，强50%
-             */
-            var improvedV = at.MagicImprovedProbabilityAndValue(player, ref that.rm);
-            at.Ignore(ref player, ref that.rm);
+            throw new Exception("");
+            ///*
+            // * 1.这个方法中的Ignore针对普攻、雷法、火法、水法中的忽视
+            // * 2.这个方法中的Improve针对雷法、火法、水法，强50%
+            // */
+            //var improvedV = at.MagicImprovedProbabilityAndValue(player, ref that.rm);
+            //at.Ignore(ref player, ref that.rm);
 
-            var attackMoneyBeforeDefend = ((at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver)) / 100) * percentValue / 100) * (100 + improvedV) / 100;
-            var attackMoneyAfterDefend = ((at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver, victim.improvementRecord.defenceValue > 0)) / 100) * percentValue / 100) * (100 + improvedV) / 100;
-            attackMoneyBeforeDefend = Math.Max(1, attackMoneyBeforeDefend);
-            attackMoneyAfterDefend = Math.Max(1, attackMoneyAfterDefend);
+            //var attackMoneyBeforeDefend = ((at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver)) / 100) * percentValue / 100) * (100 + improvedV) / 100;
+            //var attackMoneyAfterDefend = ((at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver, victim.improvementRecord.defenceValue > 0)) / 100) * percentValue / 100) * (100 + improvedV) / 100;
+            //attackMoneyBeforeDefend = Math.Max(1, attackMoneyBeforeDefend);
+            //attackMoneyAfterDefend = Math.Max(1, attackMoneyAfterDefend);
 
-            long attackMoney;
-            if (attackMoneyBeforeDefend == attackMoneyAfterDefend)
-                attackMoney = attackMoneyBeforeDefend;
-            else
-            {
-                attackMoney = attackMoneyAfterDefend;
-                victim.improvementRecord.reduceDefend(victim, attackMoneyBeforeDefend, ref notifyMsg);
-            }
-            if (!at.isMagic)
-                attackMoney = at.ImproveAttack(player, attackMoney, ref notifyMsg);
-            reduce = attackMoney;
-            if (reduce > m)
-            {
-                reduce = m;
-            }
-            reduce = Math.Max(1, reduce);
-            at.setCost(reduce, player, car, ref notifyMsg);
+            //long attackMoney;
+            //if (attackMoneyBeforeDefend == attackMoneyAfterDefend)
+            //    attackMoney = attackMoneyBeforeDefend;
+            //else
+            //{
+            //    attackMoney = attackMoneyAfterDefend;
+            //    victim.improvementRecord.reduceDefend(victim, attackMoneyBeforeDefend, ref notifyMsg);
+            //}
+            //if (!at.isMagic)
+            //    attackMoney = at.ImproveAttack(player, attackMoney, ref notifyMsg);
+            //reduce = attackMoney;
+            //if (reduce > m)
+            //{
+            //    reduce = m;
+            //}
+            //reduce = Math.Max(1, reduce);
+            //at.setCost(reduce, player, car, ref notifyMsg);
+            ////this.WebNotify(victim, $"【{player.PlayerName}】对你进行了{at.GetSkillName()}，损失{(reduce / 100.00).ToString("f2")}金币 ");
+            //this.WebNotify(player, $"你对【{victim.PlayerName}】进行了{at.GetSkillName()}，获得{(reduce / 100.00).ToString("f2")}金币。其还有{(victim.Money / 100.00).ToString("f2")}金币。");
             //this.WebNotify(victim, $"【{player.PlayerName}】对你进行了{at.GetSkillName()}，损失{(reduce / 100.00).ToString("f2")}金币 ");
-            this.WebNotify(player, $"你对【{victim.PlayerName}】进行了{at.GetSkillName()}，获得{(reduce / 100.00).ToString("f2")}金币。其还有{(victim.Money / 100.00).ToString("f2")}金币。");
-            this.WebNotify(victim, $"【{player.PlayerName}】对你进行了{at.GetSkillName()}，损失{(reduce / 100.00).ToString("f2")}金币 ");
-            reduceSum += reduce;
-            if (at.Ignored())
-            {
-                if (at.isMagic)
-                {
-                    var amt = (attackMagicTool)at;
-                    that.WebNotify(player, $"你忽略了其抵抗{amt.GetSkillName()}的能力！");
-                    that.WebNotify(victim, $"【{player.PlayerName}】忽略了你的抵抗{amt.GetSkillName()}的能力{amt.IgnoreValue}点！");
-                    at.ReduceIgnore(ref player);
-                }
-                else
-                {
-                    that.WebNotify(player, $"你忽略了其抵抗{at.GetSkillName()}的能力！");
-                    that.WebNotify(victim, $"【{player.PlayerName}】忽略了你的抵抗{at.GetSkillName()}的能力！");
-                    at.ReduceIgnore(ref player);
-                }
-            }
-            if (improvedV > 0)
-            {
+            //reduceSum += reduce;
+            //if (at.Ignored())
+            //{
+            //    if (at.isMagic)
+            //    {
+            //        var amt = (attackMagicTool)at;
+            //        that.WebNotify(player, $"你忽略了其抵抗{amt.GetSkillName()}的能力！");
+            //        that.WebNotify(victim, $"【{player.PlayerName}】忽略了你的抵抗{amt.GetSkillName()}的能力{amt.IgnoreValue}点！");
+            //        at.ReduceIgnore(ref player);
+            //    }
+            //    else
+            //    {
+            //        that.WebNotify(player, $"你忽略了其抵抗{at.GetSkillName()}的能力！");
+            //        that.WebNotify(victim, $"【{player.PlayerName}】忽略了你的抵抗{at.GetSkillName()}的能力！");
+            //        at.ReduceIgnore(ref player);
+            //    }
+            //}
+            //if (improvedV > 0)
+            //{
 
-            }
-            //at.ReduceMagicImprovedValue(player);
+            //}
+
         }
 
 

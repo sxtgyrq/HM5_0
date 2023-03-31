@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Project\\VRPGame\\VRPServer\\MateWsAndHouse\\MateWsAndHouse.csproj": {}
+    "E:\\Project\\HouseManager5_0\\VRPServer\\MateWsAndHouse\\MateWsAndHouse.csproj": {}
   },
   "projects": {
-    "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj": {
+    "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj",
+        "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj",
         "projectName": "CommonClass",
-        "projectPath": "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj",
+        "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\obj\\",
+        "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -22,7 +22,7 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "netcoreapp3.1"
+          "net6.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -30,11 +30,11 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
+          "net6.0": {
+            "targetAlias": "net6.0",
             "projectReferences": {
-              "E:\\Project\\VRPGame\\VRPServer\\Model\\Model.csproj": {
-                "projectPath": "E:\\Project\\VRPGame\\VRPServer\\Model\\Model.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj"
               }
             }
           }
@@ -46,8 +46,8 @@
         }
       },
       "frameworks": {
-        "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
+        "net6.0": {
+          "targetAlias": "net6.0",
           "dependencies": {
             "FontStashSharp.Rasterizers.SixLabors.Fonts": {
               "target": "Package",
@@ -84,15 +84,15 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
-              "version": "[3.1.31, 3.1.31]"
+              "version": "[6.0.11, 6.0.11]"
             },
             {
               "name": "Microsoft.NETCore.App.Runtime.win-x86",
-              "version": "[3.1.31, 3.1.31]"
+              "version": "[6.0.11, 6.0.11]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
-              "version": "[3.1.31, 3.1.31]"
+              "version": "[6.0.11, 6.0.11]"
             }
           ],
           "frameworkReferences": {
@@ -109,14 +109,14 @@
         }
       }
     },
-    "E:\\Project\\VRPGame\\VRPServer\\MateWsAndHouse\\MateWsAndHouse.csproj": {
+    "E:\\Project\\HouseManager5_0\\VRPServer\\MateWsAndHouse\\MateWsAndHouse.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Project\\VRPGame\\VRPServer\\MateWsAndHouse\\MateWsAndHouse.csproj",
+        "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\MateWsAndHouse\\MateWsAndHouse.csproj",
         "projectName": "MateWsAndHouse",
-        "projectPath": "E:\\Project\\VRPGame\\VRPServer\\MateWsAndHouse\\MateWsAndHouse.csproj",
+        "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\MateWsAndHouse\\MateWsAndHouse.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "E:\\Project\\VRPGame\\VRPServer\\MateWsAndHouse\\obj\\publish\\win-x86\\",
+        "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\MateWsAndHouse\\obj\\publish\\win-x86\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -138,11 +138,11 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj": {
-                "projectPath": "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj"
               },
-              "E:\\Project\\VRPGame\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
-                "projectPath": "E:\\Project\\VRPGame\\VRPServer\\TcpFunction\\TcpFunction.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj"
               }
             }
           }
@@ -209,14 +209,14 @@
         }
       }
     },
-    "E:\\Project\\VRPGame\\VRPServer\\Model\\Model.csproj": {
+    "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Project\\VRPGame\\VRPServer\\Model\\Model.csproj",
+        "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj",
         "projectName": "Model",
-        "projectPath": "E:\\Project\\VRPGame\\VRPServer\\Model\\Model.csproj",
+        "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\Model.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "E:\\Project\\VRPGame\\VRPServer\\Model\\obj\\",
+        "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\Model\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -288,14 +288,14 @@
         }
       }
     },
-    "E:\\Project\\VRPGame\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
+    "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Project\\VRPGame\\VRPServer\\TcpFunction\\TcpFunction.csproj",
+        "projectUniqueName": "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj",
         "projectName": "TcpFunction",
-        "projectPath": "E:\\Project\\VRPGame\\VRPServer\\TcpFunction\\TcpFunction.csproj",
+        "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\TcpFunction.csproj",
         "packagesPath": "C:\\Users\\sxtgy\\.nuget\\packages\\",
-        "outputPath": "E:\\Project\\VRPGame\\VRPServer\\TcpFunction\\obj\\",
+        "outputPath": "E:\\Project\\HouseManager5_0\\VRPServer\\TcpFunction\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -306,7 +306,7 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "netcoreapp3.1"
+          "net6.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -314,11 +314,11 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
+          "net6.0": {
+            "targetAlias": "net6.0",
             "projectReferences": {
-              "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj": {
-                "projectPath": "E:\\Project\\VRPGame\\VRPServer\\CommonClass\\CommonClass.csproj"
+              "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj": {
+                "projectPath": "E:\\Project\\HouseManager5_0\\VRPServer\\CommonClass\\CommonClass.csproj"
               }
             }
           }
@@ -330,8 +330,8 @@
         }
       },
       "frameworks": {
-        "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
+        "net6.0": {
+          "targetAlias": "net6.0",
           "dependencies": {
             "SuperSocket.ClientEngine.Core": {
               "target": "Package",
@@ -352,15 +352,15 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
-              "version": "[3.1.31, 3.1.31]"
+              "version": "[6.0.11, 6.0.11]"
             },
             {
               "name": "Microsoft.NETCore.App.Runtime.win-x86",
-              "version": "[3.1.31, 3.1.31]"
+              "version": "[6.0.11, 6.0.11]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
-              "version": "[3.1.31, 3.1.31]"
+              "version": "[6.0.11, 6.0.11]"
             }
           ],
           "frameworkReferences": {

@@ -13,16 +13,23 @@ namespace WsOfWebClient
         public static object connectedWs_LockObj = new object();
         public class ConnectInfoDetail
         {
-            public ConnectInfoDetail(WebSocket webSocket)
+            //public List<string> datas = new List<string>();
+            public int webSocketID { get; private set; }
+            public ConnectInfoDetail(WebSocket webSocket, int wsID)
             {
+                this.webSocketID = wsID;
                 this.ws = webSocket;
                 this.BitcoinAddr = "";
                 //this.aModle = new Dictionary<string, bool>();
                 //this.msgs = new List<string>();
+                this.LockObj = new object();
+                //  this.datas = new List<string>();
             }
 
             public WebSocket ws { get; private set; }
             public string BitcoinAddr { get; private set; }
+
+            public object LockObj { get; private set; }
             //public List<string> msgs = new List<string>();
             //  public Dictionary<string, bool> aModle { get; private set; }
         }

@@ -114,11 +114,11 @@ namespace CommonClass
         }
         public class AwardsGivingPass : CommonClass.Command
         {
-            public string time { get; set; }
-            public List<string> list { get; set; }
-            public List<string> msgs { get; set; }
-            public List<int> ranks { get; set; }
-            public List<string> applyAddr { get; set; }
+            public string Time { get; set; }
+            public List<string> List { get; set; }
+            public List<string> Msgs { get; set; }
+            public List<int> IDs { get; set; }
+            public List<string> ApplyAddr { get; set; }
             public class Result
             {
                 public bool success { get; set; }

@@ -19,6 +19,19 @@ namespace HouseManager5_0
         public OssModel.SaveRoad.RoadInfo GetItemRoadInfo(string roadCode, int roadOrder);
         public OssModel.SaveRoad.RoadInfo GetItemRoadInfo(string roadCode, int roadOrder, out bool existed);
         public void GetAFromBPoint(List<OssModel.MapGo.nyrqPosition> dataResult, OssModel.MapGo.nyrqPosition position, int speed, ref List<int> result, ref int startT, bool speedImproved, RoomMainF.RoomMain rmain);
+        public int FindIndexByID(string fastenPositionID)
+        {
+            var count = this.GetFpCount();
+            for (int i = 0; i < count; i++)
+            {
+                var fp = this.GetFpByIndex(i);
+                if (fp.FastenPositionID == fastenPositionID.Trim())
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
     }
 
     public partial class Data : GetRandomPos
@@ -310,11 +323,11 @@ namespace HouseManager5_0
                 var newMaterial = (from item in calMaterial orderby item.RoadCode ascending, item.RoadOrder ascending, item.Percent ascending select item).ToList();
                 this.countOFMaterial = newMaterial.Count;
                 this.calMaterial = newMaterial;
-                var conten1 = File.ReadAllText($"{ this.dataDictionary}fpOrder.json");
+                var conten1 = File.ReadAllText($"{this.dataDictionary}fpOrder.json");
                 this.fpDirect = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(conten1);
-                var conten2 = File.ReadAllText($"{ this.dataDictionary}resultommm22x.txt");
+                var conten2 = File.ReadAllText($"{this.dataDictionary}resultommm22x.txt");
                 this.allDirect = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(conten2);
-                Console.WriteLine($"加载的数据{ this.fpDirect.Count},{this.allDirect.Count}{"\r\n"}任意键继续");
+                Console.WriteLine($"加载的数据{this.fpDirect.Count},{this.allDirect.Count}{"\r\n"}任意键继续");
                 if (unitTest) { }
                 else
                 {
@@ -590,9 +603,9 @@ namespace HouseManager5_0
             ////var fpConfig = Config.map.getFastonPositionConfigInfo(city, false);
             List<OssModel.FastonPosition> result = new List<OssModel.FastonPosition>();
             var index = 0;
-            while (File.Exists($"{fpDictionary}fpindex\\fp_{index }.txt"))
+            while (File.Exists($"{fpDictionary}fpindex\\fp_{index}.txt"))
             {
-                var json = File.ReadAllText($"{fpDictionary}fpindex\\fp_{index }.txt");
+                var json = File.ReadAllText($"{fpDictionary}fpindex\\fp_{index}.txt");
                 var item = Newtonsoft.Json.JsonConvert.DeserializeObject<OssModel.FastonPosition>(json);
                 item.region = f.GetBoundry(item.Longitude, item.Latitde);
                 // if(string.ins)

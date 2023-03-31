@@ -9,12 +9,13 @@ namespace WsOfWebClient
 {
     class WaitForSelection
     {
-        internal static async Task<State> SelectSingleTeamJoin(State s, WebSocket webSocket)
+        internal static State SelectSingleTeamJoin(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail)
         {
             s.Ls = LoginState.selectSingleTeamJoin;
             var msg = Newtonsoft.Json.JsonConvert.SerializeObject(new { c = "setState", state = Enum.GetName(typeof(LoginState), s.Ls) });
-            var sendData = Encoding.UTF8.GetBytes(msg);
-            await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+            CommonF.SendData(msg, connectInfoDetail, 0);
+            //var sendData = Encoding.UTF8.GetBytes(msg);
+            //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
             return s;
         }
     }

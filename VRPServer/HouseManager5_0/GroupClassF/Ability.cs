@@ -19,6 +19,7 @@ namespace HouseManager5_0.GroupClassF
                     var player = (Player)role;
                     var car = player.getCar();
                     that.AbilityChanged2_0(player, car, ref notifyMsg, "volume");
+                    that.AbilityChanged2_0(player, car, ref notifyMsg, "business");
                     that.AbilityChanged2_0(player, car, ref notifyMsg, "mile");
                     that.AbilityChanged2_0(player, car, ref notifyMsg, "speed");
                 }

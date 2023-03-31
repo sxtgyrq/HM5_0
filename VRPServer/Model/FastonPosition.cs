@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Model
 {
-    public class FastonPosition : HasPosition
+    public class FastonPosition
     {
         public string FastenPositionID { get; set; }
         public string FastenPositionName { get; set; }
@@ -25,12 +25,33 @@ namespace Model
         public int Weight { get; set; }
         public string region { get; set; }
     }
+    public class FastonPositionHP : HasPosition
+    {
+        public FastonPositionHP(FastonPosition fastonPosition_)
+        {
+            this.fastonPosition = fastonPosition_;
+        }
+        public FastonPosition fastonPosition { get; private set; }
+
+        public double Longitude { get { return this.fastonPosition.Longitude; } }
+
+        public double Latitde { get { return this.fastonPosition.Latitde; } }
+
+        public double Height { get { return this.fastonPosition.Height; } }
+
+        public double positionLongitudeOnRoad { get { return this.fastonPosition.positionLongitudeOnRoad; } }
+
+        public double positionLatitudeOnRoad { get { return this.fastonPosition.positionLatitudeOnRoad; } }
+
+        public string ClassType { get { return "FastonPosition"; } }
+    }
     public interface HasPosition
     {
         public double Longitude { get; }
         public double Latitde { get; }
         public double Height { get; }
-        double positionLongitudeOnRoad { get; }
-        double positionLatitudeOnRoad { get; }
+        public double positionLongitudeOnRoad { get; }
+        public double positionLatitudeOnRoad { get; }
+        public string ClassType { get; }
     }
 }

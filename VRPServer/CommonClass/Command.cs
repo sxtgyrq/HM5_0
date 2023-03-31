@@ -437,10 +437,15 @@ namespace CommonClass
         public float currentY { get; set; }
         public string base64 { get; set; }
 
+        public bool isFineshed { get; set; }
+        public string TimeStr { get; set; }
+        public string ResultMsg { get; set; }
+        public bool RecordedInDB { get; set; }
+
         public class DataItem
         {
             public string DataType { get; set; }
-            public float[] Path { get; set; }
+            public int[] Path { get; set; }
         }
         //public Model.FastonPosition Fp { get; set; }
         //public string msg { get; set; }
@@ -493,6 +498,7 @@ namespace CommonClass
         /// 
         /// </summary>
         public string RefererAddr { get; set; }
+        public int groupMemberCount { get; set; }
     }
 
     public class GetFrequency : Command
@@ -528,7 +534,7 @@ namespace CommonClass
 
         public string fastenpositionID { get; set; }
         /// <summary>
-        /// 取值0~38
+        /// 取值0~37
         /// </summary>
         public int collectIndex { get; set; }
         //public string car { get; set; }
@@ -579,6 +585,7 @@ namespace CommonClass
     public class SetAbility : Command
     {
         public string Key { get; set; }
+        public string GroupKey { get; set; }
         //public string car { get; set; }
         public string pType { get; set; }
 
@@ -599,6 +606,7 @@ namespace CommonClass
     public class OrderToSubsidize : Command
     {
         public string Key { get; set; }
+        public string GroupKey { get; set; }
         public string address { get; set; }
         public string signature { get; set; }
         public long value { get; set; }
@@ -612,6 +620,7 @@ namespace CommonClass
     public class SaveMoney : Command
     {
         public string Key { get; set; }
+        public string GroupKey { get; set; }
         public string dType { get; set; }
         public string address { get; set; }
     }
@@ -635,6 +644,7 @@ namespace CommonClass
         public string CommandStart { get; set; }
         public int WebSocketID { get; set; }
         public string PlayerName { get; set; }
+        public string GroupKey { get; set; }
     }
     public class GetPromoteMiles : CommonClass.Command
     {
@@ -646,6 +656,7 @@ namespace CommonClass
     {
         public int TeamNum { get; set; }
         public int RoomIndex { get; set; }
+        public string GroupKey { get; set; }
     }
 
     public class TeamExit : Command
@@ -669,6 +680,12 @@ namespace CommonClass
         public int WebSocketID { get; set; }
         public string TeamIndex { get; set; }
     }
+    public class TeamMemberCount : Command
+    {
+        public int TeamNum { get; set; }
+        //public int GroupKey { get; set; }
+    }
+
     public class TeamDisplayItem
     {
         public string Name { get; set; }
@@ -701,6 +718,7 @@ namespace CommonClass
     {
         public string Secret { get; set; }
         public string RefererAddr { get; set; }
+        public string GroupKey { get; set; }
     }
     public class TeamResult : Command
     {
@@ -741,7 +759,7 @@ namespace CommonClass
     {
         public string Key { get; set; }
         public string GroupKey { get; set; }
-        public string selectObjName { get; set; }
+        //  public string selectObjName { get; set; }
     }
     /// <summary>
     /// 用于传输对话。
@@ -984,6 +1002,6 @@ namespace CommonClass
     public class NotWantToGoNeedToBack : Command
     {
         public string Key { get; set; }
-        public string GroupKey { get; set; } 
+        public string GroupKey { get; set; }
     }
 }

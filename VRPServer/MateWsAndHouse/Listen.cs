@@ -70,7 +70,7 @@ namespace MateWsAndHouse
                                 for (int i = 0; i < keysNeedToRemove.Count; i++)
                                 {
                                     Program.allTeams.Remove(keysNeedToRemove[i]);
-                                } 
+                                }
                             }
                             var teamCreateFinish = new CommonClass.TeamCreateFinish()
                             {
@@ -122,12 +122,21 @@ namespace MateWsAndHouse
                                 int hash = 0;
                                 for (var i = 0; i < t.member.Count; i++)
                                 {
-                                    var secret = CommonClass.AES.AesEncrypt("team:" + teamBegain.RoomIndex.ToString(), t.member[i].CommandStart);
+                                    // CommonClass
+                                    var obj = new CommonClass.MateWsAndHouse.RoomInfo()
+                                    {
+                                        RoomIndex = teamBegain.RoomIndex,
+                                        MemberCount = t.member.Count,
+                                        GroupKey = teamBegain.GroupKey,
+                                    };
+
+                                    var secret = CommonClass.AES.AesEncrypt("team-" + Newtonsoft.Json.JsonConvert.SerializeObject(obj), t.member[i].CommandStart);
                                     CommonClass.TeamNumWithSecret teamNumWithSecret = new CommonClass.TeamNumWithSecret()
                                     {
                                         c = "TeamNumWithSecret",
                                         WebSocketID = t.member[i].WebSocketID,
-                                        Secret = secret
+                                        Secret = secret,
+                                        GroupKey = teamBegain.GroupKey,
                                     };
                                     var json = Newtonsoft.Json.JsonConvert.SerializeObject(teamNumWithSecret);
                                     var url = t.member[i].FromUrl;
@@ -391,6 +400,30 @@ namespace MateWsAndHouse
                                 }
                                 t.IsBegun = true;
                                 outPut = $"ok{hash}";
+                            }
+                        }; break;
+                    case "TeamMemberCount":
+                        {
+                            CommonClass.TeamMemberCount teamInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.TeamMemberCount>(notifyJson);
+
+                            Team t = null;
+                            lock (Program.teamLock)
+                            {
+
+                                if (Program.allTeams.ContainsKey(teamInfo.TeamNum))
+                                {
+                                    t = Program.allTeams[teamInfo.TeamNum];
+                                }
+                                //Program.allTeams.Add()
+                            }
+                            if (t == null)
+                            {
+                                outPut = "0";
+                            }
+                            else
+                            {
+                                // t.GroupKey = teamInfo.GroupKey;
+                                outPut = (t.member.Count + 1).ToString();
                             }
                         }; break;
                 }

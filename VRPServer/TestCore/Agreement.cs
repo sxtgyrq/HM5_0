@@ -16,7 +16,7 @@ namespace TestCore
         [SetUp]
         public void Setup()
         {
-            msg = "1@3FkXatYUQv81t7mDsQf8igumGnp1mE1gkk@3BkRN6seLYYgSqGQNX3o1poEzCXhGK3vTs->354vT5hncSwmob6461WjhhfWmaiZgHuaSK:100000Satoshi";
+            msg = "1@3FkXatYUQv81t7mDsQf8igumGnp1mE1gkk@3BkRN6seLYYgSqGQNX3o1poEzCXhGK3vTs->354vT5hncSwmob6461WjhhfWmaiZgHuaSK:100000satoshi";
             CommonClass.Agreement.IsUseful(msg, out index, out tradeAddr, out businessAddr, out acceptAddr, out passValue);
         }
         [Test]

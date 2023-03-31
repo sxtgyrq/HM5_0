@@ -149,7 +149,7 @@ namespace BitCoin
                         this.sum += coin.value;
                     }
                 }
-                Console.WriteLine($"可已花{sum}Satoshi/{sum / 100000000}.{(sum % 100000000).ToString("D8")}BTC");
+                Console.WriteLine($"可已花{sum}satoshi/{sum / 100000000}.{(sum % 100000000).ToString("D8")}BTC");
                 //Console.WriteLine($"")
             }
 

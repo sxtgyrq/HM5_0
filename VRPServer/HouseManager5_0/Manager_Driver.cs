@@ -557,15 +557,15 @@ namespace HouseManager5_0
                         defensiveOfAmbush = self.getCar().ability.driver.defensiveOfAmbush;
                     }
 
-                    int defendedProbability;
-                    if (self.improvementRecord.defenceValue > 0)
-                    {
-                        defendedProbability = Engine_MagicEngine.AmbushPropertyByDefendMagic;
-                    }
-                    else
-                    {
-                        defendedProbability = 0;
-                    }
+                    int defendedProbability = 0;
+                    //if (self.improvementRecord.defenceValue > 0)
+                    //{
+                    //    defendedProbability = Engine_MagicEngine.AmbushPropertyByDefendMagic;
+                    //}
+                    //else
+                    //{
+                    //    defendedProbability = 0;
+                    //}
                     var randomValue = that.rm.Next(0, 100);
                     if (randomValue > _confuseManger.getBaseControlProbability(ControlAttackType.Ambush) - defensiveOfAmbush)
                     {
@@ -639,15 +639,15 @@ namespace HouseManager5_0
                         defensiveOfControl = cm.getControl(self.getCar().ability.driver);
                     }
 
-                    int defendedProbability;
-                    if (self.improvementRecord.defenceValue > 0)
-                    {
-                        defendedProbability = cm.getProtectedByDefendMagic(that.magicE);//.ProtectedByConfuse();
-                    }
-                    else
-                    {
-                        defendedProbability = 0;
-                    }
+                    int defendedProbability = 0;
+                    //if (self.improvementRecord.defenceValue > 0)
+                    //{
+                    //    defendedProbability = cm.getProtectedByDefendMagic(that.magicE);//.ProtectedByConfuse();
+                    //}
+                    //else
+                    //{
+                    //    defendedProbability = 0;
+                    //}
                     var randomValue = that.rm.Next(0, 100);
                     if (randomValue > _confuseManger.getBaseControlProbability(cm.controlType) - defensiveOfControl)
                     {
@@ -710,7 +710,7 @@ namespace HouseManager5_0
                 //        return 0;
                 //    }
                 //}
-           
+
             }
 
             //private int getBaseControlProbability(object controlType)
@@ -996,15 +996,15 @@ namespace HouseManager5_0
                 }
                 //string name = "潜伏";
 
-                int defendedProbability;
-                if (self.improvementRecord.defenceValue > 0)
-                {
-                    defendedProbability = Engine_MagicEngine.AmbushPropertyByDefendMagic;
-                }
-                else
-                {
-                    defendedProbability = 0;
-                }
+                int defendedProbability = 0;
+                //if (self.improvementRecord.defenceValue > 0)
+                //{
+                //    defendedProbability = Engine_MagicEngine.AmbushPropertyByDefendMagic;
+                //}
+                //else
+                //{
+                //    defendedProbability = 0;
+                //}
                 var randomValue = that.rm.Next(0, 100);
                 if (randomValue > this.getBaseControlProbability(ControlAttackType.Ambush) - defensiveOfAmbush)
                 {
@@ -1057,240 +1057,46 @@ namespace HouseManager5_0
         public class ImproveManager
         {
             long _speedValue = 0;
-            long _attackValue = 0;
-            long _defenceValue = 0;
-            public long speedValue { get { return this._speedValue; } }
-            public long attackValue { get { return this._attackValue; } }
-            public long defenceValue { get { return this._defenceValue; } }
+            public long SpeedValue { get { return this._speedValue; } }
+            public bool HasValueToImproveSpeed { get { return this._speedValue >= 10; } }
             public ImproveManager()
             {
                 this._speedValue = 0;
-                this._attackValue = 0;
-                this._defenceValue = 0;
-                this.simulate = new Simulate(this);
             }
-
-            const int speedImproveParameter = 7;
-            internal void addSpeed(Player role, long leftVolume, out long costVolumeValue, ref List<string> notifyMsg)
+            internal void addSpeed(Player role, int addValue, ref List<string> notifyMsg)
             {
-                if (add(ref this._speedValue, leftVolume, speedImproveParameter, out costVolumeValue))
+                if (this.HasValueToImproveSpeed)
+                {
+                    this._speedValue -= 10;
+                }
+                this._speedValue += addValue;
                 {
                     role.speedMagicChanged(role, ref notifyMsg);
                 }
             }
-            internal void addDefence(Player role, long leftVolume, out long costVolumeValue, ref List<string> notifyMsg)
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="role">操作的对象</param>
+            /// <param name="changeValue">被减去的值</param>
+            /// <param name="notifyMsg"></param>
+            internal void reduceSpeed(Player role, ref List<string> notifyMsg)
             {
-                if (add(ref this._defenceValue, leftVolume, defenceImproveParameter, out costVolumeValue))
+                if (this.HasValueToImproveSpeed)
                 {
-                    role.defenceMagicChanged(role, ref notifyMsg);
-                }
-            }
-            internal void simulateToAddSpeed(long leftVolume, out long costVolumeValue)
-            {
-                var copySpeed = this._speedValue + 0;
-                add(ref copySpeed, leftVolume, speedImproveParameter, out costVolumeValue);
-            }
-            private void simulateToAddDefend(long leftVolume, out long costVolumeValue)
-            {
-                var copyDefence = this._defenceValue + 0;
-                add(ref copyDefence, leftVolume, defenceImproveParameter, out costVolumeValue);
-            }
-            private void simulateToAddAttack(long leftBusinessValue, out long costBusinessValue)
-            {
-                var copySpeed = this._attackValue + 0;
-                add(ref copySpeed, leftBusinessValue, speedImproveParameter, out costBusinessValue);
-            }
-
-            internal void reduceSpeed(Player role, long changeValue, ref List<string> notifyMsg)
-            {
-                if (reduce(ref this._speedValue, changeValue))
-                {
+                    this._speedValue -= 10;
+                    if (this._speedValue < 0)
+                    {
+                        this._speedValue = 0;
+                    }
                     role.speedMagicChanged(role, ref notifyMsg);
                 }
             }
-            const int attackImproveParameter = 7;
-            internal void addAttack(Player role, long leftBusiness, out long costBusinessValue, ref List<string> notifyMsg)
-            {
-                if (add(ref this._attackValue, leftBusiness, attackImproveParameter, out costBusinessValue))
-                {
-                    role.attackMagicChanged(role, ref notifyMsg);
-                }
-            }
-
-            internal void reduceAttack(Player role, long changeValue, ref List<string> notifyMsg)
-            {
-                if (reduce(ref this._attackValue, changeValue))
-                {
-                    role.attackMagicChanged(role, ref notifyMsg);
-                }
-            }
-
-            static bool reduce(ref long operateValue, long changeValue)
-            {
-                var valueBeforeImprove = operateValue;
-
-                operateValue -= changeValue;
-                if (operateValue < 0)
-                {
-                    operateValue = 0;
-                }
-                var valueAfterImprove = operateValue;
-                if ((valueBeforeImprove == 0 && valueAfterImprove != 0) ||
-                    (valueBeforeImprove != 0 && valueAfterImprove == 0))
-                {
-                    return true;
-                }
-                else return false;
-            }
-
-
-            static bool add(ref long operateValue, long leftValue, long ImproveParameter, out long costValue)
-            {
-                var beforeImprove = operateValue;
-                if (operateValue < leftValue * ImproveParameter)
-                {
-                    costValue = leftValue - operateValue / ImproveParameter;
-                    costValue = Math.Max(1, costValue);
-                    operateValue = leftValue * ImproveParameter;
-                }
-                else
-                {
-                    costValue = 0;
-                }
-                var afterImprove = operateValue;
-                if ((afterImprove == 0 && beforeImprove != 0) ||
-                    (afterImprove != 0 && beforeImprove == 0))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            const int defenceImproveParameter = 7;
-
-
-            internal void reduceDefend(Player role, long changeValue, ref List<string> notifyMsg)
-            {
-                if (reduce(ref this._defenceValue, changeValue))
-                {
-                    role.defenceMagicChanged(role, ref notifyMsg);
-                }
-            }
-
-            public class Simulate
-            {
-                private ImproveManager _improveManager;
-
-                public Simulate(ImproveManager improveManager_)
-                {
-                    this._improveManager = improveManager_;
-                }
-
-
-                interface improveMagic
-                {
-                    long getMoney(Simulate simulate, Player npc_Operate, long costVolume);
-                }
-
-                class improveAttackMagic : improveMagic
-                {
-                    public long getMoney(Simulate simulate, Player npc_Operate, long costVolume)
-                    {
-                        long costBusinessValue;
-                        simulate._improveManager.simulateToAddAttack(npc_Operate.getCar().ability.leftBusiness, out costBusinessValue);
-                        return costBusinessValue;
-                    }
-                }
-                class improveSpeedMagic : improveMagic
-                {
-                    public long getMoney(Simulate simulate, Player npc_Operate, long costVolume)
-                    {
-                        long costVolumeValue;
-                        simulate._improveManager.simulateToAddSpeed(npc_Operate.getCar().ability.leftVolume - costVolume, out costVolumeValue);
-                        return costVolumeValue * 3 / 2;
-                    }
-                }
-                class improveDefendMagic : improveMagic
-                {
-                    public long getMoney(Simulate simulate, Player npc_Operate, long costVolume)
-                    {
-                        long costVolumeValue;
-                        simulate._improveManager.simulateToAddDefend(npc_Operate.getCar().ability.leftVolume - costVolume, out costVolumeValue);
-                        return costVolumeValue * 3 / 2;
-                        // throw new NotImplementedException();
-                    }
-                }
-                //internal double improveAttack(Player partner, RoomMain that, Car car, NPC npc_Operate, GetRandomPos grp, out FastonPosition fp)
-                //{
-
-                //    improveAttackMagic lo = new improveAttackMagic();
-                //    return improve(partner, that, car, npc_Operate, lo, grp, out fp);
-
-                //}
-
-                //private double improve(Player partner, RoomMain that, Car car, NPC npc_Operate, improveMagic im, GetRandomPos grp, out FastonPosition fp)
-                //{
-
-                //    if (that._Players.ContainsKey(partner.Key))
-                //    {
-                //        var listIndexes = that.getCollectPositionsByDistance(grp.GetFpByIndex(partner.StartFPIndex), grp);
-                //        fp = grp.GetFpByIndex(that._collectPosition[listIndexes[0]]);
-                //        var longCollectMoney = that.GetCollectReWard(listIndexes[0]) * 100;
-                //        double distance;
-                //        Player boss;
-                //        var fromTarget = grp.GetFpByIndex(npc_Operate.StartFPIndex);
-                //        var endTarget = fp;
-                //        if (npc_Operate.HasTheBoss(that._Players, out boss))
-                //        {
-                //            var bossPoint = grp.GetFpByIndex(boss.StartFPIndex);
-                //            distance =
-                //                CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fromTarget.Latitde, fromTarget.Longitude, fromTarget.Height, endTarget.Latitde, endTarget.Longitude, endTarget.Height)
-                //                + CommonClass.Geography.getLengthOfTwoPoint.GetDistance(bossPoint.Latitde, bossPoint.Longitude, bossPoint.Height, endTarget.Latitde, endTarget.Longitude, endTarget.Height)
-                //                + CommonClass.Geography.getLengthOfTwoPoint.GetDistance(bossPoint.Latitde, bossPoint.Longitude, bossPoint.Height, fromTarget.Latitde, fromTarget.Longitude, fromTarget.Height);
-                //        }
-                //        else
-                //        {
-                //            distance = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(endTarget.Latitde, endTarget.Longitude, endTarget.Height, fromTarget.Latitde, fromTarget.Longitude, fromTarget.Height) * 2;
-                //        }
-                //        var beneficiary = that._Players[partner.Key];
-                //        if (!beneficiary.Bust)
-                //        {
-                //            long moneyGet = im.getMoney(this, npc_Operate, longCollectMoney) + longCollectMoney;
-
-                //            return moneyGet / distance;
-                //        }
-                //        else
-                //        {
-                //            return 0;
-                //        }
-
-                //    }
-                //    else
-                //    {
-                //        fp = null;
-                //        return 0;
-                //    }
-                //}
-
-                //internal double improveSpeed(Player partner, RoomMain that, Car car, NPC npc_Operate, GetRandomPos grp, out FastonPosition fp)
-                //{
-
-                //    improveSpeedMagic ism = new improveSpeedMagic();
-                //    return improve(partner, that, car, npc_Operate, ism, grp, out fp);
-                //}
-
-                //internal double improveDefend(Player partner, RoomMain that, Car car, NPC npc_Operate, GetRandomPos grp, out FastonPosition fp)
-                //{
-                //    improveDefendMagic idm = new improveDefendMagic();
-                //    return improve(partner, that, car, npc_Operate, idm, grp, out fp);
-                //}
-            }
 
 
 
-            public Simulate simulate { get; private set; }
+
+
         }
 
         internal bool controlledByMagic(Player victim, Car car, GetRandomPos grp, ref List<string> notifyMsg)

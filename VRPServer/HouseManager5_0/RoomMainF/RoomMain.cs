@@ -282,15 +282,15 @@ namespace HouseManager5_0.RoomMainF
                                 this.WebNotify(player, "你的积分还没有存储！");
                                 return Newtonsoft.Json.JsonConvert.SerializeObject(r);
                             }
-                            else if (car.ability.HasDiamond())
-                            {
-                                ExitObjResult r = new ExitObjResult()
-                                {
-                                    Success = false,
-                                };
-                                this.WebNotify(player, "还有宝石没有释放！");
-                                return Newtonsoft.Json.JsonConvert.SerializeObject(r);
-                            }
+                            //else if (car.ability.HasDiamond())
+                            //{
+                            //    ExitObjResult r = new ExitObjResult()
+                            //    {
+                            //        Success = false,
+                            //    };
+                            //    this.WebNotify(player, "还有宝石没有释放！");
+                            //    return Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                            //}
                             else
                             {
                                 ExitObjResult r = new ExitObjResult()

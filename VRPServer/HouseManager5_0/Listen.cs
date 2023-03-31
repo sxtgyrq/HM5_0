@@ -344,8 +344,9 @@ namespace HouseManager5_0
                     case "GetRewardFromBuildingM":
                         {
                             //此方法对应web平台求福
-                            CommonClass.GetRewardFromBuildingM m = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.GetRewardFromBuildingM>(notifyJson);
-                            outPut = objI.GetRewardFromBuildingF(m);
+                            //CommonClass.GetRewardFromBuildingM m = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.GetRewardFromBuildingM>(notifyJson);
+                            //outPut = objI.GetRewardFromBuildingF(m);
+                            outPut = "";
                         }; break;
                     case "GetResistanceObj":
                         {
@@ -356,8 +357,9 @@ namespace HouseManager5_0
                     case "TakeApart":
                         {
                             //对应强太释玉
-                            CommonClass.TakeApart t = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.TakeApart>(notifyJson);
-                            outPut = objI.TakeApartF(t);
+                            //CommonClass.TakeApart t = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.TakeApart>(notifyJson);
+                            //outPut = objI.TakeApartF(t);
+                            outPut = "";
                         }; break;
                     case "ServerStatictis":
                         {
@@ -388,10 +390,16 @@ namespace HouseManager5_0
                             CommonClass.ModelTranstraction.RewardInfomation ri = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.RewardInfomation>(notifyJson);
                             outPut = objI.GetRewardApplyInfomationByStartDate(ri);
                         }; break;
+                    //case "RewardApplyInfomation_V2":
+                    //    {
+                    //        CommonClass.ModelTranstraction.RewardInfomation ri = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.RewardInfomation>(notifyJson);
+                    //        outPut = objI.GetRewardApplyInfomationByStartDate(ri);
+                    //    }; break;
                     case "RewardApply":
                         {
-                            CommonClass.ModelTranstraction.RewardApply rA = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.RewardApply>(notifyJson);
-                            outPut = objI.RewardApplyF(rA, false);
+                            //CommonClass.ModelTranstraction.RewardApply rA = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.RewardApply>(notifyJson);
+                            //outPut = objI.RewardApplyF(rA, false);
+
                         }; break;
                     case "AwardsGivingPass":
                         {

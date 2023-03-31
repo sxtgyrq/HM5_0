@@ -41,7 +41,7 @@ namespace ConsoleBitcoinChainApp
                         var addr = list[i];
                         BitCoin.Transtraction.TradeInfo t = new BitCoin.Transtraction.TradeInfo(addr);
                         //tradeDetail = Task.Run(() => t.GetTradeInfomationFromChain_v2()).Result;
-                        var t1 = t.GetTradeInfomationFromChain_v2(); 
+                        var t1 = t.GetTradeInfomationFromChain_v2();
                         var tradeDetail = t1.GetAwaiter().GetResult();
                         var json = Newtonsoft.Json.JsonConvert.SerializeObject(tradeDetail);
                         lock (Program.locker)
@@ -49,7 +49,7 @@ namespace ConsoleBitcoinChainApp
                     }
                     catch
                     {
-                        Console.WriteLine("读取错误");
+                        Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}-读取错误");
                     }
                 }
                 Thread.Sleep(1000 * 60 * 13);

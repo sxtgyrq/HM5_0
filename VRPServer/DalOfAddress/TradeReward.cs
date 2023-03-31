@@ -197,5 +197,22 @@ waitingForAddition) VALUES (@startDate,@tradeIndex,@tradeAddress,@bussinessAddr,
             return tw;
             //  throw new NotImplementedException();
         }
+
+        internal static bool HasDataToOperate(int startDate, MySqlConnection con, MySqlTransaction tran)
+        { 
+            var sQL = $"SELECT startDate,tradeIndex,tradeAddress,bussinessAddr,passCoin,waitingForAddition,signOfTradeAddress,signOfBussinessAddr,orderMessage FROM  tradereward WHERE startDate={startDate} AND waitingForAddition=1;";
+
+            using (MySqlCommand command = new MySqlCommand(sQL, con))
+            {
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

@@ -93,7 +93,7 @@ namespace HouseManager5_0
 
                 if (cmp.returningOjb.returnToSelfAddrPath.path.Count > 0)
                 {
-                    Program.dt.GetAFromBPoint(cmp.returningOjb.returnToSelfAddrPath.path[0].path, cmp.returningOjb.returnToSelfAddrPath.path[0].position, speed, ref result, ref startT_FirstPath, player.improvementRecord.speedValue > 0, that);
+                    Program.dt.GetAFromBPoint(cmp.returningOjb.returnToSelfAddrPath.path[0].path, cmp.returningOjb.returnToSelfAddrPath.path[0].position, speed, ref result, ref startT_FirstPath, player.improvementRecord.HasValueToImproveSpeed, that);
                 }
                 var self = player;
                 //  that.getEndPositon(Program.dt.GetFpByIndex(self.StartFPIndex), self.positionInStation, ref result, ref startT, player.improvementRecord.speedValue > 0);
@@ -138,7 +138,7 @@ namespace HouseManager5_0
                     result = new List<int>();
                     that.getStartPositionByGoPath(out startPosition, goPath.path[indexValue]);
                 }
-                Program.dt.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.speedValue > 0, that);
+                Program.dt.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed, that);
                 var animation = new AnimateDataItem(startPosition, result, false, startT_PathLast, privateKeys[i], ref that.rm);
                 animations.Add(animation);
             }
@@ -181,8 +181,8 @@ namespace HouseManager5_0
 
                             Data.PathStartPoint3 startPosition;
                             var fp1 = Program.dt.GetFpByIndex(boss.StartFPIndex);
-                            result = that.getStartPositon(fp1, boss.positionInStation + 1, ref startT_FirstPath, out startPosition, player.improvementRecord.speedValue > 0);
-                            Program.dt.GetAFromBPoint(cmp.returningOjb.returnToSelfAddrPath.path[0].path, cmp.returningOjb.returnToSelfAddrPath.path[0].position, speed, ref result, ref startT_FirstPath, player.improvementRecord.speedValue > 0, that);
+                            result = that.getStartPositon(fp1, boss.positionInStation + 1, ref startT_FirstPath, out startPosition, player.improvementRecord.HasValueToImproveSpeed);
+                            Program.dt.GetAFromBPoint(cmp.returningOjb.returnToSelfAddrPath.path[0].path, cmp.returningOjb.returnToSelfAddrPath.path[0].position, speed, ref result, ref startT_FirstPath, player.improvementRecord.HasValueToImproveSpeed, that);
 
 
                             // that.getEndPositon(Program.dt.GetFpByIndex(self.StartFPIndex), self.positionInStation, ref result, ref startT, player.improvementRecord.speedValue > 0);
@@ -205,7 +205,7 @@ namespace HouseManager5_0
                                 result = new List<int>();
                                 that.getStartPositionByGoPath(out startPosition, goPath.path[indexValue]);
                             }
-                            Program.dt.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.speedValue > 0, that);
+                            Program.dt.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed, that);
                             var animation = new AnimateDataItem(startPosition, result, false, startT_PathLast, privateKeys[i], ref that.rm);
                             animations.Add(animation);
                         }
@@ -241,7 +241,7 @@ namespace HouseManager5_0
 
 
                             if (cmp.returningOjb.returnToBossAddrPath.path.Count > 0)
-                                Program.dt.GetAFromBPoint(cmp.returningOjb.returnToBossAddrPath.path[0].path, cmp.returningOjb.returnToBossAddrPath.path[0].position, speed, ref result, ref startT_FirstPath, player.improvementRecord.speedValue > 0, that);
+                                Program.dt.GetAFromBPoint(cmp.returningOjb.returnToBossAddrPath.path[0].path, cmp.returningOjb.returnToBossAddrPath.path[0].position, speed, ref result, ref startT_FirstPath, player.improvementRecord.HasValueToImproveSpeed, that);
                             //  that.getEndPositon(Program.dt.GetFpByIndex(boss.StartFPIndex), boss.positionInStation + 1, ref result, ref startT, player.improvementRecord.speedValue > 0);
                             // result.RemoveAll(item => item.t == 0);
 
@@ -279,7 +279,7 @@ namespace HouseManager5_0
                                     result = new List<int>();
                                     that.getStartPositionByGoPath(out startPosition, goPath.path[indexValue]);
                                 }
-                                Program.dt.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.speedValue > 0, that);
+                                Program.dt.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed, that);
                                 var animation = new AnimateDataItem(startPosition, result, false, startT_PathLast, privateKeys[i], ref that.rm);
                                 animations.Add(animation);
                             }
