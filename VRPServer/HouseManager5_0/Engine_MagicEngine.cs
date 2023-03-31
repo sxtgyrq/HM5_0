@@ -247,7 +247,7 @@ namespace HouseManager5_0
         internal int shotTime(int v, bool speedImproved)
         {
             if (speedImproved)
-                return v * 5 / 6;
+                return v * 5 / 7;
             else
                 return v;
         }
@@ -1686,115 +1686,119 @@ namespace HouseManager5_0
 
             public bool DealWith()
             {
-                var selfRole = this.self;
-                int defensiveOfAmbush;
-                if (selfRole.getCar().ability.driver == null)
-                {
-                    defensiveOfAmbush = 0;
-                }
-                else
-                {
-                    defensiveOfAmbush = selfRole.getCar().ability.driver.defensiveOfAmbush;
-                }
-                // string name = "潜伏";
+                throw new Exception("");
 
-                int defendedProbability;
-                if (selfRole.improvementRecord.defenceValue > 0)
-                {
-                    defendedProbability = AmbushPropertyByDefendMagic;
-                }
-                else
-                {
-                    defendedProbability = 0;
-                }
-                var randomValue = that.rm.Next(0, 100);
+                //var selfRole = this.self;
+                //int defensiveOfAmbush;
+                //if (selfRole.getCar().ability.driver == null)
+                //{
+                //    defensiveOfAmbush = 0;
+                //}
+                //else
+                //{
+                //    defensiveOfAmbush = selfRole.getCar().ability.driver.defensiveOfAmbush;
+                //}
+                //// string name = "潜伏";
 
-                /*
-                 * example base=90,ignore=25,defence=40,defendedProbability=20
-                 * [90+25-40-20,90+25-40]=[55,75]
-                 * 在这个区间内是由于受到了保护。
-                 * 之所以施法不成功，是因为受到了保护。
-                 */
-                if (that.magicE.getBaseControlProbability(ControlAttackType.Ambush) + this.IgnoreValue - defensiveOfAmbush - defendedProbability < randomValue)
-                {
-                    return false;
-                }
-                else if (that.magicE.getBaseControlProbability(ControlAttackType.Ambush) + this.IgnoreValue - defensiveOfAmbush < randomValue)
-                {
-                    this.protecedByDefendMagic = true;
-                    var car = this.enemy.getCar();
-                    var victim = this.self;
-                    if (victim.improvementRecord.defenceValue > 0)
-                    {
-                        this.attackMoneyBeforeBeingControled = (at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver, victim.improvementRecord.defenceValue > 0)) / 100);
-                    }
-                    else
-                    {
-                        this.attackMoneyBeforeBeingControled = (at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver)) / 100);
-                    }
-                    return false;
-                }
-                else
-                {
-                    var car = this.enemy.getCar();
-                    var victim = this.self;
-                    this.attackMoneyWithoutDefence = (at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver)) / 100);
-                    if (victim.improvementRecord.defenceValue > 0)
-                    {
-                        this.harmValue = (at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver, victim.improvementRecord.defenceValue > 0)) / 100);
-                    }
-                    else
-                    {
-                        this.harmValue = (at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver)) / 100);
-                    }
-                    this.harmValue = Math.Max(1, this.harmValue);
-                    return true;
-                }
+                //int defendedProbability;
+                //if (selfRole.improvementRecord.defenceValue > 0)
+                //{
+                //    defendedProbability = AmbushPropertyByDefendMagic;
+                //}
+                //else
+                //{
+                //    defendedProbability = 0;
+                //}
+                //var randomValue = that.rm.Next(0, 100);
+
+                ///*
+                // * example base=90,ignore=25,defence=40,defendedProbability=20
+                // * [90+25-40-20,90+25-40]=[55,75]
+                // * 在这个区间内是由于受到了保护。
+                // * 之所以施法不成功，是因为受到了保护。
+                // */
+                //if (that.magicE.getBaseControlProbability(ControlAttackType.Ambush) + this.IgnoreValue - defensiveOfAmbush - defendedProbability < randomValue)
+                //{
+                //    return false;
+                //}
+                //else if (that.magicE.getBaseControlProbability(ControlAttackType.Ambush) + this.IgnoreValue - defensiveOfAmbush < randomValue)
+                //{
+                //    this.protecedByDefendMagic = true;
+                //    var car = this.enemy.getCar();
+                //    var victim = this.self;
+                //    if (victim.improvementRecord.defenceValue > 0)
+                //    {
+                //        this.attackMoneyBeforeBeingControled = (at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver, victim.improvementRecord.defenceValue > 0)) / 100);
+                //    }
+                //    else
+                //    {
+                //        this.attackMoneyBeforeBeingControled = (at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver)) / 100);
+                //    }
+                //    return false;
+                //}
+                //else
+                //{
+                //    var car = this.enemy.getCar();
+                //    var victim = this.self;
+                //    this.attackMoneyWithoutDefence = (at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver)) / 100);
+                //    if (victim.improvementRecord.defenceValue > 0)
+                //    {
+                //        this.harmValue = (at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver, victim.improvementRecord.defenceValue > 0)) / 100);
+                //    }
+                //    else
+                //    {
+                //        this.harmValue = (at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver)) / 100);
+                //    }
+                //    this.harmValue = Math.Max(1, this.harmValue);
+                //    return true;
+                //}
             }
+            [Obsolete]
             public override void SetReturn(bool success, GetRandomPos grp, ref List<string> notifyMsg)//enemy success
             {
-                if (success)
-                {
-                    that.WebNotify(this.enemy, $"你对【{this.self.PlayerName}】成功实施了{name}计谋！并造{this.harmValue}点{this.at.GetSkillName()}伤害！");
-                    that.WebNotify(this.self, $"【{this.enemy.PlayerName}】对你成功实施了{name}计谋！并造{this.harmValue}点{this.at.GetSkillName()}伤害！");
-                    //  that.WebNotify(self, $"【{magicItem.player.PlayerName}】让你陷入了{name}！");
-                    // if (this.attackMoneyWithoutDefence - this.attackMoneyWithDefence > 0)
-                    {
-                        var victim = this.self;
-                        var defendReduce = this.attackMoneyWithoutDefence;
-                        if (defendReduce > 0)
-                            victim.improvementRecord.reduceDefend(victim, defendReduce, ref notifyMsg);
-                    }
-                    if (this.at.isMagic)
-                    {
-                        //  at.MagicAnimateShow(this.enemy, this.self, ref notifyMsg);
-                    }
+                throw new Exception("");
+                //if (success)
+                //{
+                //    that.WebNotify(this.enemy, $"你对【{this.self.PlayerName}】成功实施了{name}计谋！并造{this.harmValue}点{this.at.GetSkillName()}伤害！");
+                //    that.WebNotify(this.self, $"【{this.enemy.PlayerName}】对你成功实施了{name}计谋！并造{this.harmValue}点{this.at.GetSkillName()}伤害！");
+                //    //  that.WebNotify(self, $"【{magicItem.player.PlayerName}】让你陷入了{name}！");
+                //    // if (this.attackMoneyWithoutDefence - this.attackMoneyWithDefence > 0)
+                //    {
+                //        var victim = this.self;
+                //        var defendReduce = this.attackMoneyWithoutDefence;
+                //        if (defendReduce > 0)
+                //            victim.improvementRecord.reduceDefend(victim, defendReduce, ref notifyMsg);
+                //    }
+                //    if (this.at.isMagic)
+                //    {
+                //        //  at.MagicAnimateShow(this.enemy, this.self, ref notifyMsg);
+                //    }
 
-                }
-                else
-                {
+                //}
+                //else
+                //{
 
-                    if (this.attackMoneyBeforeBeingControled > 0)
-                    {
-                        //这种情况，说明，防御法术在抵御控制法术过程中，起到了作用。
-                        //this.selfRole
-                        var victim = this.self;
-                        var defendReduce = this.attackMoneyBeforeBeingControled;
-                        victim.improvementRecord.reduceDefend(victim, defendReduce, ref notifyMsg);
-                    }
-                    that.WebNotify(this.enemy, $"你对【{this.self.PlayerName}】实施了{name}计谋，被其识破，未能成功！");
-                    that.WebNotify(this.self, $"【{this.enemy.PlayerName}】对你实施了{name}阴谋，被你识破！");
-                }
-                this.enemy.getCar().setState(enemy, ref notifyMsg, CarState.returning);
-                that.retutnE.SetReturnT(500, new commandWithTime.returnning()
-                {
-                    c = "returnning",
-                    changeType = commandWithTime.returnning.ChangeType.BeforeTax,
-                    key = this.enemy.Key,
-                    groupKey = this.enemy.Group.GroupKey,
-                    returningOjb = this.enemy.returningOjb,
-                    target = this.enemy.getCar().targetFpIndex
-                }, grp);
+                //    if (this.attackMoneyBeforeBeingControled > 0)
+                //    {
+                //        //这种情况，说明，防御法术在抵御控制法术过程中，起到了作用。
+                //        //this.selfRole
+                //        var victim = this.self;
+                //        var defendReduce = this.attackMoneyBeforeBeingControled;
+                //        victim.improvementRecord.reduceDefend(victim, defendReduce, ref notifyMsg);
+                //    }
+                //    that.WebNotify(this.enemy, $"你对【{this.self.PlayerName}】实施了{name}计谋，被其识破，未能成功！");
+                //    that.WebNotify(this.self, $"【{this.enemy.PlayerName}】对你实施了{name}阴谋，被你识破！");
+                //}
+                //this.enemy.getCar().setState(enemy, ref notifyMsg, CarState.returning);
+                //that.retutnE.SetReturnT(500, new commandWithTime.returnning()
+                //{
+                //    c = "returnning",
+                //    changeType = commandWithTime.returnning.ChangeType.BeforeTax,
+                //    key = this.enemy.Key,
+                //    groupKey = this.enemy.Group.GroupKey,
+                //    returningOjb = this.enemy.returningOjb,
+                //    target = this.enemy.getCar().targetFpIndex
+                //}, grp);
             }
 
             public void SetHarm(ref long reduceSumInput, ref List<string> notifyMsg)
@@ -1834,50 +1838,51 @@ namespace HouseManager5_0
 
             public bool DealWithCommon(DWCInput inputObj)
             {
-                int defensiveOfControl;
-                if (self.getCar().ability.driver == null)
-                {
-                    defensiveOfControl = 0;
-                }
-                else
-                {
-                    defensiveOfControl = inputObj.GetDriverDefence();//self.getCar().ability.driver.defensiveOfConfuse;
-                }
-                var randomValue = that.rm.Next(0, 100);
-                int defendedProbability;
-                if (self.improvementRecord.defenceValue > 0)
-                {
-                    defendedProbability = inputObj.GetMagicDefence(); //that.magicE.ProtectedByConfuse();
-                }
-                else
-                {
-                    defendedProbability = 0;
-                }
+                throw new Exception("");
+                //int defensiveOfControl;
+                //if (self.getCar().ability.driver == null)
+                //{
+                //    defensiveOfControl = 0;
+                //}
+                //else
+                //{
+                //    defensiveOfControl = inputObj.GetDriverDefence();//self.getCar().ability.driver.defensiveOfConfuse;
+                //}
+                //var randomValue = that.rm.Next(0, 100);
+                //int defendedProbability;
+                //if (self.improvementRecord.defenceValue > 0)
+                //{
+                //    defendedProbability = inputObj.GetMagicDefence(); //that.magicE.ProtectedByConfuse();
+                //}
+                //else
+                //{
+                //    defendedProbability = 0;
+                //}
 
-                if (inputObj.GetBaseSuccess() + this.IgnoreValue - defensiveOfControl - defendedProbability < randomValue)
-                {
-                    this.isControled = false;
-                }
-                else if (inputObj.GetBaseSuccess() + this.IgnoreValue - defensiveOfControl < randomValue)
-                {
-                    this.protecedByDefendMagic = true;
-                    var car = this.enemy.getCar();
-                    var victim = this.self;
-                    if (victim.improvementRecord.defenceValue > 0)
-                    {
-                        this.attackMoneyBeforeBeingControled = this.enemy.getCar().ability.leftVolume;//(at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver, victim.improvementRecord.defenceValue > 0)) / 100);
-                    }
-                    else
-                    {
-                        this.attackMoneyBeforeBeingControled = this.enemy.getCar().ability.leftVolume;
-                    }
-                    this.isControled = false;
-                }
-                else
-                {
-                    this.isControled = true;
-                }
-                return this.isControled;
+                //if (inputObj.GetBaseSuccess() + this.IgnoreValue - defensiveOfControl - defendedProbability < randomValue)
+                //{
+                //    this.isControled = false;
+                //}
+                //else if (inputObj.GetBaseSuccess() + this.IgnoreValue - defensiveOfControl < randomValue)
+                //{
+                //    this.protecedByDefendMagic = true;
+                //    var car = this.enemy.getCar();
+                //    var victim = this.self;
+                //    if (victim.improvementRecord.defenceValue > 0)
+                //    {
+                //        this.attackMoneyBeforeBeingControled = this.enemy.getCar().ability.leftVolume;//(at.leftValue(car.ability) * (100 - at.GetDefensiveValue(victim.getCar().ability.driver, victim.improvementRecord.defenceValue > 0)) / 100);
+                //    }
+                //    else
+                //    {
+                //        this.attackMoneyBeforeBeingControled = this.enemy.getCar().ability.leftVolume;
+                //    }
+                //    this.isControled = false;
+                //}
+                //else
+                //{
+                //    this.isControled = true;
+                //}
+                //return this.isControled;
             }
 
             bool _controleMagicIsIgnored = false;
@@ -1994,25 +1999,25 @@ namespace HouseManager5_0
             }
             public void SetHarm(ref long reduceSumInput, ref List<string> notifyMsg)
             {
-                if (this.isControled)
-                {
-                    that.WebNotify(this.enemy, $"你对【{self.PlayerName}】成功地实施了{name}计谋！");
-                    that.WebNotify(self, $"【{this.enemy.PlayerName}】对你成功地实施了{name}计谋！");
-                    //self.getCar().ability.driver
-                    self.confuseRecord.SelectItem(this.magicItem);
-                    self.confuseMagicChanged(self, ref notifyMsg);
-                }
-                else if (this.protecedByDefendMagic)
-                {
-                    self.improvementRecord.reduceDefend(self, this.attackMoneyBeforeBeingControled, ref notifyMsg);
-                    that.WebNotify(enemy, $"你对【{self.PlayerName}】实施了{name}计谋，被其保护光环阻挡，未能成功！");
-                    that.WebNotify(self, $"【{enemy.PlayerName}】对你实施了{name}阴谋，被保护光环阻挡，未能成功！");
-                }
-                else
-                {
-                    that.WebNotify(this.enemy, $"你对【{self.PlayerName}】实施了{name}计谋，未得逞！");
-                    that.WebNotify(self, $"【{this.enemy.PlayerName}】对你实施了{name}计谋，未得逞！");
-                }
+                //if (this.isControled)
+                //{
+                //    that.WebNotify(this.enemy, $"你对【{self.PlayerName}】成功地实施了{name}计谋！");
+                //    that.WebNotify(self, $"【{this.enemy.PlayerName}】对你成功地实施了{name}计谋！");
+                //    //self.getCar().ability.driver
+                //    self.confuseRecord.SelectItem(this.magicItem);
+                //    self.confuseMagicChanged(self, ref notifyMsg);
+                //}
+                //else if (this.protecedByDefendMagic)
+                //{
+                //    self.improvementRecord.reduceDefend(self, this.attackMoneyBeforeBeingControled, ref notifyMsg);
+                //    that.WebNotify(enemy, $"你对【{self.PlayerName}】实施了{name}计谋，被其保护光环阻挡，未能成功！");
+                //    that.WebNotify(self, $"【{enemy.PlayerName}】对你实施了{name}阴谋，被保护光环阻挡，未能成功！");
+                //}
+                //else
+                //{
+                //    that.WebNotify(this.enemy, $"你对【{self.PlayerName}】实施了{name}计谋，未得逞！");
+                //    that.WebNotify(self, $"【{this.enemy.PlayerName}】对你实施了{name}计谋，未得逞！");
+                //}
             }
 
         }
@@ -2062,25 +2067,25 @@ namespace HouseManager5_0
 
             public void SetHarm(ref long reduceSumInput, ref List<string> notifyMsg)
             {
-                if (this.isControled)
-                {
-                    that.WebNotify(this.enemy, $"你对【{self.PlayerName}】成功地实施了{name}计谋！");
-                    that.WebNotify(self, $"【{this.enemy.PlayerName}】对你成功地实施了{name}计谋！");
-                    //self.getCar().ability.driver
-                    self.confuseRecord.SelectItem(this.magicItem);
-                    self.loseMagicChanged(self, ref notifyMsg);
-                }
-                else if (this.protecedByDefendMagic)
-                {
-                    self.improvementRecord.reduceDefend(self, this.attackMoneyBeforeBeingControled, ref notifyMsg);
-                    that.WebNotify(enemy, $"你对【{self.PlayerName}】实施了{name}计谋，被其保护光环阻挡，未能成功！");
-                    that.WebNotify(self, $"【{enemy.PlayerName}】对你实施了{name}阴谋，被保护光环阻挡，未能成功！");
-                }
-                else
-                {
-                    that.WebNotify(this.enemy, $"你对【{self.PlayerName}】实施了{name}计谋，未得逞！");
-                    that.WebNotify(self, $"【{this.enemy.PlayerName}】对你实施了{name}计谋，未得逞！");
-                }
+                //if (this.isControled)
+                //{
+                //    that.WebNotify(this.enemy, $"你对【{self.PlayerName}】成功地实施了{name}计谋！");
+                //    that.WebNotify(self, $"【{this.enemy.PlayerName}】对你成功地实施了{name}计谋！");
+                //    //self.getCar().ability.driver
+                //    self.confuseRecord.SelectItem(this.magicItem);
+                //    self.loseMagicChanged(self, ref notifyMsg);
+                //}
+                //else if (this.protecedByDefendMagic)
+                //{
+                //    self.improvementRecord.reduceDefend(self, this.attackMoneyBeforeBeingControled, ref notifyMsg);
+                //    that.WebNotify(enemy, $"你对【{self.PlayerName}】实施了{name}计谋，被其保护光环阻挡，未能成功！");
+                //    that.WebNotify(self, $"【{enemy.PlayerName}】对你实施了{name}阴谋，被保护光环阻挡，未能成功！");
+                //}
+                //else
+                //{
+                //    that.WebNotify(this.enemy, $"你对【{self.PlayerName}】实施了{name}计谋，未得逞！");
+                //    that.WebNotify(self, $"【{this.enemy.PlayerName}】对你实施了{name}计谋，未得逞！");
+                //}
             }
         }
 

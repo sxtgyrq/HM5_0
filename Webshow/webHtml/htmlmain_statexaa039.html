@@ -270,23 +270,21 @@
 
         </div>-->
         <script type="text/javascript">
-            var mOr = function ()
-            {
+            var mOr = function () {
                 var btn = document.getElementById('minOrMax');
                 var panelToAskWhetherGoto = document.getElementById('panelToAskWhetherGoto');
-                switch (btn.innerText)
-                {
+                switch (btn.innerText) {
                     case '最小化':
                         {
                             btn.innerText = "最大化";
                             panelToAskWhetherGoto.style.maxWidth = "3.5em";
-                            panelToAskWhetherGoto.style.maxHeight = "1.5em"; 
+                            panelToAskWhetherGoto.style.maxHeight = "1.5em";
                         }; break;
                     case '最大化':
                         {
                             btn.innerText = "最小化";
                             panelToAskWhetherGoto.style.maxWidth = "";
-                            panelToAskWhetherGoto.style.maxHeight = "calc(90%)"; 
+                            panelToAskWhetherGoto.style.maxHeight = "calc(90%)";
                         }; break;
                 }
             };
@@ -297,22 +295,23 @@
         margin-bottom: 0.25em;
         margin-top: 0.25em;border:1px solid gray;width:100%;">
             <div>
-                <img src="Pic/girl/2705.png" style="height:15em;width:auto;left:0px;float:right;" />
+                <img src="Pic/girl/2705.png" style="height: 15em; width: 13.37em; right: 0px; float: right; top: 0px;" />
             </div>
             <p>
-                是否前往【太谷区】胡村镇胡村收集1元
+                <b>是否前<span style="color:blue;text-shadow:1px 1px green;">1.00</span>往【太谷区】胡村镇胡村收集1元</b>
             </p>
 
 
-            <div style="background: rgba(154,205,50, 0.6); margin-bottom: 0.25em; margin-top: 0.25em; padding-bottom: 1em; padding-top: 1em; box-shadow: 2px 1px; border-radius:0.5em;" onclick="whetherGo.goTo();">
+            <div style="background: rgba(154,205,50, 0.6); margin-bottom: 0.25em; margin-top: 0.25em; padding-bottom: 1em; padding-top: 1em; box-shadow: 2px 1px; border-radius: 0.5em; margin-right: calc(13.37em + 4px);" onclick="whetherGo.goTo();">
                 是
             </div>
-            <div style="background: rgba(154,205,50, 0.6); margin-bottom: 0.25em; margin-top: 0.25em; padding-bottom: 1em; padding-top: 1em; box-shadow: 2px 1px; border-radius: 0.5em; " onclick="whetherGo.lookFor();">
+            <div style="background: rgba(154,205,50, 0.6); margin-bottom: 0.25em; margin-top: 0.25em; padding-bottom: 1em; padding-top: 1em; box-shadow: 2px 1px; border-radius: 0.5em; margin-right: calc(13.37em + 4px);" onclick="whetherGo.lookFor();">
                 查看
             </div>
-            <div style="background: rgba(154,205,50, 0.6); margin-bottom: 0.25em; margin-top: 0.25em; padding-bottom: 1em; padding-top: 1em; box-shadow: 2px 1px; border-radius: 0.5em; " onclick="moneyOperator.add();">
+            <div style="background: rgba(154,205,50, 0.6); margin-bottom: 0.25em; margin-top: 0.25em; padding-bottom: 1em; padding-top: 1em; box-shadow: 2px 1px; border-radius: 0.5em; margin-right: calc(13.37em + 4px);" onclick="moneyOperator.add();">
                 否
             </div>
+
         </div>
 
 

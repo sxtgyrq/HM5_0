@@ -28,7 +28,7 @@ namespace WsOfWebClient
             // throw new NotImplementedException();
         }
 
-        internal static void setRandomPic(IntroState iState, WebSocket webSocket)
+        internal static void setRandomPic(IntroState iState, ConnectInfo.ConnectInfoDetail connectInfoDetail)
         {
             string checkCode = iState.randomValue.Trim();
             string base64String;
@@ -77,7 +77,7 @@ namespace WsOfWebClient
                 c = "VerifyCodePic"
             };
             var returnMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
-            CommonF.SendData(returnMsg, webSocket, 0);
+            CommonF.SendData(returnMsg, connectInfoDetail, 0);
         }
 
         

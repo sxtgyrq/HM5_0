@@ -34,7 +34,7 @@ namespace WsOfWebClient.MapEditor
             public double MercatorX { get; set; }
             public double MercatorY { get; set; }
         }
-     
+
         class UseModelObj : CommonClass.Command
         {
             public string name { get; set; }
@@ -151,7 +151,7 @@ namespace WsOfWebClient.MapEditor
         }
 
 
-        private static async Task<string> GetBTCAddress(WebSocket webSocket)
+        private static async Task<string> GetBTCAddress(ConnectInfo.ConnectInfoDetail connectInfoDetail)
         {
             //  mm.ID = Guid.NewGuid().ToString();
             var sn = new
@@ -159,16 +159,17 @@ namespace WsOfWebClient.MapEditor
                 c = "InputAddress"
             };
             var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(sn);
-            var sendData = Encoding.ASCII.GetBytes(sendMsg);
-            await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+            // var sendData = Encoding.UTF8.GetBytes(sendMsg);
+            CommonF.SendData(sendMsg, connectInfoDetail, 0);
+            //  await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
             // throw new NotImplementedException();
-            var returnResult = await ReceiveStringAsync(webSocket, webWsSize);
+            var returnResult = await ReceiveStringAsync(connectInfoDetail.ws, webWsSize);
             //Consol.WriteLine($"receive from web:{returnResult.result}");
 
             return returnResult.result;
         }
 
-        private static async Task SetState(stateOfSelection ss, WebSocket webSocket)
+        private static void SetState(stateOfSelection ss, ConnectInfo.ConnectInfoDetail connectInfoDetail)
         {
             //  mm.ID = Guid.NewGuid().ToString();
             var sn = new
@@ -177,9 +178,7 @@ namespace WsOfWebClient.MapEditor
                 state = ss.ToString()
             };
             var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(sn);
-            var sendData = Encoding.ASCII.GetBytes(sendMsg);
-            await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-            // throw new NotImplementedException();
+            CommonF.SendData(sendMsg, connectInfoDetail, 0);
         }
 
 
@@ -231,7 +230,7 @@ namespace WsOfWebClient.MapEditor
             }
         }
 
-        private static async Task<Dictionary<string, bool>> Draw(Position firstRoad, Dictionary<string, bool> roads, WebSocket webSocket, Random rm)
+        private static async Task<Dictionary<string, bool>> Draw(Position firstRoad, Dictionary<string, bool> roads, ConnectInfo.ConnectInfoDetail connectInfoDetail, Random rm)
         {
             var roadCode = firstRoad.roadCode;
             var roadOrder = firstRoad.roadOrder;
@@ -244,10 +243,11 @@ namespace WsOfWebClient.MapEditor
             else
             {
                 roads.Add(roadCode, true);
-                var msg = await drawRoad(roadCode, rm);
+                var msg = drawRoad(roadCode, rm);
                 {
-                    var sendData = Encoding.ASCII.GetBytes(msg);
-                    await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                    CommonF.SendData(msg, connectInfoDetail, 0);
+                    //var sendData = Encoding.ASCII.GetBytes(msg);
+                    //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
                 }
             }
             if (roads.ContainsKey(anotherRoadCode))
@@ -257,16 +257,17 @@ namespace WsOfWebClient.MapEditor
             else
             {
                 roads.Add(anotherRoadCode, true);
-                var msg = await drawRoad(anotherRoadCode, rm);
+                var msg = drawRoad(anotherRoadCode, rm);
                 {
-                    var sendData = Encoding.ASCII.GetBytes(msg);
-                    await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                    CommonF.SendData(msg, connectInfoDetail, 0);
+                    //var sendData = Encoding.ASCII.GetBytes(msg);
+                    //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
                 }
             }
             return roads;
         }
 
-        private static async Task SetView(Position firstRoad, WebSocket webSocket)
+        private static async Task SetView(Position firstRoad, ConnectInfo.ConnectInfoDetail connectInfoDetail)
         {
             double MacatuoX, MacatuoY, MacatuoZ;
             CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(firstRoad.longitude, firstRoad.latitude, firstRoad.height, out MacatuoX, out MacatuoY, out MacatuoZ);
@@ -278,10 +279,11 @@ namespace WsOfWebClient.MapEditor
                 mctY = Convert.ToInt32(MacatuoY * 256),
             };
             var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(sn);
-            var sendData = Encoding.ASCII.GetBytes(sendMsg);
-            await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+            CommonF.SendData(sendMsg, connectInfoDetail, 0);
+            //var sendData = Encoding.ASCII.GetBytes(sendMsg);
+            //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
         }
-        private static async Task<string> drawRoad(string roadCode, Random rm)
+        private static string drawRoad(string roadCode, Random rm)
         {
             var index = rm.Next(0, roomUrls.Count);
             var roomUrl = roomUrls[index];

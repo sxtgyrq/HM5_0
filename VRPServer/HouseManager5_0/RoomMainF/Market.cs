@@ -13,7 +13,7 @@ namespace HouseManager5_0.RoomMainF
     {
         public void priceChanged(string priceType, long value)
         {
-            throw new Exception();
+            //  throw new Exception();
 
             //List<string> msgs = new List<string>();
             //lock (this.PlayerLock)
@@ -190,6 +190,26 @@ namespace HouseManager5_0.RoomMainF
 
         internal void ClearPlayers()
         {
+            lock (this.PlayerLock)
+            {
+                List<string> keysNeedToClear = new List<string>();
+                foreach (var item in this._Groups)
+                {
+                    var group = item.Value;
+                    if (group.ActiveTime.AddHours(1) < DateTime.Now)
+                    {
+                        keysNeedToClear.Add(item.Key);
+                    }
+                }
+                for (int i = 0; i < keysNeedToClear.Count; i++)
+                {
+                    var key = keysNeedToClear[i];
+                    var group = this._Groups[key];
+                    group.Clear();
+                    group = null;
+                    this._Groups.Remove(key);
+                }
+            }
             //   return;
             //List<string> notifyMsg = new List<string>();
             //lock (this.PlayerLock)

@@ -929,7 +929,7 @@ namespace HouseManager5_0
                         indexNumber = GetIndexOfTrade(bussinessAddr, this.stockAddr);
                         if (indexNumber >= 0)
                         {
-                            var agreement = $"{indexNumber}@{this.stockAddr}@{bussinessAddr}->{addrTo}:{tranNum * 100000000}Satoshi";
+                            var agreement = $"{indexNumber}@{this.stockAddr}@{bussinessAddr}->{addrTo}:{tranNum * 100000000}satoshi";
                             var sign = BitCoin.Sign.SignMessage(this.stockAddrPrivateKey, agreement, this.stockAddr);
                             // DalOfAddress
                             var r = that.TradeCoinF(new TradeCoin()
@@ -1043,7 +1043,7 @@ namespace HouseManager5_0
                     case 6: return $"将积分进行存储。点击左下角，从左往右第二按钮，点击，然后存储。";
                     case 7: return $"视角对准建筑物，进行一次求福";
                     case 8: return $"挑战一次二级NPC，或者二级以上的NPC";
-                    case 9: return $"将{this.GetTaskHappenPlaceName(item)}的股份（地址对应的比特币地址为{this.GetItemBussinessAddr(item)}），从{item.btcAddr}转至{this.stockAddr}，至少转1Satoshi。(视角对准{this.GetTaskHappenPlaceName(item)}，点击详情，然后生成转让协议，并用私钥签名)。可查看攻略。";
+                    case 9: return $"将{this.GetTaskHappenPlaceName(item)}的股份（地址对应的比特币地址为{this.GetItemBussinessAddr(item)}），从{item.btcAddr}转至{this.stockAddr}，至少转1satoshi。(视角对准{this.GetTaskHappenPlaceName(item)}，点击详情，然后生成转让协议，并用私钥签名)。可查看攻略。";
                     case 10:
                         {
                             string bindWord = DalOfAddress.BindWordInfo.GetWordByAddr(item.btcAddr);

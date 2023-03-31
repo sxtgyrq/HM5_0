@@ -175,7 +175,7 @@ namespace HouseManager5_0.GroupClassF
                             {"volume",0 },
                             {"speed",0 }
                         },
-                    positionInStation = 0,
+                    positionInStation = this._PlayerInGroup.Count,
                     RefererAddr = addItem.RefererAddr,
                     RefererCount = 0,
                     Group = this

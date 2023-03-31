@@ -11,6 +11,7 @@ using System.Linq;
 using static CommonClass.MapEditor;
 using System.Drawing;
 using MySqlX.XDevAPI.Relational;
+using static WsOfWebClient.ConnectInfo;
 
 namespace WsOfWebClient.MapEditor
 {
@@ -70,7 +71,7 @@ namespace WsOfWebClient.MapEditor
                 var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(json);
                 return obj;
             }
-            public void SendModelTypes(List<string> modelTypes, WebSocket webSocket)
+            public void SendModelTypes(List<string> modelTypes, ConnectInfo.ConnectInfoDetail WebSocketDetail)
             {
                 // this.ID = "n" + Guid.NewGuid().ToString("N");
                 var sn = new
@@ -79,9 +80,9 @@ namespace WsOfWebClient.MapEditor
                     modelTypes = modelTypes
                 };
                 var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(sn);
-                CommonF.SendData(sendMsg, webSocket, 0);
+                CommonF.SendData(sendMsg, WebSocketDetail, 0);
             }
-            public async Task AddModel(aModel m, WebSocket webSocket)
+            public async Task AddModel(aModel m, ConnectInfo.ConnectInfoDetail connectInfoDetail)
             {
                 this.ID = "n" + Guid.NewGuid().ToString("N");
                 var sn = new
@@ -92,10 +93,11 @@ namespace WsOfWebClient.MapEditor
                     id = this.ID
                 };
                 var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(sn);
-                var sendData = Encoding.UTF8.GetBytes(sendMsg);
-                await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                //var sendData = Encoding.UTF8.GetBytes(sendMsg);
+                //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
             }
-            public void DrawModel(aModel m, CommonClass.databaseModel.detailmodel dm, WebSocket webSocket)
+            public void DrawModel(aModel m, CommonClass.databaseModel.detailmodel dm, ConnectInfo.ConnectInfoDetail connectInfoDetail)
             {
                 //this.ID = "n" + Guid.NewGuid().ToString("N");
                 var sn = new
@@ -110,10 +112,10 @@ namespace WsOfWebClient.MapEditor
                     r = dm.rotatey
                 };
                 var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(sn);
-                CommonF.SendData(sendMsg, webSocket, 0);
+                CommonF.SendData(sendMsg, connectInfoDetail, 0);
             }
 
-            public void SaveObjF(SaveObj so, WebSocket webSocket, Random rm, string author, bool isAdministartor)
+            public void SaveObjF(SaveObj so, ConnectInfo.ConnectInfoDetail connectInfoDetail, Random rm, string author, bool isAdministartor)
             {
                 if (material[this.indexOfSelect].author == author)
                 { }
@@ -123,7 +125,7 @@ namespace WsOfWebClient.MapEditor
                 }
                 else
                 {
-                    ShowMsg(webSocket, "只有管理员与作者才能编辑该模型！");
+                    ShowMsg(connectInfoDetail, "只有管理员与作者才能编辑该模型！");
                     return;
                 }
                 if (this.addModel)
@@ -163,7 +165,7 @@ namespace WsOfWebClient.MapEditor
                         x = so.x,
                         z = so.z
                     };
-                    this.ShowObj(sf, webSocket, rm);
+                    this.ShowObj(sf, connectInfoDetail, rm);
                 }
                 //var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.MapEditor.Position>(json);
                 //return obj;
@@ -207,7 +209,7 @@ namespace WsOfWebClient.MapEditor
             //    throw new NotImplementedException();
             //}
 
-            internal void GetCrossBG(Position baseCross, WebSocket webSocket, Random rm)
+            internal void GetCrossBG(Position baseCross, ConnectInfo.ConnectInfoDetail connectInfoDetail, Random rm)
             {
                 string firstRoadcode, secondRoadcode;
                 int firstRoadorder, secondRoadorder;
@@ -261,9 +263,10 @@ namespace WsOfWebClient.MapEditor
                 };
                 sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(sm);
 
-                var sendData = Encoding.UTF8.GetBytes(sendMsg);
-                var t = webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-                t.GetAwaiter().GetResult();
+                CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                //var sendData = Encoding.UTF8.GetBytes(sendMsg);
+                //var t = webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                //t.GetAwaiter().GetResult();
             }
 
             internal aModel GetModel(Random rm)
@@ -280,7 +283,7 @@ namespace WsOfWebClient.MapEditor
                 return this.material[this.indexOfSelect];
             }
 
-            public void ShowObj(ShowOBJFile sf, WebSocket webSocket, Random rm)
+            public void ShowObj(ShowOBJFile sf, ConnectInfo.ConnectInfoDetail connectInfoDetail, Random rm)
             {
                 var index = rm.Next(0, roomUrls.Count);
                 var roomUrl = roomUrls[index];
@@ -294,7 +297,7 @@ namespace WsOfWebClient.MapEditor
                 {
                     var objInfomation = this.material.Find(item => item.amID == obj.detail[i].amodel);
                     objInfomation.initialize(rm);
-                    this.DrawModel(objInfomation, obj.detail[i], webSocket);
+                    this.DrawModel(objInfomation, obj.detail[i], connectInfoDetail);
                 }
             }
 
@@ -327,7 +330,7 @@ namespace WsOfWebClient.MapEditor
                 }
                 return result;
             }
-            internal void SetBackground(bool isUsed, Position baseCross, string address, Random rm, WebSocket webSocket)
+            internal void SetBackground(bool isUsed, Position baseCross, string address, Random rm, ConnectInfo.ConnectInfoDetail connectInfoDetail)
             {
                 string firstRoadcode, secondRoadcode;
                 int firstRoadorder, secondRoadorder;
@@ -370,7 +373,7 @@ namespace WsOfWebClient.MapEditor
                     //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
                 }
             }
-            internal void SetBackground(SetBG sb, Position baseCross, string address, Random rm, WebSocket webSocket)
+            internal void SetBackground(SetBG sb, Position baseCross, string address, Random rm, ConnectInfo.ConnectInfoDetail connectInfoDetail)
             {
                 string firstRoadcode, secondRoadcode;
                 int firstRoadorder, secondRoadorder;
@@ -500,7 +503,7 @@ namespace WsOfWebClient.MapEditor
                     }
                 }
             }
-            internal void ShowMsg(WebSocket webSocket, string msg)
+            internal void ShowMsg(ConnectInfo.ConnectInfoDetail connectInfoDetail, string msg)
             {
                 var sm = new
                 {
@@ -509,12 +512,12 @@ namespace WsOfWebClient.MapEditor
                 };
                 var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(sm);
 
-                CommonF.SendData(sendMsg, webSocket, 0);
+                CommonF.SendData(sendMsg, connectInfoDetail, 0);
             }
 
 
 
-            internal async Task EditModel(WebSocket webSocket)
+            internal void EditModel(ConnectInfo.ConnectInfoDetail connectInfoDetail)
             {
                 var sn = new
                 {
@@ -522,12 +525,13 @@ namespace WsOfWebClient.MapEditor
                     id = this.ID
                 };
                 var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(sn);
-                var sendData = Encoding.ASCII.GetBytes(sendMsg);
-                await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-                // throw new NotImplementedException();
+                CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                //var sendData = Encoding.ASCII.GetBytes(sendMsg);
+                //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                //// throw new NotImplementedException();
             }
 
-            internal async Task DeleteModel(WebSocket webSocket, DeleteModel dm, Random rm, bool isAdministartor)
+            internal void DeleteModel(ConnectInfo.ConnectInfoDetail connectInfoDetail, DeleteModel dm, Random rm, bool isAdministartor)
             {
                 if (isAdministartor)
                 {
@@ -546,11 +550,11 @@ namespace WsOfWebClient.MapEditor
                         x = dm.x,
                         z = dm.z,
                     };
-                    this.ShowObj(sf, webSocket, rm);
+                    this.ShowObj(sf, connectInfoDetail, rm);
                 }
                 else
                 {
-                    this.ShowMsg(webSocket, "只有管理员才能删除");
+                    this.ShowMsg(connectInfoDetail, "只有管理员才能删除");
                 }
             }
             readonly char[] splits = new char[] { '\r', '\n' };
@@ -630,7 +634,7 @@ namespace WsOfWebClient.MapEditor
                 //throw new NotImplementedException();
             }
 
-            internal async Task GetModelDetail(WebSocket webSocket, GetModelDetail gmd, Random rm)
+            internal async Task GetModelDetail(ConnectInfo.ConnectInfoDetail connectInfoDetail, GetModelDetail gmd, Random rm)
             {
 
 
@@ -646,12 +650,13 @@ namespace WsOfWebClient.MapEditor
                 if (string.IsNullOrEmpty(json)) { }
                 else
                 {
-                    var sendData = Encoding.UTF8.GetBytes(json);
-                    await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                    CommonF.SendData(json, connectInfoDetail, 0);
+                    //var sendData = Encoding.UTF8.GetBytes(json);
+                    //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
                 }
             }
 
-            internal void UseModelObj(WebSocket webSocket, UseModelObj umo, Random rm, bool isAdministartor)
+            internal void UseModelObj(ConnectInfo.ConnectInfoDetail connectInfoDetail, UseModelObj umo, Random rm, bool isAdministartor)
             {
                 if (isAdministartor)
                 {
@@ -667,12 +672,12 @@ namespace WsOfWebClient.MapEditor
                 }
                 else
                 {
-                    this.ShowMsg(webSocket, "只有管理员才能进行此操作！");
+                    this.ShowMsg(connectInfoDetail, "只有管理员才能进行此操作！");
                 }
 
             }
 
-            internal void ClearModelObj(WebSocket webSocket, Random rm, bool isAdministartor)
+            internal void ClearModelObj(ConnectInfo.ConnectInfoDetail connectInfoDetail, Random rm, bool isAdministartor)
             {
                 if (isAdministartor)
                 {
@@ -686,11 +691,11 @@ namespace WsOfWebClient.MapEditor
                 }
                 else
                 {
-                    this.ShowMsg(webSocket, "只有管理元才能进行此操作！");
+                    this.ShowMsg(connectInfoDetail, "只有管理元才能进行此操作！");
                 }
 
             }
-            internal async Task GetHeight(WebSocket webSocket, LookForHeight lfh, Random rm)
+            internal async Task GetHeight(ConnectInfo.ConnectInfoDetail connectInfoDetail, LookForHeight lfh, Random rm)
             {
                 var index = rm.Next(0, roomUrls.Count);
                 var roomUrl = roomUrls[index];
@@ -705,11 +710,13 @@ namespace WsOfWebClient.MapEditor
                 if (string.IsNullOrEmpty(json)) { }
                 else
                 {
-                    var sendData = Encoding.UTF8.GetBytes(json);
-                    await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                    CommonF.SendData(json, connectInfoDetail, 0);
+                    //var sendData = Encoding.UTF8.GetBytes(json);
+
+                    //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
                 }
             }
-            internal void DownloadModel(WebSocket webSocket, GetModelDetail gmd, Random rm)
+            internal void DownloadModel(ConnectInfo.ConnectInfoDetail connectInfoDetail, GetModelDetail gmd, Random rm)
             {
                 var index = rm.Next(0, roomUrls.Count);
                 var roomUrl = roomUrls[index];
@@ -726,12 +733,12 @@ namespace WsOfWebClient.MapEditor
                     var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.MapEditor.ModelDetail>(json);
                     obj.c = "DownloadModel";
                     json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
-                    CommonF.SendData(json, webSocket, 0);
+                    CommonF.SendData(json, connectInfoDetail, 0);
                 }
             }
 
             int startIndex = 0;
-            internal void GetUnLockedModelID(WebSocket webSocket, Random rm, string direction)
+            internal void GetUnLockedModelID(ConnectInfo.ConnectInfoDetail connectInfoDetail, Random rm, string direction)
             {
                 var index = rm.Next(0, roomUrls.Count);
                 var roomUrl = roomUrls[index];
@@ -758,7 +765,7 @@ namespace WsOfWebClient.MapEditor
                         };
 
                         sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(sn);
-                        CommonF.SendData(sendMsg, webSocket, 0);
+                        CommonF.SendData(sendMsg, connectInfoDetail, 0);
 
                         ShowOBJFile sf = new ShowOBJFile()
                         {
@@ -766,7 +773,7 @@ namespace WsOfWebClient.MapEditor
                             z = result.z,
                             c = "ShowOBJFile"
                         };
-                        this.ShowObj(sf, webSocket, rm);
+                        this.ShowObj(sf, connectInfoDetail, rm);
                     }
                 }
             }
@@ -775,7 +782,7 @@ namespace WsOfWebClient.MapEditor
         partial class ModeManger
         {
             int chargingOrder = 100000000;
-            public void ChargingSend(WebSocket webSocket, Random rm, CommonClass.Finance.Charging cObj, string addr)
+            public void ChargingSend(ConnectInfo.ConnectInfoDetail connectInfoDetail, Random rm, CommonClass.Finance.Charging cObj, string addr)
             {
                 cObj.c = "Charging";
                 cObj.ChargingAddr = addr;
@@ -791,7 +798,7 @@ namespace WsOfWebClient.MapEditor
                 // await this.ShowMsg(webSocket, r.msg);
             }
 
-            void showItemOfCharging(WebSocket webSocket, int row, int chargingOrder, int index)
+            void showItemOfCharging(ConnectInfo.ConnectInfoDetail connectInfoDetail, int row, int chargingOrder, int index)
             {
                 CommonClass.Finance.ChargingLookFor condition = new CommonClass.Finance.ChargingLookFor()
                 {
@@ -813,13 +820,13 @@ namespace WsOfWebClient.MapEditor
                         row = row
                     };
                     json = Newtonsoft.Json.JsonConvert.SerializeObject(objWeb);
-                    CommonF.SendData(json, webSocket, 0);
+                    CommonF.SendData(json, connectInfoDetail, 0);
                 }
             }
 
             Dictionary<int, bool> showItemDic = new Dictionary<int, bool>() { };
 
-            internal void ChargingRefresh(WebSocket webSocket, Random rm)
+            internal void ChargingRefresh(ConnectInfo.ConnectInfoDetail connectInfoDetail, Random rm)
             {
                 var obj = new { c = "ChargingMax" };
                 var index = rm.Next(0, roomUrls.Count);
@@ -833,12 +840,12 @@ namespace WsOfWebClient.MapEditor
                     var row = i + 0;
                     if (indexOfData > 0)
                     {
-                        showItemOfCharging(webSocket, row, indexOfData, index);
+                        showItemOfCharging(connectInfoDetail, row, indexOfData, index);
                     }
                 }
             }
 
-            internal void ChargingNextPage(WebSocket webSocket, Random rm)
+            internal void ChargingNextPage(ConnectInfo.ConnectInfoDetail connectInfoDetail, Random rm)
             {
                 var index = rm.Next(0, roomUrls.Count);
                 this.chargingOrder -= 10;
@@ -852,11 +859,11 @@ namespace WsOfWebClient.MapEditor
                     var row = i + 0;
                     if (indexOfData > 0)
                     {
-                        showItemOfCharging(webSocket, row, indexOfData, index);
+                        showItemOfCharging(connectInfoDetail, row, indexOfData, index);
                     }
                 }
             }
-            internal void ChargingPreviousPage(WebSocket webSocket, Random rm)
+            internal void ChargingPreviousPage(ConnectInfo.ConnectInfoDetail connectInfoDetail, Random rm)
             {
                 var index = rm.Next(0, roomUrls.Count);
                 this.chargingOrder += 10;
@@ -866,13 +873,13 @@ namespace WsOfWebClient.MapEditor
                     var row = i + 0;
                     if (indexOfData > 0)
                     {
-                        showItemOfCharging(webSocket, row, indexOfData, index);
+                        showItemOfCharging(connectInfoDetail, row, indexOfData, index);
                     }
                 }
             }
 
 
-            internal void LookForTaskCopyF(WebSocket webSocket, CommonClass.Finance.LookForTaskCopy lftc, Random rm)
+            internal void LookForTaskCopyF(ConnectInfo.ConnectInfoDetail connectInfoDetail, CommonClass.Finance.LookForTaskCopy lftc, Random rm)
             {
                 var index = rm.Next(0, roomUrls.Count);
                 var roomUrl = roomUrls[index];
@@ -881,10 +888,10 @@ namespace WsOfWebClient.MapEditor
                 if (string.IsNullOrEmpty(json)) { }
                 else
                 {
-                    CommonF.SendData(json, webSocket, 0);
+                    CommonF.SendData(json, connectInfoDetail, 0);
                 }
             }
-            internal void TaskCopyPassOrNGF(WebSocket webSocket, CommonClass.Finance.TaskCopyPassOrNG pOrNG, Random rm)
+            internal void TaskCopyPassOrNGF(ConnectInfo.ConnectInfoDetail connectInfoDetail, CommonClass.Finance.TaskCopyPassOrNG pOrNG, Random rm)
             {
                 var index = rm.Next(0, roomUrls.Count);
                 var roomUrl = roomUrls[index];
@@ -893,7 +900,7 @@ namespace WsOfWebClient.MapEditor
                 if (string.IsNullOrEmpty(json)) { }
                 else
                 {
-                    CommonF.SendData(json, webSocket, 0);
+                    CommonF.SendData(json, connectInfoDetail, 0);
                 }
             }
         }

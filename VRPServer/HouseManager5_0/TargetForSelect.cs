@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HouseManager5_0.interfaceOfHM;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,9 @@ namespace HouseManager5_0
         public int select { get; set; }
 
         public string tsType { get; set; }
+        public int rank { get; set; }
+        public int costPrice { get { return this.rank * 500; } }
+        public string costPriceStr { get { return $"{this.costPrice / 100}.{(this.costPrice % 100).ToString("D2")}"; } }
         //public int defaultSelect { get; set; }
 
         //public int price

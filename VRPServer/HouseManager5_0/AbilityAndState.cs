@@ -198,7 +198,9 @@ namespace HouseManager5_0
         {
             get
             {
-                return _costBusiness;
+                return role.Group.Money;
+                //switch(role.Group.Money)
+                //return _costBusiness;
             }
             //private set
 
@@ -316,15 +318,15 @@ namespace HouseManager5_0
             }
         }
 
-        //public AbilityChangedF BusinessChanged;
-        //public void setCostBusiness(long costBusinessCostInput, Player player, Car car, ref List<string> notifyMsg)
-        //{
-        //    this._costBusiness = costBusinessCostInput;
-        //    if (player.playerType == Player.PlayerType.player)
-        //    {
-        //        //  BusinessChanged((Player)player, car, ref notifyMsg, "business");
-        //    }
-        //}
+        public AbilityChangedF BusinessChanged;
+        public void setCostBusiness(long costBusinessCostInput, Player player, Car car, ref List<string> notifyMsg)
+        {
+            this._costBusiness = costBusinessCostInput;
+            if (player.playerType == Player.PlayerType.player)
+            {
+                BusinessChanged((Player)player, car, ref notifyMsg, "business");
+            }
+        }
 
         public AbilityChangedF VolumeChanged;
         public void setCostVolume(long costVolumeCostInput, Player role, Car car, ref List<string> notifyMsg)
@@ -385,27 +387,13 @@ namespace HouseManager5_0
         }
 
         /// <summary>
-        /// 小车能跑的最大距离，最小值为350km！确保地图中的最长路径有个来回！
+        /// 小车能跑的最大距离，最小值为200km！
         /// </summary>
         public long mile
         {
             get
             {
-                var selfValue = this.Data["mile"].Count * 7 + 350;
-                if (!string.IsNullOrEmpty(role.TheLargestHolderKey))
-                {
-                    // this.role.rm
-                    if ((this.role).Group._PlayerInGroup.ContainsKey(role.TheLargestHolderKey))
-                    {
-                        if (this.role.Group._PlayerInGroup[role.TheLargestHolderKey].playerType == Player.PlayerType.player)
-                        {
-                            if (!this.role.Group._PlayerInGroup[role.TheLargestHolderKey].Bust)
-                            {
-                                return Math.Max(selfValue, this.role.Group._PlayerInGroup[role.TheLargestHolderKey].getCar().ability.Data["mile"].Count * 7 + 350);
-                            }
-                        }
-                    }
-                }
+                var selfValue = this.Data["mile"].Count * 15 + 200;
                 return selfValue;
             }
         }
@@ -436,51 +424,27 @@ namespace HouseManager5_0
                 return this.Volume - this.costVolume;
             }
         }
+
+        public static int GetTaskValueByGroupNumber(int groupNumber)
+        {
+            switch (groupNumber)
+            {
+                case 1: return 70 * 100 * 1;
+                case 2: return 80 * 100 * 2;
+                case 3: return 90 * 100 * 3;
+                case 4: return 100 * 100 * 4;
+                case 5: return 110 * 100 * 5;
+                default: return 110 * 100 * 100;
+            }
+        }
         /// <summary>
-        /// 小车能携带的金钱数量！单位为分，即1/100元。
+        /// 小车应该完成的任务。
         /// </summary>
         public long Business
         {
             get
             {
-                if (this.driver == null)
-                {
-                    var selfValue = (this.Data["business"].Count * 500 + 10000);
-                    if (!string.IsNullOrEmpty(role.TheLargestHolderKey))
-                    {
-                        if (this.role.Group._PlayerInGroup.ContainsKey(role.TheLargestHolderKey))
-                        {
-                            if (this.role.Group._PlayerInGroup[role.TheLargestHolderKey].playerType == Player.PlayerType.player)
-                            {
-                                if (!this.role.Group._PlayerInGroup[role.TheLargestHolderKey].Bust)
-                                {
-                                    var bossValue = this.role.Group._PlayerInGroup[role.TheLargestHolderKey].getCar().ability.Data["business"].Count * 500 + 10000;
-                                    return Math.Max(selfValue, bossValue);
-                                }
-                            }
-                        }
-                    }
-                    return selfValue;
-                }
-                else
-                {
-                    var selfValue = driver.improveBusiness((this.Data["business"].Count * 500 + 10000));
-                    if (!string.IsNullOrEmpty(role.TheLargestHolderKey))
-                    {
-                        if (this.role.Group._PlayerInGroup.ContainsKey(role.TheLargestHolderKey))
-                        {
-                            if (this.role.Group._PlayerInGroup[role.TheLargestHolderKey].playerType == Player.PlayerType.player)
-                            {
-                                if (!this.role.Group._PlayerInGroup[role.TheLargestHolderKey].Bust)
-                                {
-                                    var bossValue = driver.improveBusiness(this.role.Group._PlayerInGroup[role.TheLargestHolderKey].getCar().ability.Data["business"].Count * 500 + 10000);
-                                    return Math.Max(selfValue, bossValue);
-                                }
-                            }
-                        }
-                    }
-                    return selfValue;
-                }
+                return GetTaskValueByGroupNumber(this.role.Group.groupNumber);
             }
         }
         /// <summary>
@@ -490,44 +454,8 @@ namespace HouseManager5_0
         {
             get
             {
-                if (this.driver == null)
-                {
-                    var selfValue = this.Data["volume"].Count * 500 + 10000;
-                    if (!string.IsNullOrEmpty(role.TheLargestHolderKey))
-                    {
-                        if (this.role.Group._PlayerInGroup.ContainsKey(role.TheLargestHolderKey))
-                        {
-                            if (this.role.Group._PlayerInGroup[role.TheLargestHolderKey].playerType == Player.PlayerType.player)
-                            {
-                                if (!this.role.Group._PlayerInGroup[role.TheLargestHolderKey].Bust)
-                                {
-                                    var bossValue = this.role.Group._PlayerInGroup[role.TheLargestHolderKey].getCar().ability.Data["volume"].Count * 500 + 10000;
-                                    return Math.Max(selfValue, bossValue);
-                                }
-                            }
-                        }
-                    }
-                    return selfValue;
-                }
-                else
-                {
-                    var selfValue = driver.improveVolume((this.Data["volume"].Count * 500 + 10000));
-                    if (!string.IsNullOrEmpty(role.TheLargestHolderKey))
-                    {
-                        if (this.role.Group._PlayerInGroup.ContainsKey(role.TheLargestHolderKey))
-                        {
-                            if (this.role.Group._PlayerInGroup[role.TheLargestHolderKey].playerType == Player.PlayerType.player)
-                            {
-                                if (!this.role.Group._PlayerInGroup[role.TheLargestHolderKey].Bust)
-                                {
-                                    var bossValue = driver.improveVolume(this.role.Group._PlayerInGroup[role.TheLargestHolderKey].getCar().ability.Data["volume"].Count * 500 + 10000);
-                                    return Math.Max(selfValue, bossValue);
-                                }
-                            }
-                        }
-                    }
-                    return selfValue;
-                }
+                var selfValue = this.Data["volume"].Count * 100 + 10 * 100;
+                return selfValue;
             }
         }
 
@@ -573,46 +501,9 @@ namespace HouseManager5_0
         {
             get
             {
-                if (this.driver == null)
-                {
-                    var selfValue = this.Data["speed"].Count * 2 + 50;
-                    if (!string.IsNullOrEmpty(role.TheLargestHolderKey))
-                    {
-                        //  if(role.TheLargestHolderKey)
-                        if (this.role.Group._PlayerInGroup.ContainsKey(role.TheLargestHolderKey))
-                        {
-                            if (this.role.Group._PlayerInGroup[role.TheLargestHolderKey].playerType == Player.PlayerType.player)
-                            {
-                                if (!this.role.Group._PlayerInGroup[role.TheLargestHolderKey].Bust)
-                                {
-                                    var bossValue = this.role.Group._PlayerInGroup[role.TheLargestHolderKey].getCar().ability.Data["speed"].Count * 2 + 50;
-                                    return Math.Max(selfValue, bossValue);
-                                }
-                            }
-                        }
-                    }
-                    return selfValue;
-                }
-                else
-                {
-                    var selfValue = driver.improveSpeed(this.Data["speed"].Count * 2 + 50);
-                    if (!string.IsNullOrEmpty(role.TheLargestHolderKey))
-                    {
-                        // this.role.rm
-                        if (this.role.Group._PlayerInGroup.ContainsKey(role.TheLargestHolderKey))
-                        {
-                            if (this.role.Group._PlayerInGroup[role.TheLargestHolderKey].playerType == Player.PlayerType.player)
-                            {
-                                if (!this.role.Group._PlayerInGroup[role.TheLargestHolderKey].Bust)
-                                {
-                                    var bossValue = driver.improveSpeed(this.role.Group._PlayerInGroup[role.TheLargestHolderKey].getCar().ability.Data["speed"].Count * 2 + 50);
-                                    return Math.Max(selfValue, bossValue);
-                                }
-                            }
-                        }
-                    }
-                    return selfValue;
-                }
+                var selfValue = this.Data["speed"].Count * 4 + 50;
+                return selfValue;
+
             }
         }
 

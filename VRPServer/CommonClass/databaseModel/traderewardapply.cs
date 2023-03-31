@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace CommonClass.databaseModel
@@ -10,6 +9,6 @@ namespace CommonClass.databaseModel
         public int startDate { get; set; }
         public string applyAddr { get; set; }
         public int applyLevel { get; set; }
-        public string applySign { get; set; } 
+        public string applySign { get; set; }
     }
 }

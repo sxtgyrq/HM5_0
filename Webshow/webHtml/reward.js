@@ -229,10 +229,7 @@
        margin-top: 3.2rem; min-height: 300px; width:80%;left:10%;
        position:relative;overflow-y:scroll;max-height:calc(100% - 6.2rem);">
                 <div style="text-align:center;"><span id="rewardTimeTitle"></span></div>
-                <div style="text-align:center;"><span id="rewardTimeMsgToNotify"></span></div>
-                <div style="text-align:center;margin-top:2em;">
-                    <button id="useLevelToApplyRewardBtn">申请</button>
-                </div>
+                <div style="text-align:center;"><span id="rewardTimeMsgToNotify"></span></div> 
                 <div style="text-align:center;margin-top:2em;">
                     <button id="lookRewardBuildingStockDetailBtn">查看</button>
                 </div>
@@ -248,12 +245,12 @@
                         <td id="rewardPublishState"></td>
                     </tr>
                 </table>
-                <div id="rewardAppleItemContainer"></div> 
                 <div style="text-align:center;">
                     <button id="previousRewardTimeBtn">上一期</button>
                     <button id="RewardTimeReback">返回</button>
                     <button id="nextRewardTimeBtn">下一期</button> 
                 </div>
+                <div id="rewardAppleItemContainer"></div>  
                 <table border="1" style="margin-top:4em">
                     <tr>
                         <th>奖励信息</th>
@@ -270,7 +267,7 @@
                 </table>
             </div>
         </div>`,
-    'hasData': function (title, data, list, indexNumber) {
+    'hasData': function (title, data, array, indexNumber) {
         var that = reward;
         if (document.getElementById(that.id) == null) {
             document.getElementById('rootContainer').innerHTML = '';
@@ -298,49 +295,51 @@
             }
             document.getElementById('rewardInfomationBuildingAddrSign').innerText = data.signOfBussinessAddr;
             document.getElementById('rewardInfomationRewardAddrSign').innerText = data.signOfTradeAddress;
-
-            //document.getElementById('nextRewardTimeBtn').onclick = function () {
-            //    that.page++;
-            //    objMain.ws.send(JSON.stringify({ 'c': 'RewardInfomation', 'Page': that.page }));
-            //}
+             
             that.navigationAdd();
-            that.msgToApply = data.orderMessage;
-            //list = [];
-            for (var i = 0; i < list.length; i++) {
-                var itemHtml = `<table border="1" style="margin-top:1em;">
-
-                    <tr>
-                        <th>申请地址</th>
-                        <th>申请等级</th>
-                        <th>获得点数</th>
+            that.msgToApply = data.orderMessage; 
+            for (var indexOfArray = 0; indexOfArray < array.length; indexOfArray++) {
+                var list = array[indexOfArray];
+                var tableCenter = '';
+                for (var i = 0; i < list.length; i++) {
+                    var bgColor = '#ff000020';
+                    if (i % 2 == 0) {
+                        bgColor = '#00ff0020';
+                    }
+                    tableCenter += `<tr style="background:${bgColor}">
+                        <th colspan="5">申请地址</th>
+                    </tr>
+                    <tr style="background:${bgColor}">
+                        <td style="word-break:break-all;word-wrap:anywhere;" colspan="5">${list[i].applyAddr}</td>
+                    </tr>
+                    <tr style="background:${bgColor}">
+                        <th>任务</th>
+                        <th>时间</th>
+                        <th>名次</th>
                         <th>比例</th>
+                        <th>奖励</th>
                     </tr>
-                    <tr>
-                        <td style="word-break:break-all;word-wrap:anywhere;">${list[i].applyAddr}</td>
-                        <td style="word-break:break-all;word-wrap:anywhere;">${list[i].applyLevel}级</td>
-                        <td style="word-break:break-all;word-wrap:anywhere;">${list[i].satoshiShouldGet}satoshi</td>
-                        <td style="word-break:break-all;word-wrap:anywhere;">${list[i].percentStr}</td>
-                    </tr>
-                    <tr>
-                        <th colspan="1" style="word-break:break-all;word-wrap:anywhere;">消息→</th>
-                        <td colspan="2" style="word-break:break-all;word-wrap:anywhere;">${list[i].startDate}</td>
-                        <th colspan="1" style="word-break:break-all;word-wrap:anywhere;">↓签名↓</th>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="word-break:break-all;word-wrap:anywhere;">${list[i].applySign}</td>
-                    </tr>
-                </table>`
+                    <tr style="background:${bgColor}">
+                        <td style="text-align:center;">${list[i].TaskValue}</td>
+                        <td style="text-align:center;">${list[i].raceTimeStr}</td>
+                        <td style="text-align:center;">${list[i].rank}</td>
+                        <td style="text-align:center;">${list[i].percentStr}</td>
+                        <td style="text-align:center;">${list[i].rewardGiven}satoshi</td>
+                    </tr>`;
+                }
+                var itemHtml = `<table border="1" style="margin-top:1em;">${tableCenter}</table>`;
                 var tableFrag = document.createRange().createContextualFragment(itemHtml);
                 document.getElementById('rewardAppleItemContainer').appendChild(tableFrag);
+
             }
 
             //useLevelToApplyRewardBtn
-            document.getElementById('useLevelToApplyRewardBtn').onclick = function () {
-                var domObj = document.createRange().createContextualFragment(that.dialogToApplyRewardHtml);
-                domObj.id = that.applyDialogID;
-                document.getElementById('rootContainer').appendChild(domObj);
-                document.getElementById("msgNeedToSignForRewardApply").innerText = document.getElementById('rewardMsgNeedToSign').innerText;
-            };
+            //document.getElementById('useLevelToApplyRewardBtn').onclick = function () {
+            //    var domObj = document.createRange().createContextualFragment(that.dialogToApplyRewardHtml);
+            //    domObj.id = that.applyDialogID;
+            //    document.getElementById('rootContainer').appendChild(domObj);
+            //    document.getElementById("msgNeedToSignForRewardApply").innerText = document.getElementById('rewardMsgNeedToSign').innerText;
+            //};
             document.getElementById('lookRewardBuildingStockDetailBtn').onclick = function () {
                 var title = document.getElementById('rewardMsgNeedToSign').innerText;
                 QueryReward.draw3D();
@@ -352,10 +351,20 @@
                 QueryReward.drawToolBar(title);
             };
             that.msgsToTransferSshares = [];
-            for (var i = 0; i < list.length; i++) {
-                var msg = `${indexNumber + i}@${data.tradeAddress}@${data.bussinessAddr}->${list[i].applyAddr}:${list[i].satoshiShouldGet}Satoshi`;
-                that.msgsToTransferSshares.push(msg);
+
+            // var indexNumToSign = 0;
+            for (var indexOfArray = 0; indexOfArray < array.length; indexOfArray++) {
+                var list = array[indexOfArray];
+                for (var i = 0; i < list.length; i++) {
+                    if (i < 100) {
+                        var msg = `${indexNumber}@${data.tradeAddress}@${data.bussinessAddr}->${list[i].applyAddr}:${list[i].rewardGiven}satoshi`;
+                        that.msgsToTransferSshares.push(msg);
+                        indexNumber++;
+                    }
+                }
             }
+
+
         }
         else {
         }

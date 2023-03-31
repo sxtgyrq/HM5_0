@@ -8,21 +8,26 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using NGraphics;
 using SixLabors.ImageSharp.Drawing;
+using System.Runtime.CompilerServices;
+using SixLabors.Fonts;
 
 namespace CommonClass.Img
 {
     public class DrawFont
     {
-
+        public static objTff2 DataMemery;
         public static void Initialize(objTff2 data)
         {
             var s = data.glyphs["國"];
             Console.WriteLine("字体初始化完毕");
+            Platforms.SetPlatform(new NGraphics.SystemDrawingPlatform());
+            DrawFont.DataMemery = data;
         }
         int xx = 0;
         List<string> strss = new List<string>();
         //  private string o;
 
+        public int MaxV { get; private set; }
         public DrawFont(string character, objTff2 data, string color)
         {
             if (data.glyphs.ContainsKey(character))
@@ -92,8 +97,9 @@ namespace CommonClass.Img
                     }
                 }
                 //   NGraphics.IPlatform
-                Platforms.SetPlatform(new NGraphics.SystemDrawingPlatform());
-                var maxV = Math.Max(maxX - minX, maxY - minY);
+                // Platforms.SetPlatform(new NGraphics.SystemDrawingPlatform());
+                this.MaxV = Math.Max(maxX - minX, maxY - minY);
+                var maxV = this.MaxV;
                 var Width = maxX - minX;
                 var Height = maxY - minY;
                 var canvas = Platforms.Current.CreateImageCanvas(new Size(maxV, maxV), scale: 1, transparency: true);
@@ -144,14 +150,17 @@ namespace CommonClass.Img
                         {
                             c = Colors.Black;
                         }; break;
+                    case "green":
+                        {
+                            c = Colors.Green;
+                        }; break;
                     default:
                         {
                             c = Colors.Red;
                         }; break;
                 }
-                canvas.FillPath(ops.ToArray(),c);
+                canvas.FillPath(ops.ToArray(), c);
                 var ii = canvas.GetImage();
-
                 this.img = canvas.GetImage();
             }
         }
@@ -303,6 +312,172 @@ namespace CommonClass.Img
                     public string trademark { get; set; }
                 }
             }
+
+        }
+    }
+
+    public class DrawFonts
+    {
+        public int PicWidth { get; private set; }
+        public int PicHeight { get; private set; }
+        public DrawFonts(string characters, objTff2 data, string color)
+        {
+            {
+                int maxY = -5000;
+                int minY = 5000;
+                int sumLength = 0;
+                for (int indexOfCharacters = 0; indexOfCharacters < characters.Length; indexOfCharacters++)
+                {
+                    var character = characters[indexOfCharacters].ToString();
+                    if (data.glyphs.ContainsKey(character))
+                    {
+                        sumLength += data.glyphs[character].x_max - data.glyphs[character].x_min;
+                        if (indexOfCharacters != characters.Length - 1)
+                            sumLength += (data.glyphs[character].x_max - data.glyphs[character].x_min) / 10;
+                    }
+                    var strss = data.glyphs[character].o.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList();
+                    for (int i = 0; i < strss.Count; i++)
+                    {
+                        if (strss[i] == "q")
+                        {
+
+                            // var x1 = Convert.ToInt32(strss[i + 1]);
+                            var y1 = Convert.ToInt32(strss[i + 2]);
+                            //var x2 = Convert.ToInt32(strss[i + 3]);
+                            var y2 = Convert.ToInt32(strss[i + 4]);
+
+                            maxY = Math.Max(maxY, y1);
+                            maxY = Math.Max(maxY, y2);
+                            minY = Math.Min(minY, y1);
+                            minY = Math.Min(minY, y2);
+                        }
+                        else if (strss[i] == "l")
+                        {
+
+                            //var x1 = Convert.ToInt32(strss[i + 1]);
+                            var y1 = Convert.ToInt32(strss[i + 2]);
+                            maxY = Math.Max(maxY, y1);
+                            minY = Math.Min(minY, y1);
+
+                        }
+                        else if (strss[i] == "m")
+                        {
+
+                            //var x1 = Convert.ToInt32(strss[i + 1]);
+                            var y1 = Convert.ToInt32(strss[i + 2]);
+                            maxY = Math.Max(maxY, y1);
+                            minY = Math.Min(minY, y1);
+                        }
+                        else if (strss[i] == "z")
+                        {
+                        }
+                    }
+                }
+                var canvas = Platforms.Current.CreateImageCanvas(new Size(sumLength, maxY - minY), scale: 1, transparency: true);
+                var height = maxY - minY;
+
+                int startPosition = 0;
+                for (int indexOfCharacters = 0; indexOfCharacters < characters.Length; indexOfCharacters++)
+                {
+
+                    List<PathOp> ops = new List<PathOp>();
+
+                    var character = characters[indexOfCharacters].ToString();
+                    var x_max = data.glyphs[character].x_max;
+                    var x_min = data.glyphs[character].x_min;
+
+                    ops.Add(new MoveTo(x_min + startPosition, 0));
+                    var strss = data.glyphs[character].o.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList();
+                    for (int i = 0; i < strss.Count; i++)
+                    {
+
+                        if (strss[i] == "q")
+                        {
+                            var x1 = Convert.ToInt32(strss[i + 1]) - x_min + startPosition;
+                            var y1 = height - (Convert.ToInt32(strss[i + 2]) - minY);
+                            var x2 = Convert.ToInt32(strss[i + 3]) - x_min + startPosition;
+                            var y2 = height - (Convert.ToInt32(strss[i + 4]) - minY);
+                            ops.Add(new NGraphics.CurveTo(new Point(x2, y2), new Point(x1, y1), new Point(x1, y1)));
+                        }
+                        else if (strss[i] == "l")
+                        {
+
+                            var x1 = Convert.ToInt32(strss[i + 1]) - x_min + startPosition;
+                            var y1 = height - (Convert.ToInt32(strss[i + 2]) - minY);
+                            ops.Add(new LineTo(x1, y1));
+                        }
+                        else if (strss[i] == "m")
+                        {
+                            var x1 = Convert.ToInt32(strss[i + 1]) - x_min + startPosition;
+                            var y1 = height - (Convert.ToInt32(strss[i + 2]) - minY);
+
+                            if (ops.Count > 0)
+                            {
+                                ops.Add(new ClosePath());
+                            }
+                            ops.Add(new MoveTo(x1, y1));
+                        }
+                        else if (strss[i] == "z")
+                        {
+                            if (ops.Last().GetType() != typeof(ClosePath))
+                                ops.Add(new ClosePath());
+                        }
+                    }
+                    NGraphics.Color c = Colors.Red;
+                    switch (color)
+                    {
+                        case "red":
+                            {
+                                c = Colors.Red;
+                            }; break;
+                        case "black":
+                            {
+                                c = Colors.Black;
+                            }; break;
+                        case "green":
+                            {
+                                c = Colors.Green;
+                            }; break;
+                        default:
+                            {
+                                c = Colors.Red;
+                            }; break;
+                    }
+                    if (ops.Last().GetType() != typeof(ClosePath))
+                        ops.Add(new ClosePath());
+                    canvas.FillPath(ops.ToArray(), c);
+                    // canvas.
+                    if (data.glyphs.ContainsKey(character))
+                    {
+                        startPosition += data.glyphs[character].x_max - data.glyphs[character].x_min;
+                        startPosition += (data.glyphs[character].x_max - data.glyphs[character].x_min) / 10;
+                    }
+                }
+                var ii = canvas.GetImage();
+                this.img = canvas.GetImage();
+                this.PicWidth = sumLength;
+                this.PicHeight = height;
+            }
+        }
+        IImage img = null;
+        public void SaveAsImg()
+        {
+            if (this.img != null)
+            {
+                this.img.SaveAsPng("Example2.png");
+            }
+        }
+        public MemoryStream GetAsStream(out bool success)
+        {
+            MemoryStream ms = new MemoryStream();
+            if (this.img != null)
+            {
+                this.img.SaveAsPng(ms);
+                success = true;
+            }
+            else
+                success = false;
+            return ms;
 
         }
     }

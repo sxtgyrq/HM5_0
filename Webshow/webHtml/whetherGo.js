@@ -21,18 +21,18 @@
         margin-bottom: 0.25em;
         margin-top: 0.25em;border:1px solid gray;width:100%;">
             <div>
-                <img src="Pic/girl/2705.png" style="height:15em;width:auto;left:0px;float:right;" />
+                <img src="Pic/girl/2705.png" style="height:15em;width:13.37em;right:0px;float:right;top:0px;" />
             </div>
             <p>
                 ${title}
             </p>
-            <div style="background: rgba(154,205,50, 0.6); margin-bottom: 0.25em; margin-top: 0.25em; padding-bottom: 1em; padding-top: 1em; box-shadow: 2px 1px; border-radius:0.5em;" onclick="whetherGo.goTo();">
+            <div style="background: rgba(154,205,50, 0.6); margin-bottom: 0.25em; margin-top: 0.25em; padding-bottom: 1em; padding-top: 1em; box-shadow: 2px 1px; border-radius:0.5em;margin-right: calc(13.37em + 4px);" onclick="whetherGo.goTo();">
                 是
             </div>
-            <div style="background: rgba(154,205,50, 0.6); margin-bottom: 0.25em; margin-top: 0.25em; padding-bottom: 1em; padding-top: 1em; box-shadow: 2px 1px; border-radius: 0.5em; " onclick="whetherGo.lookFor();">
+            <div style="background: rgba(154,205,50, 0.6); margin-bottom: 0.25em; margin-top: 0.25em; padding-bottom: 1em; padding-top: 1em; box-shadow: 2px 1px; border-radius: 0.5em;margin-right: calc(13.37em + 4px);" onclick="whetherGo.lookFor();">
                 查看
             </div>
-            <div style="background: rgba(154,205,50, 0.6); margin-bottom: 0.25em; margin-top: 0.25em; padding-bottom: 1em; padding-top: 1em; box-shadow: 2px 1px; border-radius: 0.5em; " onclick="whetherGo.Back();">
+            <div style="background: rgba(154,205,50, 0.6); margin-bottom: 0.25em; margin-top: 0.25em; padding-bottom: 1em; padding-top: 1em; box-shadow: 2px 1px; border-radius: 0.5em;margin-right: calc(13.37em + 4px);" onclick="whetherGo.Back();">
                 否
             </div> 
         </div>
@@ -96,13 +96,13 @@
         }
     },
     cancle: function () {
-        //var that = whetherGo;
-        //if (document.getElementById(that.operateID) == null) {
+        var that = whetherGo;
+        if (document.getElementById(that.operateID) == null) {
 
-        //}
-        //else {
-        //    document.getElementById(that.operateID).remove();
-        //}
+        }
+        else {
+            document.getElementById(that.operateID).remove();
+        }
     },
     Back: function () {
         objMain.ws.send(JSON.stringify({ 'c': 'NotWantToGoNeedToBack' }));
@@ -117,21 +117,28 @@
     //    objMain.ws.send(JSON.stringify({ 'c': 'WhetherGoNext', 'cType': 'previous' }));
     //},
     mOr: function () {
-        var btn = document.getElementById('minOrMax');
-        var panelToAskWhetherGoto = document.getElementById('panelToAskWhetherGoto');
-        switch (btn.innerText) {
-            case '最小化':
-                {
-                    btn.innerText = "最大化";
-                    panelToAskWhetherGoto.style.maxWidth = "3.5em";
-                    panelToAskWhetherGoto.style.maxHeight = "1.5em";
-                }; break;
-            case '最大化':
-                {
-                    btn.innerText = "最小化";
-                    panelToAskWhetherGoto.style.maxWidth = "calc(90%)";
-                    panelToAskWhetherGoto.style.maxHeight = "calc(90%)";
-                }; break;
+        //if (objMain.state == 'OnLine')
+        {
+            var btn = document.getElementById('minOrMax');
+            var panelToAskWhetherGoto = document.getElementById('panelToAskWhetherGoto');
+            switch (btn.innerText) {
+                case '最小化':
+                    {
+                        btn.innerText = "最大化";
+                        panelToAskWhetherGoto.style.maxWidth = "3.5em";
+                        panelToAskWhetherGoto.style.maxHeight = "1.5em";
+                        panelToAskWhetherGoto.style.top = "calc(68px + 3em)";
+                        panelToAskWhetherGoto.style.left = "5px";
+                    }; break;
+                case '最大化':
+                    {
+                        btn.innerText = "最小化";
+                        panelToAskWhetherGoto.style.maxWidth = "calc(90%)";
+                        panelToAskWhetherGoto.style.maxHeight = "calc(90%)";
+                        panelToAskWhetherGoto.style.top = "calc(5%)";
+                        panelToAskWhetherGoto.style.left = "calc(5%)";
+                    }; break;
+            }
         }
     },
     obj: null,
@@ -147,7 +154,7 @@
     height:100%;
     max-width: calc(90%);max-height: calc(90%);height:90%;  border: solid 1px red; text-align: center; background: rgba(104, 48, 8, 0.4); color: #83ffff; overflow: hidden;   border-radius: 5px; ">
         <span id="minOrMax" style="background:red;float:left;border:solid 1px #000000;" onclick="whetherGo.mOr();">最小化</span>
-        <img id="imageOfSmallMap" src="data:image/jpeg;base64,${that.obj.base64}" style="max-width:calc(98%); max-height: calc(98% - 3em);background: #674a4a8b;box-shadow:2px 1px;" onclick="click();" />
+        <img id="imageOfSmallMap" src="" style="max-width:calc(98%); max-height: calc(98% - 3em);background: #674a4a8b;box-shadow:2px 1px;" onclick="click();" />
         <div>点击图片，选择目标</div> 
     </div>`;
         if (document.getElementById(that.operateID) == null) {
@@ -181,11 +188,14 @@
             var lon = (whetherGo.obj.maxX - whetherGo.obj.minX) * percent1 + whetherGo.obj.minX;
             var lat = (whetherGo.obj.maxY - whetherGo.obj.minY) * percent2 + whetherGo.obj.minY;
             var radius = (whetherGo.obj.maxX - whetherGo.obj.minX) / 24;
-            objMain.ws.send(JSON.stringify({ 'c': 'SmallMapClick', 'lon': lon, 'lat': lat, 'radius': radius }));
-            var that = whetherGo;
-            document.getElementById(that.operateID).remove();
-            // alert(`点击位置${lon},${lat}`)
-            //alert(`点击位置${originX},${originY}`)
+            if (objMain.state == 'OnLine') {
+                objMain.ws.send(JSON.stringify({ 'c': 'SmallMapClick', 'lon': lon, 'lat': lat, 'radius': radius }));
+                var that = whetherGo;
+                document.getElementById(that.operateID).remove();
+            }
+            else {
+                $.notify('此状态点击无效', 'warn');
+            }
         });
     }
 }

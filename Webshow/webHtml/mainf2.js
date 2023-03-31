@@ -947,11 +947,8 @@ var objMain =
                             }; break;
                         case 'QueryReward':
                             {
-                                //if (objMain.state == 'OnLine')
-                                {
-                                    objMain.state = objMain.receivedState;
-                                    objMain.ws.send(JSON.stringify({ 'c': 'RewardInfomation', 'Page': 0 }));
-                                }
+                                objMain.state = objMain.receivedState;
+                                objMain.ws.send(JSON.stringify({ 'c': 'RewardInfomation', 'Page': 0 }));
                             }; break;
                         case 'Guid':
                             {
@@ -2038,8 +2035,9 @@ var objMain =
                 }; break;
             case 'GetRewardInfomationHasResult':
                 {
-                    reward.hasData(received_obj.title, received_obj.data, received_obj.list, received_obj.indexNumber);
+                    //reward.hasData(received_obj.title, received_obj.data, received_obj.list, received_obj.indexNumber);
                     // alert('有数据');
+                    reward.hasData(received_obj.title, received_obj.data, received_obj.array, received_obj.indexNumber);
                 }; break;
             case 'VerifyCodePic':
                 {
@@ -2126,8 +2124,24 @@ var objMain =
                 }; break;
             case 'BradCastWhereToGoInSmallMap':
                 {
-                    whetherGo.obj = received_obj;
-                    whetherGo.show2();
+                    /*received_obj.base64 =*/
+                    if (received_obj.isFineshed) {
+                        if (received_obj.base64 == "") {
+                            whetherGo.obj = JSON.parse(JSON.stringify(received_obj));
+                            received_obj.data = [];
+                            objMain.ws.send(JSON.stringify(received_obj));
+                        }
+                        else {
+                            whetherGo.obj.base64 = received_obj.base64;
+                            smallMapClass.draw(whetherGo.obj);
+                            whetherGo.show2();
+                        }
+                    }
+                    else {
+                        smallMapClass.draw(received_obj);
+                        whetherGo.obj = received_obj;
+                        whetherGo.show2();
+                    }
                 }; break;
             default:
                 {
@@ -4708,6 +4722,25 @@ var operatePanel =
                     switch (objMain.Task.state) {
                         case 'collect':
                             {
+                                addItemToTaskOperatingPanle('收集', 'collectBtn', function () {
+                                    objMain.canSelect = false;
+                                    if (objMain.carState["car"] == 'waitAtBaseStation' || objMain.carState["car"] == 'waitOnRoad') {
+                                        var selectObj = objMain.selectObj.obj;
+                                        var radius = 0.00001;
+                                        objMain.ws.send(JSON.stringify(
+                                            {
+                                                'c': 'SmallMapClick',
+                                                'lon': selectObj.userData.collectPosition.Fp.positionLongitudeOnRoad,
+                                                'lat': selectObj.userData.collectPosition.Fp.positionLatitudeOnRoad,
+                                                'radius': radius
+                                            }));
+
+                                        objMain.selectObj.obj = null;
+                                        objMain.selectObj.type = '';
+                                        operatePanel.refresh();
+                                        whetherGo.cancle();
+                                    }
+                                });
                                 lookUp();
                             }; break;
                         case 'attack':
@@ -4716,7 +4749,26 @@ var operatePanel =
                         case 'mile':
                         case 'volume':
                         case 'speed':
-                            { 
+                            {
+                                addItemToTaskOperatingPanle('寻宝', 'promoteBtn', function () {
+                                    objMain.canSelect = false;
+                                    if (objMain.carState["car"] == 'waitAtBaseStation' || objMain.carState["car"] == 'waitOnRoad') {
+                                        var selectObj = objMain.selectObj.obj;
+                                        var radius = 0.00001;
+                                        objMain.ws.send(JSON.stringify(
+                                            {
+                                                'c': 'SmallMapClick',
+                                                'lon': selectObj.userData.Fp.positionLongitudeOnRoad,
+                                                'lat': selectObj.userData.Fp.positionLatitudeOnRoad,
+                                                'radius': radius
+                                            }));
+
+                                        objMain.selectObj.obj = null;
+                                        objMain.selectObj.type = '';
+                                        operatePanel.refresh();
+                                        whetherGo.cancle();
+                                    }
+                                });
                                 lookUp();
                             }; break;
                         case 'ability':
@@ -4744,8 +4796,29 @@ var operatePanel =
                 {
                     switch (objMain.Task.state) {
                         case 'collect':
-                            { 
-                                lookUp(); 
+                            {
+                                addItemToTaskOperatingPanle('收集', 'collectBtn', function () {
+                                    objMain.canSelect = false;
+                                    if (objMain.carState["car"] == 'waitAtBaseStation' || objMain.carState["car"] == 'waitOnRoad') {
+                                        var selectObj = objMain.selectObj.obj;
+                                        // console.log('selectObj', selectObj.userData.collectPosition.Fp.FastenPositionID);
+                                        //  objMain.ws.send(JSON.stringify({ 'c': 'Collect', 'cType': 'findWork', 'fastenpositionID': selectObj.userData.collectPosition.Fp.FastenPositionID, 'collectIndex': selectObj.userData.collectPosition.collectIndex }));
+                                        var radius = 0.00001;
+                                        objMain.ws.send(JSON.stringify(
+                                            {
+                                                'c': 'SmallMapClick',
+                                                'lon': selectObj.userData.collectPosition.Fp.positionLongitudeOnRoad,
+                                                'lat': selectObj.userData.collectPosition.Fp.positionLatitudeOnRoad,
+                                                'radius': radius
+                                            }));
+
+                                        objMain.selectObj.obj = null;
+                                        objMain.selectObj.type = '';
+                                        operatePanel.refresh();
+                                        whetherGo.cancle();
+                                    }
+                                });
+                                lookUp();
                             }; break;
                         case 'attack':
                             {
@@ -4754,10 +4827,27 @@ var operatePanel =
                                 //lookUp();
                             }; break;
                         case 'mile':
-                        //  case 'business':
                         case 'volume':
                         case 'speed':
-                            { 
+                            {
+                                addItemToTaskOperatingPanle('寻宝', 'promoteBtn', function () {
+                                    objMain.canSelect = false;
+                                    if (objMain.carState["car"] == 'waitAtBaseStation' || objMain.carState["car"] == 'waitOnRoad') {
+                                        var selectObj = objMain.selectObj.obj;
+                                        var radius = 0.00001;
+                                        objMain.ws.send(JSON.stringify(
+                                            {
+                                                'c': 'SmallMapClick',
+                                                'lon': selectObj.userData.Fp.positionLongitudeOnRoad,
+                                                'lat': selectObj.userData.Fp.positionLatitudeOnRoad,
+                                                'radius': radius
+                                            }));
+                                        objMain.selectObj.obj = null;
+                                        objMain.selectObj.type = '';
+                                        operatePanel.refresh();
+                                        whetherGo.cancle();
+                                    }
+                                });
                                 lookUp();
                             }; break;
                         case 'setReturn':
@@ -4787,7 +4877,17 @@ var operatePanel =
                             }; break;
                     }
                     if (objMain.state == 'OnLine')
-                    { } 
+                        addItemToTaskOperatingPanle('回基地', 'goBackBtn', function () {
+                            objMain.canSelect = false;
+                            if (objMain.carState["car"] == 'waitOnRoad') {
+                                var selectObj = objMain.selectObj.obj;
+                                objMain.ws.send(JSON.stringify({ 'c': 'SetCarReturn' }));
+                                objMain.selectObj.obj = null;
+                                objMain.selectObj.type = '';
+                                operatePanel.refresh();
+                                whetherGo.cancle();
+                            }
+                        });
                 }; break;
             case 'selecting':
                 {
@@ -5843,7 +5943,7 @@ var UpdateOtherBasePoint = function () {
     for (var key in objMain.othersBasePoint) {
         var indexKey = key + '';
         var basePoint = objMain.othersBasePoint[key].basePoint;
-        drawPoint('orange', basePoint, indexKey);
+        //  drawPoint('orange', basePoint, indexKey);
         objMain.mainF.drawLineOfFpToRoad(basePoint, objMain.playerGroup, 'orange', indexKey);
         objMain.mainF.initilizeCars(basePoint, 'orange', indexKey, false, objMain.othersBasePoint[key].positionInStation);
         //  console.log('哦哦', '出现了预料的情况！！！');

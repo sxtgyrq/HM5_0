@@ -12,7 +12,7 @@ namespace CommonClass
             //1@3FkXatYUQv81t7mDsQf8igumGnp1mE1gkk@3BkRN6seLYYgSqGQNX3o1poEzCXhGK3vTs->354vT5hncSwmob6461WjhhfWmaiZgHuaSK:100000Satoshi
             // var regex = new Regex("^[0-9]{1,6}@[13][a-km-zA-HJ-NP-Z1-9]{25,34}@[13][a-km-zA-HJ-NP-Z1-9]{25,34}->[13][a-km-zA-HJ-NP-Z1-9]{25,34}:[1-9][0-9]{1,8}Satoshi$");
             //(?<middle>\d+)
-            var regex = new Regex("^(?<index>[0-9]{1,6})@(?<tradeAddr>[13][a-km-zA-HJ-NP-Z1-9]{25,34})@(?<businessAddr>[13][a-km-zA-HJ-NP-Z1-9]{25,34})->(?<acceptAddr>[13][a-km-zA-HJ-NP-Z1-9]{25,34}):(?<passValue>[1-9][0-9]{1,8})Satoshi$");
+            var regex = new Regex("^(?<index>[0-9]{1,6})@(?<tradeAddr>[13][a-km-zA-HJ-NP-Z1-9]{25,34})@(?<businessAddr>[13][a-km-zA-HJ-NP-Z1-9]{25,34})->(?<acceptAddr>[13][a-km-zA-HJ-NP-Z1-9]{25,34}):(?<passValue>[1-9][0-9]{1,8})[Ss]{1}atoshi$");
             Match match = regex.Match(msg);
             if (match.Success)
             {

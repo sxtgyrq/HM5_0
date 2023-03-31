@@ -33,10 +33,15 @@ namespace ConsoleTestAPP
             //   CommonClass.Img.DrawFont.Draw("你");
             var data = CommonClass.Img.DrawFont.FontCodeResult.Data.Get(Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.Img.DrawFont.FontCodeResult.Data.objTff2>);
             CommonClass.Img.DrawFont.Initialize(data);
-            var dr = new CommonClass.Img.DrawFont("膩", data, "red");
-            dr.SaveAsImg();
-            // CommonClass.Img.DrawFont.Draw("你", data);
-
+            {
+                var dr = new CommonClass.Img.DrawFont("国", data, "red");
+                dr.SaveAsImg();
+            }
+            {
+                var dr = new CommonClass.Img.DrawFonts("耗时1小时38分49.24秒", data, "green");
+                dr.SaveAsImg();
+                // CommonClass.Img.DrawFont.Draw("你", data);
+            }
 
             while (Console.ReadLine().ToLower() == "exit")
             {

@@ -181,39 +181,50 @@ namespace HouseManager5_0.RoomMainF
         public string Statictis(ServerStatictis ss)
         {
             var r = new List<int>(4) { 0, 0, 0, 0 };
-            //foreach (var item in this._Players)
-            //{
-            //    r[0]++;
-            //    if (item.Value.playerType == Player.PlayerType.player)
-            //    {
-            //        r[1]++;
-            //        if (((Player)item.Value).IsOnline())
-            //        {
-            //            r[3]++;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        r[2]++;
-            //    }
-            //}
+            lock (this.PlayerLock)
+            {
+
+                foreach (var groupItem in this._Groups)
+                {
+                    var group = groupItem.Value;
+                    foreach (var playerItem in group._PlayerInGroup)
+                    {
+                        r[0]++;
+                        r[1]++;
+                        if (playerItem.Value.IsOnline())
+                        {
+                            r[3]++;
+                        }
+                    }
+                }
+                //foreach (var item in this._Players)
+                //{
+                //    r[0]++;
+                //    if (item.Value.playerType == Player.PlayerType.player)
+                //    {
+                //        r[1]++;
+                //        if (((Player)item.Value).IsOnline())
+                //        {
+                //            r[3]++;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        r[2]++;
+                //    }
+                //}
+            }
             return Newtonsoft.Json.JsonConvert.SerializeObject(r);
             //  throw new NotImplementedException();
         }
 
         public void SystemBradcast(SystemBradcast sb)
         {
-            //foreach (var item in this._Players)
-            //{
-            //    if (item.Value.playerType == Player.PlayerType.player)
-            //    {
-            //        if (!item.Value.Bust)
-            //        {
-            //            WebNotify(item.Value, sb.msg);
-            //        }
-            //    }
-            //}
-            // throw new NotImplementedException();
+            foreach (var item in this._Groups)
+            {
+                var group = item.Value;
+                group.SystemBradcast(sb);
+            }
         }
 
         public string updateView(View v)
@@ -282,15 +293,15 @@ namespace HouseManager5_0.RoomMainF
                                 this.WebNotify(player, "你的积分还没有存储！");
                                 return Newtonsoft.Json.JsonConvert.SerializeObject(r);
                             }
-                            else if (car.ability.HasDiamond())
-                            {
-                                ExitObjResult r = new ExitObjResult()
-                                {
-                                    Success = false,
-                                };
-                                this.WebNotify(player, "还有宝石没有释放！");
-                                return Newtonsoft.Json.JsonConvert.SerializeObject(r);
-                            }
+                            //else if (car.ability.HasDiamond())
+                            //{
+                            //    ExitObjResult r = new ExitObjResult()
+                            //    {
+                            //        Success = false,
+                            //    };
+                            //    this.WebNotify(player, "还有宝石没有释放！");
+                            //    return Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                            //}
                             else
                             {
                                 ExitObjResult r = new ExitObjResult()

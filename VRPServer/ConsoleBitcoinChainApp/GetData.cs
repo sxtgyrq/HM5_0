@@ -23,7 +23,7 @@ namespace ConsoleBitcoinChainApp
         {
             var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes(UriStr, addr);
             var resultString = t.GetAwaiter().GetResult();
-            
+
             //var resultString = t.Result;
             //var resultString = await TcpFunction.WithResponse.SendInmationToUrlAndGetRes(UriStr, addr);
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, long>>(resultString);
@@ -46,7 +46,7 @@ namespace ConsoleBitcoinChainApp
                         var addrTo = parameter[3];
 
                         var passCoinStr = parameter[4];
-                        if (passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi")
+                        if (passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi" || passCoinStr.Substring(passCoinStr.Length - 7, 7) == "satoshi")
                         {
                             var passCoin = Convert.ToInt64(passCoinStr.Substring(0, passCoinStr.Length - 7));
 

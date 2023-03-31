@@ -61,7 +61,7 @@ namespace WsOfWebClient
         }
 
 
-        internal static void GetMaterial(string r, WebSocket webSocket)
+        internal static void GetMaterial(string r, ConnectInfo.ConnectInfoDetail connectInfoDetail)
         {
             var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<ParameterToEditPlayerMaterial>(r);
             string CarPth = "Car_04.png";
@@ -112,7 +112,7 @@ namespace WsOfWebClient
                                         Base64 = base64
                                     };
                                     var json = Newtonsoft.Json.JsonConvert.SerializeObject(sm);
-                                    CommonF.SendData(json, webSocket, 0);
+                                    CommonF.SendData(json, connectInfoDetail, 0);
                                 }
                                 else
                                 {
@@ -124,7 +124,7 @@ namespace WsOfWebClient
                                         Base64 = base64
                                     };
                                     var json = Newtonsoft.Json.JsonConvert.SerializeObject(sm);
-                                    CommonF.SendData(json, webSocket, 0);
+                                    CommonF.SendData(json, connectInfoDetail, 0);
                                 }
                             }
                         }
@@ -141,14 +141,11 @@ namespace WsOfWebClient
         public static string GetMapBase64(BradCastWhereToGoInSmallMap smallMap)
         {
             CommonClass.Img.DrawSmallMap dsm = new CommonClass.Img.DrawSmallMap();
-            var base64 = dsm.GetBase64(smallMap);
-
-            //byte[] imageArray = Convert.FromBase64String(base64);
-           // File.WriteAllBytes("r22change.png", imageArray);
+            var base64 = dsm.GetBase64(smallMap); 
             return base64;
         }
 
-        
+
     }
 
 

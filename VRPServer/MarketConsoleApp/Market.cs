@@ -165,7 +165,7 @@ namespace MarketConsoleApp
             //  throw new NotImplementedException();
         }
 
-        private async void getAllBitInfomation()
+        private   void getAllBitInfomation()
         {
             while (true)
             {
@@ -246,7 +246,7 @@ namespace MarketConsoleApp
                                         var addrTo = parameter[3];
 
                                         var passCoinStr = parameter[4];
-                                        if (passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi")
+                                        if (passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi"|| passCoinStr.Substring(passCoinStr.Length - 7, 7) == "satoshi")
                                         {
                                             var passCoin = Convert.ToInt64(passCoinStr.Substring(0, passCoinStr.Length - 7));
 

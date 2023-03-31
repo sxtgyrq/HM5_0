@@ -56,101 +56,75 @@ namespace HouseManager5_0.RoomMainF
 
         public string SetAbility(SetAbility sa)
         {
-            throw new Exception("");
+            //  throw new Exception("");
 
-            //            if (string.IsNullOrEmpty(sa.pType))
-            //            {
-            //                return $"wrong pType:{sa.pType}";
-            //            }
-            //            else if (!(sa.pType == "mile" || sa.pType == "business" || sa.pType == "volume" || sa.pType == "speed"))
-            //            {
-            //                return $"wrong pType:{sa.pType}"; ;
-            //            }
-            //            else if (sa.count != 1 && sa.count != 2 && sa.count != 5 && sa.count != 10 && sa.count != 20 && sa.count != 50)
-            //            {
-            //                return $"wrong count:{sa.count}"; ;
-            //            }
+            if (string.IsNullOrEmpty(sa.pType))
+            {
+                return $"wrong pType:{sa.pType}";
+            }
+            else if (!(sa.pType == "mile" || sa.pType == "volume" || sa.pType == "speed"))
+            {
+                return $"wrong pType:{sa.pType}"; ;
+            }
+            else if (sa.count != 1 && sa.count != 2 && sa.count != 5 && sa.count != 10 && sa.count != 20 && sa.count != 50)
+            {
+                return $"wrong count:{sa.count}"; ;
+            }
 
-            //            else
-            //            {
-            //                sa.count = 1;
-            //                List<string> notifyMsg = new List<string>();
-            //                lock (this.PlayerLock)
-            //                {
-            //                    if (this._Players.ContainsKey(sa.Key))
-            //                    {
-            //                        var player = this._Players[sa.Key];
-            //                        var car = player.getCar();
-            //                        if (player.Bust)
-            //                        {
-            //                            WebNotify(player, "您已破产");
-            //                            return $"{player.Key} go bust!";
-            //#warning 这里要提示前台，已经进行破产清算了。
-            //                        }
-            //                        else if (player.playerType != Player.PlayerType.player)
-            //                        {
-            //                            return "wrong player!";
-            //                        }
-            //                        else
-            //                        {
-            //                            switch (sa.pType)
-            //                            {
-            //                                case "mile":
-            //                                case "business":
-            //                                case "volume":
-            //                                case "speed":
-            //                                    {
-            //                                        if (player.PromoteDiamondCount[sa.pType] >= sa.count)
-            //                                        {
-            //                                            const double brokeProbability = 0.9683237857;
-            //                                            bool broken = false;
-            //                                            for (int i = 0; i < sa.count; i++)
-            //                                            {
-            //                                                var d = this.rm.NextDouble();
-            //                                                if (d > brokeProbability)
-            //                                                {
-            //                                                    broken = true;
-            //                                                }
-            //                                                if (broken)
-            //                                                {
-            //                                                    break;
-            //                                                }
-            //                                            }
-            //                                            if (broken)
-            //                                            {
-            //                                                car.ability.AbilityClear(sa.pType, player, car, ref notifyMsg);
-            //                                                player.PromoteDiamondCount[sa.pType] -= sa.count;
-            //                                                if (player.playerType == Player.PlayerType.player)
-            //                                                {
-            //                                                    SendPromoteCountOfPlayer(sa.pType, player.PromoteDiamondCount[sa.pType], (Player)player, ref notifyMsg);
-            //                                                    this.WebNotify(player, "能力升级失败！");
-            //                                                }
-            //                                            }
-            //                                            else
-            //                                            {
-            //                                                car.ability.AbilityAdd(sa.pType, sa.count, player, car, ref notifyMsg);
+            else
+            {
+                sa.count = 1;
+                List<string> notifyMsg = new List<string>();
+                GroupClassF.GroupClass group = null;
+                lock (this.PlayerLock)
+                {
+                    if (this._Groups.ContainsKey(sa.GroupKey))
+                    {
+                        group = this._Groups[sa.GroupKey];
+                    }
 
-            //                                                player.PromoteDiamondCount[sa.pType] -= sa.count;
-            //                                                if (player.playerType == Player.PlayerType.player)
-            //                                                {
-            //                                                    SendPromoteCountOfPlayer(sa.pType, player.PromoteDiamondCount[sa.pType], (Player)player, ref notifyMsg);
-            //                                                    this.taskM.UseDiamondSuccess((Player)player);
-            //                                                }
-            //                                            }
-            //                                        }
-            //                                    }; break;
-            //                            }
-            //                        }
-            //                    }
-            //                    else
-            //                    {
-            //                        return $"not has player-{sa.Key}!";
-            //                    }
 
-            //                }
-            //                Startup.sendSeveralMsgs(notifyMsg); 
-            //                return "ok";
-            //            }
+                }
+                if (group != null)
+                {
+                    lock (group.PlayerLock)
+                    {
+                        if (group._PlayerInGroup.ContainsKey(sa.Key))
+                        {
+                            var player = group._PlayerInGroup[sa.Key];
+                            var car = player.getCar();
+                            if (player.Bust)
+                            {
+                                WebNotify(player, "您已破产");
+                                return $"{player.Key} go bust!";
+                            }
+                            else if (player.playerType != Player.PlayerType.player)
+                            {
+                                return "wrong player!";
+                            }
+                            else
+                            {
+                                switch (sa.pType)
+                                {
+                                    case "mile":
+                                    case "volume":
+                                    case "speed":
+                                        {
+                                            car.ability.AbilityAdd(sa.pType, sa.count, player, car, ref notifyMsg);
+
+                                        }; break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            return $"not has player-{sa.Key}!";
+                        }
+                    }
+                }
+                Startup.sendSeveralMsgs(notifyMsg);
+                return "ok";
+            }
         }
 
         public void SendPromoteCountOfPlayer(string pType, int count, HasContactInfo player, ref List<string> notifyMsgs)
@@ -180,7 +154,7 @@ namespace HouseManager5_0.RoomMainF
 
         private void sendCarAbilityState(string key, string groupKey)
         {
-            if (string.IsNullOrEmpty(groupKey))
+            if (!string.IsNullOrEmpty(groupKey))
             {
                 if (this._Groups.ContainsKey(groupKey))
                 {
@@ -188,6 +162,8 @@ namespace HouseManager5_0.RoomMainF
                     group.sendCarAbilityState(key);
                 }
             }
+
+
             // throw new Exception("");
 
             //List<string> notifyMsg = new List<string>();

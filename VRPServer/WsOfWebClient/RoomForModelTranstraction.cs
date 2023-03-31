@@ -23,7 +23,7 @@ namespace WsOfWebClient
             //public string mtlText { get; set; }
             //public string imageBase64 { get; set; }
         }
-        internal static State receiveState2(State s, LookForBuildings joinType, WebSocket webSocket)
+        internal static State receiveState2(State s, LookForBuildings joinType, ConnectInfo.ConnectInfoDetail connectInfoDetail)
         {
             // try
             {
@@ -71,10 +71,10 @@ namespace WsOfWebClient
                                 author = obj.author,
                             };
                             var returnMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
-                            CommonF.SendData(returnMsg, webSocket, 0);
+                            CommonF.SendData(returnMsg, connectInfoDetail, 0);
                             addr = obj.bussinessAddress;
                         }
-                        var tdr = getTradeDetail(s, webSocket, addr);
+                        var tdr = getTradeDetail(s, connectInfoDetail, addr);
                         return tdr;
                     }
                 }
@@ -91,7 +91,7 @@ namespace WsOfWebClient
         }
 
 
-        internal static State getTradeDetail(State s, WebSocket webSocket, string addr)
+        internal static State getTradeDetail(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail, string addr)
         {
             Dictionary<string, long> tradeDetail;
             {
@@ -129,7 +129,7 @@ namespace WsOfWebClient
                         index = i.ToString(),
                     };
                     var msg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
-                    CommonF.SendData(msg, webSocket, 0);
+                    CommonF.SendData(msg, connectInfoDetail, 0);
                 }
             }
             if (sumValue == 0)
@@ -168,7 +168,7 @@ namespace WsOfWebClient
                             index = i.ToString(),
                         };
                         var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
-                        CommonF.SendData(sendMsg, webSocket, 0);
+                        CommonF.SendData(sendMsg, connectInfoDetail, 0);
                     }
                 }
             }
@@ -189,7 +189,7 @@ namespace WsOfWebClient
                             var addrTo = parameter[3];
 
                             var passCoinStr = parameter[4];
-                            if (passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi")
+                            if (passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi" || passCoinStr.Substring(passCoinStr.Length - 7, 7) == "satoshi")
                             {
                                 var passCoin = Convert.ToInt64(passCoinStr.Substring(0, passCoinStr.Length - 7));
 
@@ -242,7 +242,7 @@ namespace WsOfWebClient
                         percentValue = percentValue
                     };
                     var passMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj3);
-                    CommonF.SendData(passMsg, webSocket, 0);
+                    CommonF.SendData(passMsg, connectInfoDetail, 0);
                 }
             }
             return s;
@@ -279,7 +279,7 @@ namespace WsOfWebClient
             return result;
         }
 
-        internal static async Task GenerateAgreementF(State s, WebSocket webSocket, GenerateAgreement ga)
+        internal static void GenerateAgreementF(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail, GenerateAgreement ga)
         {
             if (
                 BitCoin.CheckAddress.CheckAddressIsUseful(ga.addrBussiness) &&
@@ -299,15 +299,16 @@ namespace WsOfWebClient
                     //});
                     //var json = await Startup.sendInmationToUrlAndGetRes(roomUrl, sendMsg);
 
-                    var agreement = $"{indexNumber}@{ga.addrFrom}@{ga.addrBussiness}->{ga.addrTo}:{Convert.ToInt32(Math.Round(ga.tranNum * 100000000))}Satoshi";
+                    var agreement = $"{indexNumber}@{ga.addrFrom}@{ga.addrBussiness}->{ga.addrTo}:{Convert.ToInt32(Math.Round(ga.tranNum * 100000000))}satoshi";
                     var passObj = new
                     {
                         agreement = agreement,
                         c = "ShowAgreement"
                     };
                     var returnMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
-                    var sendData = Encoding.UTF8.GetBytes(returnMsg);
-                    await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                    CommonF.SendData(returnMsg, connectInfoDetail, 0);
+                    //var sendData = Encoding.UTF8.GetBytes(returnMsg);
+                    //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
                 }
             }
             //throw new NotImplementedException();
@@ -327,13 +328,13 @@ namespace WsOfWebClient
             return Convert.ToInt32(info);
         }
 
-        internal static void ModelTransSignF(State s, WebSocket webSocket, ModelTransSign mts)
+        internal static void ModelTransSignF(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail, ModelTransSign mts)
         {
             try
             {
                 var parameter = mts.msg.Split(new char[] { '@', '-', '>', ':' }, StringSplitOptions.RemoveEmptyEntries);
                 //  var agreement = $"{indexNumber}@{ga.addrFrom}@{ga.addrBussiness}->{ga.addrTo}:{ga.tranNum * 100000000}Satoshi";
-                var regex = new Regex("^[0-9]{1,8}@[A-HJ-NP-Za-km-z1-9]{1,50}@[A-HJ-NP-Za-km-z1-9]{1,50}->[A-HJ-NP-Za-km-z1-9]{1,50}:[0-9]{1,13}Satoshi$");
+                var regex = new Regex("^[0-9]{1,8}@[A-HJ-NP-Za-km-z1-9]{1,50}@[A-HJ-NP-Za-km-z1-9]{1,50}->[A-HJ-NP-Za-km-z1-9]{1,50}:[0-9]{1,13}[Ss]{1}atoshi$");
                 if (regex.IsMatch(mts.msg))
                 {
                     if (parameter.Length == 5)
@@ -346,7 +347,7 @@ namespace WsOfWebClient
                             var addrTo = parameter[3];
 
                             var passCoinStr = parameter[4];
-                            if (passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi")
+                            if (passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi" || passCoinStr.Substring(passCoinStr.Length - 7, 7) == "satoshi")
                             {
                                 var trDetail = getValueOfAddr(addrBussiness);
                                 var passCoin = Convert.ToInt64(passCoinStr.Substring(0, passCoinStr.Length - 7));
@@ -384,43 +385,43 @@ namespace WsOfWebClient
                                             var msg = Newtonsoft.Json.JsonConvert.SerializeObject(tc);
                                             var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
                                             var resultObj = Newtonsoft.Json.JsonConvert.DeserializeObject<TradeCoin.Result>(info);
-                                            NotifyMsg(webSocket, resultObj.msg);
+                                            NotifyMsg(connectInfoDetail, resultObj.msg);
 
                                             if (resultObj.success)
                                             {
-                                                var ok = clearInfomation(webSocket);
+                                                var ok = clearInfomation(connectInfoDetail);
                                                 if (ok)
-                                                    s = getTradeDetail(s, webSocket, addrBussiness);
+                                                    s = getTradeDetail(s, connectInfoDetail, addrBussiness);
                                             }
                                         }
                                         else
                                         {
                                             var notifyMsg = $"{addrFrom}没有足够的余额。";
-                                            NotifyMsg(webSocket, notifyMsg);
+                                            NotifyMsg(connectInfoDetail, notifyMsg);
                                         }
                                     }
                                     else
                                     {
                                         var notifyMsg = $"{addrFrom}没有足够的余额。";
-                                        NotifyMsg(webSocket, notifyMsg);
+                                        NotifyMsg(connectInfoDetail, notifyMsg);
                                     }
                                 }
                             }
                         }
                         else
                         {
-                            NotifyMsg(webSocket, "无效的签名!");
+                            NotifyMsg(connectInfoDetail, "无效的签名!");
                         }
                     }
                 }
             }
             catch
             {
-                NotifyMsg(webSocket, "交易失败!");
+                NotifyMsg(connectInfoDetail, "交易失败!");
             }
         }
 
-        internal static void PublicReward(State s, WebSocket webSocket, RewardPublicSign rewardPub)
+        internal static void PublicReward(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail, RewardPublicSign rewardPub)
         {
             var parameter = rewardPub.msg.Split(new char[] { '@', '-', '>', ':' }, StringSplitOptions.RemoveEmptyEntries);
             var firstIndex = rewardPub.msg.IndexOf('@');
@@ -449,13 +450,13 @@ namespace WsOfWebClient
                             var indexV = GetIndexOfTrade(addrBussiness, addrFrom);
                             if (indexV < 0)
                             {
-                                NotifyMsg(webSocket, $"错误的addrBussiness:{addrBussiness}");
+                                NotifyMsg(connectInfoDetail, $"错误的addrBussiness:{addrBussiness}");
                             }
                             else if (tradeIndex == indexV)
                             {
                                 var passCoinStr = parameter[4];
 
-                                if (passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi")
+                                if (passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi" || passCoinStr.Substring(passCoinStr.Length - 7, 7) == "satoshi")
                                 {
                                     var passCoin = Convert.ToInt64(passCoinStr.Substring(0, passCoinStr.Length - 7));
                                     if (passCoin > 0)
@@ -482,26 +483,26 @@ namespace WsOfWebClient
 
                                                 var resultObj = Newtonsoft.Json.JsonConvert.DeserializeObject<TradeSetAsReward.Result>(info);
                                                 {
-                                                    NotifyMsg(webSocket, resultObj.msg);
+                                                    NotifyMsg(connectInfoDetail, resultObj.msg);
                                                 }
                                             }
                                             else
                                             {
                                                 var notifyMsg = $"{addrFrom}没有足够的余额。";
-                                                NotifyMsg(webSocket, notifyMsg);
+                                                NotifyMsg(connectInfoDetail, notifyMsg);
                                             }
                                         }
                                         else
                                         {
                                             var notifyMsg = $"{addrFrom}没有足够的余额。";
-                                            NotifyMsg(webSocket, notifyMsg);
+                                            NotifyMsg(connectInfoDetail, notifyMsg);
                                         }
                                     }
                                 }
                             }
                             else
                             {
-                                NotifyMsg(webSocket, $"错误的tradeIndex:{tradeIndex}");
+                                NotifyMsg(connectInfoDetail, $"错误的tradeIndex:{tradeIndex}");
                             }
 
                         }
@@ -568,7 +569,7 @@ namespace WsOfWebClient
                 //}
             }
         }
-        internal static async Task GetAllStockAddr(WebSocket webSocket, AllStockAddr asa)
+        internal static void GetAllStockAddr(ConnectInfo.ConnectInfoDetail connectInfoDetail, AllStockAddr asa)
         {
             if (AdministratorBTCAddr._addresses.ContainsKey(asa.administratorAddr))
             {
@@ -593,15 +594,16 @@ namespace WsOfWebClient
                                 value = $"{i.Key}:{i.Value}"
                             };
                             var returnMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
-                            var sendData = Encoding.UTF8.GetBytes(returnMsg);
-                            await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                            CommonF.SendData(returnMsg, connectInfoDetail, 0);
+                            //var sendData = Encoding.UTF8.GetBytes(returnMsg);
+                            //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
                         }
                     }
                 }
             }
         }
 
-        internal static async Task GenerateRewardAgreementF(WebSocket webSocket, GenerateRewardAgreement ga)
+        internal static void GenerateRewardAgreementF(ConnectInfo.ConnectInfoDetail connectInfoDetail, GenerateRewardAgreement ga)
         {
             if (AdministratorBTCAddr._addresses.ContainsKey(ga.administratorAddr))
             {
@@ -624,22 +626,23 @@ namespace WsOfWebClient
                             //});
                             //var json = await Startup.sendInmationToUrlAndGetRes(roomUrl, sendMsg);
 
-                            var agreement = $"{indexNumber}@{ga.addrFrom}@{ga.addrBussiness}->SetAsReward:{ga.tranNum}Satoshi";
+                            var agreement = $"{indexNumber}@{ga.addrFrom}@{ga.addrBussiness}->SetAsReward:{ga.tranNum}satoshi";
                             var passObj = new
                             {
                                 agreement = agreement,
                                 c = "ShowRewardAgreement"
                             };
                             var returnMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
-                            var sendData = Encoding.UTF8.GetBytes(returnMsg);
-                            await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                            CommonF.SendData(returnMsg, connectInfoDetail, 0);
+                            //var sendData = Encoding.UTF8.GetBytes(returnMsg);
+                            //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
                         }
                     }
                 }
             }
 
         }
-        internal static async Task<string> GetAllBusinessAddr(WebSocket webSocket, RewardSet rs)
+        internal static string GetAllBusinessAddr(ConnectInfo.ConnectInfoDetail connectInfoDetail, RewardSet rs)
         {
             string r = "";
             if (AdministratorBTCAddr._addresses.ContainsKey(rs.administratorAddr))
@@ -664,15 +667,17 @@ namespace WsOfWebClient
                             value = f[i]
                         };
                         var returnMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
-                        var sendData = Encoding.UTF8.GetBytes(returnMsg);
-                        await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                        CommonF.SendData(returnMsg, connectInfoDetail, 0);
+                        //var sendData = Encoding.UTF8.GetBytes(returnMsg);
+
+                        //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
                         r = r.GetHashCode().ToString() + f[i];
                     }
                 }
             }
             return r;
         }
-        internal static void RewardPublicSignF(State s, WebSocket webSocket, RewardPublicSign rewardPub)
+        internal static void RewardPublicSignF(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail, RewardPublicSign rewardPub)
         {
             //var parameter = rewardPub.msg.Split(new char[] { '@', '-', '>', ':' }, StringSplitOptions.RemoveEmptyEntries);
             //var firstIndex = rewardPub.msg.IndexOf('@');
@@ -684,7 +689,7 @@ namespace WsOfWebClient
             //{
             //    return;
             //}
-            var regex = new Regex("^[0-9]{1,8}@[A-HJ-NP-Za-km-z1-9]{1,50}@[A-HJ-NP-Za-km-z1-9]{1,50}->SetAsReward:[0-9]{1,13}Satoshi$");
+            var regex = new Regex("^[0-9]{1,8}@[A-HJ-NP-Za-km-z1-9]{1,50}@[A-HJ-NP-Za-km-z1-9]{1,50}->SetAsReward:[0-9]{1,13}[Ss]{1}atoshi$");
             if (regex.IsMatch(rewardPub.msg))
             {
                 var parameter = rewardPub.msg.Split(new char[] { '@', '-', '>', ':' }, StringSplitOptions.RemoveEmptyEntries);
@@ -703,7 +708,7 @@ namespace WsOfWebClient
                             {
                                 var passCoinStr = parameter[4];
 
-                                if (passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi")
+                                if (passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi" || passCoinStr.Substring(passCoinStr.Length - 7, 7) == "satoshi")
                                 {
                                     var passCoin = Convert.ToInt64(passCoinStr.Substring(0, passCoinStr.Length - 7));
                                     if (passCoin > 0)
@@ -729,25 +734,25 @@ namespace WsOfWebClient
                                                 var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
                                                 if (string.IsNullOrEmpty(info))
                                                 {
-                                                    var ok = clearInfomation(webSocket);
+                                                    var ok = clearInfomation(connectInfoDetail);
                                                     if (ok)
-                                                        s = getTradeDetail(s, webSocket, addrBussiness);
+                                                        s = getTradeDetail(s, connectInfoDetail, addrBussiness);
                                                 }
                                                 else
                                                 {
-                                                    NotifyMsg(webSocket, info);
+                                                    NotifyMsg(connectInfoDetail, info);
                                                 }
                                             }
                                             else
                                             {
                                                 var notifyMsg = $"{addrFrom}没有足够的余额。";
-                                                NotifyMsg(webSocket, notifyMsg);
+                                                NotifyMsg(connectInfoDetail, notifyMsg);
                                             }
                                         }
                                         else
                                         {
                                             var notifyMsg = $"{addrFrom}没有足够的余额。";
-                                            NotifyMsg(webSocket, notifyMsg);
+                                            NotifyMsg(connectInfoDetail, notifyMsg);
                                         }
                                     }
                                 }
@@ -820,7 +825,7 @@ namespace WsOfWebClient
             }
         }
 
-        //internal static async Task ModelTransSignAsReward(State s, WebSocket webSocket, ModelTransSign mts)
+        //internal static async Task ModelTransSignAsReward(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail, ModelTransSign mts)
         //{
         //    var parameter = mts.msg.Split(new char[] { '@', '-', '>', ':' }, StringSplitOptions.RemoveEmptyEntries);
         //    if (parameter.Length == 5)
@@ -893,7 +898,7 @@ namespace WsOfWebClient
         //    }
         //}
 
-        static bool clearInfomation(WebSocket webSocket)
+        static bool clearInfomation(ConnectInfo.ConnectInfoDetail connectInfoDetail)
         {
             // var notifyMsg = info;
             var passObj = new
@@ -901,14 +906,14 @@ namespace WsOfWebClient
                 c = "ClearTradeInfomation"
             };
             var returnMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
-            CommonF.SendData(returnMsg, webSocket, 0);
+            CommonF.SendData(returnMsg, connectInfoDetail, 0);
             //var sendData = Encoding.UTF8.GetBytes(returnMsg);
             //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-            var ok = CheckRespon(webSocket, "ClearTradeInfomation");
+            var ok = CheckRespon(connectInfoDetail, "ClearTradeInfomation");
             return ok;
         }
 
-        private static void NotifyMsg(WebSocket webSocket, string info)
+        private static void NotifyMsg(ConnectInfo.ConnectInfoDetail connectInfoDetail, string info)
         {
             var notifyMsg = info;
             var passObj = new
@@ -917,10 +922,10 @@ namespace WsOfWebClient
                 c = "ShowAgreementMsg"
             };
             var returnMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
-            CommonF.SendData(returnMsg, webSocket, 0);
+            CommonF.SendData(returnMsg, connectInfoDetail, 0);
         }
 
-        internal static State GetAllModelPositionF(State s, WebSocket webSocket)
+        internal static State GetAllModelPositionF(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail)
         {
             var gfma = new GetAllModelPosition()
             {
@@ -1005,7 +1010,7 @@ namespace WsOfWebClient
             return respon;
         }
 
-        internal static void GetRewardInfomation(WebSocket webSocket, RewardInfomation gra)
+        internal static void GetRewardInfomation(ConnectInfo.ConnectInfoDetail connectInfoDetail, RewardInfomation gra)
         {
             var date = DateTime.Now;
             if (gra.Page > 52)
@@ -1031,7 +1036,7 @@ namespace WsOfWebClient
                     title = $"{date.ToString("yyyyMMdd")}期"
                 };
                 var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
-                CommonF.SendData(sendMsg, webSocket, 0);
+                CommonF.SendData(sendMsg, connectInfoDetail, 0);
             }
             else
             {
@@ -1039,7 +1044,7 @@ namespace WsOfWebClient
                 if (passObj != null)
                 {
                     var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
-                    CommonF.SendData(sendMsg, webSocket, 0);
+                    CommonF.SendData(sendMsg, connectInfoDetail, 0);
                 }
                 //int indexNumber = 0;
                 //indexNumber = await GetIndexOfTrade(objGet.bussinessAddr, objGet.tradeAddress);
@@ -1115,12 +1120,114 @@ namespace WsOfWebClient
                 //}
             }
         }
+        static RewardInfoHasResultObj getResultObj_V2(tradereward objGet, DateTime date)
+        {
+            throw new Exception();
+            //int indexNumber = 0;
+            //indexNumber = GetIndexOfTrade(objGet.bussinessAddr, objGet.tradeAddress);
+            //List<CommonClass.databaseModel.traderewardapply> list;
+            //{
+            //    var grn = new CommonClass.ModelTranstraction.RewardInfomation()
+            //    {
+            //        c = "RewardApplyInfomation_V2",
+            //        startDate = int.Parse(date.ToString("yyyyMMdd"))
+            //    };
+            //    var index = rm.Next(0, roomUrls.Count);
+            //    var msg = Newtonsoft.Json.JsonConvert.SerializeObject(grn);
+            //    //   Console.WriteLine(msg);
+            //    var respon = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+            //    // Console.WriteLine(respon);
+            //    list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CommonClass.databaseModel.traderewardapply>>(respon);
+            //}
+            //int sumStock = 0;
+            //{
+            //    for (int i = 0; i < list.Count; i++)
+            //    {
+            //        sumStock += list[i].applyLevel;
+            //    }
+
+            //}
+            //if (sumStock == 0)
+            //{
+            //    List<List<traderewardtimerecordShow>> raArray = new List<List<traderewardtimerecordShow>>();
+            //    for (int i = 0; i < list.Count; i++)
+            //    {
+            //        raArray.Add(new List<traderewardtimerecordShow>());
+            //    }
+            //    var passObj = new RewardInfoHasResultObj()
+            //    {
+            //        c = "GetRewardInfomationHasResult",
+            //        title = $"{date.ToString("yyyyMMdd")}期",
+            //        data = objGet,
+            //        indexNumber = indexNumber,
+            //        array = raArray.ToArray(),
+            //    };
+            //    return passObj;
+            //}
+            //else if (sumStock <= objGet.passCoin)
+            //{
+            //    var satoshiPerStock = objGet.passCoin / sumStock;
+            //    var remainder = objGet.passCoin % sumStock;
+            //    var orderR = (from item in list
+            //                  orderby item.applyLevel descending
+            //                  select item).ToList();
+            //    list = orderR;
+            //    List<RewardApplyInDB> raList = new List<RewardApplyInDB>();
+            //    for (int i = 0; i < list.Count; i++)
+            //    {
+            //        int satoshiShouldGet = list[i].applyLevel * satoshiPerStock;
+            //        if (remainder > list[i].applyLevel)
+            //        {
+            //            satoshiShouldGet += list[i].applyLevel;
+            //            remainder -= list[i].applyLevel;
+            //        }
+            //        else if (remainder > 0)
+            //        {
+            //            satoshiShouldGet += remainder;
+            //            remainder = 0;
+            //        }
+            //        int percent = (satoshiShouldGet * 10000 / objGet.passCoin);
+            //        var percentStr = $"{percent / 100}.{(percent % 100).ToString("D2")}%";
+            //        raList.Add(new RewardApplyInDB()
+            //        {
+            //            applyAddr = list[i].applyAddr,
+            //            applyLevel = list[i].applyLevel,
+            //            applySign = list[i].applySign,
+            //            rankIndex = list[i].rankIndex,
+            //            startDate = list[i].startDate,
+            //            satoshiShouldGet = satoshiShouldGet,
+            //            percentStr = percentStr,
+            //        });
+            //    }
+            //    List<List<traderewardtimerecordShow>> raArray = new List<List<traderewardtimerecordShow>>();
+            //    for (int i = 0; i < list.Count; i++)
+            //    {
+            //        raArray.Add(list[i]);
+            //    }
+            //    var passObj = new RewardInfoHasResultObj()
+            //    {
+            //        c = "GetRewardInfomationHasResult",
+            //        title = $"{date.ToString("yyyyMMdd")}期",
+            //        data = objGet,
+            //        list = raList,
+            //        indexNumber = indexNumber
+            //    };
+            //    return passObj;
+            //    //var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
+            //    //var sendData = Encoding.UTF8.GetBytes(sendMsg);
+            //    //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+            //}
+            //else
+            //{
+            //    return null;
+            //}
+        }
 
         static RewardInfoHasResultObj getResultObj(tradereward objGet, DateTime date)
         {
             int indexNumber = 0;
             indexNumber = GetIndexOfTrade(objGet.bussinessAddr, objGet.tradeAddress);
-            List<CommonClass.databaseModel.traderewardapply> list;
+            List<CommonClass.databaseModel.traderewardtimerecordShow>[] list;
             {
                 var grn = new CommonClass.ModelTranstraction.RewardInfomation()
                 {
@@ -1129,95 +1236,207 @@ namespace WsOfWebClient
                 };
                 var index = rm.Next(0, roomUrls.Count);
                 var msg = Newtonsoft.Json.JsonConvert.SerializeObject(grn);
-                Console.WriteLine(msg);
+                //   Console.WriteLine(msg);
                 var respon = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
-                Console.WriteLine(respon);
-                list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CommonClass.databaseModel.traderewardapply>>(respon);
+                // Console.WriteLine(respon);
+                list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CommonClass.databaseModel.traderewardtimerecordShow>[]>(respon);
             }
-            int sumStock = 0;
-            {
-                for (int i = 0; i < list.Count; i++)
-                {
-                    sumStock += list[i].applyLevel;
-                }
 
-            }
-            if (sumStock == 0)
             {
-                List<RewardApplyInDB> raList = new List<RewardApplyInDB>();
-                var passObj = new RewardInfoHasResultObj()
+                int sumStock = 0;
+                for (int i = 0; i < list.Length; i++)
                 {
-                    c = "GetRewardInfomationHasResult",
-                    title = $"{date.ToString("yyyyMMdd")}期",
-                    data = objGet,
-                    list = raList,
-                    indexNumber = indexNumber
-                };
-                return passObj;
-            }
-            else if (sumStock <= objGet.passCoin)
-            {
-                var satoshiPerStock = objGet.passCoin / sumStock;
-                var remainder = objGet.passCoin % sumStock;
-                var orderR = (from item in list
-                              orderby item.applyLevel descending
-                              select item).ToList();
-                list = orderR;
-                List<RewardApplyInDB> raList = new List<RewardApplyInDB>();
-                for (int i = 0; i < list.Count; i++)
-                {
-                    int satoshiShouldGet = list[i].applyLevel * satoshiPerStock;
-                    if (remainder > list[i].applyLevel)
+                    for (int j = 0; j < list[i].Count; j++)
                     {
-                        satoshiShouldGet += list[i].applyLevel;
-                        remainder -= list[i].applyLevel;
+                        if (j < 100)
+                        {
+                            sumStock += (100 - j);
+                        }
+                        // sumStock += list[i][j].
                     }
-                    else if (remainder > 0)
-                    {
-                        satoshiShouldGet += remainder;
-                        remainder = 0;
-                    }
-                    int percent = (satoshiShouldGet * 10000 / objGet.passCoin);
-                    var percentStr = $"{percent / 100}.{(percent % 100).ToString("D2")}%";
-                    raList.Add(new RewardApplyInDB()
-                    {
-                        applyAddr = list[i].applyAddr,
-                        applyLevel = list[i].applyLevel,
-                        applySign = list[i].applySign,
-                        rankIndex = list[i].rankIndex,
-                        startDate = list[i].startDate,
-                        satoshiShouldGet = satoshiShouldGet,
-                        percentStr = percentStr,
-                    });
                 }
-
-                var passObj = new RewardInfoHasResultObj()
+                if (sumStock == 0)
                 {
-                    c = "GetRewardInfomationHasResult",
-                    title = $"{date.ToString("yyyyMMdd")}期",
-                    data = objGet,
-                    list = raList,
-                    indexNumber = indexNumber
-                };
-                return passObj;
-                //var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
-                //var sendData = Encoding.UTF8.GetBytes(sendMsg);
-                //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                    List<List<traderewardtimerecordShow>> raArray = new List<List<traderewardtimerecordShow>>();
+                    for (int i = 0; i < list.Length; i++)
+                    {
+                        raArray.Add(new List<traderewardtimerecordShow>());
+                    }
+                    var passObj = new RewardInfoHasResultObj()
+                    {
+                        c = "GetRewardInfomationHasResult",
+                        title = $"{date.ToString("yyyyMMdd")}期",
+                        data = objGet,
+                        indexNumber = indexNumber,
+                        array = raArray.ToArray(),
+                    };
+                    return passObj;
+                }
+                else
+                {
+                    var satoshiPerStock = objGet.passCoin / sumStock;
+                    var remainder = objGet.passCoin % sumStock;
+                    for (int i = 0; i < list.Length; i++)
+                    {
+                        for (int j = 0; j < list[i].Count; j++)
+                        {
+                            if (j < 100)
+                            {
+                                list[i][j].rewardGiven = (100 - j) * satoshiPerStock;
+                            }
+                            else
+                            {
+                                list[i][j].rewardGiven = 0;
+                            }
+                            list[i][j].rank = j + 1;
+                        }
+                    }
+                    while (remainder > 0)
+                    {
+                        for (int i = 0; i < list.Length; i++)
+                        {
+                            if (list[i].Count > 0)
+                            {
+                                list[i][0].rewardGiven++;
+                                remainder--;
+                                if (remainder <= 0)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        if (remainder <= 0)
+                        {
+                            break;
+                        }
+                    }
+                    for (int i = 0; i < list.Length; i++)
+                    {
+                        for (int j = 0; j < list[i].Count; j++)
+                        {
+
+                            if (list[i][j].rewardGiven > 0)
+                            {
+                                var percent = 10000 * list[i][j].rewardGiven / objGet.passCoin;
+                                if (percent <= 0)
+                                {
+                                    percent = 1;
+                                }
+                                var percentStr = $"{percent / 100}.{(percent % 100).ToString("D2")}%";
+                                list[i][j].percentStr = percentStr;
+                            }
+                            else
+                                list[i][j].percentStr = "0.00%";
+                        }
+                    }
+                    List<List<traderewardtimerecordShow>> raArray = new List<List<traderewardtimerecordShow>>();
+                    for (int i = 0; i < list.Length; i++)
+                    {
+                        raArray.Add(list[i]);
+                    }
+                    var passObj = new RewardInfoHasResultObj()
+                    {
+                        c = "GetRewardInfomationHasResult",
+                        title = $"{date.ToString("yyyyMMdd")}期",
+                        data = objGet,
+                        indexNumber = indexNumber,
+                        array = raArray.ToArray()
+                    };
+                    return passObj;
+                }
             }
-            else
+
             {
-                return null;
+                /*
+                 * 封存不删
+                 */
+                //int sumStock = 0;
+                //{
+                //    for (int i = 0; i < list.Count; i++)
+                //    {
+                //        sumStock += list[i].applyLevel;
+                //    }
+
+                //}
+                //if (sumStock == 0)
+                //{
+                //    List<RewardApplyInDB> raList = new List<RewardApplyInDB>();
+                //    var passObj = new RewardInfoHasResultObj()
+                //    {
+                //        c = "GetRewardInfomationHasResult",
+                //        title = $"{date.ToString("yyyyMMdd")}期",
+                //        data = objGet,
+                //        list = raList,
+                //        indexNumber = indexNumber
+                //    };
+                //    return passObj;
+                //}
+                //else if (sumStock <= objGet.passCoin)
+                //{
+                //    var satoshiPerStock = objGet.passCoin / sumStock;
+                //    var remainder = objGet.passCoin % sumStock;
+                //    var orderR = (from item in list
+                //                  orderby item.applyLevel descending
+                //                  select item).ToList();
+                //    list = orderR;
+                //    List<RewardApplyInDB> raList = new List<RewardApplyInDB>();
+                //    for (int i = 0; i < list.Count; i++)
+                //    {
+                //        int satoshiShouldGet = list[i].applyLevel * satoshiPerStock;
+                //        if (remainder > list[i].applyLevel)
+                //        {
+                //            satoshiShouldGet += list[i].applyLevel;
+                //            remainder -= list[i].applyLevel;
+                //        }
+                //        else if (remainder > 0)
+                //        {
+                //            satoshiShouldGet += remainder;
+                //            remainder = 0;
+                //        }
+                //        int percent = (satoshiShouldGet * 10000 / objGet.passCoin);
+                //        var percentStr = $"{percent / 100}.{(percent % 100).ToString("D2")}%";
+                //        raList.Add(new RewardApplyInDB()
+                //        {
+                //            applyAddr = list[i].applyAddr,
+                //            applyLevel = list[i].applyLevel,
+                //            applySign = list[i].applySign,
+                //            rankIndex = list[i].rankIndex,
+                //            startDate = list[i].startDate,
+                //            satoshiShouldGet = satoshiShouldGet,
+                //            percentStr = percentStr,
+                //        });
+                //    }
+
+                //    var passObj = new RewardInfoHasResultObj()
+                //    {
+                //        c = "GetRewardInfomationHasResult",
+                //        title = $"{date.ToString("yyyyMMdd")}期",
+                //        data = objGet,
+                //        list = raList,
+                //        indexNumber = indexNumber
+                //    };
+                //    return passObj;
+                //    //var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
+                //    //var sendData = Encoding.UTF8.GetBytes(sendMsg);
+                //    //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                //}
+                //else
+                //{
+                //    return null;
+                //}
             }
         }
         class RewardInfoHasResultObj : CommonClass.Command
         {
             public string title { get; set; }
             public tradereward data { get; set; }
-            public List<RewardApplyInDB> list { get; set; }
+            //public List<RewardApplyInDB> list { get; set; }
             public int indexNumber { get; set; }
+            public List<CommonClass.databaseModel.traderewardtimerecordShow>[] array { get; set; }
         }
-        internal static void GiveAward(WebSocket webSocket, AwardsGiving ag)
+        internal static void GiveAward(ConnectInfo.ConnectInfoDetail connectInfoDetail, AwardsGiving ag)
         {
+
             var objGet = exitPageF(ag.time);
             if (objGet == null) { }
             else
@@ -1232,32 +1451,39 @@ namespace WsOfWebClient
                     List<string> msgsToTransfer = new List<string>();
                     bool IsRight = true;
                     List<string> msgs = new List<string>();
-                    List<int> ranks = new List<int>();
+                    List<int> ids = new List<int>();
                     List<string> applyAddr = new List<string>();
 
-                    if (r.list.Count == ag.list.Count)
-                        for (int i = 0; i < r.list.Count; i++)
+                    int indexNeedToSign = 0;
+                    if (r.array.Sum(item => item.Count) == ag.list.Count)
+                        for (int indexOfA = 0; indexOfA < r.array.Length; indexOfA++)
                         {
-
-                            var msg = $"{r.indexNumber + i}@{objGet.tradeAddress}@{objGet.bussinessAddr}->{r.list[i].applyAddr}:{r.list[i].satoshiShouldGet}Satoshi";
-                            var signature = ag.list[i];
-                            if (BitCoin.Sign.checkSign(signature, msg, objGet.tradeAddress))
-                            { }
-                            else { IsRight = false; }
-                            msgs.Add(msg);
-                            ranks.Add(r.list[i].rankIndex);
-                            applyAddr.Add(r.list[i].applyAddr);
+                            var list = r.array[indexOfA];
+                            for (int indexOfList = 0; indexOfList < list.Count; indexOfList++)
+                            {
+                                var msg = $"{r.indexNumber + indexNeedToSign}@{objGet.tradeAddress}@{objGet.bussinessAddr}->{list[indexOfList].applyAddr}:{list[indexOfList].rewardGiven}satoshi";
+                                var signature = ag.list[indexNeedToSign++];
+                                if (BitCoin.Sign.checkSign(signature, msg, objGet.tradeAddress))
+                                { }
+                                else
+                                {
+                                    IsRight = false;
+                                }
+                                msgs.Add(msg);
+                                ids.Add(list[indexOfList].raceRecordIndex);
+                                applyAddr.Add(list[indexOfList].applyAddr);
+                            }
                         }
                     if (IsRight)
                     {
                         AwardsGivingPass awardsGivingPass = new AwardsGivingPass()
                         {
                             c = "AwardsGivingPass",
-                            list = ag.list,
-                            time = ag.time,
-                            msgs = msgs,
-                            ranks = ranks,
-                            applyAddr = applyAddr
+                            List = ag.list,
+                            Time = ag.time,
+                            Msgs = msgs,
+                            IDs = ids,
+                            ApplyAddr = applyAddr
                         };
                         var index = rm.Next(0, roomUrls.Count);
                         var msg = Newtonsoft.Json.JsonConvert.SerializeObject(awardsGivingPass);
@@ -1265,11 +1491,10 @@ namespace WsOfWebClient
                     }
                 }
             }
-            //  var passObj = await getResultObj(objGet, date);
-            // throw new NotImplementedException();
+
         }
 
-        internal static bool BindWordInfoF(IntroState iState, WebSocket webSocket, CommonClass.ModelTranstraction.BindWordInfo bwi)
+        internal static bool BindWordInfoF(IntroState iState, ConnectInfo.ConnectInfoDetail connectInfoDetail, CommonClass.ModelTranstraction.BindWordInfo bwi)
         {
             if (bwi.verifyCodeValue != null && iState.randomValue.Trim().ToLower() == bwi.verifyCodeValue.Trim().ToLower())
             {
@@ -1289,35 +1514,35 @@ namespace WsOfWebClient
                             var requestObj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.BindWordInfo.Result>(msgRequested);
                             if (requestObj.success)
                             {
-                                NotifyMsg(webSocket, $"绑定成功！{requestObj.msg}");
+                                NotifyMsg(connectInfoDetail, $"绑定成功！{requestObj.msg}");
                             }
                             else
                             {
-                                NotifyMsg(webSocket, $"绑定失败！{requestObj.msg}");
+                                NotifyMsg(connectInfoDetail, $"绑定失败！{requestObj.msg}");
                             }
                         }
                         else
                         {
-                            NotifyMsg(webSocket, "程序异常！");
+                            NotifyMsg(connectInfoDetail, "程序异常！");
                         }
                         iState.randomCharacterCount = 4;
                         iState.randomValue = Room.GetRandom(iState.randomCharacterCount);
-                        Room.setRandomPic(iState, webSocket);
+                        Room.setRandomPic(iState, connectInfoDetail);
                     }
                     else
                     {
                         iState.randomCharacterCount++;
                         iState.randomValue = Room.GetRandom(iState.randomCharacterCount);
-                        Room.setRandomPic(iState, webSocket);
-                        NotifyMsg(webSocket, "绑定词，您的签名错误，绑定失败！");
+                        Room.setRandomPic(iState, connectInfoDetail);
+                        NotifyMsg(connectInfoDetail, "绑定词，您的签名错误，绑定失败！");
                     }
                 }
                 else
                 {
                     iState.randomCharacterCount++;
                     iState.randomValue = Room.GetRandom(iState.randomCharacterCount);
-                    Room.setRandomPic(iState, webSocket);
-                    NotifyMsg(webSocket, "绑定词，须由2-10个汉字组成！");
+                    Room.setRandomPic(iState, connectInfoDetail);
+                    NotifyMsg(connectInfoDetail, "绑定词，须由2-10个汉字组成！");
                 }
                 return true;
             }
@@ -1325,14 +1550,14 @@ namespace WsOfWebClient
             {
                 iState.randomCharacterCount++;
                 iState.randomValue = Room.GetRandom(iState.randomCharacterCount);
-                Room.setRandomPic(iState, webSocket);
-                NotifyMsg(webSocket, "验证码输入错误");
+                Room.setRandomPic(iState, connectInfoDetail);
+                NotifyMsg(connectInfoDetail, "验证码输入错误");
                 return false;
             }
         }
 
 
-        internal static bool LookForBindInfoF(IntroState iState, WebSocket webSocket, CommonClass.ModelTranstraction.LookForBindInfo lbi)
+        internal static bool LookForBindInfoF(IntroState iState, ConnectInfo.ConnectInfoDetail connectInfoDetail, CommonClass.ModelTranstraction.LookForBindInfo lbi)
         {
             if (lbi.verifyCodeValue != null && iState.randomValue.Trim().ToLower() == lbi.verifyCodeValue.Trim().ToLower())
             {
@@ -1345,72 +1570,72 @@ namespace WsOfWebClient
                     var requestObj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.LookForBindInfo.Result>(msgRequested);
                     if (requestObj.success)
                     {
-                        NotifyMsg(webSocket, $"{requestObj.msg}");
+                        NotifyMsg(connectInfoDetail, $"{requestObj.msg}");
                     }
                     else
                     {
-                        NotifyMsg(webSocket, $"没有查询到绑定关系");
+                        NotifyMsg(connectInfoDetail, $"没有查询到绑定关系");
                     }
                 }
                 else
                 {
-                    NotifyMsg(webSocket, "程序异常！");
+                    NotifyMsg(connectInfoDetail, "程序异常！");
                 }
                 iState.randomCharacterCount = 4;
                 iState.randomValue = Room.GetRandom(iState.randomCharacterCount);
-                Room.setRandomPic(iState, webSocket);
+                Room.setRandomPic(iState, connectInfoDetail);
                 return true;
             }
             else
             {
                 iState.randomCharacterCount++;
                 iState.randomValue = Room.GetRandom(iState.randomCharacterCount);
-                Room.setRandomPic(iState, webSocket);
-                NotifyMsg(webSocket, "验证码输入错误");
+                Room.setRandomPic(iState, connectInfoDetail);
+                NotifyMsg(connectInfoDetail, "验证码输入错误");
                 return false;
             }
         }
 
-        internal static void RewardApply(WebSocket webSocket, RewardApply rA)
+        internal static void RewardApply(ConnectInfo.ConnectInfoDetail connectInfoDetail, RewardApply rA)
         {
-            var date = DateTime.Now;
-            while (date.DayOfWeek != DayOfWeek.Monday)
-            {
-                date = date.AddDays(-1);
-            }
-            var dateStr = date.ToString("yyyyMMdd");
-            if (dateStr == rA.msgNeedToSign)
-            {
-                if (BitCoin.Sign.checkSign(rA.signature, rA.msgNeedToSign, rA.addr))
-                {
-                    var index = rm.Next(0, roomUrls.Count);
-                    var msg = Newtonsoft.Json.JsonConvert.SerializeObject(rA);
-                    var msgRequested = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
-                    if (!string.IsNullOrEmpty(msgRequested))
-                    {
-                        var requestObj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.RewardApply.Result>(msgRequested);
-                        //  Console.WriteLine(msgRequested);
-                        if (requestObj.success)
-                        {
-                            NotifyMsg(webSocket, requestObj.msg);
-                        }
-                        else
-                        {
-                            NotifyMsg(webSocket, requestObj.msg);
-                        }
-                    }
-                    else
-                        NotifyMsg(webSocket, "系统错误");
-                }
-                else
-                {
-                    NotifyMsg(webSocket, "错误的签名");
-                }
-            }
-            else
-            {
-                NotifyMsg(webSocket, $"现在只能申请{date.ToString("yyyyMMdd")}期奖励。");
-            }
+            //var date = DateTime.Now;
+            //while (date.DayOfWeek != DayOfWeek.Monday)
+            //{
+            //    date = date.AddDays(-1);
+            //}
+            //var dateStr = date.ToString("yyyyMMdd");
+            //if (dateStr == rA.msgNeedToSign)
+            //{
+            //    if (BitCoin.Sign.checkSign(rA.signature, rA.msgNeedToSign, rA.addr))
+            //    {
+            //        var index = rm.Next(0, roomUrls.Count);
+            //        var msg = Newtonsoft.Json.JsonConvert.SerializeObject(rA);
+            //        var msgRequested = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+            //        if (!string.IsNullOrEmpty(msgRequested))
+            //        {
+            //            var requestObj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.RewardApply.Result>(msgRequested);
+            //            //  Console.WriteLine(msgRequested);
+            //            if (requestObj.success)
+            //            {
+            //                NotifyMsg(connectInfoDetail, requestObj.msg);
+            //            }
+            //            else
+            //            {
+            //                NotifyMsg(connectInfoDetail, requestObj.msg);
+            //            }
+            //        }
+            //        else
+            //            NotifyMsg(connectInfoDetail, "系统错误");
+            //    }
+            //    else
+            //    {
+            //        NotifyMsg(connectInfoDetail, "错误的签名");
+            //    }
+            //}
+            //else
+            //{
+            //    NotifyMsg(connectInfoDetail, $"现在只能申请{date.ToString("yyyyMMdd")}期奖励。");
+            //}
         }
         private static CommonClass.databaseModel.tradereward exitPageF(string v)
         {
@@ -1429,12 +1654,12 @@ namespace WsOfWebClient
             return Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.databaseModel.tradereward>(json);
         }
 
-       
+
     }
 
     public partial class Room
     {
-        internal static int RewardBuildingShowF(State s, WebSocket webSocket, RewardBuildingShow rbs)
+        internal static int RewardBuildingShowF(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail, RewardBuildingShow rbs)
         {
             // try
             {
@@ -1446,7 +1671,7 @@ namespace WsOfWebClient
                 for (int i = 0; i < list.Count; i++)
                 {
                     var dataItem = list[i].Trim();
-                    CommonF.SendData(dataItem, webSocket, 0);
+                    CommonF.SendData(dataItem, connectInfoDetail, 0);
                 }
                 return list.Count;
             }

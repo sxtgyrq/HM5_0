@@ -146,6 +146,8 @@ namespace HouseManager5_0.RoomMainF
         }
         public string updateCollect(SetCollect sc, GetRandomPos grp)
         {
+            //this.collectE.SingleColect(sc, grp);
+            //return "";
             return this.collectE.updateCollect(sc, grp);
         }
 

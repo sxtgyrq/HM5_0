@@ -69,7 +69,7 @@ namespace HouseManager5_0
                 Data.PathStartPoint3 startPosition;
                 if (car.state == CarState.waitAtBaseStation)
                 {
-                    result = that.getStartPositon(fp1, player.positionInStation, ref startT_FirstPath, out startPosition, player.improvementRecord.speedValue > 0);
+                    result = that.getStartPositon(fp1, player.positionInStation, ref startT_FirstPath, out startPosition, player.improvementRecord.HasValueToImproveSpeed);
 
                 }
                 else if (car.state == CarState.waitOnRoad)
@@ -85,7 +85,7 @@ namespace HouseManager5_0
                 car.setState(player, ref notifyMsg, CarState.working);
                 //car.state = CarState.roadForCollect;
                 //  var position = new Model.MapGo.nyrqPosition(fp1.RoadCode, fp1.RoadOrder, fp1.RoadPercent, fp1.positionLongitudeOnRoad, fp1.positionLatitudeOnRoad, Program.dt.GetItemRoadInfo(fp1.RoadCode, fp1.RoadOrder).MaxSpeed);
-                grp.GetAFromBPoint(goPath.path[0].path, goPath.path[0].position, speed, ref result, ref startT_FirstPath, player.improvementRecord.speedValue > 0, that);
+                grp.GetAFromBPoint(goPath.path[0].path, goPath.path[0].position, speed, ref result, ref startT_FirstPath, player.improvementRecord.HasValueToImproveSpeed, that);
                 //  result.RemoveAll(item => item.t == 0);
                 var animation = new AnimateDataItem(startPosition, result, false, startT_FirstPath, goPath.path.Count > 0 ? privateKeys[0] : 255, ref that.rm);
                 animations.Add(animation);
@@ -107,7 +107,7 @@ namespace HouseManager5_0
                         result = new List<int>();
                         that.getStartPositionByGoPath(out startPosition, goPath.path[indexValue]);
                     }
-                    grp.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.speedValue > 0, that);
+                    grp.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed, that);
                     var animation = new AnimateDataItem(startPosition, result, false, startT_PathLast, privateKeys[indexValue], ref that.rm);
                     animations.Add(animation);
                 }
@@ -357,8 +357,9 @@ namespace HouseManager5_0
                         List<string> notifyMsg = new List<string>();
                         if (player.playerType == Player.PlayerType.player)
                         {
-                            that.goodsM.ShowConnectionModels(player, selectionCenter, ref notifyMsg);
+                            that.goodsM.ShowConnectionModels(player, new Node.pathItem.PostionForHP(selectionCenter), ref notifyMsg);
                         }
+                        this.sendSeveralMsgs(notifyMsg);
                     }
                     return true;
                 }
@@ -426,7 +427,7 @@ namespace HouseManager5_0
                     result = new List<int>();
                     that.getStartPositionByGoPath(out startPosition, node.path[indexValue]);
                 }
-                Program.dt.GetAFromBPoint(node.path[indexValue].path, node.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.speedValue > 0, that);
+                Program.dt.GetAFromBPoint(node.path[indexValue].path, node.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed, that);
                 {
                     int positionInStation;
                     if (player.Key == targetPlayer.Key)
@@ -439,7 +440,7 @@ namespace HouseManager5_0
                         positionInStation = (targetPlayer.positionInStation + 2) % 5;
                         //   that.getEndPositon(Program.dt.GetFpByIndex(player.StartFPIndex), positionInStation, ref result, ref startT_PathLast, player.improvementRecord.speedValue > 0);
                     }
-                    that.getEndPositon(Program.dt.GetFpByIndex(targetPlayer.StartFPIndex), positionInStation, ref result, ref startT_PathLast, player.improvementRecord.speedValue > 0);
+                    that.getEndPositon(Program.dt.GetFpByIndex(targetPlayer.StartFPIndex), positionInStation, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed);
                 }
                 var animation = new AnimateDataItem(startPosition, result, false, startT_PathLast, privateKeys[indexValue], ref that.rm);
                 animations.Add(animation);
@@ -518,11 +519,11 @@ namespace HouseManager5_0
                 }
                 else if (
                   player.playerType == Player.PlayerType.player &&
-                  player.improvementRecord.speedValue > 0)
+                  player.improvementRecord.HasValueToImproveSpeed)
                 {
-                    if (that.rm.Next(0, 100) < 50)
+                    if (that.rm.Next(0, 100) <100)
                     {
-                        //加速效果50%，直接过。
+                        //加速效果80%，直接过。
                         this.ThreadSleep(5);
                         p();
                     }
@@ -546,9 +547,9 @@ namespace HouseManager5_0
                 }
                 else if (
                     player.playerType == Player.PlayerType.player &&
-                    player.improvementRecord.speedValue > 0)
+                    player.improvementRecord.HasValueToImproveSpeed)
                 {
-                    if (that.rm.Next(0, 100) < 50)
+                    if (that.rm.Next(0, 100) < 100)
                     {
                         this.ThreadSleep(5);
                         p();

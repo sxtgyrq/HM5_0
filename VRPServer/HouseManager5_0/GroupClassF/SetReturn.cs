@@ -51,17 +51,38 @@ namespace HouseManager5_0.GroupClassF
                 var car = player.getCar();
                 if (car.state == CarState.returning)
                 {
-                    player.MoneySet(player.Money + car.ability.costBusiness + car.ability.costVolume, ref notifyMsg);
+                    if (this.taskFineshedTime.ContainsKey(player.Key))
+                    {
+                        that.WebNotify(player, "任务完成后，收集不会记录入个人收入中！");
+                    }
+                    else
+                    {
+                        player.MoneySet(player.Money + car.ability.costVolume, ref notifyMsg);
+                    }
                     this.MoneySet(this.Money + car.ability.costVolume, ref notifyMsg);
-                    player.improvementRecord.reduceSpeed(player, car.ability.costBusiness + car.ability.costVolume, ref notifyMsg);
+                    if (this.Money > player.getCar().ability.Business)
+                    {
+                        if (!this.taskFineshedTime.ContainsKey(player.Key))
+                        {
+                            this.taskFineshedTime.Add(player.Key, DateTime.Now);
+                            this.recordRaceTime(player.Key);
+                        }
+                    }
+                    player.improvementRecord.reduceSpeed(player, ref notifyMsg);
 
                     if (!string.IsNullOrEmpty(car.ability.diamondInCar))
                     {
-                        player.PromoteDiamondCount[car.ability.diamondInCar]++;
+                        //player.PromoteDiamondCount[car.ability.diamondInCar]++;
                         if (player.playerType == Player.PlayerType.player)
                         {
-                            that.SendPromoteCountOfPlayer(car.ability.diamondInCar, player.PromoteDiamondCount[car.ability.diamondInCar], (Player)player, ref notifyMsg);
-                            that.taskM.DiamondCollected((Player)player);
+                            that.SetAbility(new SetAbility()
+                            {
+                                c = "SetAbility",
+                                count = 1,
+                                GroupKey = this.GroupKey,
+                                Key = player.Key,
+                                pType = car.ability.diamondInCar
+                            });
                         }
                     }
                     car.ability.Refresh(player, car, ref notifyMsg);
@@ -90,10 +111,73 @@ namespace HouseManager5_0.GroupClassF
             }
             Startup.sendSeveralMsgs(notifyMsg);
         }
+        Dictionary<string, string> recordErrorMsgs = new Dictionary<string, string>();
+        Dictionary<string, bool> records = new Dictionary<string, bool>();
+        public void recordRaceTime(string key)
+        {
+            if (this.taskFineshedTime.ContainsKey(key))
+            {
+                if (this.recordErrorMsgs.ContainsKey(key)) { }
+                else
+                {
+                    this.recordErrorMsgs.Add(key, "您还未登录！");
+                }
+                var player = this._PlayerInGroup[key];
+                if (string.IsNullOrEmpty(player.BTCAddress))
+                {
+                    this.recordErrorMsgs[key] = "您还没有登录，挑战记录未能记录";
+                }
+                else
+                {
+                    var item = DalOfAddress.TradeReward.GetByStartDate(int.Parse(this.RewardDate));
+                    if (item != null)
+                    {
+                        if (item.waitingForAddition == 0)
+                        {
+                            this.recordErrorMsgs[key] = $"{this.RewardDate}期奖励，已颁发，挑战记录未能记录。";
+                        }
+                        else
+                        {
+                            var r = DalOfAddress.traderewardtimerecord.Add(new CommonClass.databaseModel.traderewardtimerecord()
+                            {
+                                applyAddr = player.BTCAddress,
+                                raceEndTime = this.taskFineshedTime[key],
+                                raceStartTime = this.startTime,
+                                raceMember = this.groupNumber,
+                                rewardGiven = 0,
+                                startDate = int.Parse(this.RewardDate)
+                            });
+                            if (r)
+                            {
+                                this.recordErrorMsgs[key] = $"你的成绩已经记录在了{this.RewardDate}期奖励中。";
+                                this.records.Add(key, true);
+                            }
+                            else
+                            {
+                                this.recordErrorMsgs[key] = $"系统错误。";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        this.recordErrorMsgs[key] = $"不存在日期{this.RewardDate}期奖励，挑战记录未能记录";
+                    }
+                }
+            }
+            else
+            {
+
+            }
+        }
 
         private void MoneySet(long value, ref List<string> notifyMsg)
         {
-            //   throw new NotImplementedException();
+
+            this.Money = value;
+            foreach (var item in this._PlayerInGroup)
+            {
+                item.Value.getCar().ability.setCostBusiness(value, item.Value, item.Value.getCar(), ref notifyMsg);
+            }
         }
 
         internal void setDiamondOwner(commandWithTime.diamondOwner dor, GetRandomPos grp)
@@ -160,7 +244,7 @@ namespace HouseManager5_0.GroupClassF
                             that.diamondOwnerE.carParkOnRoad(dor.target, ref car, player, ref notifyMsg);
                             car.setState(player, ref notifyMsg, CarState.waitOnRoad);
                             this._PlayerInGroup[dor.key].returningOjb = dor.returningOjb;
-
+                            group.askWhetherGoToPositon2(dor.key, grp);
                             //player.
 
                         }
@@ -182,6 +266,19 @@ namespace HouseManager5_0.GroupClassF
             }
         }
 
-       
+        internal bool MoneyIsEnoughForSelect(string key)
+        {
+            var player = this._PlayerInGroup[key];
+
+            return player.Ts.costPrice < player.Money;
+        }
+
+        internal void SystemBradcast(SystemBradcast sb)
+        {
+            foreach (var item in this._PlayerInGroup)
+            {
+                that.WebNotify(item.Value, sb.msg);
+            }
+        }
     }
 }
