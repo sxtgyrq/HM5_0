@@ -2954,59 +2954,63 @@ var animateDetailF =
 var selectSingleTeamJoinHtml = function () {
 
     document.getElementById('rootContainer').innerHTML = selectSingleTeamJoinHtmlF.drawHtml();
+    selectSingleTeamJoinHtmlF.canBtnClick = true;
 }
 var buttonClick = function (v) {
     if (objMain.receivedState == 'selectSingleTeamJoin') {
-        switch (v) {
-            case 'single':
-                {
-                    objMain.ws.send(JSON.stringify({ c: 'JoinGameSingle', RefererAddr: nyrqUrl.get() }));
-                    objMain.receivedState = '';
-                }; break;
-            case 'team':
-                {
-                    objMain.ws.send(JSON.stringify({ c: 'CreateTeam', RefererAddr: nyrqUrl.get() }));
-                    objMain.receivedState = '';
-                }; break;
-            case 'join':
-                {
-                    objMain.ws.send(JSON.stringify({ c: 'JoinTeam' }));
-                    objMain.receivedState = '';
-                }; break;
-            case 'setName':
-                {
-                    // objMain.ws.send(JSON.stringify({ c: 'JoinTeam' }));
-                    objMain.receivedState = 'setName';
-                    selectSingleTeamJoinHtmlF.setNameHtmlShow();
-                    objMain.ws.send(JSON.stringify({ c: 'GetName' }));
-                }; break;
-            case 'setCarsName':
-                {
-                    // objMain.ws.send(JSON.stringify({ c: 'JoinTeam' }));
-                    objMain.receivedState = 'setCarsName';
-                    selectSingleTeamJoinHtmlF.setCarsNameHtmlShow();
-                    objMain.ws.send(JSON.stringify({ c: 'GetCarsName' }));
-                }; break;
-            case 'QueryReward':
-                {
-                    //selectSingleTeamJoinHtmlF.setNameHtmlShow();
-                    objMain.ws.send(JSON.stringify({ c: 'QueryReward' }));
-                }; break;
-            case 'HelpAndGuide':
-                {
-                    objMain.ws.send(JSON.stringify({ c: 'Guid' }));
-                }; break;
+        if (selectSingleTeamJoinHtmlF.canBtnClick) {
+            switch (v) {
+                case 'single':
+                    {
+                        objMain.ws.send(JSON.stringify({ c: 'JoinGameSingle', RefererAddr: nyrqUrl.get() }));
+                        objMain.receivedState = '';
+                    }; break;
+                case 'team':
+                    {
+                        objMain.ws.send(JSON.stringify({ c: 'CreateTeam', RefererAddr: nyrqUrl.get() }));
+                        objMain.receivedState = '';
+                    }; break;
+                case 'join':
+                    {
+                        objMain.ws.send(JSON.stringify({ c: 'JoinTeam' }));
+                        objMain.receivedState = '';
+                    }; break;
+                case 'setName':
+                    {
+                        // objMain.ws.send(JSON.stringify({ c: 'JoinTeam' }));
+                        objMain.receivedState = 'setName';
+                        selectSingleTeamJoinHtmlF.setNameHtmlShow();
+                        objMain.ws.send(JSON.stringify({ c: 'GetName' }));
+                    }; break;
+                case 'setCarsName':
+                    {
+                        // objMain.ws.send(JSON.stringify({ c: 'JoinTeam' }));
+                        objMain.receivedState = 'setCarsName';
+                        selectSingleTeamJoinHtmlF.setCarsNameHtmlShow();
+                        objMain.ws.send(JSON.stringify({ c: 'GetCarsName' }));
+                    }; break;
+                case 'QueryReward':
+                    {
+                        //selectSingleTeamJoinHtmlF.setNameHtmlShow();
+                        objMain.ws.send(JSON.stringify({ c: 'QueryReward' }));
+                    }; break;
+                case 'HelpAndGuide':
+                    {
+                        objMain.ws.send(JSON.stringify({ c: 'Guid' }));
+                    }; break;
 
-            //case 'lookForBuildings':
-            //    {
-            //        objMain.ws.send(JSON.stringify({ c: 'LookForBuildings' }));
-            //        objMain.receivedState = '';
-            //    }; break;
+                //case 'lookForBuildings':
+                //    {
+                //        objMain.ws.send(JSON.stringify({ c: 'LookForBuildings' }));
+                //        objMain.receivedState = '';
+                //    }; break;
+            }
+            // objMain.receivedState = '';
         }
-        // objMain.receivedState = '';
     }
-
+    selectSingleTeamJoinHtmlF.canBtnClick = false;
 }
+
 var QueryReward =
 {
     draw3D: function () {

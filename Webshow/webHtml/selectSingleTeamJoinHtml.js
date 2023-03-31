@@ -379,5 +379,6 @@
             document.getElementById(that.setCarsNameHtmlID).remove();
             objMain.receivedState = 'selectSingleTeamJoin';
         }
-    }
+    },
+    canBtnClick: false
 }
