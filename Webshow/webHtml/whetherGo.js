@@ -127,16 +127,22 @@
                         btn.innerText = "最大化";
                         panelToAskWhetherGoto.style.maxWidth = "3.5em";
                         panelToAskWhetherGoto.style.maxHeight = "1.5em";
+<<<<<<< HEAD
                         panelToAskWhetherGoto.style.top = "calc(68px + 3em)";
                         panelToAskWhetherGoto.style.left = "5px";
+=======
+>>>>>>> 73a3b0864a6aff95d85522f8577086a82dd5777d
                     }; break;
                 case '最大化':
                     {
                         btn.innerText = "最小化";
                         panelToAskWhetherGoto.style.maxWidth = "calc(90%)";
                         panelToAskWhetherGoto.style.maxHeight = "calc(90%)";
+<<<<<<< HEAD
                         panelToAskWhetherGoto.style.top = "calc(5%)";
                         panelToAskWhetherGoto.style.left = "calc(5%)";
+=======
+>>>>>>> 73a3b0864a6aff95d85522f8577086a82dd5777d
                     }; break;
             }
         }

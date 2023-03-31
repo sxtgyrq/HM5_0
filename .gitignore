@@ -33,7 +33,7 @@
 /VRPServer/HouseManager5_0/obj/
 /VRPServer/CityRunServerRouteApp/obj/
 /VRPServer/CityRunServerRouteApp/bin/
-/VRPServer/ConsoleAppOtherFunc/obj/
+/VRPServer/ConsoleAppOtherFunc/obj/ 
 /VRPServer/ConsoleAppOtherFunc/bin/
 /VRPServer/ConsoleTestAPP/obj/
 /VRPServer/ConsoleTestAPP/bin/
@@ -53,3 +53,7 @@
 /VRPServer/TestCore/bin/
 /VRPServer/WindowsFormsController/obj/
 /VRPServer/WindowsFormsController/bin/
+/Webshow/WebApplication1/bin/
+/Webshow/WebApplication1/obj/
+/Webshow/WebApplication1/.vs/
+ 
