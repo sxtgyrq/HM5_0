@@ -1001,9 +1001,11 @@ namespace CommonClass
         public double lat { get; set; }
         public double radius { get; set; }
     }
-    public class NotWantToGoNeedToBack : Command
+    public class ConfirmPanelSelectResult : Command
     {
         public string Key { get; set; }
         public string GroupKey { get; set; }
+        public bool GoToPosition { get; set; }
+        public string FastenPositionID { get; set; }
     }
 }

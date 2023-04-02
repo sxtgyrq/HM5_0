@@ -373,6 +373,7 @@ namespace HouseManager5_0.RoomMainF
 
         public string SmallMapClickF(SmallMapClick smc)
         {
+            //List<string> notifyMsgs = new List<string>();
             GroupClass group = null;
             lock (this.PlayerLock)
             {
@@ -389,19 +390,19 @@ namespace HouseManager5_0.RoomMainF
             //  throw new NotImplementedException();
         }
 
-        public string NotWantToGoNeedToBackF(NotWantToGoNeedToBack nwtgntb)
+        public string ConfirmPanelSelectResultF(ConfirmPanelSelectResult cpsr)
         {
             GroupClass group = null;
             lock (this.PlayerLock)
             {
-                if (this._Groups.ContainsKey(nwtgntb.GroupKey))
+                if (this._Groups.ContainsKey(cpsr.GroupKey))
                 {
-                    group = this._Groups[nwtgntb.GroupKey];
+                    group = this._Groups[cpsr.GroupKey];
                 }
             }
             if (group != null)
             {
-                group.NotWantToGoNeedToBackF(nwtgntb, this.GetRandomPosObj);
+                group.ConfirmPanelSelectResultF(cpsr, this.GetRandomPosObj);
             }
             return "";
         }

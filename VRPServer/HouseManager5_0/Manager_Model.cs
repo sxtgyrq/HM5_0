@@ -23,23 +23,26 @@ namespace HouseManager5_0
         }
         internal bool setModel(Player player, Data.detailmodel cloesdMaterial, ref List<string> notifyMsgs)
         {
-            if (player.modelHasShowed.ContainsKey(cloesdMaterial.modelID))
+            // bool AddRecord = false;
+            lock (player.Group.PlayerLock)
             {
-                return false;
-            }
-            else
-            {
-                if (Program.dt.material.ContainsKey(cloesdMaterial.amodel))
+                if (player.modelHasShowed.ContainsKey(cloesdMaterial.modelID))
                 {
-                    var m1 = Program.dt.material[cloesdMaterial.amodel];
-                    var m2 = cloesdMaterial;
-                    player.DrawObj3DModelF(player, m2.modelID, m2.x, m2.y, m2.z, m2.amodel, m1.modelType, m2.rotatey, false, m1.imageBase64, m1.objText, m1.mtlText, ref notifyMsgs);
+                    return false;
                 }
                 else
-                { }
-                player.modelHasShowed.Add(cloesdMaterial.modelID, true);
-                return true;
+                {
+                    player.modelHasShowed.Add(cloesdMaterial.modelID, true);
+                }
             }
+
+            if (Program.dt.material.ContainsKey(cloesdMaterial.amodel))
+            {
+                var m1 = Program.dt.material[cloesdMaterial.amodel];
+                var m2 = cloesdMaterial;
+                player.DrawObj3DModelF(player, m2.modelID, m2.x, m2.y, m2.z, m2.amodel, m1.modelType, m2.rotatey, false, m1.imageBase64, m1.objText, m1.mtlText, ref notifyMsgs);
+            }
+            return true;
         }
 
 

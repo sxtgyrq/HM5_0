@@ -914,7 +914,6 @@ namespace WsOfWebClient
                                     {
                                         if (s.Ls == LoginState.OnLine)
                                         {
-                                            Console.WriteLine(returnResult.result);
                                             WsOfWebClient.SmallMapClick wgn = Newtonsoft.Json.JsonConvert.DeserializeObject<WsOfWebClient.SmallMapClick>(returnResult.result);
                                             Room.SmallMapClickF(s, wgn);
                                             // Room.GetOnLineState(s);
@@ -925,6 +924,14 @@ namespace WsOfWebClient
                                         if (s.Ls == LoginState.OnLine)
                                         {
                                             Room.NotWantToGoNeedToBackF(s);
+                                        }
+                                    }; break;
+                                case "GoToDoCollectOrPromote":
+                                    {
+                                        if (s.Ls == LoginState.OnLine)
+                                        {
+                                            GoToDoCollectOrPromote gcp = Newtonsoft.Json.JsonConvert.DeserializeObject<GoToDoCollectOrPromote>(returnResult.result);
+                                            Room.GoToDoCollectOrPromoteF(s, gcp);
                                         }
                                     }; break;
                                 case "BradCastWhereToGoInSmallMap":

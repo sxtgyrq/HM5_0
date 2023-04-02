@@ -222,16 +222,100 @@ namespace HouseManager5_0.GroupClassF
                 Fp = fp,
                 msg = msg,
                 select = ts.select,
-                tsType = ts.tsType
+                tsType = ts.tsType.ToString()
             };
             return obj;
         }
-        internal void NotWantToGoNeedToBackF(NotWantToGoNeedToBack nwtgntb, GetRandomPos gp)
+        internal string ConfirmPanelSelectResultF(ConfirmPanelSelectResult nwtgntb, GetRandomPos gp) //(NotWantToGoNeedToBack nwtgntb, GetRandomPos gp)
         {
-            askWhetherGoToPositon2(nwtgntb.Key, gp);
+            // if(CommonClass.Format.)
+            if (nwtgntb.GoToPosition)
+            {
+                var player = this._PlayerInGroup[nwtgntb.Key];
+                switch (player.Ts.tsType)
+                {
+                    case TargetForSelect.TargetForSelectType.collect:
+                        {
+                            that.updateCollect(new SetCollect()
+                            {
+                                c = "SetCollect",
+                                collectIndex = player.Ts.select,
+                                cType = "findWork",
+                                fastenpositionID = nwtgntb.FastenPositionID,
+                                GroupKey = nwtgntb.GroupKey,
+                                Key = nwtgntb.Key,
+                            }, gp);
+                        }; break;
+                    case TargetForSelect.TargetForSelectType.mile:
+                        {
+                            if (gp.GetFpByIndex(this.promoteMilePosition).FastenPositionID == nwtgntb.FastenPositionID)
+                            {
+                                that.updatePromote(new SetPromote()
+                                {
+                                    c = "SetPromote",
+                                    pType = player.Ts.tsType.ToString(),
+                                    GroupKey = nwtgntb.GroupKey,
+                                    Key = nwtgntb.Key,
+
+                                }, gp);
+                            }
+                            else
+                            {
+                                that.WebNotify(player, "确认慢了！");
+                                askWhetherGoToPositon2(nwtgntb.Key, that.GetRandomPosObj);
+                            }
+                        }; break;
+                    case TargetForSelect.TargetForSelectType.volume:
+                        {
+                            if (gp.GetFpByIndex(this.promoteVolumePosition).FastenPositionID == nwtgntb.FastenPositionID)
+                            {
+                                that.updatePromote(new SetPromote()
+                                {
+                                    c = "SetPromote",
+                                    pType = player.Ts.tsType.ToString(),
+                                    GroupKey = nwtgntb.GroupKey,
+                                    Key = nwtgntb.Key,
+
+                                }, gp);
+                            }
+                            else
+                            {
+                                that.WebNotify(player, "确认慢了！");
+                                askWhetherGoToPositon2(nwtgntb.Key, that.GetRandomPosObj);
+                            }
+                        }; break;
+                    case TargetForSelect.TargetForSelectType.speed:
+                        {
+                            if (gp.GetFpByIndex(this.promoteSpeedPosition).FastenPositionID == nwtgntb.FastenPositionID)
+                            {
+                                that.updatePromote(new SetPromote()
+                                {
+                                    c = "SetPromote",
+                                    pType = player.Ts.tsType.ToString(),
+                                    GroupKey = nwtgntb.GroupKey,
+                                    Key = nwtgntb.Key,
+
+                                }, gp);
+                            }
+                            else
+                            {
+                                that.WebNotify(player, "确认慢了！");
+                                askWhetherGoToPositon2(nwtgntb.Key, that.GetRandomPosObj);
+                            }
+                        }; break;
+                    default:
+                        {
+                            askWhetherGoToPositon2(nwtgntb.Key, that.GetRandomPosObj);
+                        }; break;
+                }
+            }
+            else
+                askWhetherGoToPositon2(nwtgntb.Key, that.GetRandomPosObj);
+            return "";
         }
         internal void SmallMapClickF(SmallMapClick smc, GetRandomPos gp)
         {
+            List<string> notifyMsgs = new List<string>();
             lock (this.PlayerLock)
             {
                 List<FastonPosition> fps = new List<FastonPosition>();
@@ -294,33 +378,29 @@ namespace HouseManager5_0.GroupClassF
                                     }; break;
                                 case "mile":
                                     {
-                                        that.updatePromote(new SetPromote()
-                                        {
-                                            c = "SetPromote",
-                                            GroupKey = smc.GroupKey,
-                                            Key = smc.Key,
-                                            pType = "mile"
-                                        }, gp);
+                                        PromoteClickFunction(player, fps, selection[0], gp, ref notifyMsgs);
+                                        //that.updatePromote(new SetPromote()
+                                        //{
+                                        //    c = "SetPromote",
+                                        //    GroupKey = smc.GroupKey,
+                                        //    Key = smc.Key,
+                                        //    pType = "mile"
+                                        //}, gp);
                                     }; break;
                                 case "speed":
                                     {
-                                        that.updatePromote(new SetPromote()
-                                        {
-                                            c = "SetPromote",
-                                            GroupKey = smc.GroupKey,
-                                            Key = smc.Key,
-                                            pType = "speed"
-                                        }, gp);
+                                        PromoteClickFunction(player, fps, selection[0], gp, ref notifyMsgs);
+                                        //that.updatePromote(new SetPromote()
+                                        //{
+                                        //    c = "SetPromote",
+                                        //    GroupKey = smc.GroupKey,
+                                        //    Key = smc.Key,
+                                        //    pType = "speed"
+                                        //}, gp);
                                     }; break;
                                 case "volume":
                                     {
-                                        that.updatePromote(new SetPromote()
-                                        {
-                                            c = "SetPromote",
-                                            GroupKey = smc.GroupKey,
-                                            Key = smc.Key,
-                                            pType = "volume"
-                                        }, gp);
+                                        PromoteClickFunction(player, fps, selection[0], gp, ref notifyMsgs);
                                     }; break;
 
                             }
@@ -426,33 +506,15 @@ namespace HouseManager5_0.GroupClassF
                                     }; break;
                                 case "mile":
                                     {
-                                        that.updatePromote(new SetPromote()
-                                        {
-                                            c = "SetPromote",
-                                            GroupKey = smc.GroupKey,
-                                            Key = smc.Key,
-                                            pType = "mile"
-                                        }, gp);
+                                        PromoteClickFunction(player, fps, selection[0], gp, ref notifyMsgs);
                                     }; break;
                                 case "speed":
                                     {
-                                        that.updatePromote(new SetPromote()
-                                        {
-                                            c = "SetPromote",
-                                            GroupKey = smc.GroupKey,
-                                            Key = smc.Key,
-                                            pType = "speed"
-                                        }, gp);
+                                        PromoteClickFunction(player, fps, selection[0], gp, ref notifyMsgs);
                                     }; break;
                                 case "volume":
                                     {
-                                        that.updatePromote(new SetPromote()
-                                        {
-                                            c = "SetPromote",
-                                            GroupKey = smc.GroupKey,
-                                            Key = smc.Key,
-                                            pType = "volume"
-                                        }, gp);
+                                        PromoteClickFunction(player, fps, selection[0], gp, ref notifyMsgs);
                                     }; break;
 
                             }
@@ -464,14 +526,17 @@ namespace HouseManager5_0.GroupClassF
                     }
                 }
             }
+            Startup.sendSeveralMsgs(notifyMsgs);
         }
+
+
 
         public void CollectFunction(Player player, List<FastonPosition> fps, int collectSelect, GetRandomPos gp, List<FastonPosition> rank)
         {
             List<string> sendMsgs = new List<string>();
             var Fp = fps[0];
             var rankNum = rank.FindIndex(item => item.FastenPositionID == Fp.FastenPositionID);
-            player.Ts = new TargetForSelect(collectSelect, "collect", rankNum, player.improvementRecord.HasValueToImproveSpeed);
+            player.Ts = new TargetForSelect(collectSelect, TargetForSelect.TargetForSelectType.collect, rankNum, player.improvementRecord.HasValueToImproveSpeed);
             //{
             //    tsType = "collect",
             //    select = collectSelect,

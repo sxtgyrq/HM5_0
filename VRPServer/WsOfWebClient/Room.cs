@@ -1890,13 +1890,28 @@ namespace WsOfWebClient
         }
         internal static void NotWantToGoNeedToBackF(State s)
         {
-            CommonClass.NotWantToGoNeedToBack gfs = new CommonClass.NotWantToGoNeedToBack()
+            CommonClass.ConfirmPanelSelectResult cps = new CommonClass.ConfirmPanelSelectResult()
             {
-                c = "NotWantToGoNeedToBack",
+                c = "ConfirmPanelSelectResult",
                 Key = s.Key,
-                GroupKey = s.GroupKey
+                GroupKey = s.GroupKey,
+                GoToPosition = false,
+                FastenPositionID = ""
             };
-            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gfs);
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(cps);
+            Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+        }
+        internal static void GoToDoCollectOrPromoteF(State s, GoToDoCollectOrPromote gcp)
+        {
+            CommonClass.ConfirmPanelSelectResult cps = new CommonClass.ConfirmPanelSelectResult()
+            {
+                c = "ConfirmPanelSelectResult",
+                Key = s.Key,
+                GroupKey = s.GroupKey,
+                GoToPosition = true,
+                FastenPositionID = gcp.FastenPositionID
+            };
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(cps);
             Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
         }
 

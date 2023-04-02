@@ -30,9 +30,12 @@ namespace HouseManager5_0
 
         public bool conditionsOk(Command c, GetRandomPos grp, out string reason)
         {
+            // throw new Exception("不想写了");
             if (c.c == "SetPromote")
             {
                 var sp = (SetPromote)c;
+                var group = that._Groups[sp.GroupKey];
+                var player = group._PlayerInGroup[sp.Key];
                 if (string.IsNullOrEmpty(sp.pType))
                 {
                     reason = $"wrong pType:{sp.pType}";
@@ -41,6 +44,14 @@ namespace HouseManager5_0
                 else if (!(sp.pType == "mile" || sp.pType == "volume" || sp.pType == "speed"))
                 {
                     reason = $"wrong pType:{sp.pType}";
+                    return false;
+                }
+                else if (player.improvementRecord.HasValueToImproveSpeed && !group.MoneyIsEnoughForSelect(sp.Key))
+                {
+                    var costPriceStr = group._PlayerInGroup[sp.Key].Ts.costPriceStr;
+                    this.WebNotify(group._PlayerInGroup[sp.Key], $"身上的钱不够路费{costPriceStr}元，未能出发！");
+                    group.askWhetherGoToPositon2(sp.Key, grp);
+                    reason = "";
                     return false;
                 }
                 else

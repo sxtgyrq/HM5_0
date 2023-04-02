@@ -115,12 +115,13 @@ namespace HouseManager5_0.interfaceOfHM
         void SystemBradcast(SystemBradcast sb);
         string Statictis(ServerStatictis ss);
         //string GetFightSituationF(GetFightSituation fs);
-       // string GetTaskCopyDetailF(GetTaskCopyDetail gtd);
-       // string RemoveTaskCopyF(RemoveTaskCopyM gtd);
+        // string GetTaskCopyDetailF(GetTaskCopyDetail gtd);
+        // string RemoveTaskCopyF(RemoveTaskCopyM gtd);
         string ExitF(ExitObj obj);
         string GetOnLineStateF(GetOnLineState obj);
         string SmallMapClickF(SmallMapClick smc);
-        string NotWantToGoNeedToBackF(NotWantToGoNeedToBack nwtgntb);
+        // string NotWantToGoNeedToBackF(NotWantToGoNeedToBack nwtgntb);
+        string ConfirmPanelSelectResultF(ConfirmPanelSelectResult nwtgntb);
     }
 
     interface MapEditor
@@ -147,7 +148,7 @@ namespace HouseManager5_0.interfaceOfHM
         string GetUnLockedModel(CommonClass.MapEditor.GetUnLockedModel gulm);
         void UpdateModelStock(ModelStock sa);
         string GetBG(SetCrossBG ss);
-        string GetHeightAtPositionF(CommonClass.MapEditor.GetHeightAtPosition gh, Data dt); 
+        string GetHeightAtPositionF(CommonClass.MapEditor.GetHeightAtPosition gh, Data dt);
         string LookForTaskCopyF(LookForTaskCopy lftc);
         string TaskCopyPassOrNGF(TaskCopyPassOrNG pOrNG);
     }

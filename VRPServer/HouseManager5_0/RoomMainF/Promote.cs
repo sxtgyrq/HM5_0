@@ -467,7 +467,7 @@ namespace HouseManager5_0.RoomMainF
 
         private void SendPromoteCountOfPlayer(string pType, Player player, ref List<string> notifyMsgs)
         {
-            if (!(pType == "mile" || pType == "business" || pType == "volume" || pType == "speed"))
+            if (!(pType == "mile" || pType == "volume" || pType == "speed"))
             {
 
             }

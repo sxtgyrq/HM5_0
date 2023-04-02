@@ -145,7 +145,7 @@ namespace WsOfWebClient
             return base64;
         }
 
-
+        
     }
 
 

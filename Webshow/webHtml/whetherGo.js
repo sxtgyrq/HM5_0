@@ -89,7 +89,16 @@
                 if (objMain.carState["car"] == 'waitAtBaseStation' || objMain.carState["car"] == 'waitOnRoad') {
                     var fp = that.obj.Fp;
                     // var selectObj = objMain.selectObj.obj;
-                    objMain.ws.send(JSON.stringify({ 'c': 'Collect', 'cType': 'findWork', 'fastenpositionID': fp.FastenPositionID, 'collectIndex': that.obj.select }));
+                    // objMain.ws.send(JSON.stringify({ 'c': 'Collect', 'cType': 'findWork', 'fastenpositionID': fp.FastenPositionID, 'collectIndex': that.obj.select }));
+                    objMain.ws.send(JSON.stringify({ 'c': 'GoToDoCollectOrPromote', 'FastenPositionID': fp.FastenPositionID }));
+                    document.getElementById(that.operateID).remove();
+                }
+            }
+            else if (obj.tsType == "mile" || obj.tsType == "volume" || obj.tsType == "speed") {
+                if (objMain.carState["car"] == 'waitOnRoad') {
+                    var fp = that.obj.Fp;
+                    // var selectObj = objMain.selectObj.obj;
+                    objMain.ws.send(JSON.stringify({ 'c': 'GoToDoCollectOrPromote', 'FastenPositionID': fp.FastenPositionID }));
                     document.getElementById(that.operateID).remove();
                 }
             }
@@ -127,17 +136,17 @@
                         btn.innerText = "最大化";
                         panelToAskWhetherGoto.style.maxWidth = "3.5em";
                         panelToAskWhetherGoto.style.maxHeight = "1.5em";
- 
+
                         panelToAskWhetherGoto.style.top = "calc(68px + 3em)";
-                        panelToAskWhetherGoto.style.left = "5px"; 
+                        panelToAskWhetherGoto.style.left = "5px";
                     }; break;
                 case '最大化':
                     {
                         btn.innerText = "最小化";
                         panelToAskWhetherGoto.style.maxWidth = "calc(90%)";
-                        panelToAskWhetherGoto.style.maxHeight = "calc(90%)"; 
+                        panelToAskWhetherGoto.style.maxHeight = "calc(90%)";
                         panelToAskWhetherGoto.style.top = "calc(5%)";
-                        panelToAskWhetherGoto.style.left = "calc(5%)"; 
+                        panelToAskWhetherGoto.style.left = "calc(5%)";
                     }; break;
             }
         }

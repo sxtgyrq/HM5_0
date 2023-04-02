@@ -393,7 +393,7 @@ namespace HouseManager5_0
         {
             get
             {
-                var selfValue = this.Data["mile"].Count * 15 + 200;
+                var selfValue = this.Data["mile"].Count * 40 + 200;
                 return selfValue;
             }
         }
@@ -454,7 +454,7 @@ namespace HouseManager5_0
         {
             get
             {
-                var selfValue = this.Data["volume"].Count * 100 + 10 * 100;
+                var selfValue = this.Data["volume"].Count * 2 * 100 + 10 * 100;
                 return selfValue;
             }
         }
@@ -501,7 +501,7 @@ namespace HouseManager5_0
         {
             get
             {
-                var selfValue = this.Data["speed"].Count * 4 + 50;
+                var selfValue = this.Data["speed"].Count * 10 + 50;
                 return selfValue;
 
             }

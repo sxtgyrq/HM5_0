@@ -74,8 +74,9 @@ namespace HouseManager5_0
                         }; break;
                     case "SetPromote":
                         {
-                            CommonClass.SetPromote sp = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.SetPromote>(notifyJson);
-                            var result = objI.updatePromote(sp, Program.dt);
+                            //有了Player.Ts,此方法在后台调用！
+                            //CommonClass.SetPromote sp = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.SetPromote>(notifyJson);
+                            //var result = objI.updatePromote(sp, Program.dt);
                             outPut = "ok";
                             //await context.Response.WriteAsync("ok");
                         }; break;
@@ -93,8 +94,9 @@ namespace HouseManager5_0
                         }; break;
                     case "SetCollect":
                         {
-                            CommonClass.SetCollect sc = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.SetCollect>(notifyJson);
-                            var result = objI.updateCollect(sc, Program.dt);
+                            //有了Player.Ts,此方法在后台调用！
+                            //CommonClass.SetCollect sc = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.SetCollect>(notifyJson);
+                            //var result = objI.updateCollect(sc, Program.dt);
                             outPut = "ok";
                             //await context.Response.WriteAsync("ok");
                         }; break;
@@ -489,10 +491,10 @@ namespace HouseManager5_0
                             SmallMapClick smc = Newtonsoft.Json.JsonConvert.DeserializeObject<SmallMapClick>(notifyJson);
                             outPut = objI.SmallMapClickF(smc);
                         }; break;
-                    case "NotWantToGoNeedToBack":
+                    case "ConfirmPanelSelectResult":
                         {
-                            NotWantToGoNeedToBack nwtgntb = Newtonsoft.Json.JsonConvert.DeserializeObject<NotWantToGoNeedToBack>(notifyJson);
-                            outPut = objI.NotWantToGoNeedToBackF(nwtgntb);
+                            ConfirmPanelSelectResult nwtgntb = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfirmPanelSelectResult>(notifyJson);
+                            outPut = objI.ConfirmPanelSelectResultF(nwtgntb);
                         }; break;
                         //case "CopyTaskDisplay": 
                         //    {

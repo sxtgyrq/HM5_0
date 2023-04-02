@@ -4,6 +4,7 @@ using HouseManager5_0.RoomMainF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using static HouseManager5_0.Car;
@@ -177,7 +178,91 @@ namespace HouseManager5_0.GroupClassF
                     };
             }
         }
+        private void PromoteClickFunction(Player player, List<OssModel.FastonPosition> fps, string pType, GetRandomPos gp, ref List<string> notifyMsgs)
+        {
+            int promotePosition;
+            string diamondName;
+            HouseManager5_0.TargetForSelect.TargetForSelectType tsType;
+            switch (pType)
+            {
+                case "mile":
+                    {
+                        promotePosition = this.promoteMilePosition;
+                        diamondName = "红宝石";
+                        tsType = TargetForSelect.TargetForSelectType.mile;
+                    }; break;
+                case "volume":
+                    {
+                        promotePosition = this.promoteVolumePosition;
+                        diamondName = "蓝宝石";
+                        tsType = TargetForSelect.TargetForSelectType.volume;
+                    }; break;
+                case "speed":
+                    {
+                        promotePosition = this.promoteSpeedPosition;
+                        diamondName = "黑宝石";
+                        tsType = TargetForSelect.TargetForSelectType.speed;
+                    }; break;
+                default:
+                    {
+                        throw new Exception($"wrong parameter \"{pType}\"");
+                    }
+            };
+            OssModel.FastonPosition fpResult;
+            var car = player.getCar();
+            var distanceIsEnoughToStart = that.theNearestToDiamondIsCarNotMoney(player, car, pType, Program.dt, out fpResult);
+            if (distanceIsEnoughToStart)
+            {
+                player.Ts = new TargetForSelect(promotePosition, tsType, 0, player.improvementRecord.HasValueToImproveSpeed);
+                that.updatePromote(new SetPromote()
+                {
+                    c = "SetPromote",
+                    GroupKey = this.GroupKey,
+                    Key = player.Key,
+                    pType = pType
+                }, gp);
+            }
+            else if (player.improvementRecord.HasValueToImproveSpeed && player.getCar().state == CarState.waitOnRoad)
+            {
+                List<string> sendMsgs = new List<string>();
+                var Fp = fps[0];
+                var lengthToDiamond = this.getLength(gp.GetFpByIndex(promotePosition), gp.GetFpByIndex(player.getCar().targetFpIndex));
+                var rank = (from item in this._collectPosition
+                            where this.getLength(gp.GetFpByIndex(item.Value), gp.GetFpByIndex(player.getCar().targetFpIndex)) < lengthToDiamond
+                            select gp.GetFpByIndex(item.Value)).ToList();
+                var rankNum = rank.Count;
+                player.Ts = new TargetForSelect(promotePosition, tsType, rankNum, player.improvementRecord.HasValueToImproveSpeed);
 
+                var msg = "";
+                {
+                    var priceStr = player.Ts.costPriceStr;
+                    if (string.IsNullOrEmpty(Fp.region))
+                    {
+                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到【{Fp.FastenPositionName}】收集{diamondName}？</b>";
+                    }
+                    else
+                    {
+                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到[{Fp.region}]【{Fp.FastenPositionName}】收集{diamondName}？</b>";
+                    }
+                }
+                var obj = GetConfirmInfomation(player.WebSocketID, Fp, msg, player.Ts);
+                var url = player.FromUrl;
+                var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+                notifyMsgs.Add(url);
+                notifyMsgs.Add(sendMsg);
+            }
+            else
+            {
+                player.Ts = new TargetForSelect(promotePosition, tsType, 100, player.improvementRecord.HasValueToImproveSpeed);
+                that.updatePromote(new SetPromote()
+                {
+                    c = "SetPromote",
+                    GroupKey = this.GroupKey,
+                    Key = player.Key,
+                    pType = pType
+                }, gp);
+            }
+        }
         public Dictionary<string, long> promotePrice = new Dictionary<string, long>()
         {
             { "mile",1000},
@@ -267,6 +352,57 @@ namespace HouseManager5_0.GroupClassF
                                         var fp1 = Program.dt.GetFpByIndex(from);
                                         var fp2 = Program.dt.GetFpByIndex(to);
                                         var baseFp = Program.dt.GetFpByIndex(player.StartFPIndex);
+                                        var goPath = that.GetAFromB_v2(from, to, player, grp, ref notifyMsg);
+                                        var returnPath = that.GetAFromB_v2(to, player.StartFPIndex, player, grp, ref notifyMsg);
+
+                                        var goMile = that.GetMile(goPath);
+                                        var returnMile = that.GetMile(returnPath);
+
+
+                                        //第一步，计算去程和回程。
+                                        if (car.ability.leftMile >= goMile + returnMile)
+                                        {
+                                            int startT;
+                                            that.promoteE.EditCarStateWhenActionStartOK(player, ref car, to, fp1, goPath, grp, ref notifyMsg, out startT);
+
+                                            RoomMainF.RoomMain.commandWithTime.ReturningOjb ro = commandWithTime.ReturningOjb.ojbWithoutBoss(returnPath);
+                                            that.diamondOwnerE.StartDiamondOwnerThread(startT, 0, player, car, sp, ro, goMile, goPath, grp);
+                                            mrr = MileResultReason.Abundant;
+                                            return ro;
+                                        }
+
+                                        else if (car.ability.leftMile >= goMile)
+                                        {
+                                            that.WebNotify(player, $"去程{goMile}km，回程{returnMile}km,去了回不来");
+                                            mrr = MileResultReason.CanNotReturn;
+                                            this.askWhetherGoToPositon(player.Key, grp);
+                                            return player.returningOjb;
+                                        }
+                                        else
+                                        {
+                                            that.WebNotify(player, $"去程{goMile}km，回程{returnMile}km,去不了");
+                                            mrr = MileResultReason.CanNotReach;
+                                            this.askWhetherGoToPositon(player.Key, grp);
+                                            return player.returningOjb;
+                                        }
+                                    }
+                                    else if (player.improvementRecord.HasValueToImproveSpeed)
+                                    {
+                                        if (player.Money - player.Ts.costPrice > 0)
+                                        {
+                                            player.MoneySet(player.Money - player.Ts.costPrice, ref notifyMsg);
+                                        }
+                                        else
+                                        {
+                                            player.MoneySet(0, ref notifyMsg);
+                                        }
+
+                                        var from = that.promoteE.getFromWhenAction(player, car);
+                                        var to = that.GetPromotePositionTo(sp.pType, player.Group);//  this.promoteMilePosition;
+
+                                        var fp1 = Program.dt.GetFpByIndex(from);
+                                        //  var fp2 = Program.dt.GetFpByIndex(to);
+                                        //var baseFp = Program.dt.GetFpByIndex(player.StartFPIndex);
                                         var goPath = that.GetAFromB_v2(from, to, player, grp, ref notifyMsg);
                                         var returnPath = that.GetAFromB_v2(to, player.StartFPIndex, player, grp, ref notifyMsg);
 

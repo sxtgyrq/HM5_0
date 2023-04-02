@@ -9,7 +9,8 @@ namespace HouseManager5_0
 {
     public class TargetForSelect
     {
-        public TargetForSelect(int select_, string tsType_, int rank_, bool hasValueToImproveSpeed_)
+        public enum TargetForSelectType { collect, mile, volume, speed }
+        public TargetForSelect(int select_, TargetForSelectType tsType_, int rank_, bool hasValueToImproveSpeed_)
         {
             this.select = select_;
             this.tsType = tsType_;
@@ -19,20 +20,37 @@ namespace HouseManager5_0
 
         public int select { get; private set; }
 
-        public string tsType { get; private set; }
+        public TargetForSelectType tsType { get; private set; }
         public int rank { get; private set; }
         public int costPrice
         {
             get
             {
-                if (this.HasValueToImproveSpeed)
+                switch (this.tsType)
                 {
-                    return (this.rank / 5) * 500;
+                    case TargetForSelectType.collect:
+                        {
+                            if (this.HasValueToImproveSpeed)
+                            {
+                                return (this.rank / 5) * 500;
+                            }
+                            else
+                            {
+                                return this.rank * 500;
+                            }
+                        };
+                    case TargetForSelectType.mile:
+                    case TargetForSelectType.volume:
+                    case TargetForSelectType.speed:
+                        {
+                            return this.rank * 500;
+                        }
+                    default:
+                        {
+                            return 100 * 500;
+                        }
                 }
-                else
-                {
-                    return this.rank * 500;
-                }
+
             }
         }
         public string costPriceStr

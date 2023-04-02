@@ -225,4 +225,8 @@ namespace WsOfWebClient
         public double lat { get; set; }
         public double radius { get; set; }
     }
+    public class GoToDoCollectOrPromote : CommonClass.Command
+    {
+        public string FastenPositionID { get; set; }
+    }
 }
