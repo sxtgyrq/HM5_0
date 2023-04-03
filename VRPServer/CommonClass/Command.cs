@@ -246,9 +246,9 @@ namespace CommonClass
         public string amodel { get; set; }
         public double rotatey { get; set; }
         public bool existed { get; set; }
-        public string imageBase64 { get; set; }
-        public string objText { get; set; }
-        public string mtlText { get; set; }
+        //public string imageBase64 { get; set; }
+        //public string objText { get; set; }
+        //public string mtlText { get; set; }
         public string modelType { get; set; }
     }
 
@@ -442,6 +442,8 @@ namespace CommonClass
         public string ResultMsg { get; set; }
         public bool RecordedInDB { get; set; }
         public int groupNumber { get; set; }
+        public string TaskName { get; set; }
+        public string BTCAddr { get; set; }
 
         public class DataItem
         {
@@ -1007,5 +1009,11 @@ namespace CommonClass
         public string GroupKey { get; set; }
         public bool GoToPosition { get; set; }
         public string FastenPositionID { get; set; }
+    }
+
+    public class GetAbtractmodels : Command
+    {
+        public string AmID { get; set; }
+        //public int Password { get; set; }
     }
 }

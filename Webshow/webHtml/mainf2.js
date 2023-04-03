@@ -1912,8 +1912,10 @@ var objMain =
             case 'ModelDataShow':
                 {
                     var modelDataShow = received_obj;
-                    BuildingModelObj.f(modelDataShow);
-                    QueryReward.lookAt();
+                    objMain.buildingData.dModel[modelDataShow.modelID] = modelDataShow;
+                    BuildingModelObj.Refresh();
+                    //BuildingModelObj.f(modelDataShow);
+                   
                 }; break;
             case 'ModelDataShow_Whether_Existed':
                 {
@@ -2133,8 +2135,9 @@ var objMain =
                         }
                         else {
                             whetherGo.obj.base64 = received_obj.base64;
-                            smallMapClass.draw(whetherGo.obj);
                             whetherGo.show2();
+                            smallMapClass.draw2(whetherGo.obj);
+
                         }
                     }
                     else {
@@ -2180,6 +2183,10 @@ var objMain =
     {
         'isLogin': false,
         'HasNewTask': false
+    },
+    buildingData: {
+        aModel: {},
+        dModel: {}
     }
 };
 var startA = function () {
@@ -5739,34 +5746,7 @@ var DirectionOperator =
 
 var BuildingModelObj =
 {
-    f: function (received_obj) {
-        /*
-         * 依据objText，mtlText，base64画图
-         */
-        if (received_obj.existed) {
-            var amodel = received_obj.amodel;
-            BuildingModelObj.copy(amodel, received_obj);
-        }
-        else {
-            if (objMain.buildingGroup.getObjectByName(received_obj.modelID) == undefined) {
-                var manager = new THREE.LoadingManager();
-                new THREE.MTLLoader(manager)
-                    .loadTextOnly(received_obj.mtlText, 'data:image/jpeg;base64,' + received_obj.imageBase64, function (materials) {
-                        materials.preload();
-                        // materials.depthTest = false;
-                        new THREE.OBJLoader(manager)
-                            .setMaterials(materials)
-                            //.setPath('/Pic/')
-                            .loadTextOnly(received_obj.objText, function (object) {
-                                var amodel = received_obj.amodel;
-                                objMain.buildingModel[amodel] = object;
-                                object.userData.modelType = received_obj.modelType;
-                                BuildingModelObj.copy(amodel, received_obj);
-                            }, function () { }, function () { });
-                    });
-            }
-        }
-    },
+
     copy: function (amodel, received_obj) {
         if (objMain.buildingModel[amodel] == undefined) {
 
@@ -5782,16 +5762,55 @@ var BuildingModelObj =
                 if (objMain.state == 'LookForBuildings') {
                     objMain.mainF.lookAtPosition2();
                 }
+                QueryReward.lookAt();
             }
         }
     },
     respon: function (received_obj) {
-        var amodel = received_obj.amodel;
-        if (objMain.buildingModel[amodel] == undefined) {
-            objMain.ws.send(JSON.stringify({ 'c': 'ModelNotExited' }));
-        }
-        else {
-            objMain.ws.send(JSON.stringify({ 'c': 'ModelExited' }));
+        throw '此方法已停用！';
+        //var amodel = received_obj.amodel;
+        //if (objMain.buildingModel[amodel] == undefined) {
+        //    objMain.ws.send(JSON.stringify({ 'c': 'ModelNotExited' }));
+        //}
+        //else {
+        //    objMain.ws.send(JSON.stringify({ 'c': 'ModelExited' }));
+        //}
+    },
+    Refresh: function () {
+        for (var dModeItem in objMain.buildingData.dModel) {
+            var dItem = objMain.buildingData.dModel[dModeItem];
+            var amodelID = dItem.amodel;
+            if (objMain.buildingModel[amodelID] == undefined) {
+                if (objMain.debug != 2) {
+                    var url = "http://127.0.0.1:11001/objdata/" + amodelID;
+                    $.getJSON(url, function (json) {
+                        var amID = json.AmID;
+                        var objText = json.objText;
+                        var mtlText = json.mtlText;
+                        var imgBase64 = json.imgBase64;
+                        var modelType = json.modelType;
+                        if (objMain.buildingGroup.getObjectByName(amID) == undefined) {
+                            var manager = new THREE.LoadingManager();
+                            new THREE.MTLLoader(manager)
+                                .loadTextOnly(mtlText, 'data:image/jpeg;base64,' + imgBase64, function (materials) {
+                                    materials.preload();
+                                    new THREE.OBJLoader(manager)
+                                        .setMaterials(materials)
+                                        .loadTextOnly(objText, function (object) {
+                                            object.userData.modelType = modelType;
+                                            objMain.buildingModel[amID] = object;
+                                            BuildingModelObj.Refresh();
+                                        }, function () { }, function () { });
+                                });
+                        }
+                    })
+                }
+                else {
+                }
+            }
+            else {
+                BuildingModelObj.copy(amodelID, dItem);
+            }
         }
     }
 };

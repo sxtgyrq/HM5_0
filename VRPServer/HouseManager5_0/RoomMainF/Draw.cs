@@ -35,7 +35,7 @@ namespace HouseManager5_0.RoomMainF
                 meshPoints = meshPoints,
                 basePoint = basePoint
             };
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(srpd); 
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(srpd);
             notifyMsg.Add(json);
         }
 
@@ -49,9 +49,9 @@ namespace HouseManager5_0.RoomMainF
                 amodel = amodel,
                 modelType = modelType,
                 existed = existed,
-                imageBase64 = imageBase64,
-                objText = objText,
-                mtlText = mtlText,
+                //imageBase64 = imageBase64,
+                //objText = objText,
+                //mtlText = mtlText,
                 rotatey = rotatey,
                 x = x,
                 y = y,
@@ -72,9 +72,9 @@ namespace HouseManager5_0.RoomMainF
                 amodel = amodel,
                 modelType = modelType,
                 existed = existed,
-                imageBase64 = imageBase64,
-                objText = objText,
-                mtlText = mtlText,
+                //imageBase64 = imageBase64,
+                //objText = objText,
+                //mtlText = mtlText,
                 rotatey = rotatey,
                 x = x,
                 y = y,

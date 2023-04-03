@@ -1,8 +1,11 @@
 ﻿using CommonClass;
+using CommonClass.MateWsAndHouse;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.WebSockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -141,11 +144,31 @@ namespace WsOfWebClient
         public static string GetMapBase64(BradCastWhereToGoInSmallMap smallMap)
         {
             CommonClass.Img.DrawSmallMap dsm = new CommonClass.Img.DrawSmallMap();
-            var base64 = dsm.GetBase64(smallMap); 
+
+            // CommonClass.Img.DrawFontsWithData d1=new CommonClass.Img.DrawFontsWithData()
+            var base64 = Newtonsoft.Json.JsonConvert.SerializeObject(dsm.GetBase64(smallMap));
             return base64;
         }
 
-        
+        internal static string GetObjFileJson(string amid)
+        {
+            int roomindex = rm.Next(0, Room.roomUrls.Count);
+            if (roomindex >= 0 && roomindex < Room.roomUrls.Count)
+            {
+                var obj = new GetAbtractmodels()
+                {
+                    c = "GetAbtractmodels",
+                    AmID = amid
+                };
+                var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+                var receivedMsg = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[roomindex], sendMsg);
+                return receivedMsg;
+            }
+            else
+            {
+                return "";
+            }
+        }
     }
 
 

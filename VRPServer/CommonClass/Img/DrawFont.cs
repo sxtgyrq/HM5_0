@@ -481,4 +481,154 @@ namespace CommonClass.Img
 
         }
     }
+
+    public class DataItem
+    {
+        public List<string> data { get; set; }
+        public int PicWidth { get; private set; }
+        public int PicHeight { get; private set; }
+        internal void SetSize(int picWidth, int picHeight)
+        {
+            this.PicHeight = picHeight;
+            this.PicWidth = picWidth;
+        }
+    }
+
+    public class DrawFontsWithData
+    {
+        public int PicWidth { get; private set; }
+        public int PicHeight { get; private set; }
+        public DataItem dataItem { get; private set; }
+        public DrawFontsWithData(string characters, objTff2 data)
+        {
+            this.dataItem = new DataItem()
+            {
+                data = new List<string>()
+            };
+            {
+                int maxY = -5000;
+                int minY = 5000;
+                int sumLength = 0;
+                for (int indexOfCharacters = 0; indexOfCharacters < characters.Length; indexOfCharacters++)
+                {
+                    var character = characters[indexOfCharacters].ToString();
+                    if (data.glyphs.ContainsKey(character))
+                    {
+                        sumLength += data.glyphs[character].x_max - data.glyphs[character].x_min;
+                        if (indexOfCharacters != characters.Length - 1)
+                            sumLength += (data.glyphs[character].x_max - data.glyphs[character].x_min) / 10;
+                    }
+                    var strss = data.glyphs[character].o.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList();
+                    for (int i = 0; i < strss.Count; i++)
+                    {
+                        if (strss[i] == "q")
+                        {
+
+                            // var x1 = Convert.ToInt32(strss[i + 1]);
+                            var y1 = Convert.ToInt32(strss[i + 2]);
+                            //var x2 = Convert.ToInt32(strss[i + 3]);
+                            var y2 = Convert.ToInt32(strss[i + 4]);
+
+                            maxY = Math.Max(maxY, y1);
+                            maxY = Math.Max(maxY, y2);
+                            minY = Math.Min(minY, y1);
+                            minY = Math.Min(minY, y2);
+                        }
+                        else if (strss[i] == "l")
+                        {
+
+                            //var x1 = Convert.ToInt32(strss[i + 1]);
+                            var y1 = Convert.ToInt32(strss[i + 2]);
+                            maxY = Math.Max(maxY, y1);
+                            minY = Math.Min(minY, y1);
+
+                        }
+                        else if (strss[i] == "m")
+                        {
+
+                            //var x1 = Convert.ToInt32(strss[i + 1]);
+                            var y1 = Convert.ToInt32(strss[i + 2]);
+                            maxY = Math.Max(maxY, y1);
+                            minY = Math.Min(minY, y1);
+                        }
+                        else if (strss[i] == "z")
+                        {
+                        }
+                    }
+                }
+                var canvas = Platforms.Current.CreateImageCanvas(new Size(sumLength, maxY - minY), scale: 1, transparency: true);
+                var height = maxY - minY;
+
+                int startPosition = 0;
+                for (int indexOfCharacters = 0; indexOfCharacters < characters.Length; indexOfCharacters++)
+                {
+
+                    //  List<PathOp> ops = new List<PathOp>();
+                    this.dataItem.data.Add($"StartToDraw()");
+                    var character = characters[indexOfCharacters].ToString();
+                    var x_max = data.glyphs[character].x_max;
+                    var x_min = data.glyphs[character].x_min;
+
+                    // ops.Add(new MoveTo(x_min + startPosition, 0));
+                    this.dataItem.data.Add($"MoveTo({x_min + startPosition},{0})");
+                    var strss = data.glyphs[character].o.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList();
+                    for (int i = 0; i < strss.Count; i++)
+                    {
+
+                        if (strss[i] == "q")
+                        {
+                            var x1 = Convert.ToInt32(strss[i + 1]) - x_min + startPosition;
+                            var y1 = height - (Convert.ToInt32(strss[i + 2]) - minY);
+                            var x2 = Convert.ToInt32(strss[i + 3]) - x_min + startPosition;
+                            var y2 = height - (Convert.ToInt32(strss[i + 4]) - minY);
+                            this.dataItem.data.Add($"CurveTo(({x2},{y2}),({x1},{y1}),({x1},{y1}))");
+                        }
+                        else if (strss[i] == "l")
+                        {
+
+                            var x1 = Convert.ToInt32(strss[i + 1]) - x_min + startPosition;
+                            var y1 = height - (Convert.ToInt32(strss[i + 2]) - minY);
+                            this.dataItem.data.Add($"LineTo({x1},{y1})");
+                        }
+                        else if (strss[i] == "m")
+                        {
+                            var x1 = Convert.ToInt32(strss[i + 1]) - x_min + startPosition;
+                            var y1 = height - (Convert.ToInt32(strss[i + 2]) - minY);
+
+                            //if (this.dataItem.data.Count > 0)
+                            //{
+                            //    this.dataItem.data.Add($"ClosePath()");
+                            //}
+                            this.dataItem.data.Add($"MoveTo({x1},{y1})");
+                        }
+                        else if (strss[i] == "z")
+                        {
+                            if (this.dataItem.data.Last() != "ClosePath()")
+                            {
+                                this.dataItem.data.Add($"ClosePath()");
+                            }
+                        }
+                    }
+                    if (this.dataItem.data.Last() != "ClosePath()")
+                    {
+                        this.dataItem.data.Add($"ClosePath()");
+                    }
+                    if (data.glyphs.ContainsKey(character))
+                    {
+                        startPosition += data.glyphs[character].x_max - data.glyphs[character].x_min;
+                        startPosition += (data.glyphs[character].x_max - data.glyphs[character].x_min) / 10;
+                    }
+                }
+                this.PicWidth = sumLength;
+                this.PicHeight = height;
+                this.dataItem.SetSize(this.PicWidth, this.PicHeight);
+            }
+        }
+
+        public DataItem GetObj()
+        {
+            return this.dataItem;
+
+        }
+    }
 }

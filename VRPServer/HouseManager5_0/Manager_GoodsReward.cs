@@ -160,35 +160,7 @@ namespace HouseManager5_0
         }
 
         internal void GetModelByAddr(string bussinessAddr, ref List<string> notifyMsg)
-        {
-            //List<Data.detailmodel> modelsNeedToShow = new List<Data.detailmodel>();
-            //var models = Program.dt.models;
-            ////var fp = Program.dt.GetFpByIndex(target);
-            //Dictionary<string, double> minLength = new Dictionary<string, double>();
-            //foreach (var model in models)
-            //{
-            //    if (Program.dt.material[model.amodel].modelType.Trim() == "building")
-            //    {
-            //        Program.dt.material[model.amodel].b
-            //    }
-            //}
-            //{
-            //    var fp = Program.dt.GetFpByIndex(startFPIndex);
-            //    {
-            //        foreach (var model in models)
-            //        {
-            //            if (Program.dt.material[model.amodel].modelType.Trim() == "building")
-            //            {
-            //                var length = CommonClass.Geography.getLengthOfTwoPoint.GetDistance(fp.Latitde, fp.Longitude, fp.Height, model.lat, model.lon, 0);
-            //                // model.
-            //                if (length < minLength[model.modelID])
-            //                    //if(  model.amodel)
-            //                    modelsNeedToShow.Add(model);
-            //            }
-            //        }
-            //    }
-            //}
-            //return modelsNeedToShow;
+        { 
             List<Data.detailmodel> modelsNeedToShow = new List<Data.detailmodel>();
             var models = Program.dt.models;
             var mItem = DalOfAddress.detailmodel.GetByAddr(bussinessAddr);

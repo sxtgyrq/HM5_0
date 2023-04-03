@@ -20,6 +20,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Ubiety.Dns.Core;
 using static WsOfWebClient.ConnectInfo;
 
 namespace WsOfWebClient
@@ -88,6 +89,7 @@ namespace WsOfWebClient
             app.Map("/websocket", WebSocketF);
             // app.UseCors("AllowAny");
             app.Map("/bgimg", BackGroundImg);
+            app.Map("/objdata", ObjData);
             //app.Map("/websocket", WebSocketF);
             // app.Map("/notify", notify);
 
@@ -253,6 +255,57 @@ namespace WsOfWebClient
                             }
                         }
                     }
+                }
+                catch (Exception e)
+                {
+                    //throw e;
+                }
+            });
+        }
+
+        internal static void ObjData(IApplicationBuilder app)
+        {
+            app.UseCors("AllowAny");
+            app.Run(async context =>
+            {
+                try
+                {
+                    //$.get("http://127.0.0.1:11001/objdata/04FF6C83E093F15D5E844ED94838D761/d/d")
+                    //$.getJSON("http://127.0.0.1:11001/objdata/04FF6C83E093F15D5E844ED94838D761/3/2")
+                    // throw new NotImplementedException();
+                    var pathValue = context.Request.Path.Value;
+
+                    string pattern = @"/(?<amid>[a-zA-Z0-9]{32})$";
+                    Match match = Regex.Match(pathValue, pattern);
+                    if (match.Success)
+                    {
+                        string amid = match.Groups["amid"].Value;
+                        //int roomindex = int.Parse(match.Groups["roomindex"].Value);
+                        //int password = int.Parse(match.Groups["password"].Value);
+                        var jsonStr = Room.GetObjFileJson(amid);
+
+                        if (string.IsNullOrEmpty(jsonStr))
+                        {
+
+                        }
+                        else
+                        {
+                            context.Response.ContentType = "application/json";
+                            {
+                                var bytes = Encoding.UTF8.GetBytes(jsonStr);
+                                await context.Response.Body.WriteAsync(bytes, 0, bytes.Length); 
+                            }
+                        }
+                        //   Console.WriteLine("amid: {0}, roomindex: {1},password: {2}", amid, roomindex, password);
+                    }
+                    //Consoe.Write($" {context.Request.Path.Value}");
+                    //var regex = new System.Text.RegularExpressions.Regex("^/[a-zA-Z0-9]{32}/\\d+/\\d+$");
+                    //if (regex.IsMatch(pathValue))
+                    //{
+                    //    //var amID = regex.Matches(pathValue)[0].Value;
+                    //    //var roomID = regex.Matches(pathValue)[1].Value;
+                    //    //var 
+                    //}
                 }
                 catch (Exception e)
                 {

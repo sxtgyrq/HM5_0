@@ -76,6 +76,8 @@ namespace WsOfWebClient.MapEditor
             app.Map("/upload", Upload);
 
             app.Map("/img", BackGroundImg);
+
+            app.Map("/objdata", WsOfWebClient.Startup.ObjData);
             // app.Map("/notify", notify);
 
             //Console.WriteLine($"启动TCP连接！{ ConnectInfo.tcpServerPort}");

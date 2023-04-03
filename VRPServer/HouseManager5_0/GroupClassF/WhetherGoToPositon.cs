@@ -97,6 +97,9 @@ namespace HouseManager5_0.GroupClassF
             minY = centerY - length / 2;
             maxY = centerY + length / 2;
 
+            var taskValue = HouseManager5_0.AbilityAndState.GetTaskValueByGroupNumber(this.groupNumber);
+            var taskName = $"模拟收集{(taskValue / 100)}.{(taskValue % 100).ToString("D2")}元任务";
+
             BradCastWhereToGoInSmallMap smallMap = new BradCastWhereToGoInSmallMap()
             {
                 minX = Convert.ToSingle(minX),
@@ -113,7 +116,9 @@ namespace HouseManager5_0.GroupClassF
                 ResultMsg = this.recordErrorMsgs.ContainsKey(key) ? this.recordErrorMsgs[key] : "",
                 RecordedInDB = this.records.ContainsKey(key),
                 base64 = "",
-                groupNumber = player.Group.groupNumber
+                groupNumber = player.Group.groupNumber,
+                TaskName = taskName,
+                BTCAddr = string.IsNullOrEmpty(player.BTCAddress) ? "" : player.BTCAddress
             };
             if (player.getCar().targetFpIndex >= 0)
             {

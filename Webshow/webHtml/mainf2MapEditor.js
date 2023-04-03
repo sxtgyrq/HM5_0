@@ -1097,6 +1097,25 @@ var objMain =
                     document.getElementById('taskAddrForSearch').value = received_obj.addr;
                     document.getElementById('jsonResultForSearchShow').value = received_obj.json;
                 }; break;
+            case 'ObjResult':
+                {
+                    var modelDataShow = received_obj;
+                    for (var i = 0; i < received_obj.detail.length; i++) {
+                        var detailItem = received_obj.detail[i];
+
+                        //public string modelID { get; set; }
+                        //public float x { get; set; }
+                        //public float y { get; set; }
+                        //public float z { get; set; }
+                        //public string amodel { get; set; }
+                        //public float rotatey { get; set; }
+                        //public bool locked { get; set; }
+                        //public int dmState { get; set; }
+                        objMain.buildingData.dModel[detailItem.modelID] = detailItem;
+                        BuildingModelObj.Refresh();
+                    }
+
+                }; break;
         }
     },
 
@@ -1109,7 +1128,12 @@ var objMain =
     useAddNew: false,
     modelTypes: [],
     defaultCube: null,
-    pageIndex: 0
+    pageIndex: 0,
+    buildingData: {
+        aModel: {},
+        dModel: {}
+    },
+    buildingModel: {}
 };
 var startA = function () {
     var connected = false;
@@ -2297,26 +2321,16 @@ var ModelOperateF =
             });
     },
     update: function (received_obj) {
-        var object = objMain.buildingShowGroup.getObjectByName(received_obj.id);
+        var object = objMain.buildingShowGroup.getObjectByName(received_obj.modelID);
         object.position.set(received_obj.x, received_obj.y, received_obj.z);
-        object.rotation.set(0, received_obj.r, 0, 'XYZ');
+        object.rotation.set(0, received_obj.rotatey, 0, 'XYZ');
     },
-    f2: function (received_obj) {
-        var manager = new THREE.LoadingManager();
-        new THREE.MTLLoader(manager)
-            .loadTextOnly(received_obj.aModel.mtlText, 'data:image/jpeg;base64,' + received_obj.aModel.imageBase64, function (materials) {
-                materials.preload();
-                // materials.depthTest = false;
-                new THREE.OBJLoader(manager)
-                    .setMaterials(materials)
-                    //.setPath('/Pic/')
-                    .loadTextOnly(received_obj.aModel.objText, function (object) {
-                        object.position.set(received_obj.x, received_obj.y, received_obj.z);
-                        object.rotation.set(0, received_obj.r, 0, 'XYZ');
-                        object.name = received_obj.id;
-                        objMain.buildingShowGroup.add(object);
-                    }, function () { }, function () { });
-            });
+    f2: function (received_obj, amodelID) {
+        var object = objMain.buildingModel[amodelID].clone(); 
+        object.position.set(received_obj.x, received_obj.y, received_obj.z);
+        object.rotation.set(0, received_obj.rotatey, 0, 'XYZ');
+        object.name = received_obj.modelID;
+        objMain.buildingShowGroup.add(object); 
     }
 };
 
@@ -3044,6 +3058,83 @@ var showBackground = function () {
         objMain.ws.send(json);
     }
 }
+
+var BuildingModelObj =
+{
+
+    copy: function (amodel, received_obj) {
+        //if (objMain.buildingModel[amodel] == undefined) {
+
+        //}
+        //else {
+        //    if (objMain.buildingGroup.getObjectByName(received_obj.modelID) == undefined) {
+        //        var obj = objMain.buildingModel[amodel].clone();
+        //        obj.name = received_obj.modelID;
+        //        obj.position.set(received_obj.x, received_obj.y * objMain.heightAmplify, received_obj.z);
+        //        obj.rotation.set(0, received_obj.rotatey, 0, 'XYZ');
+        //        obj.userData.modelType = received_obj.modelType;
+        //        objMain.buildingGroup.add(obj);
+        //        //if (objMain.state == 'LookForBuildings') {
+        //        //    objMain.mainF.lookAtPosition2();
+        //        //}
+        //        //QueryReward.lookAt();
+        //    }
+        //}
+
+        //  public string modelID { get; set; }
+        //public float x { get; set; }
+        //public float y { get; set; }
+        //public float z { get; set; }
+        //public string amodel { get; set; }
+        //public float rotatey { get; set; }
+        //public bool locked { get; set; }
+        //public int dmState { get; set; }
+        if (objMain.buildingGroup.getObjectByName(received_obj.modelID) != undefined) { }
+        else if (objMain.buildingShowGroup.getObjectByName(received_obj.modelID) != undefined) {
+            ModelOperateF.update(received_obj);
+        }
+        else {
+            ModelOperateF.f2(received_obj, amodel);
+        }
+    },
+    Refresh: function () {
+        for (var dModeItem in objMain.buildingData.dModel) {
+            var dItem = objMain.buildingData.dModel[dModeItem];
+            var amodelID = dItem.amodel;
+            if (objMain.buildingModel[amodelID] == undefined) {
+                if (objMain.debug != 2) {
+                    var url = "http://127.0.0.1:21001/objdata/" + amodelID;
+                    $.getJSON(url, function (json) {
+                        var amID = json.AmID;
+                        var objText = json.objText;
+                        var mtlText = json.mtlText;
+                        var imgBase64 = json.imgBase64;
+                        var modelType = json.modelType;
+                        {
+                            var manager = new THREE.LoadingManager();
+                            new THREE.MTLLoader(manager)
+                                .loadTextOnly(mtlText, 'data:image/jpeg;base64,' + imgBase64, function (materials) {
+                                    materials.preload();
+                                    new THREE.OBJLoader(manager)
+                                        .setMaterials(materials)
+                                        .loadTextOnly(objText, function (object) {
+                                            object.userData.modelType = modelType;
+                                            objMain.buildingModel[amID] = object;
+                                            BuildingModelObj.Refresh();
+                                        }, function () { }, function () { });
+                                });
+                        }
+                    })
+                }
+                else {
+                }
+            }
+            else {
+                BuildingModelObj.copy(amodelID, dItem);
+            }
+        }
+    }
+};
 //////////
 /*
  * 手柄类，此游戏只支持单手柄操作。
@@ -3139,6 +3230,6 @@ Complex.parse = function (s) {
 Complex.parseRegExp = /^\{([\d\s]+[^,]*),([\d\s]+[^}]*)\}$/;
 window.c = Complex;
 // console.log(/^\{([\d\s]+[^,]*),([\d\s]+[^}]*)\}$/.exec('{2,3}'));
-// 示例代码 
+// 示例代码
 
 ////////////

@@ -289,16 +289,22 @@ namespace WsOfWebClient.MapEditor
                 var roomUrl = roomUrls[index];
                 var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(sf);
                 var json = Startup.sendInmationToUrlAndGetRes(roomUrl, sendMsg);
-                var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.MapEditor.ObjResult>(json);
+                // var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.MapEditor.ObjResult>(json);
 
 
+                //var result = new CommonClass.MapEditor.ObjResult()
+                //{
+                //    c = "ObjResult",
+                //    detail = list
+                //};
 
-                for (int i = 0; i < obj.detail.Count; i++)
-                {
-                    var objInfomation = this.material.Find(item => item.amID == obj.detail[i].amodel);
-                    objInfomation.initialize(rm);
-                    this.DrawModel(objInfomation, obj.detail[i], connectInfoDetail);
-                }
+                CommonF.SendData(json, connectInfoDetail, 0);
+                //for (int i = 0; i < obj.detail.Count; i++)
+                //{
+                //    var objInfomation = this.material.Find(item => item.amID == obj.detail[i].amodel);
+                //    objInfomation.initialize(rm);
+                // this.DrawModel(objInfomation, obj.detail[i], connectInfoDetail);
+                //}
             }
 
 

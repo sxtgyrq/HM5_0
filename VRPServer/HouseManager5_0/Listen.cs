@@ -496,6 +496,11 @@ namespace HouseManager5_0
                             ConfirmPanelSelectResult nwtgntb = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfirmPanelSelectResult>(notifyJson);
                             outPut = objI.ConfirmPanelSelectResultF(nwtgntb);
                         }; break;
+                    case "GetAbtractmodels":
+                        {
+                            GetAbtractmodels ca = Newtonsoft.Json.JsonConvert.DeserializeObject<GetAbtractmodels>(notifyJson);
+                            outPut = objI.GetAbtractmodelsF(ca);
+                        }; break;
                         //case "CopyTaskDisplay": 
                         //    {
 

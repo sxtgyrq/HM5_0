@@ -749,6 +749,30 @@ namespace HouseManager5_0.RoomMainF
                 code = pOrNG.code,
             });
         }
+
+        public string GetAbtractmodelsF(GetAbtractmodels ca)
+        {
+
+            if (Program.dt.material.ContainsKey(ca.AmID))
+            {
+                var obj = Program.dt.material[ca.AmID];
+                var returnObj = new
+                {
+                    objText = obj.objText,
+                    mtlText = obj.mtlText,
+                    imgBase64 = obj.imageBase64,
+                    AmID = ca.AmID,
+                    modelType = obj.modelType
+                };
+                return Newtonsoft.Json.JsonConvert.SerializeObject(returnObj);
+            }
+            else
+            {
+                return "";
+            }
+            // this.get
+            // throw new NotImplementedException();
+        }
     }
 
     public partial class RoomMain : interfaceOfHM.ModelTranstractionI

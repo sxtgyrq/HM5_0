@@ -1416,9 +1416,19 @@ namespace HouseManager5_0
     }
     public partial class Data
     {
-
+        public class SecretObj
+        {
+            public string amID { get; private set; }
+            public DateTime CreateTime { get; private set; }
+            public SecretObj(string amID_, DateTime createTime_)
+            {
+                this.amID = amID_;
+                this.CreateTime = createTime_;
+            }
+        }
 
         public Dictionary<string, CommonClass.databaseModel.abtractmodelsPassData> material { get; set; }
+        public Dictionary<int, SecretObj> PassWords { get; set; }
 
         public class detailmodel : CommonClass.databaseModel.detailmodel
         {
@@ -1465,6 +1475,7 @@ namespace HouseManager5_0
         internal void LoadModel()
         {
             this.material = new Dictionary<string, CommonClass.databaseModel.abtractmodelsPassData>();
+            this.PassWords = new Dictionary<int, SecretObj>();
             //throw new NotImplementedException();
             var list = DalOfAddress.AbtractModels.GetCategeAm1();
             for (int i = 0; i < list.Count; i += 2)

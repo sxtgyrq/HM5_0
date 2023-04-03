@@ -14,98 +14,47 @@ namespace CommonClass.Img
 {
     public partial class DrawSmallMap
     {
-        //public Stream _stream1;
-        //public string _path2;
         public DrawSmallMap()
         {
-            //this._stream1 = stream1;
-            //this._path2 = path2;
-            //this._stream1.Position = 0;
-            //List<System.Drawing.Bitmap> images = new List<System.Drawing.Bitmap>();
 
 
         }
 
-        public string GetBase64(BradCastWhereToGoInSmallMap smallMap)
+        public List<DrawFontsWithData> GetBase64(BradCastWhereToGoInSmallMap smallMap)
         {
             try
             {
                 if (smallMap.ResultMsg.Trim().Length > 0 && smallMap.TimeStr.Trim().Length > 0)
                 {
-                    const int width = 1200;
-                    const int height = 1200;
-                    if (smallMap.isFineshed)
+                    //const int width = 1200;
+                    //const int height = 1200;
+
+                    if (string.IsNullOrEmpty(smallMap.BTCAddr))
                     {
-                        {
-                            using (Image outputImage = new Image<Rgba32>(width, height)) // create output image of the correct dimensions
-                            {
-                                int heightAdd = 0;
-                                {
-                                    var dr = new CommonClass.Img.DrawFonts(smallMap.TimeStr, DrawFont.DataMemery, "green");
-                                    bool fontGetSuccess; 
-
-                                    using (var ms2 = dr.GetAsStream(out fontGetSuccess))
-                                    {
-                                        if (fontGetSuccess)
-                                        {
-                                            ms2.Position = 0;
-                                            using (Image<Rgba32> fontImage = Image.Load<Rgba32>(ms2))
-                                            { 
-                                                fontImage.Mutate(o => o.Resize(1100, dr.PicHeight * 1100 / dr.PicWidth));
-                                                heightAdd += dr.PicHeight * 1100 / dr.PicWidth * 11 / 10;
-                                                outputImage.Mutate(o => o
-                                        .DrawImage(fontImage, new Point(50, Convert.ToInt32(height - height * 0.618)), 0.8f));
-                                            }
-                                        }
-                                    }
-                                }
-                                if (!string.IsNullOrEmpty(smallMap.ResultMsg))
-                                {
-                                    var color = "green";
-                                    if (smallMap.RecordedInDB) color = "green";
-                                    else color = "red";
-                                    var dr = new CommonClass.Img.DrawFonts(smallMap.ResultMsg, DrawFont.DataMemery, color);
-                                    bool fontGetSuccess;
-
-                                    using (var ms2 = dr.GetAsStream(out fontGetSuccess))
-                                    {
-                                        if (fontGetSuccess)
-                                        {
-                                            ms2.Position = 0;
-                                            using (Image<Rgba32> fontImage = Image.Load<Rgba32>(ms2))
-                                            {
-                                                fontImage.Mutate(o => o.Resize(1100, dr.PicHeight * 1100 / dr.PicWidth));
-                                                heightAdd += dr.PicHeight * 1100 / dr.PicWidth * 11 / 10;
-                                                outputImage.Mutate(o => o
-                                        .DrawImage(fontImage, new Point(50, Convert.ToInt32(height - height * 0.618 + heightAdd)), 0.8f));
-                                            }
-                                        }
-                                    }
-                                }
-                                using (System.IO.MemoryStream stream = new System.IO.MemoryStream())
-                                {
-                                    //IImageFormat format = SixLabors.ImageSharp.Formats.Png.PngFormat;
-                                    outputImage.Save(stream, new PngEncoder());
-                                    byte[] imageArray = stream.ToArray();
-                                    var imgBase64Str = Convert.ToBase64String(imageArray);
-                                    return imgBase64Str;
-                                }
-                            }
-                        }
+                        var d1 = new DrawFontsWithData(smallMap.TimeStr.Trim(), DrawFont.DataMemery);
+                        var d2 = new DrawFontsWithData(smallMap.ResultMsg.Trim(), DrawFont.DataMemery);
+                        var d3 = new DrawFontsWithData("www.nyrq123.com", DrawFont.DataMemery);
+                        var d4 = new DrawFontsWithData(smallMap.TaskName, DrawFont.DataMemery);
+                        return new List<DrawFontsWithData> { d1, d2, d3, d4 };
                     }
                     else
                     {
-                        return ""; 
+                        var d1 = new DrawFontsWithData(smallMap.TimeStr.Trim(), DrawFont.DataMemery);
+                        var d2 = new DrawFontsWithData(smallMap.ResultMsg.Trim(), DrawFont.DataMemery);
+                        var d3 = new DrawFontsWithData("www.nyrq123.com", DrawFont.DataMemery);
+                        var d4 = new DrawFontsWithData(smallMap.TaskName, DrawFont.DataMemery);
+                        var d5 = new DrawFontsWithData(smallMap.BTCAddr, DrawFont.DataMemery);
+                        return new List<DrawFontsWithData> { d1, d2, d3, d4, d5 };
                     }
                 }
                 else
                 {
-                    return "";
+                    return new List<DrawFontsWithData>();
                 }
             }
             catch
             {
-                return "";
+                return new List<DrawFontsWithData>();
             }
         }
 

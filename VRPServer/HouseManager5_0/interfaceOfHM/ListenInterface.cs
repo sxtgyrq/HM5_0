@@ -122,6 +122,7 @@ namespace HouseManager5_0.interfaceOfHM
         string SmallMapClickF(SmallMapClick smc);
         // string NotWantToGoNeedToBackF(NotWantToGoNeedToBack nwtgntb);
         string ConfirmPanelSelectResultF(ConfirmPanelSelectResult nwtgntb);
+
     }
 
     interface MapEditor
@@ -151,6 +152,7 @@ namespace HouseManager5_0.interfaceOfHM
         string GetHeightAtPositionF(CommonClass.MapEditor.GetHeightAtPosition gh, Data dt);
         string LookForTaskCopyF(LookForTaskCopy lftc);
         string TaskCopyPassOrNGF(TaskCopyPassOrNG pOrNG);
+        string GetAbtractmodelsF(GetAbtractmodels ca);
     }
 
     interface ModelTranstractionI

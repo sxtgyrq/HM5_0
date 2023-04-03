@@ -125,7 +125,7 @@ namespace HouseManager5_0.GroupClassF
                 var player = this._PlayerInGroup[key];
                 if (string.IsNullOrEmpty(player.BTCAddress))
                 {
-                    this.recordErrorMsgs[key] = "您还没有登录，挑战记录未能记录";
+                    this.recordErrorMsgs[key] = "挑战记录未能记录";
                 }
                 else
                 {
@@ -134,7 +134,7 @@ namespace HouseManager5_0.GroupClassF
                     {
                         if (item.waitingForAddition == 0)
                         {
-                            this.recordErrorMsgs[key] = $"{this.RewardDate}期奖励，已颁发，挑战记录未能记录。";
+                            this.recordErrorMsgs[key] = $"记录于{this.RewardDate}期荣誉";
                         }
                         else
                         {
@@ -149,7 +149,7 @@ namespace HouseManager5_0.GroupClassF
                             });
                             if (r)
                             {
-                                this.recordErrorMsgs[key] = $"你的成绩已经记录在了{this.RewardDate}期奖励中。";
+                                this.recordErrorMsgs[key] = $"记录于{this.RewardDate}期荣誉"; ;
                                 this.records.Add(key, true);
                             }
                             else
