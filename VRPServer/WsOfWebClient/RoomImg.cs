@@ -158,7 +158,8 @@ namespace WsOfWebClient
                 var obj = new GetAbtractmodels()
                 {
                     c = "GetAbtractmodels",
-                    AmID = amid
+                    AmID = amid,
+                    FromDB = false
                 };
                 var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
                 var receivedMsg = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[roomindex], sendMsg);

@@ -752,26 +752,46 @@ namespace HouseManager5_0.RoomMainF
 
         public string GetAbtractmodelsF(GetAbtractmodels ca)
         {
-
-            if (Program.dt.material.ContainsKey(ca.AmID))
+            if (ca.FromDB)
             {
-                var obj = Program.dt.material[ca.AmID];
-                var returnObj = new
+                var amInfomationData = DalOfAddress.AbtractModels.GetAbtractModelItem(ca.AmID);
+                if (amInfomationData == null)
                 {
-                    objText = obj.objText,
-                    mtlText = obj.mtlText,
-                    imgBase64 = obj.imageBase64,
-                    AmID = ca.AmID,
-                    modelType = obj.modelType
-                };
-                return Newtonsoft.Json.JsonConvert.SerializeObject(returnObj);
+                    return "";
+                }
+                else 
+                {
+                    var returnObj = new
+                    {
+                        objText = amInfomationData.objText,
+                        mtlText = amInfomationData.mtlText,
+                        imgBase64 = amInfomationData.imageBase64,
+                        AmID = ca.AmID,
+                        modelType = amInfomationData.modelType
+                    };
+                    return Newtonsoft.Json.JsonConvert.SerializeObject(returnObj);
+                }
             }
             else
             {
-                return "";
-            }
-            // this.get
-            // throw new NotImplementedException();
+                if (Program.dt.material.ContainsKey(ca.AmID))
+                {
+                    var obj = Program.dt.material[ca.AmID];
+                    var returnObj = new
+                    {
+                        objText = obj.objText,
+                        mtlText = obj.mtlText,
+                        imgBase64 = obj.imageBase64,
+                        AmID = ca.AmID,
+                        modelType = obj.modelType
+                    };
+                    return Newtonsoft.Json.JsonConvert.SerializeObject(returnObj);
+                }
+                else
+                {
+                    return "";
+                }
+            } 
         }
     }
 
@@ -1157,7 +1177,7 @@ namespace HouseManager5_0.RoomMainF
                         var addrBussiness = parameter[2];
                         var addrTo = parameter[3];
                         var passCoinStr = parameter[4];
-                        if (passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi" &&
+                        if ((passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi"|| passCoinStr.Substring(passCoinStr.Length - 7, 7) == "satoshi") &&
                             tradeIndex == tc.tradeIndex &&
                             addrFrom == tc.addrFrom &&
                             addrTo == tc.addrTo &&

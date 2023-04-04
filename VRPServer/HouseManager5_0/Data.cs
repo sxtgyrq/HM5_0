@@ -1481,8 +1481,8 @@ namespace HouseManager5_0
             for (int i = 0; i < list.Count; i += 2)
             {
                 var amInfomationData = DalOfAddress.AbtractModels.GetAbtractModelItem(list[i].Trim());
-                //  var amInfomation= DalOfAddress.AbtractModels.GetAbtractModelItem(amInfomationData);
-                this.material.Add(list[i].Trim(), amInfomationData);
+                if (amInfomationData != null)
+                    this.material.Add(list[i].Trim(), amInfomationData);
             }
 
             this.models = new List<detailmodel>();

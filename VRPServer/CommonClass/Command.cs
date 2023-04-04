@@ -1014,6 +1014,7 @@ namespace CommonClass
     public class GetAbtractmodels : Command
     {
         public string AmID { get; set; }
+        public bool FromDB { get; set; }
         //public int Password { get; set; }
     }
 }

@@ -1915,7 +1915,7 @@ var objMain =
                     objMain.buildingData.dModel[modelDataShow.modelID] = modelDataShow;
                     BuildingModelObj.Refresh();
                     //BuildingModelObj.f(modelDataShow);
-                   
+
                 }; break;
             case 'ModelDataShow_Whether_Existed':
                 {
@@ -5781,8 +5781,20 @@ var BuildingModelObj =
             var dItem = objMain.buildingData.dModel[dModeItem];
             var amodelID = dItem.amodel;
             if (objMain.buildingModel[amodelID] == undefined) {
-                if (objMain.debug != 2) {
+                if (this.RequestTime[amodelID] == undefined) {
+                    this.RequestTime[amodelID] = 0;
+                }
+                if (Date.now() - this.RequestTime[amodelID] > 30000) {
+                    this.RequestTime[amodelID] = Date.now();
                     var url = "http://127.0.0.1:11001/objdata/" + amodelID;
+                    if (objMain.debug != 2) {
+                        url = "http://127.0.0.1:11001/objdata/" + amodelID;
+
+                    }
+                    else {
+                        url = "https://www.nyrq123.com/objtaiyuan/" + amodelID;
+                        //  url = "http://127.0.0.1:11001/objdata/"
+                    }
                     $.getJSON(url, function (json) {
                         var amID = json.AmID;
                         var objText = json.objText;
@@ -5805,14 +5817,14 @@ var BuildingModelObj =
                         }
                     })
                 }
-                else {
-                }
+
             }
             else {
                 BuildingModelObj.copy(amodelID, dItem);
             }
         }
-    }
+    },
+    RequestTime: {}
 };
 
 var SetBustPage = function () {

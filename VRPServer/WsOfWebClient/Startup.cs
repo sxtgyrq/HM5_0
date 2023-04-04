@@ -293,19 +293,10 @@ namespace WsOfWebClient
                             context.Response.ContentType = "application/json";
                             {
                                 var bytes = Encoding.UTF8.GetBytes(jsonStr);
-                                await context.Response.Body.WriteAsync(bytes, 0, bytes.Length); 
+                                await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
                             }
                         }
-                        //   Console.WriteLine("amid: {0}, roomindex: {1},password: {2}", amid, roomindex, password);
                     }
-                    //Consoe.Write($" {context.Request.Path.Value}");
-                    //var regex = new System.Text.RegularExpressions.Regex("^/[a-zA-Z0-9]{32}/\\d+/\\d+$");
-                    //if (regex.IsMatch(pathValue))
-                    //{
-                    //    //var amID = regex.Matches(pathValue)[0].Value;
-                    //    //var roomID = regex.Matches(pathValue)[1].Value;
-                    //    //var 
-                    //}
                 }
                 catch (Exception e)
                 {

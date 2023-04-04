@@ -178,7 +178,7 @@ namespace DalOfAddress
                                 command.Parameters.AddWithValue("@amID", amID);
                                 using (var reader = command.ExecuteReader())
                                 {
-                                    while (reader.Read())
+                                    if (reader.Read())
                                     {
                                         m = new CommonClass.databaseModel.abtractmodels()
                                         {
@@ -192,6 +192,10 @@ namespace DalOfAddress
                                             author = Convert.ToString(reader["author"]).Trim(),
                                             amID = Convert.ToString(reader["amID"]).Trim(),
                                         };
+                                    }
+                                    else
+                                    {
+                                        return null;
                                     }
                                 }
                             }

@@ -2326,11 +2326,11 @@ var ModelOperateF =
         object.rotation.set(0, received_obj.rotatey, 0, 'XYZ');
     },
     f2: function (received_obj, amodelID) {
-        var object = objMain.buildingModel[amodelID].clone(); 
+        var object = objMain.buildingModel[amodelID].clone();
         object.position.set(received_obj.x, received_obj.y, received_obj.z);
         object.rotation.set(0, received_obj.rotatey, 0, 'XYZ');
         object.name = received_obj.modelID;
-        objMain.buildingShowGroup.add(object); 
+        objMain.buildingShowGroup.add(object);
     }
 };
 
@@ -3102,8 +3102,19 @@ var BuildingModelObj =
             var dItem = objMain.buildingData.dModel[dModeItem];
             var amodelID = dItem.amodel;
             if (objMain.buildingModel[amodelID] == undefined) {
-                if (objMain.debug != 2) {
+                if (this.RequestTime[amodelID] == undefined) {
+                    this.RequestTime[amodelID] = 0;
+                }
+                if (Date.now() - this.RequestTime[amodelID] > 30000) {
+                    this.RequestTime[amodelID] = Date.now();
                     var url = "http://127.0.0.1:21001/objdata/" + amodelID;
+                    if (objMain.debug) {
+                        url = "http://127.0.0.1:21001/objdata/" + amodelID;
+
+                    }
+                    else {
+                        url = 'https://www.nyrq123.com/websocket' + window.location.pathname.split('/')[1] + 'editor/objdata/' + amodelID;
+                    }
                     $.getJSON(url, function (json) {
                         var amID = json.AmID;
                         var objText = json.objText;
@@ -3126,14 +3137,13 @@ var BuildingModelObj =
                         }
                     })
                 }
-                else {
-                }
             }
             else {
                 BuildingModelObj.copy(amodelID, dItem);
             }
         }
-    }
+    },
+    RequestTime: {}
 };
 //////////
 /*

@@ -7,11 +7,24 @@
     //position: absolute;
     //left: 0px;
     //top: 0px; " 
-    gameIntroHtml: `<div id="GameIntrolPanel" style="background-color:rgba(56, 60, 67, .15);width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+    bgData: `background-color: #a1a1a1;
+  background-image: linear-gradient(45deg, #dfdf90 25%, transparent 80%),
+    linear-gradient(-45deg, #dfdf90 25%, transparent 80%),
+    linear-gradient(45deg, transparent 75%, #dfdf90 75%),
+    linear-gradient(-45deg, transparent 75%, #dfdf90 75%);
+  background-size: 20em 20em;
+  background-position: 0 0, 0 20em, 20em -20em, -20em 0px;`,
+    gameIntroHtml: `<div id="GameIntrolPanel" style="${`background-color: #a1a1a1;
+  background-image: linear-gradient(45deg, #cacaa0 25%, transparent 80%),
+    linear-gradient(-45deg, #cacaa0 25%, transparent 80%),
+    linear-gradient(45deg, transparent 75%, #cacaa0 75%),
+    linear-gradient(-45deg, transparent 75%, #cacaa0 75%);
+  background-size: 20em 20em;
+  background-position: 0 0, 0 20em, 20em -20em, -20em 0px;`};width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;">
             <p style="text-align:left;">
                 <h1 style="text-align:left;font-size:xx-large;">游戏剧情</h1>
-                &emsp;&emsp;在游戏中，模拟城市交通，通过<a href="javascript:void(null);" onclick="GuidObj.selectDriver.show();">选取司机</a>、<a href="javascript:void(null);" onclick="GuidObj.collectMoney.show();">收集奖励</a>、<a href="javascript:void(null);" onclick="GuidObj.npcChallenge.show();">挑战NPC</a>、<a href="javascript:void(null);" onclick="GuidObj.getDiamand.show();">收集宝石</a>，<a href="javascript:void(null);" onclick="GuidObj.getReward.show();">获得虚拟股份</a>，然后<a href="javascript:void(null);" onclick="GuidObj.BTC.show();">获得比特币</a>。
+                &emsp;&emsp;在游戏中，模拟城市交通，通过选取目标、选择方向、到达目的地获得加速效果、<a href="javascript:void(null);" onclick="GuidObj.getDiamand.show();">收集宝石</a>，<a href="javascript:void(null);" onclick="GuidObj.getReward.show();">获得虚拟股份</a>，然后<a href="javascript:void(null);" onclick="GuidObj.BTC.show();">获得比特币</a>。
             </p>
             <p style="text-align:left;margin-top: 1em;">
                 <h1 style="text-align:left;font-size:xx-large;">打赏</h1>
@@ -22,6 +35,10 @@
                 &emsp;&emsp;您可以通过<a href="javascript:void(null);" onclick="GuidObj.transmit.show();">转发</a>来赚取游戏积分。
             </p>
             <p style="text-align:left;margin-top: 1em;">
+                <h1 style="text-align:left;font-size:xx-large;">游戏建议</h1>
+                &emsp;&emsp;私钥代表着游戏权益。妥善保存私钥，最好用纸笔记录物理保存，频繁复制粘贴私钥增加私钥泄露的风险。需要签名<a href="javascript:void(null);" onclick="GuidObj.login.show();">登录</a>游戏时，可选用<a href="javascript:void(null);" onclick="GuidObj.wallet.show();">签名工具</a>签名工具实现登录。目前本软体只支持1打头(P2PKH(Pay-to-Pubkey Hash))与单个私钥形成3打头P2SH(pay-to-Script Hash)的地址。暂不支持bc1开头的地址。
+            </p>
+            <p style="text-align:left;margin-top: 1em;">
                 <h1 style="text-align:left;font-size:xx-large;">开发团队</h1>
                 &emsp;&emsp;此游戏由<a href="javascript:void(null);" onclick="GuidObj.developTeam.show();">要瑞卿及其团队</a>进行开发并维护。
             </p> 
@@ -29,7 +46,7 @@
         <div style="text-align:center;">
             <button onclick="GuidObj.Exit()" style="width: 5em;
         height: 3em;
-        margin-top: 1em;">
+        margin-top: 1em;margin-bottom:10em;">
                 返回
             </button>
         </div>
@@ -105,7 +122,8 @@
     },
     developTeam:
     {
-        html: `<div id="developTeamPanel" style="width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        html: function () {
+           return `<div id="developTeamPanel" style="${GuidObj.bgData}width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;">
             <p style="text-align:left;">
                 <h1 style="text-align:left">团队介绍</h1>
@@ -119,13 +137,14 @@
                 返回
             </button>
         </div>
-    </div>`,
+    </div>`;
+},
         id: 'developTeamPanel',
         show: function () {
             var that = GuidObj.developTeam;
             if (document.getElementById(that.id) == null) {
                 document.getElementById('rootContainer').innerHTML = '';
-                var frag = document.createRange().createContextualFragment(that.html);
+                var frag = document.createRange().createContextualFragment(that.html());
                 frag.id = that.id;
                 document.getElementById('rootContainer').appendChild(frag);
             }
@@ -136,31 +155,34 @@
     },
     charging:
     {
-        html: `<div id="guidChargingPanel" style="width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        html: function () {
+            return `<div id="guidChargingPanel" style="${GuidObj.bgData};width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
-            <h1 style="text-align:left">打赏</h1>
-            <p style="text-align:left;">
+            <h1 style="text-align:left;font-size:xx-large;">打赏</h1>
+            <p style="text-align:left;margin-top: 1em;">
 
                 &emsp;&emsp;一，你要有一个地址，如<span style="background-color:aqua;color:forestgreen;">356irRFazab63B3m95oyiYeR5SDKJRFa99</span>。
             </p>
-            <p style="text-align:left;">
-                &emsp;&emsp;二，地址<span style="background-color:aqua;color:forestgreen;">356irRFazab63B3m95oyiYeR5SDKJRFa99</span>在游戏里，有5000以上的余额。
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;二，地址<span style="background-color:aqua;color:forestgreen;">356irRFazab63B3m95oyiYeR5SDKJRFa99</span>在游戏里，有500.00以上的余额。
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;三，你掌握地址<span style="background-color:aqua;color:forestgreen;">356irRFazab63B3m95oyiYeR5SDKJRFa99</span>的私钥。
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;四，你选择一个你能熟记的二到十字的汉语短语如“<span style="background-color:aqua;color:forestgreen;">欢迎来到我的游戏</span>”作为绑定词。
             </p>
-            <p style="text-align:left;word-break:break-all;word-wrap:anywhere;">
+            <p style="text-align:left;word-break:break-all;word-wrap:anywhere;margin-top: 1em;">
                 &emsp;&emsp;五，用你的私钥，对“<span style="background-color:aqua;color:forestgreen;">欢迎来到我的游戏</span>”进行签名，得到结果：<span style="background-color:aqua;color:forestgreen;">IDsBRU37kmlF+NAEJZEUz12bxI2ter02Ga5jQNI6SqYbeekPBaYZuMr03C+xZQzrHtfCSCAHvzrHf8j1kOYE3mQ=</span>。
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;六，将地址、绑定词、签名发送，待条件无误，即完成绑定。
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;七，绑定成功后。你可以依靠绑定词进行<a href="javascript:void(null);" onclick="GuidObj.wechat.show('wechat');">微信扫码</a>或<a href="javascript:void(null);" onclick="GuidObj.wechat.show('alipay');">支付宝扫码</a>。
             </p>
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;八，也能用1或3打头的比特币<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>至今对建筑物<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>转账进行打赏，您将直接获得建筑物的股份！直接获得的股份，也可进行BTC提取。</p>
         </div>
         <div style=" width:100%;">
             <table style=" width:100%;">
@@ -213,17 +235,18 @@
         <div style="text-align:center;">
             <button  onclick="GuidObj.gameIntroShow();"  style="width: 5em;
         height: 3em;
-        margin-top: 1em;">
+        margin-top: 1em;margin-bottom:10em;">
                 返回
             </button>
         </div>
-    </div>`,
+    </div>`;
+        },
         id: 'guidChargingPanel',
         show: function () {
             var that = GuidObj.charging;
             if (document.getElementById(that.id) == null) {
                 document.getElementById('rootContainer').innerHTML = '';
-                var frag = document.createRange().createContextualFragment(that.html);
+                var frag = document.createRange().createContextualFragment(that.html());
                 frag.id = that.id;
                 document.getElementById('rootContainer').appendChild(frag);
                 document.getElementById('verifyCodeImg').src = 'data:image/gif;base64,' + localStorage['nyrqVerifyImg'];
@@ -267,7 +290,7 @@
                 document.getElementById('bindVerifyCodeNotifyMsg').innerText = msg;
             }
         },
-        signOnLine: {  
+        signOnLine: {
             show: function () {
                 if (document.getElementById(PrivateSignPanelObj.id) == null) {
                     PrivateSignPanelObj.show(
@@ -286,7 +309,7 @@
                 else {
                     document.getElementById(PrivateSignPanelObj.id).remove();
                 }
-            }, 
+            },
         },
         html2: '',
         add2: function () {
@@ -308,30 +331,29 @@
     wechat:
     {
         html: function (id, payType, payName, img1, img2) {
-            var temple = ` <div id="${id}" style="width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+            var temple = ` <div id="${id}" style="${GuidObj.bgData};width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
-            <h1 style="text-align:left">${payType}</h1>
-            <p style="text-align:left;">
-
+            <h1 style="text-align:left;font-size:xx-large;">${payType}</h1>
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;一，你要有一个地址，如<span style="background-color:aqua;color:forestgreen;">356irRFazab63B3m95oyiYeR5SDKJRFa99</span>。
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;二，地址已经与某个绑定词关联。
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;三，你掌握地址的私钥。
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;四，用${payName}扫描。<br />
-                <img style="max-width:calc(80%);margin-left:2em;" src="Pic/gameintro/${img1}" />
+                <img style="max-width:calc(400px);margin-left:2em;" src="Pic/gameintro/${img1}" />
             </p>
-            <p style="text-align:left;word-break:break-all;word-wrap:anywhere;">
-                &emsp;&emsp;五，在扫码支付的备注中，务必填写上您的由两至十个汉字组成的绑定词。
-                <img style="max-width:calc(80%);margin-left:2em;" src="Pic/gameintro/${img2}" />
+            <p style="text-align:left;word-break:break-all;word-wrap:anywhere;margin-top: 1em;">
+                &emsp;&emsp;五，在扫码支付的备注中，务必填写上您的由两至十个汉字组成的绑定词。<br />
+                <img style="max-width:calc(400px);margin-left:2em;" src="Pic/gameintro/${img2}" />
             </p>
         </div>
         <div style=" width:100%;">
-            <p style="text-align:left;word-break:break-all;word-wrap:anywhere;">
+            <p style="text-align:left;word-break:break-all;word-wrap:anywhere;margin-top: 1em;">
                 &emsp;&emsp;六，以下对话框用于地址与绑定词之间的绑定。查询内容，可以输入地址或绑定词。
             </p>
             <table style=" width:100%;">
@@ -371,10 +393,33 @@
             </table>
 
         </div>
+         <div style=" width:100%;">
+            <p style="text-align:left;word-break:break-all;word-wrap:anywhere;margin-top: 1em;">
+                &emsp;&emsp;七，打赏获取游戏权益表。
+            </p>
+            <table style="border:1px solid #ccc">
+                <tr>
+                    <th style="width:4em;border:1px solid #ccc;"><label>打赏金额</label> </th>
+                    <th style="width:6em;border:1px solid #ccc;"><label>获得积分</label></th>
+                </tr>
+                <tr>
+                    <td style="border:1px solid #ccc;">￥5.00</td>
+                    <td style="border:1px solid #ccc;">200.00积分</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid #ccc;">￥10.00</td>
+                    <td style="border:1px solid #ccc;">400.00积分</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid #ccc;">￥50.00</td>
+                    <td style="border:1px solid #ccc;">2000.00积分</td>
+                </tr>
+            </table>
+        </div>
         <div style="text-align:center;">
             <button onclick="GuidObj.gameIntroShow();" style="width: 5em;
         height: 3em;
-        margin-top: 1em;">
+        margin-top: 1em;margin-bottom:10em;">
                 返回
             </button>
         </div>
@@ -428,35 +473,41 @@
     },
     BTC:
     {
-        html: `<div id="getBtcIntroPanel" style="width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        html: function () {
+            return `<div id="getBtcIntroPanel" style="${GuidObj.bgData}width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
-            <h1 style="text-align:left">获得比特币</h1>
-            <p style="text-align:left;">
+            <h1 style="text-align:left;font-size:xx-large;">获得比特币</h1>
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;一，选择场景内的建筑物，点击详情。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/getBtc1.jpg" />
             </p>
-            <p style="text-align:left;">
-                &emsp;&emsp;二，将你持有的股份，聪你的地址账号转移股份至建筑物账号地址。<br />
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;二，将你持有的股份，从你的<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>转移股份至建筑物<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>是BTC提取。相应的BTC会转至你的<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/getBtc2.jpg" />
             </p>
-            <p style="text-align:left;">
-                &emsp;&emsp;三，管理员在72小时内，发送比特币至你持有的地址账号。
+             <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;三，将你持有的股份，从你的<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>转移股份至其他<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>是虚拟股份转让。<br />
+                <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/getBtc2.jpg" />
+            </p>
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;四，申请BTC提取后，管理员在72小时内，发送比特币至你持有的<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>。
             </p>
         </div>
         <div style="text-align:center;">
             <button onclick="GuidObj.gameIntroShow();" style="width: 5em;
         height: 3em;
-        margin-top: 1em;">
+        margin-top: 1em;margin-bottom: 10em;">
                 返回
             </button>
         </div>
-    </div>`,
+    </div>`;
+        },
         id: 'getBtcIntroPanel',
         show: function () {
             var that = GuidObj.BTC;
             if (document.getElementById(that.id) == null) {
                 document.getElementById('rootContainer').innerHTML = '';
-                var frag = document.createRange().createContextualFragment(that.html);
+                var frag = document.createRange().createContextualFragment(that.html());
                 frag.id = that.id;
                 document.getElementById('rootContainer').appendChild(frag);
             }
@@ -545,38 +596,40 @@
     },
     addr:
     {
-        html: ` <div id="btcAddressGuidIntroPanle" style="width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        html: function () {
+            return `<div id="btcAddressGuidIntroPanle" style="${GuidObj.bgData};width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
-            <h1 style="text-align:left">地址</h1>
-            <p style="text-align:left;">
-                &emsp;&emsp;一，这里的地址指的时1或3打头的比特币地址。<br />
+            <h1 style="text-align:left;font-size:xx-large;">地址</h1>
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;一，这里的地址指的是1或3打头的比特币地址。<br />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
 
-                &emsp;&emsp;二，其中3打头的地址。是指用单个密钥形成的P2SH地址。这里赞不支持多个组成的脚本。<br />
+                &emsp;&emsp;二，其中3打头的地址。是指用单个密钥形成的P2SH地址。这里赞不支持多个私钥组成的脚本。<br />
 
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;三，本系统暂不支持bc01打头的比特币的地址。<br />
             </p>
-            <p style="text-align:left;">
-                &emsp;&emsp;四，私钥和地址是成对获取的，详情<a href="javascript:void(null);" onclick="GuidObj.privateKey.show();">获取私钥</a>。<br />
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;四，私钥和地址是成对获取的，详情<a href="javascript:void(null);" onclick="GuidObj.privateKey.show();">获取私钥</a>。请妥善保管好私钥。<br />
             </p>
         </div>
         <div style="text-align:center;">
             <button onclick="GuidObj.gameIntroShow();" style="width: 5em;
         height: 3em;
-        margin-top: 1em;">
+        margin-top: 1em;margin-bottom: 10em;">
                 返回
             </button>
         </div>
-    </div>`,
+    </div>` ;
+        },
         id: 'btcAddressGuidIntroPanle',
         show: function () {
             var that = GuidObj.addr;
             if (document.getElementById(that.id) == null) {
                 document.getElementById('rootContainer').innerHTML = '';
-                var frag = document.createRange().createContextualFragment(that.html);
+                var frag = document.createRange().createContextualFragment(that.html());
                 frag.id = that.id;
                 document.getElementById('rootContainer').appendChild(frag);
             }
@@ -586,52 +639,54 @@
     },
     privateKey:
     {
-        html: ` <div id="privateKeyGeneratePanel" style="width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        html: function () {
+            return `<div id="privateKeyGeneratePanel" style="${GuidObj.bgData};width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
-            <h1 style="text-align:left;font-size: x-large;">获取私钥</h1>
-            <p style="text-align:left;">
+            <h1 style="text-align:left;font-size: xx-large;">获取私钥</h1>
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;支持1或3打头的比特币地址。可以在线获取与离线获取。<br />
             </p>
-            <h2 style="text-align:left;font-size:larger;">在线获取私钥</h2>
-            <p style="text-align:left;">
+            <h2 style="text-align:left;font-size:xx-large;;">在线获取私钥</h2>
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;一，在主页面点击左三按钮。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_privatekey_01.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
 
                 &emsp;&emsp;二，点击线上私钥签名。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_privatekey_02.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;三，点击获取私钥。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_privatekey_03.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;四，找个安全的地方保存私钥。私钥一旦丢失，相关权益也都丢失。私钥一旦泄露，相关权益也随之送予他人！<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_privatekey_04.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;五，为了保险起见，也可以通过<a href="javascript:void(null);" onclick="GuidObj.wallet.show();">离线签名器</a>来获取私钥！<br />
             </p>
-            <h2 style="text-align:left;font-size:larger;">离线获取私钥</h2>
-            <p style="text-align:left;">
+            <h2 style="text-align:left;font-size:xx-large;">离线获取私钥</h2>
+            <p style="text-align:left;1em;margin-top: 1em;">
                 &emsp;&emsp;用比特币钱包或者<a href="javascript:void(null);" onclick="GuidObj.wallet.show();">离线签名器</a>获取私钥和密码！<br />
             </p>
         </div>
         <div style="text-align:center;">
             <button onclick="GuidObj.gameIntroShow();" style="width: 5em;
         height: 3em;
-        margin-top: 1em;">
+        margin-top: 1em;margin-bottom: 10em;">
                 返回
             </button>
         </div>
-    </div>`,
+    </div>`;
+        },
         id: 'privateKeyGeneratePanel',
         show: function () {
             var that = GuidObj.privateKey;
             if (document.getElementById(that.id) == null) {
                 document.getElementById('rootContainer').innerHTML = '';
-                var frag = document.createRange().createContextualFragment(that.html);
+                var frag = document.createRange().createContextualFragment(that.html());
                 frag.id = that.id;
                 document.getElementById('rootContainer').appendChild(frag);
             }
@@ -641,7 +696,8 @@
     },
     wallet:
     {
-        html: ` <div id="bitcoinWalletIntroPanel" style="width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        html: function () {
+            return ` <div id="bitcoinWalletIntroPanel" style="${GuidObj.bgData}width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
             <h1 style="text-align:left;font-size: x-large;">离线签名器</h1>
             <h2 style="text-align:left;font-size:larger;">IOS系统离线签名器App制作！</h2>
@@ -649,44 +705,44 @@
                 &emsp;&emsp;一，打开App Store，查找并下载App JavaScript Anywhere.<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_signoffline_01.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
 
                 &emsp;&emsp;二，打开App后，点击右上角的“+”创建新的项目。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_signoffline_02.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;三，输入项目名称并点击save。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_signoffline_03.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;四，打开项目，点击“↓”下载JavaScript脚本与Html页面！<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_signoffline_04.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;五，Type点击JS,URL输入<a href="javascript:void(null);" onclick="GuidObj.CopyUrl(this);">www.nyrq123.com/taiyuan/Wallet/script.js</a>,点击Save！<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_signoffline_05.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;六，再次，点击“↓”！<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_signoffline_04.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;七，Type点击HTML,URL输入www.nyrq123.com/taiyuan/Wallet/html.html,点击Save！<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_signoffline_06.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;七，回到项目主页面，点击“▶”，即可运行离线钱包。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_signoffline_07.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;八，程序页面如下。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_signoffline_08.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;九，运行完毕，不要忘了关闭网络访问权限。这样一个离线签名器就部署好了。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_signoffline_09.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;十，由于苹果公司区域性限制规定。有的地点的苹果商店可以直接下载bither&emsp;App,有的不行。在能行的地点，直接下bither也可以。<br />
             </p>
             <h2 style="text-align:left;font-size:larger;">Android系统签名！</h2>
@@ -699,17 +755,18 @@
         <div style="text-align:center;">
             <button onclick="GuidObj.gameIntroShow();" style="width: 5em;
         height: 3em;
-        margin-top: 1em;">
+        margin-top: 1em;margin-bottom:10em;">
                 返回
             </button>
         </div>
-    </div>`,
+    </div>`;
+        },
         id: 'bitcoinWalletIntroPanel',
         show: function () {
             var that = GuidObj.wallet;
             if (document.getElementById(that.id) == null) {
                 document.getElementById('rootContainer').innerHTML = '';
-                var frag = document.createRange().createContextualFragment(that.html);
+                var frag = document.createRange().createContextualFragment(that.html());
                 frag.id = that.id;
                 document.getElementById('rootContainer').appendChild(frag);
             }
@@ -773,38 +830,39 @@
     },
     login:
     {
-        html: `<div id="loginIntroPanel" style="width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        html: function () {
+            return `<div id="loginIntroPanel" style="${GuidObj.bgData}width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
-            <h1 style="text-align:left;font-size: x-large;">登录</h1>
+            <h1 style="text-align:left;font-size: xx-large;">登录</h1>
             <p style="text-align:left;">
                 &emsp;&emsp;1.点击左3按钮<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_privatekey_01.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top:1em;">
                 &emsp;&emsp;2.输入地址与签名。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_sign_01.jpg" />
             </p>
-            <p style="text-align:left;">
+            <p style="text-align:left;margin-top:1em;">
                 &emsp;&emsp;3.点击资助或同步等级完成登录。完成登录后，剩余资助会由“未知”变未数字。<br />
             </p>
-            <p style="text-align:left;">
-                &emsp;&emsp;4.可以采用线上签名或者线下签名。<br />
+            <p style="text-align:left;margin-top:1em;">
+                &emsp;&emsp;4.可以采用线上签名或者用<a href="javascript:void(null);" onclick="GuidObj.wallet.show();">签名工具</a>线下签名。<br />
             </p>
         </div>
         <div style="text-align:center;">
             <button onclick="GuidObj.gameIntroShow();" style="width: 5em;
         height: 3em;
-        margin-top: 1em;">
+        margin-top: 1em;margin-bottom:10em;">
                 返回
             </button>
         </div>
-    </div>`,
+    </div>`},
         id: 'loginIntroPanel',
         show: function () {
             var that = GuidObj.login;
             if (document.getElementById(that.id) == null) {
                 document.getElementById('rootContainer').innerHTML = '';
-                var frag = document.createRange().createContextualFragment(that.html);
+                var frag = document.createRange().createContextualFragment(that.html());
                 frag.id = that.id;
                 document.getElementById('rootContainer').appendChild(frag);
             }
@@ -814,48 +872,36 @@
     },
     getReward:
     {
-        html: `  <div id="getRewardIntroPanel" style="width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        html: function () {
+            return `<div id="getRewardIntroPanel" style="${GuidObj.bgData};width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
-            <h1 style="text-align:left;font-size: x-large;">获取荣誉</h1>
-            <p style="text-align:left;">
-                &emsp;&emsp;1.<a href="javascript:void(null);" onclick="GuidObj.npcChallenge.show();">挑战NPC</a>，获取等级。<br />
-            </p>
-            <p style="text-align:left;">
-                &emsp;&emsp;2.主界面点击荣誉。<br />
+            <h1 style="text-align:left;font-size: x-large;">获取荣誉</h1> 
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;1.主界面点击荣誉。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_reward_01.jpg" />
             </p>
-            <p style="text-align:left;">
-                &emsp;&emsp;3.点击选择当前奖励，点击申请。<br />
-                <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_reward_02.jpg" />
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;2.查看成绩。<br /> 
             </p>
-            <p style="text-align:left;">
-                &emsp;&emsp;4.输入对期数如“20221121”的签名。<br />
-                <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_reward_03.jpg" />
-            </p>
-            <p style="text-align:left;">
-                &emsp;&emsp;5.下一个周期(下一个星期一)，获得指定地点的荣誉。<br />
-            </p>
-            <p style="text-align:left;">
-                &emsp;&emsp;6.下一个周期，获得的荣誉，可以通过求福提升游戏里的能力。<br />
-            </p>
-            <p style="text-align:left;">
-                &emsp;&emsp;7.也可完成<a href="javascript:void(null);" onclick="GuidObj.BTC.show();">比特币提现</a>。<br />
-            </p>
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;3.每期各项任务的前100名，会获得相应的股份。<br /> 
+            </p> 
         </div>
         <div style="text-align:center;">
             <button onclick="GuidObj.gameIntroShow();" style="width: 5em;
         height: 3em;
-        margin-top: 1em;">
+        margin-top: 1em;margin-bottom:10em;">
                 返回
             </button>
         </div>
-    </div>`,
+    </div>`;
+        },
         id: 'getRewardIntroPanel',
         show: function () {
             var that = GuidObj.getReward;
             if (document.getElementById(that.id) == null) {
                 document.getElementById('rootContainer').innerHTML = '';
-                var frag = document.createRange().createContextualFragment(that.html);
+                var frag = document.createRange().createContextualFragment(that.html());
                 frag.id = that.id;
                 document.getElementById('rootContainer').appendChild(frag);
             }
@@ -865,34 +911,38 @@
     },
     getDiamand:
     {
-        html: ` <div id="getDiamandPanel" style="width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        html: function () {
+            return ` <div id="getDiamandPanel" style="${GuidObj.bgData};width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
             <h1 style="text-align:left;font-size:  xx-large;">收集宝石</h1>
             <p style="text-align: left; margin-top: 1em;">
                 &emsp;&emsp;1.视角对准宝石。<br />
             </p>
             <p style="text-align:left;margin-top:1em;">
-                &emsp;&emsp;2.点击寻宝。<br />
+                &emsp;&emsp;2.点击寻宝。或者直接在小地图里进行操纵。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_collectdiamond_01.jpg" />
             </p>
             <p style="text-align:left;margin-top:1em;">
-                &emsp;&emsp;3.拥有宝石后可以使用与出售。<br /> 
+                &emsp;&emsp;3.在车辆处于加速状态下，可以无视距离收集宝石。<br /> 
+            </p>
+            <p style="text-align:left;margin-top:1em;">
+                &emsp;&emsp;4.收集的宝石，可以加强车辆的性能。<br /> 
             </p>
         </div>
         <div style="text-align:center;">
             <button onclick="GuidObj.gameIntroShow();" style="width: 5em;
         height: 3em;
-        margin-top: 1em;">
+        margin-top: 1em;margin-bottom:10em;">
                 返回
             </button>
         </div>
-    </div>`,
+    </div>`},
         id: 'getDiamandPanel',
         show: function () {
             var that = GuidObj.getDiamand;
             if (document.getElementById(that.id) == null) {
                 document.getElementById('rootContainer').innerHTML = '';
-                var frag = document.createRange().createContextualFragment(that.html);
+                var frag = document.createRange().createContextualFragment(that.html());
                 frag.id = that.id;
                 document.getElementById('rootContainer').appendChild(frag);
             }
@@ -945,7 +995,8 @@
     },
     transmit:
     {
-        html: `<div id="transmitIntroPanel" style="width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        html: function () {
+            return `<div id="transmitIntroPanel" style="${GuidObj.bgData}width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
             <h1 style="text-align:left;font-size:  xx-large;">转发</h1>
             <p style="text-align: left; margin-top: 1em;">
@@ -970,17 +1021,18 @@
         <div style="text-align:center;">
             <button onclick="GuidObj.gameIntroShow();" style="width: 5em;
         height: 3em;
-        margin-top: 1em;">
+        margin-top: 1em;margin-bottom:10em;">
                 返回
             </button>
         </div>
-    </div>`,
+    </div>`;
+        },
         id: 'transmitIntroPanel',
         show: function () {
             var that = GuidObj.transmit;
             if (document.getElementById(that.id) == null) {
                 document.getElementById('rootContainer').innerHTML = '';
-                var frag = document.createRange().createContextualFragment(that.html);
+                var frag = document.createRange().createContextualFragment(that.html());
                 frag.id = that.id;
                 document.getElementById('rootContainer').appendChild(frag);
             }
