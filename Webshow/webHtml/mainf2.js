@@ -3593,9 +3593,18 @@ var set3DHtml = function () {
                 }
             }
             if (selectIndex > 0) {
+
                 var rotationY = objMain.directionGroup.children[selectIndex].rotation.y;
-                var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY });
-                objMain.ws.send(json);
+
+                if (objMain.directionGroup.children[selectIndex].userData.selected) {
+                }
+                else {
+                    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY });
+                    objMain.ws.send(json);
+                    objMain.directionGroup.children[selectIndex].userData.selected = true;
+
+                }
+                operatePanel.refresh();
             }
         }
         //objMain.ws
@@ -4451,8 +4460,8 @@ var operatePanel =
         divTaskOperatingPanel.style.border = 'none';
         divTaskOperatingPanel.style.width = '5em';
         divTaskOperatingPanel.style.color = 'green';
-        //每个子对象1.3em 8px 共2.5个
-        divTaskOperatingPanel.style.top = 'calc(50% - 3.25em - 20px)';
+        //根据底部计算所得
+        divTaskOperatingPanel.style.bottom = 'calc(2.5em + 14px)';
         var addItemToTaskOperatingPanle = function (btnName, id, clickF) {
             var div = document.createElement('div');
             div.style.width = 'calc(5em - 4px)';
@@ -4471,6 +4480,38 @@ var operatePanel =
             //  <span id="carASpan">提升续航</span>
 
             div.onclick = function () { clickF(); }
+            div.classList.add('costomButton');
+            divTaskOperatingPanel.appendChild(div);
+        }
+
+        var addItemToTaskOperatingPanle2 = function (bgRc, id, clickF, objHasBeenSelected) {
+            var div = document.createElement('div');
+            div.style.width = 'calc(5em - 4px)';
+            div.style.textAlign = 'center';
+            div.style.border = '2px inset #ffc403';
+            div.style.borderRadius = '0.3em';
+            div.style.marginTop = '4px';
+            div.style.marginBottom = '4px';
+            div.style.background = 'rgba(0, 191, 255, 0.6)';
+            div.style.height = 'calc(3.09em - 2.47px)';
+            if (objHasBeenSelected) {
+                div.style.backgroundImage = 'url("Pic/crossimg/wrong.png")';
+            }
+            else {
+                div.style.backgroundImage = 'url("' + bgRc + '")';
+            }
+            div.style.backgroundSize = 'auto calc(1.5em - 1.2px)';
+            div.style.backgroundPosition = 'center center';
+            div.style.backgroundRepeat = 'no-repeat';
+            div.id = id;
+            if (objHasBeenSelected) {
+            }
+            else {
+                div.onclick = function () {
+                    clickF();
+                }
+            }
+
             div.classList.add('costomButton');
             divTaskOperatingPanel.appendChild(div);
         }
@@ -4495,50 +4536,6 @@ var operatePanel =
                 }
             });
 
-        };
-        var magicF = function () {
-            if (objMain.driver.driverIndex > 0) {
-                if (false) {
-                    addItemToTaskOperatingPanle(objMain.driver.skill1.name, 'skill1Btn', function () {
-                        objMain.canSelect = false;
-                        if (objMain.carState["car"] == 'waitAtBaseStation' || objMain.carState["car"] == 'waitOnRoad') {
-                            var selectObj = objMain.selectObj.obj;
-                            var customTagIndexKey = selectObj.name.substring(5);
-                            if (objMain.othersBasePoint[customTagIndexKey] != undefined) {
-                                var fPIndex = objMain.othersBasePoint[customTagIndexKey].fPIndex;
-                                objMain.ws.send(JSON.stringify({ 'c': 'Skill1', 'TargetOwner': customTagIndexKey, 'Target': fPIndex }));
-
-                            }
-                            else if (objMain.driver.race == 'devil' && objMain.indexKey == customTagIndexKey) {
-                                var fPIndex = objMain.fpIndex;
-                                objMain.ws.send(JSON.stringify({ 'c': 'Skill1', 'TargetOwner': customTagIndexKey, 'Target': fPIndex }));
-                            }
-                            objMain.selectObj.obj = null;
-                            objMain.selectObj.type = '';
-                            operatePanel.refresh();
-                        }
-                    });
-                    addItemToTaskOperatingPanle(objMain.driver.skill2.name, 'skill2Btn', function () {
-                        objMain.canSelect = false;
-                        if (objMain.carState["car"] == 'waitAtBaseStation' || objMain.carState["car"] == 'waitOnRoad') {
-                            var selectObj = objMain.selectObj.obj;
-                            var customTagIndexKey = selectObj.name.substring(5);
-                            if (objMain.othersBasePoint[customTagIndexKey] != undefined) {
-                                var fPIndex = objMain.othersBasePoint[customTagIndexKey].fPIndex;
-                                objMain.ws.send(JSON.stringify({ 'c': 'Skill2', 'TargetOwner': customTagIndexKey, 'Target': fPIndex }));
-
-                            }
-                            else if (objMain.driver.race == 'devil' && objMain.indexKey == customTagIndexKey) {
-                                var fPIndex = objMain.fpIndex;
-                                objMain.ws.send(JSON.stringify({ 'c': 'Skill2', 'TargetOwner': customTagIndexKey, 'Target': fPIndex }));
-                            }
-                            objMain.selectObj.obj = null;
-                            objMain.selectObj.type = '';
-                            operatePanel.refresh();
-                        }
-                    });
-                }
-            }
         };
         var lookUp = function () {
             addItemToTaskOperatingPanle('查看', 'viewBtn', function () {
@@ -4666,7 +4663,15 @@ var operatePanel =
             });
         };
         var selectPanle = function () {
-            addItemToTaskOperatingPanle('路口', 'selectDirectionBtn', function () {
+            divTaskOperatingPanel.style.top = 'calc(50% - 6em - 4px)';
+            divTaskOperatingPanel.style.right = 'calc(50% - 6em - 10px)';
+
+            if (objMain.directionGroup.children.length > 2)
+                divTaskOperatingPanel.style.height = 'calc(9.27em + 4.59px)';
+            if (objMain.directionGroup.children.length > 3)
+                divTaskOperatingPanel.style.height = 'calc(12.36em + 6.12px)';
+
+            addItemToTaskOperatingPanle2('Pic/crossimg/cross.png', 'selectDirectionBtn', function () {
                 if (objMain.carState["car"] == 'selecting') {
 
                     if (objMain.directionGroup.children.length > 0) {
@@ -4692,40 +4697,43 @@ var operatePanel =
                         operatePanel.refresh();
                     }
                 }
-            });
+            }, false);
             if (objMain.directionGroup.children.length > 1)
-                addItemToTaskOperatingPanle('A', 'selectDirectionBtn', function () {
+                addItemToTaskOperatingPanle2('Pic/crossimg/A.png', 'selectDirectionBtn', function () {
                     if (objMain.carState["car"] == 'selecting') {
                         if (objMain.directionGroup.children.length > 1) {
                             var rotationY = objMain.directionGroup.children[1].rotation.y;
                             var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY });
                             objMain.ws.send(json);
+                            objMain.directionGroup.children[1].userData.selected = true;
                             operatePanel.refresh();
                         }
                     }
-                });
+                }, objMain.directionGroup.children[1].userData.selected);
             if (objMain.directionGroup.children.length > 2)
-                addItemToTaskOperatingPanle('B', 'selectDirectionBtn', function () {
+                addItemToTaskOperatingPanle2('Pic/crossimg/B.png', 'selectDirectionBtn', function () {
                     if (objMain.carState["car"] == 'selecting') {
                         if (objMain.directionGroup.children.length > 2) {
                             var rotationY = objMain.directionGroup.children[2].rotation.y;
                             var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY });
                             objMain.ws.send(json);
+                            objMain.directionGroup.children[2].userData.selected = true;
                             operatePanel.refresh();
                         }
                     }
-                });
+                }, objMain.directionGroup.children[2].userData.selected);
             if (objMain.directionGroup.children.length > 3)
-                addItemToTaskOperatingPanle('C', 'selectDirectionBtn', function () {
+                addItemToTaskOperatingPanle2('Pic/crossimg/C.png', 'selectDirectionBtn', function () {
                     if (objMain.carState["car"] == 'selecting') {
                         if (objMain.directionGroup.children.length > 3) {
                             var rotationY = objMain.directionGroup.children[3].rotation.y;
                             var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY });
                             objMain.ws.send(json);
+                            objMain.directionGroup.children[3].userData.selected = true;
                             operatePanel.refresh();
                         }
                     }
-                });
+                }, objMain.directionGroup.children[3].userData.selected);
         };
         switch (carState) {
             case 'waitAtBaseStation':
@@ -5737,6 +5745,7 @@ var DirectionOperator =
                 newArrow.scale.set(0.03, 0.03, 0.03);//(Math.PI / 2);
                 newArrow.position.set(DirectionOperator.data.positionX, -0.1 + DirectionOperator.data.positionZ * objMain.heightAmplify, -DirectionOperator.data.positionY);
                 newArrow.rotation.y = DirectionOperator.data.direction[i];
+                newArrow.userData = { 'selected': false };
                 objMain.directionGroup.add(newArrow);
             }
         }
