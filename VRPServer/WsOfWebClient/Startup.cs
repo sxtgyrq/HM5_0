@@ -217,10 +217,10 @@ namespace WsOfWebClient
             {
                 if (context.WebSockets.IsWebSocketRequest)
                 {
-
-                    var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-
-                    await Echo(webSocket);
+                    using (var webSocket = await context.WebSockets.AcceptWebSocketAsync())
+                    {
+                        Echo(webSocket);
+                    }
                 }
             });
         }
@@ -322,8 +322,9 @@ namespace WsOfWebClient
         }
         //BackGroundImg
 
-        private static async Task Echo(System.Net.WebSockets.WebSocket webSocket)
+        private static void Echo(System.Net.WebSockets.WebSocket webSocket)
         {
+
             WebSocketReceiveResult wResult;
             {
                 //byte[] buffer = new byte[size];
@@ -348,12 +349,19 @@ namespace WsOfWebClient
                 var carsNames = new string[] { "车1", "车2", "车3", "车4", "车5" };
                 var playerName = "玩家" + Math.Abs(DateTime.Now.GetHashCode() % 10000);
 
-
+                int StopThread = 1000;
                 //if(s.Ls== LoginState.)
 
                 do
                 {
+                    if (StopThread > 0)
+                    {
+                        Thread.Sleep(StopThread);
+                        //   if (StopThread)
+                        StopThread -= 20;
+                    }
                     var returnResult = ReceiveStringAsync(connectInfoDetail, webWsSize);
+
                     wResult = returnResult.wr;
                     while (s.Ls == LoginState.WaitingToGetTeam)
                     {
@@ -373,6 +381,7 @@ namespace WsOfWebClient
                                 }; break;
                             case "TeamNumWithSecret":
                                 {
+                                    //TeamNumWithSecret
                                     if (s.Ls == LoginState.WaitingToGetTeam)
                                     {
                                         var command_start = s.CommandStart;
@@ -403,7 +412,9 @@ namespace WsOfWebClient
                         }
                         if (wResult.CloseStatus.HasValue)
                         {
-                            break;
+                            Room.setOffLine(ref s);
+                            removeWs(s.WebsocketID);
+                            return;
                         }
                         // continue;
                     }
@@ -448,9 +459,7 @@ namespace WsOfWebClient
                                         if (s.Ls == LoginState.selectSingleTeamJoin)
                                         {
                                             s = Room.GetRoomThenStart(s, connectInfoDetail, playerName, joinType.RefererAddr, 1);
-
                                         }
-
                                     }; break;
                                 case "QueryReward":
                                     {
@@ -738,7 +747,7 @@ namespace WsOfWebClient
                                         if (s.Ls == LoginState.OnLine)
                                         {
                                             Bust bust = Newtonsoft.Json.JsonConvert.DeserializeObject<Bust>(returnResult.result);
-                                            await Room.setBust(s, bust);
+                                            Room.setBust(s, bust);
                                         }
                                     }; break;
                                 case "BuyDiamond":
@@ -762,7 +771,7 @@ namespace WsOfWebClient
                                         if (s.Ls == LoginState.OnLine)
                                         {
                                             DriverSelect ds = Newtonsoft.Json.JsonConvert.DeserializeObject<DriverSelect>(returnResult.result);
-                                            await Room.selectDriver(s, ds);
+                                            Room.selectDriver(s, ds);
                                         }
                                     }; break;
                                 case "Skill1":
@@ -990,21 +999,40 @@ namespace WsOfWebClient
                                             CommonF.SendData(notifyJson, connectInfoDetail, 0);
                                         }
                                     }; break;
+                                case "LeaveTeam":
+                                    {
+                                        //这里有必要，防止上面执行完，下面执行，直接跳入default
+                                    }
+                                    ; break;
+                                case "TeamNumWithSecret":
+                                    {
+                                        //这里有必要，防止上面执行完，下面执行，直接跳入default
+                                    }
+                                    ; break;
+                                default:
+                                    {
+                                        // Console.WriteLine(returnResult.result);
+                                        removeWs(s.WebsocketID);
+                                        Room.setOffLine(ref s);
+                                        return;
+                                    };
                             }
                         }
                     }
                     catch (Exception e)
                     {
-
-                        Room.setOffLine(s);
                         removeWs(s.WebsocketID);
+                        Room.setOffLine(ref s);
+
 #warning 这里用log做记录
-                        // throw e;
+                        throw e;
                     }
+
                 }
                 while (!wResult.CloseStatus.HasValue);
-                Room.setOffLine(s);
                 removeWs(s.WebsocketID);
+                Room.setOffLine(ref s);
+                return;
             };
         }
 
@@ -1024,7 +1052,8 @@ namespace WsOfWebClient
                 {
                     if (ConnectInfo.connectedWs.ContainsKey(websocketID))
                     {
-                        ConnectInfo.connectedWs[websocketID].ws.Dispose();
+                        var ws = ConnectInfo.connectedWs[websocketID].ws;
+                        ws.Dispose();
                         ConnectInfo.connectedWs.Remove(websocketID);
                     }
                 }

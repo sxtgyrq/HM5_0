@@ -1755,9 +1755,7 @@ var objMain =
                         var oldLength = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target);
                         objMain.carStateTimestamp[received_obj.carID] = { 't': Date.now(), 'l': oldLength };
                         objNotify.notifyCar(received_obj.carID, received_obj.State);
-                        operatePanel.refresh();
-                        var checkObj = { 'c': 'CheckCarState', 'State': objMain.carState[received_obj.carID], 'Key': 'Key' };
-                        objMain.ws.send(JSON.stringify({ checkObj })); //当两个状态的间隔很小时，需要check.
+                        operatePanel.refresh(); 
                     }
                 }; break;
             case 'BradCastCollectInfoDetail_v2':
@@ -2012,9 +2010,13 @@ var objMain =
             case 'SelectionIsWrong':
                 {
                     moneyAbsorb.copyModel(received_obj.reduceValue);
+                    DirectionOperator.showWhenIsWrong();
+                    operatePanel.refresh();
+                    //objMain.se
                 }; break;
             case 'DrawTarget':
                 {
+                    //绘制目标黄色圆圈。
                     targetShow.draw(received_obj.x, received_obj.y, received_obj.h * objMain.heightAmplify);
                 }; break;
             case 'addOption':
@@ -3598,12 +3600,13 @@ var set3DHtml = function () {
 
                 var rotationY = objMain.directionGroup.children[selectIndex].rotation.y;
 
-                if (objMain.directionGroup.children[selectIndex].userData.selected) {
+                if (objMain.directionGroup.children[selectIndex].userData.objState > 0) {
                 }
                 else {
                     var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY });
                     objMain.ws.send(json);
-                    objMain.directionGroup.children[selectIndex].userData.selected = true;
+                    //userData.objState
+                    objMain.directionGroup.children[selectIndex].userData.objState = 1;
 
                 }
                 operatePanel.refresh();
@@ -4486,7 +4489,7 @@ var operatePanel =
             divTaskOperatingPanel.appendChild(div);
         }
 
-        var addItemToTaskOperatingPanle2 = function (bgRc, id, clickF, objHasBeenSelected) {
+        var addItemToTaskOperatingPanle2 = function (bgRc, id, clickF, objState) {
             var div = document.createElement('div');
             div.style.width = 'calc(5em - 4px)';
             div.style.textAlign = 'center';
@@ -4496,23 +4499,39 @@ var operatePanel =
             div.style.marginBottom = '4px';
             div.style.background = 'rgba(0, 191, 255, 0.6)';
             div.style.height = 'calc(3.09em - 2.47px)';
-            if (objHasBeenSelected) {
-                div.style.backgroundImage = 'url("Pic/crossimg/wrong.png")';
+
+            switch (objState) {
+                case 0:
+                    {
+                        div.style.backgroundImage = 'url("' + bgRc + '")';
+                        div.onclick = function () {
+                            clickF();
+                        }
+                    }; break;
+                case 1:
+                    {
+                        div.style.backgroundImage = '';
+                    }; break;
+                case 2:
+                    {
+                        div.style.backgroundImage = 'url("Pic/crossimg/wrong.png")';
+                    }; break;
             }
-            else {
-                div.style.backgroundImage = 'url("' + bgRc + '")';
-            }
+            //if (objHasBeenSelected) {
+            //    div.style.backgroundImage = 'url("Pic/crossimg/wrong.png")';
+            //}
+            //else {
+
+            //}
             div.style.backgroundSize = 'auto calc(1.5em - 1.2px)';
             div.style.backgroundPosition = 'center center';
             div.style.backgroundRepeat = 'no-repeat';
             div.id = id;
-            if (objHasBeenSelected) {
-            }
-            else {
-                div.onclick = function () {
-                    clickF();
-                }
-            }
+            //if (objHasBeenSelected) {
+            //}
+            //else {
+
+            //}
 
             div.classList.add('costomButton');
             divTaskOperatingPanel.appendChild(div);
@@ -4699,7 +4718,7 @@ var operatePanel =
                         operatePanel.refresh();
                     }
                 }
-            }, false);
+            }, 0);
             if (objMain.directionGroup.children.length > 1)
                 addItemToTaskOperatingPanle2('Pic/crossimg/A.png', 'selectDirectionBtn', function () {
                     if (objMain.carState["car"] == 'selecting') {
@@ -4707,11 +4726,11 @@ var operatePanel =
                             var rotationY = objMain.directionGroup.children[1].rotation.y;
                             var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY });
                             objMain.ws.send(json);
-                            objMain.directionGroup.children[1].userData.selected = true;
+                            objMain.directionGroup.children[1].userData.objState = 1;
                             operatePanel.refresh();
                         }
                     }
-                }, objMain.directionGroup.children[1].userData.selected);
+                }, objMain.directionGroup.children[1].userData.objState);
             if (objMain.directionGroup.children.length > 2)
                 addItemToTaskOperatingPanle2('Pic/crossimg/B.png', 'selectDirectionBtn', function () {
                     if (objMain.carState["car"] == 'selecting') {
@@ -4719,11 +4738,11 @@ var operatePanel =
                             var rotationY = objMain.directionGroup.children[2].rotation.y;
                             var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY });
                             objMain.ws.send(json);
-                            objMain.directionGroup.children[2].userData.selected = true;
+                            objMain.directionGroup.children[2].userData.objState = 1;
                             operatePanel.refresh();
                         }
                     }
-                }, objMain.directionGroup.children[2].userData.selected);
+                }, objMain.directionGroup.children[2].userData.objState);
             if (objMain.directionGroup.children.length > 3)
                 addItemToTaskOperatingPanle2('Pic/crossimg/C.png', 'selectDirectionBtn', function () {
                     if (objMain.carState["car"] == 'selecting') {
@@ -4731,11 +4750,11 @@ var operatePanel =
                             var rotationY = objMain.directionGroup.children[3].rotation.y;
                             var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY });
                             objMain.ws.send(json);
-                            objMain.directionGroup.children[3].userData.selected = true;
+                            objMain.directionGroup.children[3].userData.objState = 1;
                             operatePanel.refresh();
                         }
                     }
-                }, objMain.directionGroup.children[3].userData.selected);
+                }, objMain.directionGroup.children[3].userData.objState);
         };
         switch (carState) {
             case 'waitAtBaseStation':
@@ -5747,11 +5766,18 @@ var DirectionOperator =
                 newArrow.scale.set(0.03, 0.03, 0.03);//(Math.PI / 2);
                 newArrow.position.set(DirectionOperator.data.positionX, -0.1 + DirectionOperator.data.positionZ * objMain.heightAmplify, -DirectionOperator.data.positionY);
                 newArrow.rotation.y = DirectionOperator.data.direction[i];
-                newArrow.userData = { 'selected': false };
+                newArrow.userData = { objState: 0 };
                 objMain.directionGroup.add(newArrow);
             }
         }
         operatePanel.refresh();
+    },
+    showWhenIsWrong: function () {
+        for (var i = 1; i < objMain.directionGroup.children.length; i++) {
+            if (objMain.directionGroup.children[i].userData.objState == 1) {
+                objMain.directionGroup.children[i].userData.objState = 2;
+            }
+        }
     }
 };
 
@@ -5803,8 +5829,9 @@ var BuildingModelObj =
 
                     }
                     else {
-                        url = "https://www.nyrq123.com/objtaiyuan/" + amodelID;
+                        //  url = "https://www.nyrq123.com/objtaiyuan/" + amodelID;
                         //  url = "http://127.0.0.1:11001/objdata/"
+                        url = "https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/objmodel/" + amodelID + ".json";
                     }
                     $.getJSON(url, function (json) {
                         var amID = json.AmID;
@@ -5864,6 +5891,7 @@ var drawGoodsSelection =
          * 依据objText，mtlText，base64画图
          */
         objMain.mainF.removeF.clearGroup(objMain.buildingSelectionGroup);
+        drawGoodsSelection.data = [];
         for (var i = 0; i < received_obj.selections.length; i++) {
             var points = [];
             points.push(new THREE.Vector3(received_obj.x, received_obj.y * objMain.heightAmplify, received_obj.z));
@@ -5873,8 +5901,17 @@ var drawGoodsSelection =
             var line = new THREE.Line(geometry, drawGoodsSelection.material);
             objMain.buildingSelectionGroup.add(line);
         }
+        if (i > 0) {
+            var v = new THREE.Vector3(received_obj.x, received_obj.y * objMain.heightAmplify, received_obj.z);
+            drawGoodsSelection.data.push(v);
+        }
+        for (var i = 0; i < received_obj.selections.length; i++) {
+            var v = new THREE.Vector3(received_obj.positions[i * 3], received_obj.positions[i * 3 + 1] * objMain.heightAmplify, received_obj.positions[i * 3 + 2]);
+            drawGoodsSelection.data.push(v);
+        }
     },
-    material: new THREE.LineBasicMaterial({ color: 0x33FF00 })
+    material: new THREE.LineBasicMaterial({ color: 0x33FF00 }),
+    data: []
 };
 
 var DiamondModel =

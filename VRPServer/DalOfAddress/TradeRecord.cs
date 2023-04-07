@@ -20,7 +20,10 @@ namespace DalOfAddress
             }
 
         }
-        public const long TradeStockCost = 50000;
+        /// <summary>
+        /// 交易股份所花积分，折合￥10.00
+        /// </summary>
+        public const long TradeStockCost = 40000;
         public static string MsgSuccess
         {
             get
@@ -288,7 +291,7 @@ namespace DalOfAddress
                             }
                         }
                         {
-                            const long costMoney = 200000;
+                            const long costMoney = 100000;
                             var moneyNow = DalOfAddress.MoneyAdd.GetMoney(con, tran, addrFrom);
                             if (moneyNow > costMoney)
                             {

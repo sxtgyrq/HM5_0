@@ -342,11 +342,11 @@
             </p>
             <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;四，用${payName}扫描。<br />
-                <img style="max-width:calc(400px);margin-left:2em;" src="Pic/gameintro/${img1}" />
+                <img style="max-width:calc(400px);width: calc(100% -4em);margin-left:2em;" src="Pic/gameintro/${img1}" />
             </p>
             <p style="text-align:left;word-break:break-all;word-wrap:anywhere;margin-top: 1em;">
                 &emsp;&emsp;五，在扫码支付的备注中，务必填写上您的由两至十个汉字组成的绑定词。<br />
-                <img style="max-width:calc(400px);margin-left:2em;" src="Pic/gameintro/${img2}" />
+                <img style="max-width:calc(400px);width: calc(100% -4em);margin-left:2em;" src="Pic/gameintro/${img2}" />
             </p>
         </div>
         <div style=" width:100%;">
@@ -396,20 +396,39 @@
             </p>
             <table style="border:1px solid #ccc">
                 <tr>
-                    <th style="width:4em;border:1px solid #ccc;"><label>打赏金额</label> </th>
-                    <th style="width:6em;border:1px solid #ccc;"><label>获得积分</label></th>
+                    <th style="border: 1px solid #ccc;"><label>打赏金额</label> </th>
+                    <th style="border: 1px solid #ccc;"><label>获得积分</label></th>
+                    <th style="border: 1px solid #ccc;"><label>单价</label></th>
                 </tr>
                 <tr>
-                    <td style="border:1px solid #ccc;">￥5.00</td>
-                    <td style="border:1px solid #ccc;">200.00积分</td>
+                    <td  style="border:1px solid #ccc;">￥0.01~￥9.99</td>
+                    <td style="border:1px solid #ccc;">200.00积分~396积分</td>
+                    <td style="border:1px solid #ccc;">40.00积分/￥</td>
                 </tr>
                 <tr>
-                    <td style="border:1px solid #ccc;">￥10.00</td>
-                    <td style="border:1px solid #ccc;">400.00积分</td>
+                    <td style="border:1px solid #ccc;">￥10.00~￥19.99</td>
+                    <td style="border:1px solid #ccc;">420.00积分~839.58积分</td>
+                    <td style="border:1px solid #ccc;">42.00积分/￥</td>
                 </tr>
                 <tr>
-                    <td style="border:1px solid #ccc;">￥50.00</td>
-                    <td style="border:1px solid #ccc;">2000.00积分</td>
+                    <td style="border:1px solid #ccc;">￥20.00~￥49.99</td>
+                    <td style="border:1px solid #ccc;">880.00积分~2199.56积分</td>
+                    <td style="border:1px solid #ccc;">44.00积分/￥</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid #ccc;">￥50.00~￥99.99</td>
+                    <td style="border:1px solid #ccc;">2300.00积分~4599.54积分</td>
+                    <td style="border:1px solid #ccc;">46.00积分/￥</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid #ccc;">￥100.00~￥199.99</td>
+                    <td style="border:1px solid #ccc;">4800.00积分~9599.52积分</td>
+                    <td style="border:1px solid #ccc;">48.00积分/￥</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid #ccc;">￥200.00及以上</td>
+                    <td style="border:1px solid #ccc;">10000积分~∞</td>
+                    <td style="border:1px solid #ccc;">50.00积分/￥</td>
                 </tr>
             </table>
         </div>

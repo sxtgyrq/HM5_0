@@ -379,7 +379,7 @@ namespace MateWsAndHouse
                             {
                                 outPut = "ng";
                             }
-                            else
+                            else if(!t.IsBegun)
                             {
                                 int hash = 0;
                                 for (var i = 0; i < t.member.Count; i++)

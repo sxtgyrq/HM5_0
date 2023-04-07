@@ -556,7 +556,7 @@ namespace CommonClass.Img
                         }
                     }
                 }
-                var canvas = Platforms.Current.CreateImageCanvas(new Size(sumLength, maxY - minY), scale: 1, transparency: true);
+                // var canvas = Platforms.Current.CreateImageCanvas(new Size(sumLength, maxY - minY), scale: 1, transparency: true);
                 var height = maxY - minY;
 
                 int startPosition = 0;

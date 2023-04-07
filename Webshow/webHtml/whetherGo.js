@@ -3,6 +3,22 @@
     operateID: 'panelToAskWhetherGoto',
     show: function (title) {
         var that = whetherGo;
+        var picurl = 'Pic/girl/2705.png';
+        switch (whetherGo.obj.tsType) {
+            case 'speed':
+                {
+                    picurl = 'Pic/girl/2706.png';
+                }; break;
+            case 'volume':
+                {
+                    picurl = 'Pic/girl/2705.png';
+                }; break;
+            case 'mile':
+                {
+                    picurl = 'Pic/building/gl.png';
+                }; break;
+            default: { picurl = 'Pic/girl/2705.png'; }; break;
+        }
         var html = `<div id="${that.operateID}" style="position: absolute;
         z-index: 8;
         top: calc(50% - 10em);
@@ -21,7 +37,7 @@
         margin-bottom: 0.25em;
         margin-top: 0.25em;border:1px solid gray;width:100%;">
             <div>
-                <img src="Pic/girl/2705.png" style="height:15em;width:13.37em;right:0px;float:right;top:0px;" />
+                <img src="${picurl}" style="height:15em;width:13.37em;right:0px;float:right;top:0px;" />
             </div>
             <p>
                 ${title}

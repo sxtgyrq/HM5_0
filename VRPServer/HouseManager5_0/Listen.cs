@@ -309,6 +309,7 @@ namespace HouseManager5_0
                         }; break;
                     case "TradeCoin":
                         {
+                            //股份交易，BTC提现。
                             CommonClass.ModelTranstraction.TradeCoin tc = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.TradeCoin>(notifyJson);
                             outPut = objI.TradeCoinF(tc);
                         }; break;

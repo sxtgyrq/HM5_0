@@ -759,7 +759,7 @@ namespace HouseManager5_0.RoomMainF
                 {
                     return "";
                 }
-                else 
+                else
                 {
                     var returnObj = new
                     {
@@ -791,7 +791,7 @@ namespace HouseManager5_0.RoomMainF
                 {
                     return "";
                 }
-            } 
+            }
         }
     }
 
@@ -1177,7 +1177,7 @@ namespace HouseManager5_0.RoomMainF
                         var addrBussiness = parameter[2];
                         var addrTo = parameter[3];
                         var passCoinStr = parameter[4];
-                        if ((passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi"|| passCoinStr.Substring(passCoinStr.Length - 7, 7) == "satoshi") &&
+                        if ((passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi" || passCoinStr.Substring(passCoinStr.Length - 7, 7) == "satoshi") &&
                             tradeIndex == tc.tradeIndex &&
                             addrFrom == tc.addrFrom &&
                             addrTo == tc.addrTo &&
@@ -1382,7 +1382,29 @@ namespace HouseManager5_0.RoomMainF
             }
             else
             {
-                var chargingValue = Convert.ToInt32(chargingObj.ChargingNum * 100m) * 100;
+                var chargingValue = Convert.ToInt32(chargingObj.ChargingNum * 40m) * 100;
+
+                /*
+                 *  0<v<10,price:40/Y
+                 *  10≤v<20,5%,price:42/Y 
+                 *  20≤v<50,10%,price:44/Y
+                 *  50≤v<100,15%,price:46/Y
+                 *  100≤v<200,20%,price:48/Y
+                 *  200≤v,25%,price:50/Y
+                 */
+                if (chargingObj.ChargingNum < 10)
+                    chargingValue = chargingValue * 100 / 100;
+                else if (chargingObj.ChargingNum < 20)
+                    chargingValue = chargingValue * 105 / 100;
+                else if (chargingObj.ChargingNum < 50)
+                    chargingValue = chargingValue * 110 / 100;
+                else if (chargingObj.ChargingNum < 100)
+                    chargingValue = chargingValue * 115 / 100;
+                else if (chargingObj.ChargingNum < 200)
+                    chargingValue = chargingValue * 120 / 100;
+                else
+                    chargingValue = chargingValue * 125 / 100;
+
                 DalOfAddress.MoneyAdd.AddMoney(bitcoinAddr, chargingValue);
                 {
                     var copyTasks = DalOfAddress.TaskCopy.GetALLItem(bitcoinAddr);

@@ -209,12 +209,15 @@ namespace WsOfWebClient
              */
             int roomIndex;
             var roomInfo = Room.getRoomNum(s.WebsocketID, playerName, refererAddr, groupMemberCount);
+
             roomIndex = roomInfo.RoomIndex;
+            //  Console.WriteLine(roomInfo.RoomIndex);
             s.Key = roomInfo.Key;
             var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(roomInfo);
             var receivedMsg = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[roomInfo.RoomIndex], sendMsg);
             if (receivedMsg == "ok")
             {
+                //  Console.WriteLine(receivedMsg);
                 WriteSession(roomInfo, connectInfoDetail);
                 s.roomIndex = roomIndex;
                 s.GroupKey = roomInfo.GroupKey;
@@ -917,12 +920,15 @@ namespace WsOfWebClient
             var timeOut = new CancellationTokenSource(1500000).Token;
             var resultAsync = Startup.ReceiveStringAsync(connectInfoDetail, timeOut);
 
+            //  resultAsync 
+
             if (resultAsync.result == checkValue)
             {
                 return true;
             }
             else
             {
+                Console.WriteLine($"错误的回话--checkValue:{checkValue}!=resultAsync.result:{resultAsync.result}");
                 var t2 = connectInfoDetail.ws.CloseAsync(WebSocketCloseStatus.PolicyViolation, "错误的回话", new CancellationToken());
                 t2.GetAwaiter().GetResult();
                 return false;
@@ -1251,7 +1257,7 @@ namespace WsOfWebClient
             return "";
         }
 
-        internal static async Task<string> selectDriver(State s, DriverSelect ds)
+        internal static string selectDriver(State s, DriverSelect ds)
         {
             SetSelectDriver ssd = new SetSelectDriver()
             {
@@ -1318,73 +1324,12 @@ namespace WsOfWebClient
         internal static State GetRewardFromBuildingF(State s, GetRewardFromBuildings grfb, ConnectInfo.ConnectInfoDetail connectInfoDetail)
         {
             return s;
-            //if (CommonClass.Format.IsModelID(grfb.selectObjName))
-            //{
-            //    var index = s.roomIndex;
-            //    var gfma = new GetRewardFromBuildingM()
-            //    {
-            //        c = "GetRewardFromBuildingM",
-            //        Key = s.Key,
-            //        selectObjName = grfb.selectObjName
-            //    };
-            //    var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gfma);
-            //    var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
-            //    if (string.IsNullOrEmpty(info))
-            //    {
-            //        return s;
-            //    }
-            //    else
-            //    {
-            //        return s;
-            //    }
-            //}
-            //else
-            //{
-            //    return s;
-            //}
         }
-        internal static string setOffLine(State s)
+        internal static string setOffLine(ref State s)
         {
+            s = null;
 #warning 这里要优化！！！
             return "";
-            //var getPosition = new SetBust()
-            //{
-            //    c = "SetBust",
-            //    Key = s.Key,
-            //    car = "car" + m.Groups["car"].Value,
-            //    targetOwner = targetOwner,
-            //    target = bust.Target
-            //};
-            //var msg = Newtonsoft.Json.JsonConvert.SerializeObject(getPosition);
-            //await Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
-            //internal static async Task<string> setBust(State s, Bust bust)
-            //{
-            //    Regex r = new Regex("^car(?<car>[A-E]{1})_(?<key>[a-f0-9]{32})$");
-            //    Regex rex_Target = new Regex("^(?<target>[a-f0-9]{32})$");
-
-            //    var m = r.Match(bust.car);
-            //    var m_Target = rex_Target.Match(bust.TargetOwner);
-            //    if (m.Success && m_Target.Success)
-            //    {
-            //        var targetOwner = m_Target.Groups["target"].Value;
-
-            //        //Consol.WriteLine($"正则匹配成功：{m.Groups["car"] }+{m.Groups["key"] }");
-            //        if (m.Groups["key"].Value == s.Key)
-            //        {
-            //            var getPosition = new SetBust()
-            //            {
-            //                c = "SetBust",
-            //                Key = s.Key,
-            //                car = "car" + m.Groups["car"].Value,
-            //                targetOwner = targetOwner,
-            //                target = bust.Target
-            //            };
-            //            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(getPosition);
-            //            await Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
-            //        }
-            //    }
-            //    return "";
-            //}
         }
 
         internal static string setCarReturn(State s, SetCarReturn scr)
@@ -1439,7 +1384,7 @@ namespace WsOfWebClient
             }
         }
 
-        internal static async Task<string> setBust(State s, Bust bust)
+        internal static string setBust(State s, Bust bust)
         {
             //Regex r = new Regex("^car(?<car>[A-E]{1})_(?<key>[a-f0-9]{32})$");
             Regex rex_Target = new Regex("^(?<target>[a-f0-9]{32})$");
