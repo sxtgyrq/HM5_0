@@ -162,27 +162,24 @@
             <p style="text-align:left;margin-top: 1em;">
 
                 &emsp;&emsp;一，你要有一个地址，如<span style="background-color:aqua;color:forestgreen;">356irRFazab63B3m95oyiYeR5SDKJRFa99</span>。
+            </p> 
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;二，你掌握地址<span style="background-color:aqua;color:forestgreen;">356irRFazab63B3m95oyiYeR5SDKJRFa99</span>的私钥。
             </p>
             <p style="text-align:left;margin-top: 1em;">
-                &emsp;&emsp;二，地址<span style="background-color:aqua;color:forestgreen;">356irRFazab63B3m95oyiYeR5SDKJRFa99</span>在游戏里，有500.00以上的余额。
-            </p>
-            <p style="text-align:left;margin-top: 1em;">
-                &emsp;&emsp;三，你掌握地址<span style="background-color:aqua;color:forestgreen;">356irRFazab63B3m95oyiYeR5SDKJRFa99</span>的私钥。
-            </p>
-            <p style="text-align:left;margin-top: 1em;">
-                &emsp;&emsp;四，你选择一个你能熟记的二到十字的汉语短语如“<span style="background-color:aqua;color:forestgreen;">欢迎来到我的游戏</span>”作为绑定词。
+                &emsp;&emsp;三，你选择一个你能熟记的二到十字的汉语短语如“<span style="background-color:aqua;color:forestgreen;">欢迎来到我的游戏</span>”作为绑定词。
             </p>
             <p style="text-align:left;word-break:break-all;word-wrap:anywhere;margin-top: 1em;">
-                &emsp;&emsp;五，用你的私钥，对“<span style="background-color:aqua;color:forestgreen;">欢迎来到我的游戏</span>”进行签名，得到结果：<span style="background-color:aqua;color:forestgreen;">IDsBRU37kmlF+NAEJZEUz12bxI2ter02Ga5jQNI6SqYbeekPBaYZuMr03C+xZQzrHtfCSCAHvzrHf8j1kOYE3mQ=</span>。
+                &emsp;&emsp;四，用你的私钥，对“<span style="background-color:aqua;color:forestgreen;">欢迎来到我的游戏</span>”进行签名，得到结果：<span style="background-color:aqua;color:forestgreen;">IDsBRU37kmlF+NAEJZEUz12bxI2ter02Ga5jQNI6SqYbeekPBaYZuMr03C+xZQzrHtfCSCAHvzrHf8j1kOYE3mQ=</span>。
             </p>
             <p style="text-align:left;margin-top: 1em;">
-                &emsp;&emsp;六，将地址、绑定词、签名发送，待条件无误，即完成绑定。
+                &emsp;&emsp;五，将地址、绑定词、签名发送，待条件无误，即完成绑定。
             </p>
             <p style="text-align:left;margin-top: 1em;">
-                &emsp;&emsp;七，绑定成功后。你可以依靠绑定词进行<a href="javascript:void(null);" onclick="GuidObj.wechat.show('wechat');">微信扫码</a>或<a href="javascript:void(null);" onclick="GuidObj.wechat.show('alipay');">支付宝扫码</a>。
+                &emsp;&emsp;六，绑定成功后。你可以依靠绑定词进行<a href="javascript:void(null);" onclick="GuidObj.wechat.show('wechat');">微信扫码</a>或<a href="javascript:void(null);" onclick="GuidObj.wechat.show('alipay');">支付宝扫码</a>。
             </p>
             <p style="text-align:left;margin-top: 1em;">
-                &emsp;&emsp;八，也能用1或3打头的比特币<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>至今对建筑物<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>转账进行打赏，您将直接获得建筑物的股份！直接获得的股份，也可进行BTC提取。</p>
+                &emsp;&emsp;七，也能用1或3打头的比特币<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>至今对建筑物<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>转账进行打赏，您将直接获得建筑物的股份！直接获得的股份，也可进行BTC提取。</p>
         </div>
         <div style=" width:100%;">
             <table style=" width:100%;">

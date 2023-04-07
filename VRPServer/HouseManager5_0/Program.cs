@@ -15,6 +15,7 @@ namespace HouseManager5_0
 --------- readConnectInfomation 
 --------- calMercator
 --------- sign
+--------- writeToAliyun
 --------- 
 ");
             var commandInput = Console.ReadLine();
@@ -38,6 +39,10 @@ namespace HouseManager5_0
                 case "sign":
                     {
                         OtherFunction.sign();
+                    }; break;
+                case "writeToAliyun":
+                    {
+                        OtherFunction.writeToAliyun();
                     }; break;
 
             }
@@ -137,7 +142,7 @@ namespace HouseManager5_0
         {
             while (true)
             {
-                ; 
+                ;
                 Program.rm.SetReturn(grp);
                 Program.rm.ClearPlayers();
                 Program.rm.SetNPC();

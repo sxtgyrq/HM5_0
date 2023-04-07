@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
+using static HouseManager5_0.Data;
 
 namespace HouseManager5_0
 {
@@ -80,66 +82,28 @@ namespace HouseManager5_0
             //  throw new NotImplementedException();
         }
 
-        //        [Obsolete]
-        //        internal static void addModel()
-        //        {
-        //            while (true)
-        //            {
-        //                //Consol.WriteLine("拖入obj文件");
-        //                var path1 = Console.ReadLine();
-        //                //Consol.WriteLine("拖入mtl文件");
-        //                var path2 = Console.ReadLine();
-        //                //Consol.WriteLine("拖入jpg文件");
-        //                var path3 = Console.ReadLine();
+        internal static void writeToAliyun()
+        {
 
-        //                var bytes = File.ReadAllBytes(path3);
-        //                var Base64 = Convert.ToBase64String(bytes);
-        //                // ConnectInfo.SpeedIconBase64 = Base64;
-        //                var objText = File.ReadAllText(path1);
+            var material = new Dictionary<string, CommonClass.databaseModel.abtractmodelsPassData>();
+           
+            var list = DalOfAddress.AbtractModels.GetCategeAm1();
+            for (int i = 0; i < list.Count; i += 2)
+            {
+                var obj = DalOfAddress.AbtractModels.GetAbtractModelItem(list[i].Trim());
+                 
 
-        //                var mtlText = File.ReadAllText(path2);
-
-        //                var fileName = Path.GetFileName(path1);
-        //                List<string> modelTypes = new List<string>
-        //                         {
-        //                "direciton",
-        //                "building"
-        //                         };
-        //                for (var i = 0; i < modelTypes.Count; i++)
-        //                {
-        //                    //Consol.WriteLine($"{i}-{modelTypes[i]}");
-        //                }
-        //                var modelType = "";
-        //                do
-        //                {
-
-        //                    modelType = Console.ReadLine();
-        //                }
-        //                while (!modelTypes.Contains(modelType));
-
-
-        //                //Consol.WriteLine($@"
-        //fileName:{fileName}
-        //modelType:{modelType}
-        //objText:{objText}
-        //mtlText:{mtlText}
-        //Base64:{Base64}
-        //---按任意键继续！
-        //");
-
-        //                Console.ReadLine();
-        //                DalOfAddress.AbtractModels.AddMoney(fileName.Split('.')[0], modelType, Base64, objText, mtlText, "");
-        //                //Consol.WriteLine($"存储成功！E退出，任意键继续");
-        //                if (Console.ReadLine().ToUpper() == "E")
-        //                {
-        //                    break;
-        //                }
-        //            }
-        //            // DalOfAddress.
-        //            //DalOfAddress.
-        //            //ConnectInfo.SpeedMtl = await File.ReadAllTextAsync("model/speedicon/mfire.mtl");
-        //            //ConnectInfo.SpeedObj = await File.ReadAllTextAsync("model/speedicon/mfire.obj");
-        //            //  throw new NotImplementedException();
-        //        }
+                var returnObj = new
+                {
+                    objText = obj.objText,
+                    mtlText = obj.mtlText,
+                    imgBase64 = obj.imageBase64,
+                    AmID = list[i],
+                    modelType = obj.modelType
+                };
+                var json = Newtonsoft.Json.JsonConvert.SerializeObject(returnObj);
+                Aliyun.Json.Add($"objmodel/{list[i]}.json", json);
+            } 
+        } 
     }
 }

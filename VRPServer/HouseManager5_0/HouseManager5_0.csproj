@@ -18,6 +18,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\Aliyun\Aliyun.csproj" />
     <ProjectReference Include="..\BitCoin\BitCoin.csproj" />
     <ProjectReference Include="..\CityRunFunction\CityRunFunction.csproj" />
     <ProjectReference Include="..\CommonClass\CommonClass.csproj" />

@@ -2369,6 +2369,8 @@ function animate() {
                     for (var i = 0; i < objMain.buildingGroup.children.length; i++) {
                         objMain.buildingGroup.children[i].scale.setX(1);
                         objMain.buildingGroup.children[i].scale.setZ(1);
+
+                        //显示3km以内的建筑物
                     }
                     {
                         var lengthOfObjs = objMain.groupOfOperatePanle.children.length;
