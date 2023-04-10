@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Numerics;
 using System.Text;
+using System.Threading;
 using static CommonClass.ExitObj;
 using static CommonClass.GetOnLineState;
 using static HouseManager5_0.Car;
@@ -239,7 +240,9 @@ namespace HouseManager5_0.RoomMainF
                         var player = group._PlayerInGroup[v.Key];
                         if (player.playerType == Player.PlayerType.player)
                         {
-                            ((Player)player).direciton = getComplex(v, ((Player)player).direciton);
+                            ((Player)player).direcitonAndID.direciton = getComplex(v, ((Player)player).direcitonAndID.direciton);
+                            ((Player)player).direcitonAndID.PostionCrossKey = v.postionCrossKey;
+
                             if (((Player)player).getCar().state == CarState.selecting)
                             {
                                 if (((Player)player).playerSelectDirectionTh != null)

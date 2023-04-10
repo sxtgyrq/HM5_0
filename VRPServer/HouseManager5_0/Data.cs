@@ -1474,6 +1474,10 @@ namespace HouseManager5_0
         // List<aModel> material { get; set; }
         internal void LoadModel()
         {
+
+            // dataConfig.json
+            var content = File.ReadAllText("config/dataConfig.json");
+
             // Console.WriteLine("");
             this.material = new Dictionary<string, CommonClass.databaseModel.abtractmodelsPassData>();
             // this.PassWords = new Dictionary<int, SecretObj>();
@@ -1482,6 +1486,14 @@ namespace HouseManager5_0
             for (int i = 0; i < list.Count; i += 2)
             {
                 var amInfomationData = DalOfAddress.AbtractModels.GetAbtractModelItem(list[i].Trim());
+
+                if (Program.configObj.ModelHasDetailInfo) { }
+                else
+                {
+                    amInfomationData.imgBase64 = new string[] { };
+                    amInfomationData.mtlTexts = new string[] { };
+                    amInfomationData.objTexts = new string[] { };
+                }
 
                 if (amInfomationData != null)
                     this.material.Add(list[i].Trim(), amInfomationData);

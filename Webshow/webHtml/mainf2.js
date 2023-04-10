@@ -1755,7 +1755,7 @@ var objMain =
                         var oldLength = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target);
                         objMain.carStateTimestamp[received_obj.carID] = { 't': Date.now(), 'l': oldLength };
                         objNotify.notifyCar(received_obj.carID, received_obj.State);
-                        operatePanel.refresh(); 
+                        operatePanel.refresh();
                     }
                 }; break;
             case 'BradCastCollectInfoDetail_v2':
@@ -2010,7 +2010,7 @@ var objMain =
             case 'SelectionIsWrong':
                 {
                     moneyAbsorb.copyModel(received_obj.reduceValue);
-                    DirectionOperator.showWhenIsWrong();
+                    DirectionOperator.showWhenIsWrong(received_obj.postionCrossKey);
                     operatePanel.refresh();
                     //objMain.se
                 }; break;
@@ -3603,7 +3603,7 @@ var set3DHtml = function () {
                 if (objMain.directionGroup.children[selectIndex].userData.objState > 0) {
                 }
                 else {
-                    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY });
+                    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': objMain.directionGroup.children[selectIndex].userData.postionCrossKey });
                     objMain.ws.send(json);
                     //userData.objState
                     objMain.directionGroup.children[selectIndex].userData.objState = 1;
@@ -4724,7 +4724,8 @@ var operatePanel =
                     if (objMain.carState["car"] == 'selecting') {
                         if (objMain.directionGroup.children.length > 1) {
                             var rotationY = objMain.directionGroup.children[1].rotation.y;
-                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY });
+                            var postionCrossKey = objMain.directionGroup.children[1].userData.postionCrossKey;
+                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey });
                             objMain.ws.send(json);
                             objMain.directionGroup.children[1].userData.objState = 1;
                             operatePanel.refresh();
@@ -4736,7 +4737,8 @@ var operatePanel =
                     if (objMain.carState["car"] == 'selecting') {
                         if (objMain.directionGroup.children.length > 2) {
                             var rotationY = objMain.directionGroup.children[2].rotation.y;
-                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY });
+                            var postionCrossKey = objMain.directionGroup.children[2].userData.postionCrossKey;
+                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey });
                             objMain.ws.send(json);
                             objMain.directionGroup.children[2].userData.objState = 1;
                             operatePanel.refresh();
@@ -4748,7 +4750,8 @@ var operatePanel =
                     if (objMain.carState["car"] == 'selecting') {
                         if (objMain.directionGroup.children.length > 3) {
                             var rotationY = objMain.directionGroup.children[3].rotation.y;
-                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY });
+                            var postionCrossKey = objMain.directionGroup.children[3].userData.postionCrossKey;
+                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey });
                             objMain.ws.send(json);
                             objMain.directionGroup.children[3].userData.objState = 1;
                             operatePanel.refresh();
@@ -5766,15 +5769,15 @@ var DirectionOperator =
                 newArrow.scale.set(0.03, 0.03, 0.03);//(Math.PI / 2);
                 newArrow.position.set(DirectionOperator.data.positionX, -0.1 + DirectionOperator.data.positionZ * objMain.heightAmplify, -DirectionOperator.data.positionY);
                 newArrow.rotation.y = DirectionOperator.data.direction[i];
-                newArrow.userData = { objState: 0 };
+                newArrow.userData = { objState: 0, postionCrossKey: received_obj.postionCrossKey };
                 objMain.directionGroup.add(newArrow);
             }
         }
         operatePanel.refresh();
     },
-    showWhenIsWrong: function () {
+    showWhenIsWrong: function (postionCrossKey) {
         for (var i = 1; i < objMain.directionGroup.children.length; i++) {
-            if (objMain.directionGroup.children[i].userData.objState == 1) {
+            if (objMain.directionGroup.children[i].userData.objState == 1 && objMain.directionGroup.children[i].userData.postionCrossKey == postionCrossKey) {
                 objMain.directionGroup.children[i].userData.objState = 2;
             }
         }

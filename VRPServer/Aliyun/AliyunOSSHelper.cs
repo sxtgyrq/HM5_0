@@ -87,11 +87,11 @@ namespace Aliyun
                     // 上传文件。
                     client.PutObject(bucketName, key, requestContent);
                 }
-                Console.WriteLine($"存储字符串《{objectContent}》成功");
+                Console.WriteLine($"存储成功:{key}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"存储字符串有误, {ex.Message}");
+                Console.WriteLine($"存储字符串有误, {key},{ex.Message}");
                 return false;
             }
             return true;

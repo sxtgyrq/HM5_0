@@ -774,7 +774,7 @@ namespace HouseManager5_0.RoomMainF
             }
             else
             {
-                if (Program.dt.material.ContainsKey(ca.AmID))
+                if (Program.configObj.ModelHasDetailInfo && Program.dt.material.ContainsKey(ca.AmID))
                 {
                     var obj = Program.dt.material[ca.AmID];
                     var returnObj = new

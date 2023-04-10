@@ -1210,6 +1210,7 @@ namespace WsOfWebClient
                 GroupKey = s.GroupKey,
                 //car = "car" + m.Groups["car"].Value,
                 rotationY = va.rotationY,
+                postionCrossKey = va.postionCrossKey
             };
             var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ms);
             Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);

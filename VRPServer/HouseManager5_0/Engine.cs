@@ -279,7 +279,7 @@ namespace HouseManager5_0
         /// <param name="selections"></param>
         /// <param name="selectionCenter"></param>
         /// <param name="player"></param>
-        protected bool StartSelectThreadA(List<Node.direction> selections, Node.pathItem.Postion selectionCenter, Player player, Action selectionIsRight, Node navigationData)
+        protected void StartSelectThreadA(List<Node.direction> selections, Node.pathItem.Postion selectionCenter, Player player, Action selectionIsRight, Node navigationData)
         {
             selections.RemoveAll(item => that.isZero(item));
             //  int k = 0;
@@ -287,11 +287,12 @@ namespace HouseManager5_0
             //  bool bgHasSet = false;
             // while (true)
             {
+                //if(selectionCenter.postionCrossKey!=player)
 
-                if (isRight(selections, player.direciton, true))
+                if (isRight(selections, player.direcitonAndID, true))
                 {
                     selectionIsRight();//直接将State设置成Working
-                    return false;
+                                       //return false;
                 }
                 else
                 {
@@ -361,7 +362,7 @@ namespace HouseManager5_0
                         }
                         this.sendSeveralMsgs(notifyMsg);
                     }
-                    return true;
+                    // return true;
                 }
             }
 
@@ -369,37 +370,44 @@ namespace HouseManager5_0
 
         protected void StartSelectThreadB(List<Node.direction> selections, Node.pathItem.Postion selectionCenter, Player player, CarState oldState, Action p)
         {
-            if (isRight(selections, player.direciton, false) || player.Bust)
+            if (selectionCenter.postionCrossKey == player.direcitonAndID.PostionCrossKey)
             {
-                List<string> notifyMsg = new List<string>();
-                if (player.getCar().state == CarState.selecting)
+                if (isRight(selections, player.direcitonAndID, false) || player.Bust)
                 {
-                    // List<string> notifyMsg = new List<string>();
-                    player.getCar().setState(player, ref notifyMsg, oldState);
-                    player.SendBG(player, ref notifyMsg);
+                    List<string> notifyMsg = new List<string>();
+                    if (player.getCar().state == CarState.selecting)
+                    {
+                        // List<string> notifyMsg = new List<string>();
+                        player.getCar().setState(player, ref notifyMsg, oldState);
+                        player.SendBG(player, ref notifyMsg);
+                    }
+                    this.sendSeveralMsgs(notifyMsg);
+                    p();
                 }
-                this.sendSeveralMsgs(notifyMsg);
-                p();
+                else
+                {
+                    List<string> notifyMsg = new List<string>();
+                    var reduceValue = player.getCar().ability.ReduceBusinessAndVolume(player, player.getCar(), ref notifyMsg);
+                    reduceValue = Math.Max(0, reduceValue);
+                    SelectionIsWrong(player, selectionCenter, reduceValue, notifyMsg);
+                    this.sendSeveralMsgs(notifyMsg);
+                    player.playerSelectDirectionTh = new Thread(() => StartSelectThreadB(selections, selectionCenter, player, oldState, p));
+                }
             }
             else
             {
-                List<string> notifyMsg = new List<string>();
-                var reduceValue = player.getCar().ability.ReduceBusinessAndVolume(player, player.getCar(), ref notifyMsg);
-                reduceValue = Math.Max(0, reduceValue);
-                SelectionIsWrong(player, reduceValue, notifyMsg);
-                this.sendSeveralMsgs(notifyMsg);
                 player.playerSelectDirectionTh = new Thread(() => StartSelectThreadB(selections, selectionCenter, player, oldState, p));
             }
-
         }
 
-        private void SelectionIsWrong(Player player, long reduceValue, List<string> notifyMsg)
+        private void SelectionIsWrong(Player player, Node.pathItem.Postion selectionCenter, long reduceValue, List<string> notifyMsg)
         {
             var obj = new SelectionIsWrong
             {
                 c = "SelectionIsWrong",
                 WebSocketID = player.WebSocketID,
-                reduceValue = reduceValue
+                reduceValue = reduceValue,
+                postionCrossKey = selectionCenter.postionCrossKey
             };
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             notifyMsg.Add(player.FromUrl);
@@ -446,8 +454,10 @@ namespace HouseManager5_0
                 animations.Add(animation);
             }
         }
-        private bool isRight(List<Node.direction> selections, System.Numerics.Complex c2, bool firstCheck)
+        private bool isRight(List<Node.direction> selections, HouseManager5_0.Player.DirecitonAndSelectID direcitonAndSelectID, bool firstCheck)
         {
+            var c2 = direcitonAndSelectID.direciton;
+
             if (firstCheck)
             {
                 //if (that.rm.Next(100) < 20)
@@ -521,7 +531,7 @@ namespace HouseManager5_0
                   player.playerType == Player.PlayerType.player &&
                   player.improvementRecord.HasValueToImproveSpeed)
                 {
-                    if (that.rm.Next(0, 100) <100)
+                    if (that.rm.Next(0, 100) < 100)
                     {
                         //加速效果80%，直接过。
                         this.ThreadSleep(5);

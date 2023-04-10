@@ -95,6 +95,7 @@ namespace WsOfWebClient
     public class ViewAngle : CommonClass.Command
     {
         public double rotationY { get; set; }
+        public string postionCrossKey { get; set; }
     }
     public class Bust : Attack
     {

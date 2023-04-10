@@ -333,6 +333,7 @@ namespace CommonClass
     public class SelectionIsWrong : CommandNotify
     {
         public long reduceValue { get; set; }
+        public string postionCrossKey { get; set; }
     }
     public class BradCastAbility : CommandNotify
     {
@@ -463,6 +464,8 @@ namespace CommonClass
 
     public class ShowDirectionOperator : CommandNotify
     {
+        public string postionCrossKey;
+
         /// <summary>
         /// item为 旋转的弧度。0~2π
         /// </summary>
@@ -565,6 +568,7 @@ namespace CommonClass
         /// </summary>
         public double rotationY { get; set; }
         public string GroupKey { get; set; }
+       public string postionCrossKey { get; set; }
     }
     public class TakeApart : Command
     {

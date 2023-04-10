@@ -212,7 +212,12 @@ namespace HouseManager5_0.GroupClassF
                 newPlayer.beforeBroke = that.BeforePlayerBroken;
                 // newPlayer.driverSelected = this.driverSelected;
                 that.ConfigMagic(newPlayer);
-                ((Player)this._PlayerInGroup[addItem.Key]).direciton = that.getComplex(gp.GetFpByIndex(this.StartFPIndex));
+                ((Player)this._PlayerInGroup[addItem.Key]).direcitonAndID =
+                    new Player.DirecitonAndSelectID()
+                    {
+                        direciton = that.getComplex(gp.GetFpByIndex(this.StartFPIndex)),
+                        PostionCrossKey = ""
+                    };
                 //  newPlayer.
                 ((Player)this._PlayerInGroup[addItem.Key]).modelHasShowed = new Dictionary<string, bool>();
                 //((Player)this._Players[addItem.Key]).aModelHasShowed = new Dictionary<string, bool>();

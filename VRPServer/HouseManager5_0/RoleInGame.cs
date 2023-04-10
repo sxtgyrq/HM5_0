@@ -889,7 +889,17 @@ namespace HouseManager5_0
             notifyMsg.Add(sendMsg);
         }
 
-        public System.Numerics.Complex direciton = 0;
+        public class DirecitonAndSelectID
+        {
+            public System.Numerics.Complex direciton { get; set; }
+            public string PostionCrossKey { get; set; }
+        }
+        public DirecitonAndSelectID direcitonAndID = new DirecitonAndSelectID()
+        {
+            direciton = 0,
+            PostionCrossKey = ""
+        };
+
 
         public Dictionary<string, bool> modelHasShowed { get; set; }
         //public Dictionary<string, bool> aModelHasShowed { get; set; }

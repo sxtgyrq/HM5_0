@@ -1443,7 +1443,8 @@ namespace HouseManager5_0.RoomMainF
                 direction = direction.ToArray(),
                 positionX = positionX,
                 positionY = positionY,
-                positionZ = positionZ
+                positionZ = positionZ,
+                postionCrossKey = selectionCenter.postionCrossKey
             };
             var url = player.FromUrl;
             var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(obj);

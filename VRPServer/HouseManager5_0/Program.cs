@@ -8,6 +8,7 @@ namespace HouseManager5_0
         public static DateTime startTime;
         public static Geometry.Boundary boundary;
         public static Data dt;
+        public static AppConfig configObj;
         public static RoomMainF.RoomMain rm;
         static void Main(string[] args)
         {
@@ -78,6 +79,9 @@ namespace HouseManager5_0
                 DalOfAddress.Connection.SetPassWord(pass);
             }
             Program.startTime = DateTime.Now;
+            var content = System.IO.File.ReadAllText("config/dataConfig.json");
+            Program.configObj = Newtonsoft.Json.JsonConvert.DeserializeObject<HouseManager5_0.AppConfig>(content);
+
 
             Program.boundary = new Geometry.Boundary();
             boundary.load();
