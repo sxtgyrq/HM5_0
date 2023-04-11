@@ -721,6 +721,26 @@ var objMain =
             SysOperatePanel.draw();
             frequencyShow.show();
             operateStateShow.show();
+
+
+            var startBase = new THREE.Vector3(MercatorGetXbyLongitude(objMain.basePoint.Longitude), MercatorGetZbyHeight(objMain.basePoint.Height) * objMain.heightAmplify, -MercatorGetYbyLatitude(objMain.basePoint.Latitde));
+            var animationData =
+            {
+                old: {
+                    x: objMain.controls.target.x,
+                    y: objMain.controls.target.y,
+                    z: objMain.controls.target.z,
+                    t: Date.now()
+                },
+                newT:
+                {
+                    x: startBase.x,
+                    y: startBase.y,
+                    z: startBase.z,
+                    t: Date.now() + 3000
+                }
+            };
+            objMain.camaraAnimateData = animationData;
         }, otherData: []
     },
     Tax: {},
@@ -3997,8 +4017,8 @@ var drawPoint = function (color, fp, indexKey) {
         object.position.set(MercatorGetXbyLongitude(fp.Longitude), 0.1 + MercatorGetZbyHeight(fp.Height) * objMain.heightAmplify, -MercatorGetYbyLatitude(fp.Latitde));
         object.scale.set(0.0005, 0.0005, 0.0005);
 
-        var start = new THREE.Vector3(MercatorGetXbyLongitude(fp.Longitude), MercatorGetZbyHeight(fp.Height) * objMain.heightAmplify, -MercatorGetYbyLatitude(fp.Latitde))
-        var end = new THREE.Vector3(MercatorGetXbyLongitude(fp.positionLongitudeOnRoad), MercatorGetZbyHeight(fp.Height) * objMain.heightAmplify, -MercatorGetYbyLatitude(fp.positionLatitudeOnRoad))
+        var start = new THREE.Vector3(MercatorGetXbyLongitude(fp.Longitude), MercatorGetZbyHeight(fp.Height) * objMain.heightAmplify, -MercatorGetYbyLatitude(fp.Latitde));
+        var end = new THREE.Vector3(MercatorGetXbyLongitude(fp.positionLongitudeOnRoad), MercatorGetZbyHeight(fp.Height) * objMain.heightAmplify, -MercatorGetYbyLatitude(fp.positionLatitudeOnRoad));
         var cc = new Complex(end.x - start.x, end.z - start.z);
         cc.toOne();
         object.rotateY(-cc.toAngle() + Math.PI / 2);
@@ -4715,12 +4735,18 @@ var operatePanel =
                             }
                         };
                         objMain.camaraAnimateData = animationData;
+                        if (objMain.directionGroup.children.length > 1)
+                            objMain.directionGroup.children[1].userData.objState = 0;
+                        if (objMain.directionGroup.children.length > 2)
+                            objMain.directionGroup.children[2].userData.objState = 0;
+                        if (objMain.directionGroup.children.length > 3)
+                            objMain.directionGroup.children[3].userData.objState = 0;
                         operatePanel.refresh();
                     }
                 }
             }, 0);
             if (objMain.directionGroup.children.length > 1)
-                addItemToTaskOperatingPanle2('Pic/crossimg/A.png', 'selectDirectionBtn', function () {
+                addItemToTaskOperatingPanle2('Pic/crossimg/A.png', 'selectDirectionBtn_01', function () {
                     if (objMain.carState["car"] == 'selecting') {
                         if (objMain.directionGroup.children.length > 1) {
                             var rotationY = objMain.directionGroup.children[1].rotation.y;
@@ -4733,7 +4759,7 @@ var operatePanel =
                     }
                 }, objMain.directionGroup.children[1].userData.objState);
             if (objMain.directionGroup.children.length > 2)
-                addItemToTaskOperatingPanle2('Pic/crossimg/B.png', 'selectDirectionBtn', function () {
+                addItemToTaskOperatingPanle2('Pic/crossimg/B.png', 'selectDirectionBtn_02', function () {
                     if (objMain.carState["car"] == 'selecting') {
                         if (objMain.directionGroup.children.length > 2) {
                             var rotationY = objMain.directionGroup.children[2].rotation.y;
@@ -4746,7 +4772,7 @@ var operatePanel =
                     }
                 }, objMain.directionGroup.children[2].userData.objState);
             if (objMain.directionGroup.children.length > 3)
-                addItemToTaskOperatingPanle2('Pic/crossimg/C.png', 'selectDirectionBtn', function () {
+                addItemToTaskOperatingPanle2('Pic/crossimg/C.png', 'selectDirectionBtn_03', function () {
                     if (objMain.carState["car"] == 'selecting') {
                         if (objMain.directionGroup.children.length > 3) {
                             var rotationY = objMain.directionGroup.children[3].rotation.y;

@@ -17,8 +17,8 @@ namespace HouseManager5_0
         {
             if (dObj.c == "taxSet")
             {
-                var taxSet = (taxSet)dObj;
-                this.collectTaxT(taxSet, grp, new notifyMsg());
+                //var taxSet = (taxSet)dObj;
+                //this.collectTaxT(taxSet, grp, new notifyMsg());
             }
             //throw new NotImplementedException();
         }

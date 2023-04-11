@@ -533,8 +533,13 @@ namespace HouseManager5_0
                 {
                     if (that.rm.Next(0, 100) < 100)
                     {
-                        //加速效果80%，直接过。
+                        //加速效果100%，直接过。
                         this.ThreadSleep(5);
+                        p();
+                    }
+                    else if (player.getCar().ability.costVolume == 0)
+                    {
+                        this.ThreadSleep(10);
                         p();
                     }
                     else
@@ -553,6 +558,11 @@ namespace HouseManager5_0
                 if (player.playerType == Player.PlayerType.NPC || player.Bust)
                 {
                     this.ThreadSleep(50);
+                    p();
+                }
+                else if (player.getCar().ability.costVolume == 0)
+                {
+                    this.ThreadSleep(10);
                     p();
                 }
                 else if (

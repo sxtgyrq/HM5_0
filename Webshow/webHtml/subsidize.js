@@ -298,7 +298,31 @@
             // return navigator.clipboard.writeText(msg);
             // document.getElementById('signatureInputTextArea').value = navigator.clipboard.readText();
             navigator.clipboard.readText().then(
-                clipText => document.getElementById(eId).value = clipText);
+
+                clipText => {
+
+
+                    document.getElementById(eId).value = clipText;
+                    const messageRegex = /^-----BEGIN BITCOIN SIGNED MESSAGE-----[\r]?\n(.*)[\r]?\n-----BEGIN SIGNATURE-----[\r]?\n(.*?)[\r]?\n(.*?)[\r]?\n-----END BITCOIN SIGNED MESSAGE-----$/s;
+                    const addressRegex = /^(1|3)[a-km-zA-HJ-NP-Z1-9]{25,34}$/;
+                    message = clipText;
+                    if (messageRegex.test(message)) {
+                        const msgSigned = RegExp.$1.trim();
+                        if (document.getElementById('msgNeedToSign') != null) {
+                            if (document.getElementById('msgNeedToSign').value == msgSigned) {
+                                const address = RegExp.$2.trim();
+                                const signature = RegExp.$3.trim();
+                                if (addressRegex.test(address)) {
+                                    if (document.getElementById('bitcoinSubsidizeAddressInput') != null)
+                                        document.getElementById('bitcoinSubsidizeAddressInput').value = address;
+                                    if (document.getElementById('signatureInputTextArea') != null)
+                                        document.getElementById('signatureInputTextArea').value = signature;
+                                }
+                            }
+                        }
+
+                    }
+                });
         }
         else {
             alert('浏览器设置不支持访问剪切板！');

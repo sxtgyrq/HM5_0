@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 
 namespace HouseManager5_0
@@ -79,7 +80,12 @@ namespace HouseManager5_0
                 DalOfAddress.Connection.SetPassWord(pass);
             }
             Program.startTime = DateTime.Now;
-            var content = System.IO.File.ReadAllText("config/dataConfig.json");
+            string content;
+            using (StreamReader sr = new StreamReader("config/dataConfig.json"))
+            {
+                content = sr.ReadToEnd();
+            }
+            //var content = System.IO.File.ReadAllText("config/dataConfig.json");
             Program.configObj = Newtonsoft.Json.JsonConvert.DeserializeObject<HouseManager5_0.AppConfig>(content);
 
 

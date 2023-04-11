@@ -60,12 +60,13 @@ namespace HouseManager5_0.GroupClassF
                         player.MoneySet(player.Money + car.ability.costVolume, ref notifyMsg);
                     }
                     this.MoneySet(this.Money + car.ability.costVolume, ref notifyMsg);
-                    if (this.Money > player.getCar().ability.Business)
+                    if (this.Money >= player.getCar().ability.Business)
                     {
                         if (!this.taskFineshedTime.ContainsKey(player.Key))
                         {
                             this.taskFineshedTime.Add(player.Key, DateTime.Now);
                             this.recordRaceTime(player.Key);
+                            // player.MoneyChanged(player,)
                         }
                     }
                     player.improvementRecord.reduceSpeed(player, ref notifyMsg);
@@ -102,6 +103,10 @@ namespace HouseManager5_0.GroupClassF
                     if (player.playerType == Player.PlayerType.player)
                     {
                         this.askWhetherGoToPositon(player.Key, grp);
+                        if (this.taskFineshedTime.ContainsKey(player.Key))
+                        {
+                            player.SetMoneyCanSave(player, ref notifyMsg);
+                        }
                     }
                 }
                 else

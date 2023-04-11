@@ -546,7 +546,11 @@ namespace HouseManager5_0
         {
             get
             {
-                if (this.Money - 50000 < 0)
+                if (this.Group.taskFineshedTime.ContainsKey(this.Key))
+                {
+                    return this.Money;
+                }
+                else if (this.Money - 50000 < 0)
                 {
                     return 0;
                 }

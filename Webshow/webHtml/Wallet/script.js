@@ -60737,6 +60737,29 @@ var signMsg = function () {
         document.getElementById('publicKeyShow').value = addr;
         document.getElementById('resultOfSign').value = sign;
         localStorage['yrqToolToSign'] = privateKey;
+
+        var sgHdr = [
+            "-----BEGIN BITCOIN SIGNED MESSAGE-----",
+            "-----BEGIN SIGNATURE-----",
+            "-----END BITCOIN SIGNED MESSAGE-----"
+        ];
+
+        var qtHdr = [
+            "-----BEGIN BITCOIN SIGNED MESSAGE-----",
+            "-----BEGIN BITCOIN SIGNATURE-----",
+            "-----END BITCOIN SIGNATURE-----"
+        ];
+
+        function joinMessage(type, addr, msg, sig) {
+            if (type == 'inputs_io')
+                return sgHdr[0] + '\n' + msg + '\n' + sgHdr[1] + '\n' + addr + '\n' + sig + '\n' + sgHdr[2];
+            else if (type == 'multibit')
+                return qtHdr[0] + '\n' + msg + '\n' + qtHdr[1] + '\nVersion: Bitcoin-qt (1.0)\nAddress: ' + addr + '\n\n' + sig + '\n' + qtHdr[2];
+            else
+                return sig;
+        }
+        var jm = joinMessage('inputs_io', addr, signMsg, sign);
+        document.getElementById('publicKeyAndSignShow').value = jm;
     }
     else {
         alert('私钥格式不正确！');
@@ -60770,7 +60793,7 @@ var copyStr = function (id, operateObjName) {
     var msg = document.getElementById(id).value;
     if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(msg);
-        alert('已复制'+operateObjName+'!');
+        alert('已复制' + operateObjName + '!');
     }
     else {
         alert('浏览器设置不支持访问剪切板！');
