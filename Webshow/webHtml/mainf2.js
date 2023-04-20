@@ -870,7 +870,9 @@ var objMain =
                     }
                     else {
                         var cubeTextureLoader = new THREE.CubeTextureLoader();
-                        cubeTextureLoader.setPath('https://www.nyrq123.com/imgtaiyuan/' + r.Md5Key + '/');
+                        //http://yrqmodeldata.oss-cn-beijing.aliyuncs.com/bgimg/b46fc059ea0a9d7aac06b539d469dfe5/ny.jpg
+                        cubeTextureLoader.setPath('https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/bgimg/' + r.Md5Key + '/');
+                        // cubeTextureLoader.setPath('https://www.nyrq123.com/imgtaiyuan/' + r.Md5Key + '/');
                         // window.location.hostname + '/bgimg?key=1&y=2&p=px'
                         var cubeTexture = cubeTextureLoader.load(
                             [
@@ -2017,6 +2019,9 @@ var objMain =
                 }; break;
             case 'GoodsSelectionNotify':
                 {
+                    /*
+                     * 建筑物的画线
+                     */
                     drawGoodsSelection.f(received_obj);
                 }; break;
             case 'ResistanceDisplay':
@@ -2391,7 +2396,31 @@ function animate() {
                     for (var i = 0; i < objMain.buildingGroup.children.length; i++) {
                         objMain.buildingGroup.children[i].scale.setX(1);
                         objMain.buildingGroup.children[i].scale.setZ(1);
-
+                        objMain.buildingGroup.children[i].visible = false;
+                        if (objMain.mainF.getLength(objMain.controls.target, objMain.buildingGroup.children[i].position) < lengthOfCC * 5) {
+                            objMain.buildingGroup.children[i].visible = true;
+                        }
+                        if (objMain.buildingGroup.children[i].visible) {
+                            continue;
+                        }
+                        else {
+                            var selfCar = objMain.carGroup.getObjectByName('car_' + objMain.indexKey);
+                            if (objMain.mainF.getLength(selfCar.position, objMain.buildingGroup.children[i].position) < lengthOfCC * 5) {
+                                objMain.buildingGroup.children[i].visible = true;
+                            }
+                        }
+                        if (objMain.buildingGroup.children[i].visible) {
+                            continue;
+                        }
+                        else {
+                            for (var j = 0; j < drawGoodsSelection.data.length; j++) {
+                                var end = drawGoodsSelection.data[j];
+                                if (objMain.mainF.getLength(end, objMain.buildingGroup.children[i].position) < lengthOfCC) {
+                                    objMain.buildingGroup.children[i].visible = true;
+                                    break;
+                                }
+                            }
+                        }
                         //显示3km以内的建筑物
                     }
                     {
@@ -2743,9 +2772,7 @@ function animate() {
                                 case 'speed':
                                     {
                                         objMain.selectObj.obj = selectObj;
-                                        objMain.selectObj.type = objMain.Task.state;
-                                        // objMain.promoteDiamond.getChildByName('diamond_' + objMain.Task.state).scale.set(scale, scale * 1.1, scale);
-                                        //
+                                        objMain.selectObj.type = objMain.Task.state; 
 
                                         selectObj.scale.set(scale, scale * 1.1, scale);
 
@@ -5134,7 +5161,7 @@ var stateSet =
     {
         add: function (carId) {
             {
-                var flag = objMain.playerGroup.getChildByName('flag_' + carId);
+                var flag = objMain.playerGroup.getObjectByName('flag_' + carId);
                 if (flag) {
                     var O3d = new THREE.Object3D();
                     O3d.name = 'defender_' + carId;
@@ -5180,8 +5207,7 @@ var stateSet =
     confusePrepare:
     {
         add: function (carId, animateData) {
-            {
-                //var flag = objMain.playerGroup.getChildByName('flag_' + carId);
+            { 
                 //if (flag)
                 // var animateData = { startX: objMain.controls.target.x, startY: objMain.controls.target.y, startZ: objMain.controls.target.z, start: Date.now(), endX: objMain.controls.target.x + 5, endY: objMain.controls.target.y, endZ: objMain.controls.target.z }
                 {
@@ -5275,8 +5301,7 @@ var stateSet =
     lostPrepare:
     {
         add: function (carId, animateData) {
-            {
-                //var flag = objMain.playerGroup.getChildByName('flag_' + carId);
+            { 
                 //if (flag)
                 // var animateData = { startX: objMain.controls.target.x, startY: objMain.controls.target.y, startZ: objMain.controls.target.z, start: Date.now(), endX: objMain.controls.target.x + 5, endY: objMain.controls.target.y, endZ: objMain.controls.target.z }
                 {
@@ -5370,8 +5395,7 @@ var stateSet =
     ambusePrepare:
     {
         add: function (carId, animateData) {
-            {
-                //var flag = objMain.playerGroup.getChildByName('flag_' + carId);
+            { 
                 //if (flag)
                 // var animateData = { startX: objMain.controls.target.x, startY: objMain.controls.target.y, startZ: objMain.controls.target.z, start: Date.now(), endX: objMain.controls.target.x + 5, endY: objMain.controls.target.y, endZ: objMain.controls.target.z }
                 {
@@ -5448,7 +5472,7 @@ var stateSet =
         add: function (targetRoleID, actionRole) {
             {
                 this.clear(actionRole);
-                var flag = objMain.playerGroup.getChildByName('flag_' + targetRoleID);
+                var flag = objMain.playerGroup.getObjectByName('flag_' + targetRoleID);
                 if (flag) {
                     //var O3d = new THREE.Object3D();
 
@@ -5538,7 +5562,7 @@ var stateSet =
             var height = window.innerHeight;
             material1.setPerspective(objMain.camera.fov, height);
             var particleFireMesh1 = new THREE.Points(geometry1, material1);
-            var flag = objMain.playerGroup.getChildByName('flag_' + targetRoleID);
+            var flag = objMain.playerGroup.getObjectByName('flag_' + targetRoleID);
             if (flag) {
                 //  mesh.position.set(flag.position.x, 0, flag.position.z);
                 particleFireMesh1.position.set(flag.position.x, flag.position.y, flag.position.z);

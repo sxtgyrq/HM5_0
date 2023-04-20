@@ -445,6 +445,7 @@ namespace CommonClass
         public int groupNumber { get; set; }
         public string TaskName { get; set; }
         public string BTCAddr { get; set; }
+        public bool HasValueToImproveSpeed { get; set; }
 
         public class DataItem
         {
@@ -568,7 +569,7 @@ namespace CommonClass
         /// </summary>
         public double rotationY { get; set; }
         public string GroupKey { get; set; }
-       public string postionCrossKey { get; set; }
+        public string postionCrossKey { get; set; }
     }
     public class TakeApart : Command
     {
@@ -819,6 +820,7 @@ namespace CommonClass
     {
         public string KeyLookfor { get; set; }
         public string key { get; set; }
+        public string GroupKey { get; set; }
         /// <summary>
         /// 0代表基础信息，1代表战斗抗性
         /// </summary>
@@ -865,6 +867,32 @@ namespace CommonClass
         // public long SpeedValue { get; set; }
         // public long SpeedValue { get; set; }
         //  public int 
+    }
+
+    public class ResistanceDisplay_V2 : CommandNotify
+    {
+        /// <summary>
+        /// 自己，队友，玩家，NPC，敌对NPC
+        /// </summary>
+        public string Relation { get; set; }
+        public string Name { get; set; }
+        public long Money { get; set; }
+        public string DriverName { get; set; }
+        public int[] MileCount { get; set; }
+        public int[] VolumeCount { get; set; }
+        public int[] SpeedCount { get; set; }
+        public string BTCAddr { get; set; }
+        public long Mile { get; set; }
+        public long Volume { get; set; }
+        public int Speed { get; set; }
+
+        public string OnLineStr { get; set; }
+        public int CollectSum { get; set; }
+        public string CollcetPercent { get; set; }
+        public int SelectCount { get; set; }
+        public string SelectRightPercent { get; set; }
+        public int SpeedImproveCount { get; set; }
+        public string SpeedImprovePercent { get; set; }
     }
 
     public class ParameterToEditPlayerMaterial

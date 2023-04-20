@@ -84,26 +84,45 @@ namespace HouseManager5_0
 
         internal static void writeToAliyun()
         {
-
-            var material = new Dictionary<string, CommonClass.databaseModel.abtractmodelsPassData>();
-           
-            var list = DalOfAddress.AbtractModels.GetCategeAm1();
-            for (int i = 0; i < list.Count; i += 2)
+            if (false)
             {
-                var obj = DalOfAddress.AbtractModels.GetAbtractModelItem(list[i].Trim());
-                 
+                var material = new Dictionary<string, CommonClass.databaseModel.abtractmodelsPassData>();
 
-                var returnObj = new
+                var list = DalOfAddress.AbtractModels.GetCategeAm1();
+                for (int i = 0; i < list.Count; i += 2)
                 {
-                    objText = obj.objText,
-                    mtlText = obj.mtlText,
-                    imgBase64 = obj.imageBase64,
-                    AmID = list[i],
-                    modelType = obj.modelType
-                };
-                var json = Newtonsoft.Json.JsonConvert.SerializeObject(returnObj);
-                Aliyun.Json.Add($"objmodel/{list[i]}.json", json);
-            } 
-        } 
+                    var obj = DalOfAddress.AbtractModels.GetAbtractModelItem(list[i].Trim());
+
+
+                    var returnObj = new
+                    {
+                        objText = obj.objText,
+                        mtlText = obj.mtlText,
+                        imgBase64 = obj.imageBase64,
+                        AmID = list[i],
+                        modelType = obj.modelType
+                    };
+                    var json = Newtonsoft.Json.JsonConvert.SerializeObject(returnObj);
+                    Aliyun.Json.Add($"objmodel/{list[i]}.json", json);
+                }
+            }
+            {
+                var AllCrossesBGData = DalOfAddress.backgroundjpg.GetAllKey();
+
+                foreach (var item in AllCrossesBGData)
+                {
+                    //  var key = item.Value;
+                    var jpgValue = DalOfAddress.backgroundjpg.GetItemDetail(item.Key);
+                    if (jpgValue != null)
+                        foreach (var directionItem in jpgValue)
+                        {
+                            string base64Image = directionItem.Value;
+                            string base64Data = base64Image.Substring(base64Image.IndexOf(',') + 1);
+                            byte[] imageBytes = Convert.FromBase64String(base64Data);
+                            Aliyun.ByteData.Add($"bgimg/{item.Value}/{directionItem.Key}.jpg", imageBytes);
+                        }
+                }
+            }
+        }
     }
 }

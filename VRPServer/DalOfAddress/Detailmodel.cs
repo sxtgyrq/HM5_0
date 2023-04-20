@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace DalOfAddress
 {
@@ -862,5 +863,142 @@ WHERE locked=1 AND dmState=1 AND A.bussinessAddress='{bussinessAddr}';";
         //            }
         //            return first;
         //        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="replacingID">指新增的模型id，其模型要替代旧的模型</param>
+        /// <param name="replacedID">指旧的模型id，其模型要被新模型替代旧</param>
+        /// <returns></returns>
+        public static bool Replace(string replacingID, string replacedID)
+        {
+            Regex rg = new Regex("^n$[0-9a-f]{32}$");
+            if (rg.IsMatch(replacedID) && rg.IsMatch(replacingID))
+            {
+                using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
+                {
+                    con.Open();
+                    using (MySqlTransaction tran = con.BeginTransaction())
+                    {
+                        var oldModel = GetItem(replacedID, con, tran);
+                        var newModel = GetItem(replacingID, con, tran);
+                        if (oldModel == null)
+                        {
+                            tran.Rollback();
+                            return false;
+                        }
+                        else if (oldModel.locked)
+                        {
+                            tran.Rollback();
+                            return false;
+                        }
+                        else if (oldModel.dmState != 0)
+                        {
+                            tran.Rollback();
+                            return false;
+                        }
+                        else if (oldModel.amState == 0)
+                        {
+                            tran.Rollback();
+                            return false;
+                        }
+                        else if (newModel == null)
+                        {
+                            tran.Rollback();
+                            return false;
+                        }
+                        else
+                        {
+                            int influencedRowCount;
+                            {
+                                string sQL = $"UPDATE detailmodel SET amodel='{newModel.amID}' WHERE modelID='{replacedID}';";
+                                using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                                {
+                                    influencedRowCount = command.ExecuteNonQuery();
+                                }
+                            }
+                            if (influencedRowCount == 1)
+                            {
+                                {
+                                    {
+                                        string sQL = $@"UPDATE detailmodel b LEFT JOIN abtractmodels a  on b.amodel=a.amID
+set b.dmState=1,a.amState=1 WHERE  b.modelID='{replacedID}';";
+                                        using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                                        {
+                                            command.ExecuteNonQuery();
+                                        }
+                                    }
+                                    var updatedModel = GetItem(replacedID, con, tran);
+                                    if (updatedModel.amState == 1 && updatedModel.dmState == 1&&updatedModel.amID == newModel.amID)
+                                    {
+                                        tran.Commit();
+                                        return true;
+                                    }
+                                    else
+                                    {
+                                        tran.Rollback();
+                                        return false;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                tran.Rollback();
+                                return false;
+                            }
+                        }  
+                    }
+                }
+            } 
+            return false;
+        }
+
+        public static ItemJsonFormat GetItem(string modelID, MySqlConnection con, MySqlTransaction tran)
+        {
+            ItemJsonFormat obj;
+            string sQL = @"SELECT 
+A.x,A.y,A.z,A.locked,A.dmState,A.bussinessAddress,C.Content,B.author,B.amState,B.modelName,B.createTime,B.amID 
+FROM detailmodel as A
+LEFT JOIN abtractmodels AS B on A.amodel=B.amID
+LEFT JOIN modeltype AS C on B.modelType=C.modelType
+
+WHERE A.modelID=@modelID;";
+            {
+                {
+                    using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                    {
+                        command.Parameters.AddWithValue("@modelID", modelID);
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                obj = new ItemJsonFormat()
+                                {
+                                    c = "modelDetail",
+                                    x = Convert.ToDouble(reader["x"]),
+                                    y = Convert.ToDouble(reader["y"]),
+                                    z = Convert.ToDouble(reader["z"]),
+                                    locked = Convert.ToBoolean(reader["locked"]),
+                                    dmState = Convert.ToInt32(reader["dmState"]),
+                                    bussinessAddress = reader["bussinessAddress"] == DBNull.Value ? "" : Convert.ToString(reader["bussinessAddress"]).Trim(),
+                                    Content = Convert.ToString(reader["Content"]).Trim(),
+                                    author = Convert.ToString(reader["author"]).Trim(),
+                                    amState = Convert.ToInt32(reader["amState"]),
+                                    modelName = Convert.ToString(reader["modelName"]),
+                                    createTime = Convert.ToDateTime(reader["createTime"]).ToString("yyyy-MM-dd HH:mm:ss"),
+                                    amID = Convert.ToString(reader["amID"])
+                                };
+                            }
+                            else
+                            {
+                                obj = null;
+                            }
+                        }
+                    }
+                }
+            }
+            return obj;
+        }
     }
 }

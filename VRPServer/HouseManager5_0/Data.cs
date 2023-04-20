@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Aliyun;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using static CommonClass.PathCal;
 using OssModel = Model;
@@ -174,6 +176,8 @@ namespace HouseManager5_0
                 }
             }
         }
+
+
     }
     public partial class Data
     {
@@ -533,14 +537,26 @@ namespace HouseManager5_0
         public Dictionary<string, int> CrossesNotHaveBGData { get; private set; }
         internal void LoadCrossBackground()
         {
-            this.AllCrossesBGData = DalOfAddress.backgroundjpg.GetAllKey();
-            this.AllCrossesBGData_ = new Dictionary<string, string>();
-            foreach (var item in this.AllCrossesBGData)
             {
-                this.AllCrossesBGData_.Add(item.Value, item.Key);
-            }
+                this.AllCrossesBGData = DalOfAddress.backgroundjpg.GetAllKey();
+                this.AllCrossesBGData_ = new Dictionary<string, string>();
+                foreach (var item in this.AllCrossesBGData)
+                {
+                    this.AllCrossesBGData_.Add(item.Value, item.Key);
+                }
 
-            this.CrossesNotHaveBGData = new Dictionary<string, int>();
+                this.CrossesNotHaveBGData = new Dictionary<string, int>();
+            }
+            {
+                //   foreach(CallConvThiscall.)
+            }
+        }
+
+        internal void CrossDataToAliyun()
+        {
+           
+            // foreach(var item)
+            //throw new NotImplementedException();
         }
 
         /// <summary>

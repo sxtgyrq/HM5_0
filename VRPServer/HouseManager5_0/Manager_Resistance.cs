@@ -17,6 +17,190 @@ namespace HouseManager5_0
 
         internal string Display(GetResistanceObj r)
         {
+
+            GroupClassF.GroupClass group = null;
+            lock (that.PlayerLock)
+            {
+                if (this.that._Groups.ContainsKey(r.GroupKey))
+                {
+                    group = this.that._Groups[r.GroupKey];
+                }
+            }
+            if (group != null)
+            {
+                lock (group.PlayerLock)
+                {
+                    for (int i = 0; i < group._PlayerInGroup.Count; i++)
+                    {
+
+                    }
+                }
+                ResistanceDisplay rd = new ResistanceDisplay();
+                //switch (r.RequestType)
+                //{
+                //    case 0:
+                //        {
+                //            if (group._PlayerInGroup.ContainsKey(r.key))
+                //            {
+                //                var player = (Player)group._PlayerInGroup[r.key];
+                //                if (r.key == r.KeyLookfor)
+                //                {
+                //                    //   Player boss;
+                //                    string bossKey, bossName;
+                //                    string BTCAddr;
+                //                    var role = that._Players[r.KeyLookfor];
+                //                    if (role.playerType == Player.PlayerType.player)
+                //                    {
+                //                        BTCAddr = ((Player)role).BTCAddress;
+                //                    }
+                //                    else
+                //                    {
+                //                        BTCAddr = "";
+                //                    }
+                //                    // int[] mileCount = new int[2] { 0, 0 };
+                //                    //role.getCar().ability.AbilityAdd
+                //                    ResistanceDisplay rd = new ResistanceDisplay()
+                //                    {
+                //                        Relation = "自己",
+                //                        BossKey = bossKey,
+                //                        BossName = bossName,
+                //                        BTCAddr = BTCAddr,
+                //                        Level = role.Level,
+                //                        Driver = role.getCar().ability.driver == null ? -1 : role.getCar().ability.driver.Index,
+                //                        DriverName = role.getCar().ability.driver == null ? "" : role.getCar().ability.driver.Name.Trim(),
+                //                        c = "ResistanceDisplay",
+                //                        Name = role.PlayerName,
+                //                        MileCount = role.getCar().ability.getDataCount("mile"),
+                //                        BusinessCount = role.getCar().ability.getDataCount("business"),
+                //                        VolumeCount = role.getCar().ability.getDataCount("volume"),
+                //                        SpeedCount = role.getCar().ability.getDataCount("speed"),
+                //                        Money = role.Money,
+                //                        PlayerType = role.playerType.ToString(),
+                //                        WebSocketID = player.WebSocketID,
+                //                        Mile = role.getCar().ability.mile,
+                //                        Business = role.getCar().ability.Business,
+                //                        Volume = role.getCar().ability.Volume,
+                //                        Speed = role.getCar().ability.Speed,
+                //                        OnLineStr = "在线",
+                //                        KeyLookfor = r.KeyLookfor,
+
+                //                        // ss=role.confuseRecord.
+                //                    };
+                //                    var url = player.FromUrl;
+                //                    var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(rd);
+                //                    this.sendSingleMsg(url, sendMsg);
+
+                //                    var singleName = this.GetSingleName(player);
+                //                    ParameterToEditPlayerMaterial parameter = new ParameterToEditPlayerMaterial()
+                //                    {
+                //                        Key = role.Key,
+                //                        Driver = role.getCar().ability.driver == null ? -1 : role.getCar().ability.driver.Index,
+                //                        Relation = rd.Relation,
+                //                        singleName = singleName
+                //                    };
+                //                    return Newtonsoft.Json.JsonConvert.SerializeObject(parameter);
+                //                }
+                //                else
+                //                {
+                //                    if (that._Players.ContainsKey(r.KeyLookfor))
+                //                    {
+                //                        var role = that._Players[r.KeyLookfor];
+                //                        Player boss;
+                //                        string bossKey, bossName;
+
+                //                        if (role.HasTheBoss(that._Players, out boss))
+                //                        {
+                //                            bossKey = boss.Key;
+                //                            bossName = boss.PlayerName;
+                //                        }
+                //                        else
+                //                        {
+                //                            bossKey = role.TheLargestHolderKey;
+                //                            bossName = role.PlayerName;
+                //                        }
+                //                        string BTCAddr, Relation, OnLineStr;
+                //                        if (role.playerType == Player.PlayerType.player)
+                //                        {
+                //                            BTCAddr = ((Player)role).BTCAddress;
+                //                            if (role.Key == player.TheLargestHolderKey)
+                //                            {
+                //                                Relation = "老大";
+                //                            }
+                //                            else if (role.TheLargestHolderKey == player.TheLargestHolderKey)
+                //                            {
+                //                                Relation = "队友";
+                //                            }
+                //                            else
+                //                            {
+                //                                Relation = "玩家";
+                //                            }
+                //                            if (((Player)role).IsOnline())
+                //                            {
+                //                                OnLineStr = "在线";
+                //                            }
+                //                            else
+                //                            {
+                //                                OnLineStr = "离线";
+                //                            }
+                //                        }
+                //                        else
+                //                        {
+                //                            BTCAddr = "";
+                //                            Relation = "NPC";
+                //                            OnLineStr = "在线";
+                //                        }
+                //                        // int[] mileCount = new int[2] { 0, 0 };
+                //                        //role.getCar().ability.AbilityAdd
+                //                        ResistanceDisplay rd = new ResistanceDisplay()
+                //                        {
+                //                            Relation = Relation,
+                //                            BossKey = bossKey,
+                //                            BossName = bossName,
+                //                            BTCAddr = BTCAddr,
+                //                            Level = role.Level,
+                //                            Driver = role.getCar().ability.driver == null ? -1 : role.getCar().ability.driver.Index,
+                //                            DriverName = role.getCar().ability.driver == null ? "" : role.getCar().ability.driver.Name.Trim(),
+                //                            c = "ResistanceDisplay",
+                //                            Name = role.PlayerName,
+                //                            MileCount = role.getCar().ability.getDataCount("mile"),
+                //                            BusinessCount = role.getCar().ability.getDataCount("business"),
+                //                            VolumeCount = role.getCar().ability.getDataCount("volume"),
+                //                            SpeedCount = role.getCar().ability.getDataCount("speed"),
+                //                            Money = role.Money,
+                //                            PlayerType = role.playerType.ToString(),
+                //                            WebSocketID = player.WebSocketID,
+                //                            Mile = role.getCar().ability.mile,
+                //                            Business = role.getCar().ability.Business,
+                //                            Volume = role.getCar().ability.Volume,
+                //                            Speed = role.getCar().ability.Speed,
+                //                            OnLineStr = OnLineStr,
+                //                            KeyLookfor = r.KeyLookfor,
+                //                            //SpeedValue = role.improvementRecord.speedValue,
+                //                            //DefenceValue = role.improvementRecord.defenceValue,
+                //                            //AttackValue = role.improvementRecord.attackValue,
+                //                            //LoseValue = role.confuseRecord.GetLoseValue(),
+                //                            //ConfuseValue = role.confuseRecord.GetConfuseValue()
+                //                        };
+                //                        var url = player.FromUrl;
+                //                        var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(rd);
+                //                        this.sendSingleMsg(url, sendMsg);
+
+                //                        var singleName = this.GetSingleName(role);
+                //                        ParameterToEditPlayerMaterial parameter = new ParameterToEditPlayerMaterial()
+                //                        {
+                //                            Key = role.Key,
+                //                            Driver = role.getCar().ability.driver == null ? -1 : role.getCar().ability.driver.Index,
+                //                            Relation = rd.Relation,
+                //                            singleName = singleName
+                //                        };
+                //                        return Newtonsoft.Json.JsonConvert.SerializeObject(parameter);
+                //                    }
+                //                }
+                //            }
+                //        }; break;
+                //}
+            }
+            #region
             //lock (that.PlayerLock)
             //{
             //    switch (r.RequestType)
@@ -397,6 +581,8 @@ namespace HouseManager5_0
             //        default: return "";
             //    }
             //}
+            #endregion
+
             return "";
         }
 

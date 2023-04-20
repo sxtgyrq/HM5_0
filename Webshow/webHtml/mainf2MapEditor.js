@@ -3049,7 +3049,8 @@ var uploadBackground = function () {
     //objMain.ws.send(json);
 }
 var showBackground = function () {
-    if (window.localStorage.px != undefined) {
+    //if (window.localStorage.px != undefined)
+    {
         var backgroundData =
         {
             'c': 'showBackground',

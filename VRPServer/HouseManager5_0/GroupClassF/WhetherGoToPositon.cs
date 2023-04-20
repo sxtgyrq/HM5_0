@@ -118,16 +118,21 @@ namespace HouseManager5_0.GroupClassF
                 base64 = "",
                 groupNumber = player.Group.groupNumber,
                 TaskName = taskName,
-                BTCAddr = string.IsNullOrEmpty(player.BTCAddress) ? "" : player.BTCAddress
+                BTCAddr = string.IsNullOrEmpty(player.BTCAddress) ? "" : player.BTCAddress,
+                HasValueToImproveSpeed = player.improvementRecord.HasValueToImproveSpeed
             };
             if (player.getCar().targetFpIndex >= 0)
             {
                 AddPath(ref smallMap, player.getCar().targetFpIndex, this.promoteMilePosition, "mile", gp);
                 AddPath(ref smallMap, player.getCar().targetFpIndex, this.promoteVolumePosition, "volume", gp);
                 AddPath(ref smallMap, player.getCar().targetFpIndex, this.promoteSpeedPosition, "speed", gp);
-                foreach (var item in this._collectPosition)
+                var rank = (from cItem in this._collectPosition
+                            orderby this.getLength(gp.GetFpByIndex(cItem.Value), gp.GetFpByIndex(player.getCar().targetFpIndex)) ascending
+                            select cItem.Key).ToList();
+
+                for (int i = 0; i < rank.Count; i++)
                 {
-                    AddPath(ref smallMap, player.getCar().targetFpIndex, item.Value, $"collect", gp);
+                    AddPath(ref smallMap, player.getCar().targetFpIndex, this._collectPosition[rank[i]], $"collect", gp);
                 }
                 AddPath(ref smallMap, player.getCar().targetFpIndex, player.StartFPIndex, "home", gp);
             }
@@ -136,11 +141,15 @@ namespace HouseManager5_0.GroupClassF
                 AddPath(ref smallMap, player.StartFPIndex, this.promoteMilePosition, "mile", gp);
                 AddPath(ref smallMap, player.StartFPIndex, this.promoteVolumePosition, "volume", gp);
                 AddPath(ref smallMap, player.StartFPIndex, this.promoteSpeedPosition, "speed", gp);
-                foreach (var item in this._collectPosition)
-                {
-                    AddPath(ref smallMap, player.StartFPIndex, item.Value, $"collect", gp);
-                }
 
+                var rank = (from cItem in this._collectPosition
+                            orderby this.getLength(gp.GetFpByIndex(cItem.Value), gp.GetFpByIndex(player.StartFPIndex)) ascending
+                            select cItem.Key).ToList();
+
+                for (int i = 0; i < rank.Count; i++)
+                {
+                    AddPath(ref smallMap, player.StartFPIndex, this._collectPosition[rank[i]], $"collect", gp);
+                }
             }
             var url = this._PlayerInGroup[key].FromUrl;
             var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(smallMap);
@@ -473,32 +482,6 @@ namespace HouseManager5_0.GroupClassF
                                                         gp.GetFpByIndex(player.getCar().targetFpIndex)) ascending
                                                     select gp.GetFpByIndex(item.Value)).ToList();
                                         CollectFunction(player, fps, collectSelect, gp, rank);
-                                        //List<string> sendMsgs = new List<string>();
-                                        //var Fp = fps[0]; 
-                                        //var rankNum = rank.FindIndex(item => item.FastenPositionID == Fp.FastenPositionID);
-                                        //// var price = rankNum * 100 * 2; 
-                                        //player.Ts = new TargetForSelect()
-                                        //{
-                                        //    tsType = "collect",
-                                        //    select = collectSelect,
-                                        //    rank = rankNum,
-                                        //};
-                                        //var msg = "";
-                                        //var priceStr = player.Ts.costPriceStr;
-                                        //if (string.IsNullOrEmpty(Fp.region))
-                                        //{
-                                        //    msg = $"是否花费{priceStr}到【{Fp.FastenPositionName}】收集1.00元？";
-                                        //}
-                                        //else
-                                        //{
-                                        //    msg = $"是否花费{priceStr}到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00元？";
-                                        //}
-                                        //var obj = GetConfirmInfomation(player.WebSocketID, Fp, msg, player.Ts);
-                                        //var url = player.FromUrl;
-                                        //var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
-                                        //sendMsgs.Add(url);
-                                        //sendMsgs.Add(sendMsg);
-                                        //Startup.sendSeveralMsgs(sendMsgs);
                                     }; break;
                                 case "home":
                                     {
@@ -612,94 +595,13 @@ namespace HouseManager5_0.GroupClassF
             Startup.sendSeveralMsgs(sendMsgs);
         }
 
-        private void Simple(ref BradCastWhereToGoInSmallMap smallMap)
-        {
-            for (int indexOfData = 0; indexOfData < smallMap.data.Count; indexOfData++)
-            {
-                var item = smallMap.data[indexOfData];
-                for (int i = 2; i < item.Path.Length - 2; i++)
-                {
-                    var currentX = item.Path[i];
-                    var currentY = item.Path[i + 1];
-
-                    var lastX = item.Path[i];
-                    var lastY = item.Path[i + 1];
-
-                    Math.Sqrt((lastX - currentX) * (lastX - currentX) + (lastY - currentY) * (lastY - currentY));
-                }
-            }
-            //throw new NotImplementedException();
-        }
-
         private bool isInRegion(SmallMapClick smc, FastonPosition collectPosition)
         {
             return (collectPosition.positionLongitudeOnRoad - smc.lon) * (collectPosition.positionLongitudeOnRoad - smc.lon) + (collectPosition.positionLatitudeOnRoad - smc.lat) * (collectPosition.positionLatitudeOnRoad - smc.lat) < smc.radius * smc.radius;
-            // throw new NotImplementedException();
         }
         private double getLength(FastonPosition A, FastonPosition B)
         {
             return CommonClass.Geography.getLengthOfTwoPoint.GetDistance(A.Latitde, A.Longitude, 0, B.Latitde, B.Longitude, 0);
         }
-
-        //internal void SingleColect(SetCollect sc, GetRandomPos gp)
-        //{
-        //    if (this._collectPosition.ContainsKey(sc.collectIndex))
-        //    {
-        //        var player = this._PlayerInGroup[sc.Key];
-        //        List<string> sendMsgs = new List<string>();
-        //        var Fp = gp.GetFpByIndex(this._collectPosition[sc.collectIndex]);
-
-        //        List<FastonPosition> rank;
-        //        switch (player.getCar().state)
-        //        {
-        //            case Car.CarState.waitAtBaseStation:
-        //                {
-        //                    rank = (from item in this._collectPosition
-        //                            orderby this.getLength(gp.GetFpByIndex(item.Value), gp.GetFpByIndex(player.StartFPIndex)) ascending
-        //                            select gp.GetFpByIndex(item.Value)).ToList();
-        //                }; break;
-        //            case Car.CarState.waitOnRoad:
-        //                {
-        //                    rank = (from item in this._collectPosition
-        //                            orderby this.getLength(
-        //                                gp.GetFpByIndex(item.Value),
-        //                                gp.GetFpByIndex(player.getCar().targetFpIndex)) ascending
-        //                            select gp.GetFpByIndex(item.Value)).ToList();
-        //                }; break;
-        //            default:
-        //                {
-        //                    rank = (from item in this._collectPosition
-        //                            orderby this.getLength(gp.GetFpByIndex(item.Value), gp.GetFpByIndex(player.StartFPIndex)) ascending
-        //                            select gp.GetFpByIndex(item.Value)).ToList();
-        //                }; break;
-        //        }
-        //        var rankNum = rank.FindIndex(item => item.FastenPositionID == Fp.FastenPositionID);
-        //        // var price = rankNum * 100 * 2;
-
-
-        //        player.Ts = new TargetForSelect()
-        //        {
-        //            tsType = "collect",
-        //            select = sc.collectIndex,
-        //            rank = rankNum,
-        //        };
-        //        var msg = "";
-        //        var priceStr = player.Ts.costPriceStr;
-        //        if (string.IsNullOrEmpty(Fp.region))
-        //        {
-        //            msg = $"是否花费{priceStr}到【{Fp.FastenPositionName}】收集1.00元？";
-        //        }
-        //        else
-        //        {
-        //            msg = $"是否花费{priceStr}到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00元？";
-        //        }
-        //        var obj = GetConfirmInfomation(player.WebSocketID, Fp, msg, player.Ts);
-        //        var url = player.FromUrl;
-        //        var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
-        //        sendMsgs.Add(url);
-        //        sendMsgs.Add(sendMsg);
-        //        Startup.sendSeveralMsgs(sendMsgs);
-        //    }
-        //}
     }
 }

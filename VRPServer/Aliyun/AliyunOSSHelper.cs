@@ -92,6 +92,29 @@ namespace Aliyun
             catch (Exception ex)
             {
                 Console.WriteLine($"存储字符串有误, {key},{ex.Message}");
+                Console.ReadLine();
+                return false;
+            }
+            return true;
+        }
+
+        public static bool PutByte(string bucketName, string key, byte[] Data)
+        {
+            try
+            {
+                byte[] binaryData = Data;
+                using (MemoryStream requestContent = new MemoryStream(binaryData))
+                {
+                    // 上传文件。
+                    client.PutObject(bucketName, key, requestContent);
+                }
+                Console.WriteLine($"存储成功:{key}");
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"存储数据有误, {key},{ex.Message}");
+                Console.ReadLine();
                 return false;
             }
             return true;

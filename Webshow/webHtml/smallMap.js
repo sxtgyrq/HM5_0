@@ -96,6 +96,19 @@
                 1.732 / 2, -1 / 2,
                 0, 1
             ];
+            var triangle_Rank0 = [
+                0, 1,
+                -1.732 / 2, -1 / 2,
+                -0.5196, -0.5,
+                -0.2598, -0.75,
+                -0.1732, -0.5,
+                0, -1.5,
+                0.1732, -0.5,
+                0.2598, -0.75,
+                0.5196, -0.5,
+                1.732 / 2, -1 / 2,
+                0, 1
+            ];
             {
                 const speedLineWidth = 9;
                 for (var i = 0; i < smallMap.data.length; i++) {
@@ -111,56 +124,39 @@
                                     ctx.beginPath();
                                     ctx.moveTo(x1, height - y1);
                                 }
-                                //Color c = Color.Red;
-                                //float thick = 3f;
-                                //List<PointF> points = new List<PointF>();
                                 for (var j = 0; j < smallMap.data[i].Path.length - 2; j += 2) {
-                                    //var x1 = (smallMap.data[i].Path[j] - smallMap.minX) / (smallMap.maxX - smallMap.minX) * width;
-                                    //var y1 = (smallMap.data[i].Path[j + 1] - smallMap.minY) / (smallMap.maxY - smallMap.minY) * height;
-                                    //if (x1 < 0)
-                                    //    x1 = 0;
-                                    //if (x1 > width) x1 = width;
-                                    //if (y1 < 0) y1 = 0;
-                                    //if (y1 > height) y1 = height;
 
                                     var x2 = smallMap.data[i].Path[j + 2] * multipleNum;//(smallMap.data[i].Path[j + 2] - smallMap.minX) / (smallMap.maxX - smallMap.minX) * width;
                                     var y2 = smallMap.data[i].Path[j + 3] * multipleNum;//(smallMap.data[i].Path[j + 3] - smallMap.minY) / (smallMap.maxY - smallMap.minY) * height;
-                                    //if (x2 < 0)
-                                    //    x2 = 0;
-                                    //if (x2 > width) x2 = width;
-                                    //if (y2 < 0) y2 = 0;
-                                    //if (y2 > height) y2 = height;
+
 
                                     ctx.lineTo(x2, height - y2);
-                                    // canvas.DrawLine(new Point(x1, height - y1), new Point(x2, height - y2), Pens.Yellow);
-                                    //  ops.Add(new LineTo(x1, y1));
                                 }
-
-                                //ctx.lineWidth = 2.5;
                                 ctx.strokeStyle = '#F9B42DA0';
                                 ctx.stroke();
                                 if (smallMap.data[i].Path.length > 1) {
-                                    const Radius = 15;
-                                    drawShap(triangle, Radius, smallMap.data[i], width, height, smallMap, ctx, '#F9B42DA0');
+                                    if (smallMap.HasValueToImproveSpeed) {
+                                        if (i < 8) {
+                                            const Radius = 16;
+                                            drawShap(triangle_Rank0, Radius, smallMap.data[i], width, height, smallMap, ctx, '#F9C33CA0');
+                                        }
+                                        else {
+                                            const Radius = 15;
+                                            drawShap(triangle, Radius, smallMap.data[i], width, height, smallMap, ctx, '#F9B42DA0');
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (i < 4) {
+                                            const Radius = 16;
+                                            drawShap(triangle_Rank0, Radius, smallMap.data[i], width, height, smallMap, ctx, '#F9C33CA0');
+                                        }
+                                        else {
+                                            const Radius = 15;
+                                            drawShap(triangle, Radius, smallMap.data[i], width, height, smallMap, ctx, '#F9B42DA0');
+                                        }
+                                    } 
                                 }
-                                //if (smallMap.data[i].Path.length > 1) {
-                                //    var j = smallMap.data[i].Path.length - 2;
-
-                                //    var x1 = smallMap.data[i].Path[j] * multipleNum;//(smallMap.data[i].Path[j] - smallMap.minX) / (smallMap.maxX - smallMap.minX) * width;
-                                //    var y1 = smallMap.data[i].Path[j + 1] * multipleNum;//(smallMap.data[i].Path[j + 1] - smallMap.minY) / (smallMap.maxY - smallMap.minY) * height;
-                                //    if (x1 < 1 || y1 < 1 || x1 > unrealImageWidth * multipleNum - 1 || y1 > unrealImageWidth * multipleNum - 1) { }
-                                //    else {
-                                //        const triangleRadius = 15;
-                                //        ctx.beginPath();
-                                //        ctx.moveTo(x1, height - y1 + triangleRadius);
-                                //        ctx.lineTo(x1 + triangleRadius / 2 * 1.732, height - y1 - triangleRadius / 2);
-                                //        ctx.lineTo(x1 - triangleRadius / 2 * 1.732, height - y1 - triangleRadius / 2);
-                                //        ctx.lineTo(x1, height - y1 + triangleRadius);
-                                //        ctx.lineWidth = 2.5;
-                                //        ctx.strokeStyle = '#F9B42DA0';
-                                //        ctx.stroke();
-                                //    }
-                                //}
                             }; break;
                         case "home":
                             {
@@ -765,8 +761,8 @@
                         ctx.fillStyle = "#ffff01f0";
                         ctx.fill();
                         ctx.stroke();
-                    } 
-                } 
+                    }
+                }
                 ctx.stroke();
             }
         }

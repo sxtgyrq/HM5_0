@@ -20,4 +20,14 @@ namespace Aliyun
             AliyunOSSHelper.PutString("yrqmodeldata", path, json);
         }
     }
+    public class ByteData
+    {
+        public static void Add(string path, byte[] data)
+        {
+            if (!AliyunOSSHelper.loadSuccess)
+                AliyunOSSHelper.LoadKey();
+
+            AliyunOSSHelper.PutByte("yrqmodeldata", path, data);
+        }
+    }
 }

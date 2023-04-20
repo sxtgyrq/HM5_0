@@ -82,7 +82,7 @@ namespace WsOfWebClient
             var webSocketOptions = new WebSocketOptions()
             {
                 KeepAliveInterval = TimeSpan.FromSeconds(3600 * 24),
-                ReceiveBufferSize = webWsSize,
+                //   ReceiveBufferSize = webWsSize,
             };
             app.UseWebSockets(webSocketOptions);
 

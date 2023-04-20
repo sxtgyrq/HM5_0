@@ -311,7 +311,6 @@ namespace HouseManager5_0
                     if (car.state == CarState.working)
                     {
                         arriveThenDoCollect(ref player, ref car, pa, ref notifyMsg, out needUpdateCollectState);
-
                     }
 
                 }
@@ -416,16 +415,17 @@ namespace HouseManager5_0
                 //that.goodsM.ShowConnectionModels(role, pa.target, ref notifyMsg);
             }
 
-            if (role.playerType == Player.PlayerType.player)
-            {
-                group.askWhetherGoToPositon(role.Key, that.GetRandomPosObj);
-            }
+
             that.GetRewardFromBuildingF(new GetRewardFromBuildingM()
             {
                 c = "GetRewardFromBuildingM",
                 GroupKey = group.GroupKey,
                 Key = role.Key
             });
+            if (role.playerType == Player.PlayerType.player)
+            {
+                group.askWhetherGoToPositon(role.Key, that.GetRandomPosObj);
+            }
         }
 
         private void setCollectPosition(int target, GroupClassF.GroupClass group)
