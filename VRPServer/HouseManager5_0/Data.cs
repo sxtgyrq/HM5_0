@@ -177,7 +177,19 @@ namespace HouseManager5_0
             }
         }
 
-
+        internal OssModel.FastonPosition GetFpByCode(string fpCode, out bool existed)
+        {
+            var fp = this._allFp.Find(item => item.FastenPositionID == fpCode);
+            if (fp == null)
+            {
+                existed = false;
+            }
+            else
+                existed = true;
+            return fp;
+            // throw new NotImplementedException();
+        }
+       
     }
     public partial class Data
     {
@@ -552,9 +564,18 @@ namespace HouseManager5_0
             }
         }
 
+        public Dictionary<string, string> AllFPBGData { get; private set; }
+        public Dictionary<string, int> FPsNotHaveBGData { get; private set; }
+        internal void LoadFPBackground()
+        {
+            this.AllFPBGData = DalOfAddress.fpbackground.GetAllKey();
+            this.FPsNotHaveBGData = new Dictionary<string, int>();
+            // throw new NotImplementedException();
+        }
+
         internal void CrossDataToAliyun()
         {
-           
+
             // foreach(var item)
             //throw new NotImplementedException();
         }

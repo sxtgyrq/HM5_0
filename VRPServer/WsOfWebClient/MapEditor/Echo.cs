@@ -193,6 +193,11 @@ namespace WsOfWebClient.MapEditor
                                                     {
                                                         mm.GetCrossBG(firstRoad, connectInfoDetail, rm);
                                                     }; break;
+                                                case "ShowFPBackground":
+                                                    {
+                                                        var sb = Newtonsoft.Json.JsonConvert.DeserializeObject<ShowFPBackground>(returnResult.result);
+                                                        mm.GetFPBG(sb, connectInfoDetail, rm);
+                                                    }; break;
                                                     //case "addModel":
                                                     //    {
 
@@ -319,8 +324,14 @@ namespace WsOfWebClient.MapEditor
                                                 case "LookForHeight":
                                                     {
                                                         LookForHeight lfh = Newtonsoft.Json.JsonConvert.DeserializeObject<LookForHeight>(returnResult.result);
-                                                        await mm.GetHeight(connectInfoDetail, lfh, rm);
+                                                          mm.GetHeight(connectInfoDetail, lfh, rm);
                                                     }; break;
+                                                case "ModelUpdate":
+                                                    {
+                                                        ModelUpdate mu = Newtonsoft.Json.JsonConvert.DeserializeObject<ModelUpdate>(returnResult.result);
+                                                          mm.ModelUpdateF(connectInfoDetail, mu, rm);
+                                                    }; break;
+
                                             }
                                         }; break;
                                 }

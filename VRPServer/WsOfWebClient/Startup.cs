@@ -236,8 +236,9 @@ namespace WsOfWebClient
                     // throw new NotImplementedException();
                     var pathValue = context.Request.Path.Value;
                     //Consoe.Write($" {context.Request.Path.Value}");
-                    var regex = new System.Text.RegularExpressions.Regex("^/[a-zA-Z0-9]{32}/[np]{1}[xyz]{1}.jpg$");
-                    if (regex.IsMatch(pathValue))
+                    var regex_32Pic = new System.Text.RegularExpressions.Regex("^/[a-zA-Z0-9]{32}/[np]{1}[xyz]{1}.jpg$");
+                    var regex_FP = new System.Text.RegularExpressions.Regex("^/[A-Z]{10}/[np]{1}[xyz]{1}.jpg$");
+                    if (regex_32Pic.IsMatch(pathValue))
                     {
                         var filePath = $"{Room.ImgPath}{pathValue}";
                         if (File.Exists(filePath))
@@ -255,6 +256,18 @@ namespace WsOfWebClient
                             }
                         }
                     }
+                    else if(regex_FP.IsMatch(pathValue)) 
+                    {
+                        indexOfCall++;
+                        indexOfCall = indexOfCall % Room.roomUrls.Count;
+                        var fileName = pathValue.Split('/').Last();
+                        var dataGetFromDB = Room.getImgOfFP(indexOfCall, pathValue.Split('/')[1], fileName);
+                        if (dataGetFromDB.Length > 0)
+                        {
+                            await getImage(dataGetFromDB, context.Response);
+                        }
+                    }
+
                 }
                 catch (Exception e)
                 {

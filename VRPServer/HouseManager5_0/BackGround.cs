@@ -107,15 +107,38 @@ namespace HouseManager5_0
 
         internal string getPathByRegion(string fastenPositionID, int fastenType, string region)
         {
-            switch (region)
+            if (Program.dt.AllFPBGData.ContainsKey(fastenPositionID))
             {
+                return fastenPositionID;
+            }
+            else
+            {
+                if (Program.dt.FPsNotHaveBGData.ContainsKey(fastenPositionID))
+                {
+                    Program.dt.FPsNotHaveBGData[fastenPositionID] += 1;
+                }
+                else
+                {
+                    Program.dt.FPsNotHaveBGData.Add(fastenPositionID, 1);
+                }
+                if (Program.dt.FPsNotHaveBGData[fastenPositionID] % 3 == 0)
+                {
+                    bool existed;
+                    var fp = Program.dt.GetFpByCode(fastenPositionID, out existed);
+                    if (existed)
+                        DalOfAddress.fpbackgroundneedjpg.Insert(fastenPositionID, fp.FastenPositionName);
+                }
 
-                case "太谷区": { return "region/taigu"; };
-                case "祁县": { return "region/qixian"; };
-                default:
-                    {
-                        return "";
-                    }
+                switch (region)
+                {
+
+                    case "太谷区": { return "region/taigu"; };
+                    case "祁县": { return "region/qixian"; };
+                    default:
+                        {
+                            return "";
+                        }
+                }
             }
         }
     }

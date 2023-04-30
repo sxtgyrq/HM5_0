@@ -16,7 +16,55 @@ namespace WsOfWebClient
     {
         public const string ImgPath = "img";
 
+        public const string ImgPathFPSave = "imgfpSave";
 
+        //getImgOfFP
+        internal static byte[] getImgOfFP(int index, string fpID, string fileName)
+        {
+            //GetFPBG
+            var gfma = new CommonClass.GetFPBG()
+            {
+                c = "GetFPBG",
+                fpID = fpID,
+                FromDB = false
+            };
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gfma);
+            var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+            if (string.IsNullOrEmpty(info))
+            {
+                return new byte[] { };
+            }
+            else
+            {
+                var data = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(info);
+
+                string[] keys = new string[6] { "px", "py", "pz", "nx", "ny", "nz" };
+                for (int i = 0; i < keys.Length; i++)
+                {
+                    var pkey = keys[i];
+                    if (data.ContainsKey(pkey))
+                    {
+                        var base64 = data[pkey].Split(',')[1];
+                        byte[] bytes = Convert.FromBase64String(base64);
+                        var dicPath = $"{Room.ImgPathFPSave}/{fpID}/";
+                        if (!Directory.Exists(dicPath))
+                            Directory.CreateDirectory(dicPath);
+                        var path = $"{Room.ImgPathFPSave}/{fpID}/{pkey}.jpg";
+
+                        File.WriteAllBytes(path, bytes);
+                        if ($"{pkey}.jpg" == fileName.ToString().Trim())
+                        {
+                            return bytes;
+                        }
+                    }
+                    else
+                    {
+                        return new byte[] { };
+                    }
+                }
+                return new byte[] { };
+            }
+        }
 
         internal static byte[] getImg(int index, string Md5, string fileName)
         {

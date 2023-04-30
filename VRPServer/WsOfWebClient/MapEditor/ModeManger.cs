@@ -269,6 +269,40 @@ namespace WsOfWebClient.MapEditor
                 //t.GetAwaiter().GetResult();
             }
 
+            internal void GetFPBG(ShowFPBackground sb, ConnectInfoDetail connectInfoDetail, Random rm)
+            {
+                CommonClass.GetFPBG ubs = new CommonClass.GetFPBG()
+                {
+                    c = "GetFPBG",
+                    fpID = sb.fpCode,
+                    FromDB = true
+                };
+                var index = rm.Next(0, roomUrls.Count);
+                var roomUrl = roomUrls[index];
+                var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(ubs);
+
+
+                var respon = Startup.sendInmationToUrlAndGetRes(roomUrl, sendMsg);
+                if (!string.IsNullOrEmpty(respon))
+                {
+                    CommonClass.GetFPBG.Result r = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.GetFPBG.Result>(respon);
+                    var sm = new
+                    {
+                        c = "SetFPBackgroundScene",
+                        r = r,
+
+                        //  name=$"{ubs.firstRoadcode}{ubs.}{}{}"
+                    };
+                    sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(sm);
+
+                    CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                }
+                else
+                {
+                    this.ShowMsg(connectInfoDetail, "没有图片数据");
+                }
+            }
+
             internal aModel GetModel(Random rm)
             {
                 if (this.material[this.indexOfSelect].initialized)
@@ -321,7 +355,9 @@ namespace WsOfWebClient.MapEditor
                 return new Bitmap(image, 512, 512);
             }
 
-            public string ImageToBase64(string imagePath)
+
+
+            public static string ImageToBase64(string imagePath)
             {
                 string result;
                 using (Image image = Image.FromFile(imagePath))
@@ -701,7 +737,7 @@ namespace WsOfWebClient.MapEditor
                 }
 
             }
-            internal async Task GetHeight(ConnectInfo.ConnectInfoDetail connectInfoDetail, LookForHeight lfh, Random rm)
+            internal void GetHeight(ConnectInfo.ConnectInfoDetail connectInfoDetail, LookForHeight lfh, Random rm)
             {
                 var index = rm.Next(0, roomUrls.Count);
                 var roomUrl = roomUrls[index];
@@ -783,6 +819,27 @@ namespace WsOfWebClient.MapEditor
                     }
                 }
             }
+
+            internal void ModelUpdateF(ConnectInfoDetail connectInfoDetail, ModelUpdate mu, Random rm)
+            {
+                var index = rm.Next(0, roomUrls.Count);
+                var roomUrl = roomUrls[index];
+                var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(new CommonClass.MapEditor.ModelReplace()
+                {
+                    c = "ModelReplace",
+                    newModel = mu.newModel,
+                    oldModel = mu.oldModel,
+                });
+                var json = Startup.sendInmationToUrlAndGetRes(roomUrl, sendMsg);
+
+                if (string.IsNullOrEmpty(json)) { }
+                else
+                {
+                    CommonF.SendData(json, connectInfoDetail, 0);
+                }
+            }
+
+
         }
 
         partial class ModeManger

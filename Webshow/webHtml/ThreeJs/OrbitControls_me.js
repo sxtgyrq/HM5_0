@@ -1301,7 +1301,20 @@ THREE.OrbitControls = function (object, domElement) {
                                         }; break;
                                     case 'road':
                                         {
-                                            keyFunction(function () { showBackground(); }, buttonIndex);
+                                            if (myGamepad.buttons[6].pressed && !myGamepad.buttons[7].pressed) {
+                                                keyFunction(function () { showFPBackground(); }, buttonIndex);
+                                                // showFPBackground();
+                                            }
+                                            else if (myGamepad.buttons[7].pressed && !myGamepad.buttons[6].pressed) {
+
+                                            }
+                                            else if (myGamepad.buttons[7].pressed && myGamepad.buttons[6].pressed) {
+
+                                            }
+                                            else {
+                                                keyFunction(function () { showBackground(); }, buttonIndex);
+                                            }
+
                                         }; break;
                                 }
 

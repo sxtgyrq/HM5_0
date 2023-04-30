@@ -1062,6 +1062,10 @@ var objMain =
                 {
                     setScenseFromData(received_obj.r, received_obj.name);
                 }; break;
+            case 'SetFPBackgroundScene':
+                {
+                    setFPScenseFromData(received_obj.r);
+                }; break;
             case 'GetHeightAtPositionResult':
                 {
                     if (objMain.buildingGroup.children.length > 0) {
@@ -3035,6 +3039,24 @@ var setScenseFromData = function (r, name) {
         window.localStorage['crossName'] = name;
     }
 }
+
+var setFPScenseFromData = function (r)
+{
+    if (r.hasValue) {
+        var cubeTextureLoader = new THREE.CubeTextureLoader();
+        cubeTextureLoader.setPath(''); 
+        var cubeTexture = cubeTextureLoader.load([
+            r.px, r.nx,
+            r.py, r.ny,
+            r.pz, r.nz
+        ]);
+        objMain.scene.background = cubeTexture; 
+    }
+    else {
+        objMain.scene.background = objMain.defaultCube;
+    } 
+}
+
 var uploadBackground = function () {
     // var image
     if (window.localStorage.px != undefined) {
@@ -3057,6 +3079,20 @@ var showBackground = function () {
         };
         var json = JSON.stringify(backgroundData);
         objMain.ws.send(json);
+    }
+}
+var showFPBackground = function () {
+    {
+        var fpCode = window.localStorage['fpCode'];
+        if (fpCode != undefined && fpCode != null && /^[A-Z]{10}$/.test(fpCode)) {
+            var backgroundData =
+            {
+                'c': 'ShowFPBackground',
+                'fpCode': fpCode
+            };
+            var json = JSON.stringify(backgroundData);
+            objMain.ws.send(json);
+        }
     }
 }
 

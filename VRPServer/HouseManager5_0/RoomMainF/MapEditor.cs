@@ -19,7 +19,8 @@ namespace HouseManager5_0.RoomMainF
         {
             //字符串转成字节数组
             byte[] bytes = System.Text.Encoding.Default.GetBytes(_str);
-            MD5 md5 = new MD5CryptoServiceProvider();
+            // MD5 md5 = new MD5CryptoServiceProvider();
+            MD5 md5 = MD5.Create();
             byte[] jmbytes = md5.ComputeHash(bytes);
 
             string str = BitConverter.ToString(jmbytes);
@@ -786,6 +787,68 @@ namespace HouseManager5_0.RoomMainF
                         modelType = obj.modelType
                     };
                     return Newtonsoft.Json.JsonConvert.SerializeObject(returnObj);
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
+        public string SetBackFPgroundSceneF(MapEditor.SetBackFPgroundScene_BLL sbf)
+        {
+            // Dictionary<string, Dictionary<int, OssModel.SaveRoad.RoadInfo>> road;
+            bool existed;
+            var fp = Program.dt.GetFpByCode(sbf.fpCode, out existed);
+
+            if (existed)
+            {
+                sbf.fpName = fp.FastenPositionName;
+                DalOfAddress.fpbackground.Insert(sbf);
+            }
+            return "";
+        }
+
+        public string GetFPBGF(GetFPBG ss)
+        {
+            if (ss.FromDB)
+            {
+                var r = DalOfAddress.fpbackground.GetItemDetail(ss.fpID);
+                if (r == null)
+                {
+                    return "";
+                }
+                else
+                {
+                    GetFPBG.Result obj = new GetFPBG.Result()
+                    {
+                        hasValue = true,
+                        nx = r["nx"],
+                        ny = r["ny"],
+                        nz = r["nz"],
+                        px = r["px"],
+                        py = r["py"],
+                        pz = r["pz"],
+                    };
+                    return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+                }
+            }
+            else
+            {
+                bool existed;
+                var fp = Program.dt.GetFpByCode(ss.fpID, out existed);
+                if (existed)
+                {
+                    if (Program.dt.AllFPBGData.ContainsKey(ss.fpID))
+                    {
+                        var r = DalOfAddress.fpbackground.GetItemDetail(ss.fpID);
+                        if (r == null) return "";
+                        else return Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                    }
+                    else
+                    {
+                        return "";
+                    }
                 }
                 else
                 {

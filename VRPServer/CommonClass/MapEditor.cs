@@ -145,10 +145,21 @@ namespace CommonClass
             public string secondRoadcode { get; set; }
             public int secondRoadorder { get; set; }
         }
+
+        public class SetBackFPgroundScene_BLL : SetBackgroundScene
+        {
+            //public string firstRoadcode { get; set; }
+            //public int firstRoadorder { get; set; }
+            //public string secondRoadcode { get; set; }
+            //public int secondRoadorder { get; set; }
+            public string fpCode { get; set; }
+            public string fpName { get; set; }
+        }
+
         public class SetBackgroundScene_DAL : SetBackgroundScene
         {
             public string crossID { get; set; }
-        }
+        } 
         public class GetBackgroundScene : Command
         {
             public string firstRoadcode { get; set; }
@@ -177,6 +188,12 @@ namespace CommonClass
                 public double height { get; set; }
             }
         }
+        public class ModelReplace : Command 
+        {
+            public string newModel { get; set; }
+            public double oldModel { get; set; }
+        }
+
         public class UseBackgroundScene : Command
         {
             public string firstRoadcode { get; set; }

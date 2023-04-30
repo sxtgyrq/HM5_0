@@ -335,6 +335,11 @@ namespace HouseManager5_0
                             CommonClass.MapEditor.GetBackgroundScene gbs = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.MapEditor.GetBackgroundScene>(notifyJson);
                             outPut = objI.GetBackgroundSceneF(gbs);
                         }; break;
+                    case "SetBackFPgroundScene":
+                        {
+                            CommonClass.MapEditor.SetBackFPgroundScene_BLL sbf = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.MapEditor.SetBackFPgroundScene_BLL>(notifyJson);
+                            outPut = objI.SetBackFPgroundSceneF(sbf);
+                        }; break;
                     case "UseBackgroundScene":
                         {
                             CommonClass.MapEditor.UseBackgroundScene sbs = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.MapEditor.UseBackgroundScene>(notifyJson);
@@ -374,6 +379,11 @@ namespace HouseManager5_0
                         {
                             CommonClass.SetCrossBG ss = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.SetCrossBG>(notifyJson);
                             outPut = objI.GetBG(ss);
+                        }; break;
+                    case "GetFPBG":
+                        {
+                            CommonClass.GetFPBG ss = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.GetFPBG>(notifyJson);
+                            outPut = objI.GetFPBGF(ss);
                         }; break;
                     case "AllBuiisnessAddr":
                         {
@@ -502,6 +512,11 @@ namespace HouseManager5_0
                             GetAbtractmodels ca = Newtonsoft.Json.JsonConvert.DeserializeObject<GetAbtractmodels>(notifyJson);
                             outPut = objI.GetAbtractmodelsF(ca);
                         }; break;
+                    case "ModelReplace":
+                        {
+
+                        }; break;
+
                         //case "CopyTaskDisplay": 
                         //    {
 

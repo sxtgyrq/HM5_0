@@ -816,6 +816,22 @@ namespace CommonClass
         //public string pz { get; set; }
         //public string nz { get; set; }
     }
+    public class GetFPBG : CommandNotify
+    {
+        public string fpID { get; set; }
+        public bool FromDB { get; set; }
+
+        public class Result
+        {
+            public bool hasValue { get; set; } 
+            public string px { get; set; }
+            public string nx { get; set; }
+            public string py { get; set; }
+            public string ny { get; set; }
+            public string pz { get; set; }
+            public string nz { get; set; }
+        }
+    }
     public class GetResistanceObj : Command
     {
         public string KeyLookfor { get; set; }

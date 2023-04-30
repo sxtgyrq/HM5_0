@@ -77,6 +77,8 @@ namespace WsOfWebClient.MapEditor
 
             app.Map("/upload", Upload);
 
+            app.Map("/fpupload", FpUpload);//地点背景上传
+
             app.Map("/img", BackGroundImg);
 
             app.Map("/objdata", Editor.ObjData);

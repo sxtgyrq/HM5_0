@@ -1,6 +1,7 @@
 ﻿using CommonClass;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -108,6 +109,17 @@ namespace HouseManager5_0.GroupClassF
                             player.SetMoneyCanSave(player, ref notifyMsg);
                         }
                     }
+                    {
+                        var role = player;
+                        if (role.playerType == Player.PlayerType.player)
+                        {
+                            that.GetMusic((Player)role, ref notifyMsg);
+                            that.GetBackground((Player)role, ref notifyMsg);
+                            ((Player)role).RefererCount++;
+                            ((Player)role).ActiveTime = DateTime.Now;
+                        }
+                    }
+
                 }
                 else
                 {

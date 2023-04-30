@@ -20,6 +20,16 @@ namespace HouseManager5_0.RoomMainF
                 notifyMsg.Add(url);
                 notifyMsg.Add(sendMsg);
             }
+            else if (player.getCar().state == Car.CarState.waitAtBaseStation)
+            {
+                var fs = Program.dt.GetFpByIndex(player.StartFPIndex);
+                var code = this.bg.getPathByRegion(fs.FastenPositionID, fs.FastenType, fs.region);
+                var infomation = Program.rm.GetBackgroundInfomation(player.WebSocketID, code);
+                var url = player.FromUrl;
+                var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(infomation);
+                notifyMsg.Add(url);
+                notifyMsg.Add(sendMsg);
+            }
         }
 
         private BradCastBackground GetBackgroundInfomation(int webSocketID, string code)

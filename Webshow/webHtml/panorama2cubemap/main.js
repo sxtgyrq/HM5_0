@@ -228,9 +228,8 @@ var writeToServer = function () {
 
     var crossName = window.localStorage['crossName'];
     if (crossName) { }
-    else
-    {
-        alert('û��·������');
+    else {
+        alert('没有路口数据');
         return;
     }
     var faces = document.getElementById('faces');
@@ -276,4 +275,143 @@ var writeToServer = function () {
         xhr.send();
     }
 
+}
+
+//var messageSign = '';
+
+var writeToServerAndBindAddr = function () {
+    var msg = '';
+    if (window.localStorage['fpBGMsg'] == undefined) {
+        let date = new Date();
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+
+        if (month < 10) {
+            month = "0" + month;
+        }
+
+        if (day < 10) {
+            day = "0" + day;
+        }
+
+        let formattedDate = `${year}${month}${day}`;
+        msg = prompt('输入日期，.如' + formattedDate, formattedDate);
+        window.localStorage['fpBGMsg'] = msg;
+    }
+    else {
+        msg = window.localStorage['fpBGMsg'];
+    }
+    var addr = '';
+    if (window.localStorage['fpBGAddr'] == undefined) {
+        addr = prompt('输入比特币地址');
+        window.localStorage['fpBGAddr'] = addr;
+    }
+    else {
+        addr = window.localStorage['fpBGAddr'];
+    }
+
+    var messageSign = '';
+    if (window.localStorage['fpBGmessageSign'] == undefined) {
+        messageSign = prompt('输入签名');
+        window.localStorage['fpBGmessageSign'] = messageSign;
+    }
+    else {
+        messageSign = window.localStorage['fpBGmessageSign'];
+    }
+
+
+
+
+    //var sign = '';
+
+    var successCount = 0;
+    var fpCode = window.prompt('输入对应的地址编码', '');
+    window.localStorage['fpCode'] = fpCode;
+    //if (fpName) { }
+    //else {
+    //    alert('没有路口数据');
+    //    return;
+    //}
+    var faces = document.getElementById('faces');
+    for (var i = 0; i < faces.children.length; i++) {
+        var face = faces.children[i];
+        //var href = face.href;
+        //var title = face.title;
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', face.href, true);
+        xhr.responseType = 'blob';
+        xhr.onload = function (e) {
+            if (this.status == 200) {
+                var myBlob = this.response;
+                //console.log('myBlob:', myBlob);
+                //console.log('myBlob:' + title, e);
+                //console.log('myBlob:' + title, this);
+                var faces = document.getElementById('faces');
+                var title = 'null';
+                for (var j = 0; j < faces.children.length; j++) {
+                    var face = faces.children[j];
+                    if (face.href == this.responseURL) {
+                        title = face.title;
+                        var fd = new FormData();
+                        fd.append('messageSign', messageSign);
+                        fd.append('msg', msg);
+                        fd.append('addr', addr);
+                        fd.append('fpCode', fpCode);
+                        fd.append('fname', title);
+                        fd.append('command', 'pass');
+
+                        fd.append('data', myBlob);
+
+                        var url = 'http://127.0.0.1:21001/fpupload' + '?face=' + face + '&fpCode=' + fpCode + '&t=' + Date.now();
+                        //if (objMain.debug)
+                        //url = 'http://127.0.0.1:21001/fpupload' + '?face=' + face + '&fpCode=' + fpCode + '&t=' + Date.now();
+                        //else
+                        url = 'https://www.nyrq123.com/websocket' + window.location.pathname.split('/')[1] + 'editor/fpupload' + '?face=' + face + '&fpCode=' + fpCode + '&t=' + Date.now();
+                        // url: 'https://www.nyrq123.com/websockettaiyuaneditor/fpupload',
+                        //var url = 'http://127.0.0.1:21001/fpupload' + '?face=' + face + '&fpCode=' + fpCode + '&t=' + Date.now();
+                        $.ajax({
+                            type: 'POST',
+                            url: url,
+                            data: fd,
+                            processData: false,
+                            contentType: false
+                        }).done(function (data) {
+                            successCount++;
+                            console.log('data', data);
+                            if (successCount == 6) {
+                                var fd = new FormData();
+                                fd.append('messageSign', messageSign);
+                                fd.append('msg', msg);
+                                fd.append('addr', addr);
+                                fd.append('fpCode', fpCode);
+                                fd.append('command', 'save');
+                                $.ajax({
+                                    type: 'POST',
+                                    url: url,
+                                    data: fd,
+                                    processData: false,
+                                    contentType: false
+                                }).done(function (data) {
+                                    alert('存储成功');
+                                    successCount++;
+                                    console.log('data', data);
+                                });
+                            }
+                            console.log(data);
+                        });
+                        continue;
+                    }
+                }
+                console.log('myBlob:' + title, myBlob);
+            }
+        };
+        xhr.send();
+    }
+}
+
+var clearLoginInfo = function () {
+    delete window.localStorage['fpBGMsg'];
+    delete window.localStorage['fpBGAddr'];
+    delete window.localStorage['fpBGmessageSign'];
 }

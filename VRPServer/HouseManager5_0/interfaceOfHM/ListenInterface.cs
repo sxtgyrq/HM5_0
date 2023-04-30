@@ -122,7 +122,7 @@ namespace HouseManager5_0.interfaceOfHM
         string SmallMapClickF(SmallMapClick smc);
         // string NotWantToGoNeedToBackF(NotWantToGoNeedToBack nwtgntb);
         string ConfirmPanelSelectResultF(ConfirmPanelSelectResult nwtgntb);
-
+       
     }
 
     interface MapEditor
@@ -130,6 +130,8 @@ namespace HouseManager5_0.interfaceOfHM
         string UseBackgroundSceneF(CommonClass.MapEditor.UseBackgroundScene sbs);
         string GetBackgroundSceneF(CommonClass.MapEditor.GetBackgroundScene gbs);
         string SetBackgroundSceneF(CommonClass.MapEditor.SetBackgroundScene_BLL sbs);
+        string SetBackFPgroundSceneF(CommonClass.MapEditor.SetBackFPgroundScene_BLL sbf);
+
         string GetFirstRoad();
         string DrawRoad(CommonClass.MapEditor.DrawRoad dr);
         string NextCross(CommonClass.MapEditor.NextCross dr);
@@ -149,6 +151,7 @@ namespace HouseManager5_0.interfaceOfHM
         string GetUnLockedModel(CommonClass.MapEditor.GetUnLockedModel gulm);
         void UpdateModelStock(ModelStock sa);
         string GetBG(SetCrossBG ss);
+        string GetFPBGF(GetFPBG ss);
         string GetHeightAtPositionF(CommonClass.MapEditor.GetHeightAtPosition gh, Data dt);
         string LookForTaskCopyF(LookForTaskCopy lftc);
         string TaskCopyPassOrNGF(TaskCopyPassOrNG pOrNG);

@@ -23,7 +23,7 @@ namespace DalOfAddress
         /// <summary>
         /// 交易股份所花积分，折合￥10.00
         /// </summary>
-        public const long TradeStockCost = 40000;
+        public const long TradeStockCost = 2000 * 100;
         public static string MsgSuccess
         {
             get
@@ -291,7 +291,7 @@ namespace DalOfAddress
                             }
                         }
                         {
-                            const long costMoney = 100000;
+                            const long costMoney = 10000 * 100;
                             var moneyNow = DalOfAddress.MoneyAdd.GetMoney(con, tran, addrFrom);
                             if (moneyNow > costMoney)
                             {

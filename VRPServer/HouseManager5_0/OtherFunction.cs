@@ -84,7 +84,6 @@ namespace HouseManager5_0
 
         internal static void writeToAliyun()
         {
-            if (false)
             {
                 var material = new Dictionary<string, CommonClass.databaseModel.abtractmodelsPassData>();
 
@@ -120,6 +119,23 @@ namespace HouseManager5_0
                             string base64Data = base64Image.Substring(base64Image.IndexOf(',') + 1);
                             byte[] imageBytes = Convert.FromBase64String(base64Data);
                             Aliyun.ByteData.Add($"bgimg/{item.Value}/{directionItem.Key}.jpg", imageBytes);
+                        }
+                }
+            }
+            {
+                var AllFPBGData = DalOfAddress.fpbackground.GetAllKey();
+
+                foreach (var item in AllFPBGData)
+                {
+                    //  var key = item.Value;
+                    var jpgValue = DalOfAddress.fpbackground.GetItemDetail(item.Key);
+                    if (jpgValue != null)
+                        foreach (var directionItem in jpgValue)
+                        {
+                            string base64Image = directionItem.Value;
+                            string base64Data = base64Image.Substring(base64Image.IndexOf(',') + 1);
+                            byte[] imageBytes = Convert.FromBase64String(base64Data);
+                            Aliyun.ByteData.Add($"fpbgimg/{item.Key}/{directionItem.Key}.jpg", imageBytes);
                         }
                 }
             }

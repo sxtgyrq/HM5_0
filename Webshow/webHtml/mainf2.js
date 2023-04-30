@@ -777,9 +777,15 @@ var objMain =
 
                             bgm.appendChild(source1);
                             bgm.appendChild(source2);
+
+                            bgm.oncanplaythrough = function () {
+                                if (objMain.music.on)
+                                    this.play();
+                            };
+
                             bgm.load();
-                            if (this.on)
-                                bgm.play();
+                            //if (this.on)
+                            //    bgm.play();
                         }; break;
                     default:
                         {
@@ -798,9 +804,13 @@ var objMain =
                             bgm.appendChild(source1);
                             bgm.appendChild(source2);
 
+                            bgm.oncanplaythrough = function () {
+                                if (objMain.music.on)
+                                    this.play();
+                            }; 
                             bgm.load();
-                            if (this.on)
-                                bgm.play();
+                            //if (this.on)
+                            //    bgm.play();
                         }; break;
                 }
 
@@ -812,41 +822,73 @@ var objMain =
     {
         path: '',
         change: function () {
-            switch (this.path) {
-                case '':
-                    {
-                        var cubeTextureLoader = new THREE.CubeTextureLoader();
-                        cubeTextureLoader.setPath('Pic/');
-                        //var cubeTexture = cubeTextureLoader.load([
-                        //    "xi_r.jpg", "dong_r.jpg",
-                        //    "ding_r.jpg", "di_r.jpg",
-                        //    "nan_r.jpg", "bei_r.jpg"
-                        //]);
-                        var cubeTexture = cubeTextureLoader.load([
+            if (/^[A-Z]{10}$/.test(this.path)) {
+                if (objMain.background.backgroundData[this.path] == undefined) {
+                    var cubeTextureLoader = new THREE.CubeTextureLoader();
+                    //http://yrqmodeldata.oss-cn-beijing.aliyuncs.com/fpbgimg/IJZJBCUKEK/nx.jpg
+                    if (objMain.debug != 2)
+                        cubeTextureLoader.setPath('http://127.0.0.1:11001/bgimg/' + this.path + '/');
+                    else
+                        cubeTextureLoader.setPath('https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/fpbgimg/' + this.path + '/');
+                    // window.location.hostname + '/bgimg?key=1&y=2&p=px'
+                    var cubeTexture = cubeTextureLoader.load(
+                        [
                             "px.jpg", "nx.jpg",
                             "py.jpg", "ny.jpg",
-                            "pz.jpg", "nz.jpg"
-                        ]);
-                        //var cubeTexture = cubeTextureLoader.load([
-                        //    "px.png", "nx.png",
-                        //    "py.jpg", "ny.jpg",
-                        //    "pz.png", "nz.png"
-                        //]);
-                        objMain.background.backgroundData['main'] = cubeTexture;
-                        objMain.scene.background = objMain.background.backgroundData['main'];
-                    }; break;
-                default:
-                    {
-                        var cubeTextureLoader = new THREE.CubeTextureLoader();
-                        cubeTextureLoader.setPath('Pic/' + this.path + '/');
-                        var cubeTexture = cubeTextureLoader.load([
-                            "px.jpg", "nx.jpg",
-                            "py.jpg", "ny.jpg",
-                            "pz.jpg", "nz.jpg"
-                        ]);
-                        objMain.background.backgroundData['main'] = cubeTexture;
-                        objMain.scene.background = objMain.background.backgroundData['main'];
-                    }; break;
+                            "pz.jpg", "nz.jpg"]);
+                    objMain.background.backgroundData[this.path] = cubeTexture;
+                    objMain.scene.background = objMain.background.backgroundData[this.path];
+                }
+                else {
+                    objMain.scene.background = objMain.background.backgroundData[this.path];
+                }
+                //var cubeTextureLoader = new THREE.CubeTextureLoader();
+                //cubeTextureLoader.setPath('Pic/' + this.path + '/');
+                //var cubeTexture = cubeTextureLoader.load([
+                //    "px.jpg", "nx.jpg",
+                //    "py.jpg", "ny.jpg",
+                //    "pz.jpg", "nz.jpg"
+                //]);
+                //objMain.background.backgroundData['main'] = cubeTexture;
+                //objMain.scene.background = objMain.background.backgroundData['main'];
+            }
+            else {
+                switch (this.path) {
+                    case '':
+                        {
+                            var cubeTextureLoader = new THREE.CubeTextureLoader();
+                            cubeTextureLoader.setPath('Pic/');
+                            //var cubeTexture = cubeTextureLoader.load([
+                            //    "xi_r.jpg", "dong_r.jpg",
+                            //    "ding_r.jpg", "di_r.jpg",
+                            //    "nan_r.jpg", "bei_r.jpg"
+                            //]);
+                            var cubeTexture = cubeTextureLoader.load([
+                                "px.jpg", "nx.jpg",
+                                "py.jpg", "ny.jpg",
+                                "pz.jpg", "nz.jpg"
+                            ]);
+                            //var cubeTexture = cubeTextureLoader.load([
+                            //    "px.png", "nx.png",
+                            //    "py.jpg", "ny.jpg",
+                            //    "pz.png", "nz.png"
+                            //]);
+                            objMain.background.backgroundData['main'] = cubeTexture;
+                            objMain.scene.background = objMain.background.backgroundData['main'];
+                        }; break;
+                    default:
+                        {
+                            var cubeTextureLoader = new THREE.CubeTextureLoader();
+                            cubeTextureLoader.setPath('Pic/' + this.path + '/');
+                            var cubeTexture = cubeTextureLoader.load([
+                                "px.jpg", "nx.jpg",
+                                "py.jpg", "ny.jpg",
+                                "pz.jpg", "nz.jpg"
+                            ]);
+                            objMain.background.backgroundData['main'] = cubeTexture;
+                            objMain.scene.background = objMain.background.backgroundData['main'];
+                        }; break;
+                }
             }
         },
         backgroundData: {},
@@ -1636,14 +1678,14 @@ var objMain =
                         //geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3).onUpload(disposeArray));
                         geometry.computeBoundingSphere();
                         //var material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
-                        var material = new THREE.MeshBasicMaterial({ color: 0xff0099 });
+                        var material = new THREE.MeshBasicMaterial({ color: 0xeedd78 });
                         var mesh = new THREE.Mesh(geometry, material);
 
                         objMain.roadGroup.add(mesh);
 
 
                         var edges = new THREE.EdgesGeometry(geometry);
-                        var line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x0000FF }));
+                        var line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xeeddf0 }));
                         objMain.roadGroup.add(line);
                     };
                     drawRoadInfomation();
@@ -2772,7 +2814,7 @@ function animate() {
                                 case 'speed':
                                     {
                                         objMain.selectObj.obj = selectObj;
-                                        objMain.selectObj.type = objMain.Task.state; 
+                                        objMain.selectObj.type = objMain.Task.state;
 
                                         selectObj.scale.set(scale, scale * 1.1, scale);
 
@@ -5207,7 +5249,7 @@ var stateSet =
     confusePrepare:
     {
         add: function (carId, animateData) {
-            { 
+            {
                 //if (flag)
                 // var animateData = { startX: objMain.controls.target.x, startY: objMain.controls.target.y, startZ: objMain.controls.target.z, start: Date.now(), endX: objMain.controls.target.x + 5, endY: objMain.controls.target.y, endZ: objMain.controls.target.z }
                 {
@@ -5301,7 +5343,7 @@ var stateSet =
     lostPrepare:
     {
         add: function (carId, animateData) {
-            { 
+            {
                 //if (flag)
                 // var animateData = { startX: objMain.controls.target.x, startY: objMain.controls.target.y, startZ: objMain.controls.target.z, start: Date.now(), endX: objMain.controls.target.x + 5, endY: objMain.controls.target.y, endZ: objMain.controls.target.z }
                 {
@@ -5395,7 +5437,7 @@ var stateSet =
     ambusePrepare:
     {
         add: function (carId, animateData) {
-            { 
+            {
                 //if (flag)
                 // var animateData = { startX: objMain.controls.target.x, startY: objMain.controls.target.y, startZ: objMain.controls.target.z, start: Date.now(), endX: objMain.controls.target.x + 5, endY: objMain.controls.target.y, endZ: objMain.controls.target.z }
                 {

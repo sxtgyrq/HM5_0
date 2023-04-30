@@ -34,6 +34,11 @@ namespace WsOfWebClient.MapEditor
             public double MercatorX { get; set; }
             public double MercatorY { get; set; }
         }
+        class ModelUpdate : CommonClass.Command
+        {
+            public string newModel { get; set; }
+            public double oldModel { get; set; }
+        }
 
         class UseModelObj : CommonClass.Command
         {
@@ -59,6 +64,17 @@ namespace WsOfWebClient.MapEditor
         {
             public string[] objNew { get; set; }
         }
+        class ShowFPBackground : CommonClass.Command
+        {
+            public string fpCode { get; set; }
+            //public string px { get; set; }
+            //public string nx { get; set; }
+            //public string py { get; set; }
+            //public string ny { get; set; }
+            //public string pz { get; set; }
+            //public string nz { get; set; }
+        }
+
 
         const int webWsSize = 1024 * 1024 * 3;
 

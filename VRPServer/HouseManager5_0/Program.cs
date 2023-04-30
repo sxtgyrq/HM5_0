@@ -96,6 +96,7 @@ namespace HouseManager5_0
             Program.dt.LoadRoad();
             Program.dt.LoadModel();
             Program.dt.LoadCrossBackground();
+            Program.dt.LoadFPBackground();
 
             Program.rm = new RoomMainF.RoomMain(Program.dt);
 
