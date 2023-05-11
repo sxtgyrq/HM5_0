@@ -91,18 +91,25 @@ namespace HouseManager5_0
                 for (int i = 0; i < list.Count; i += 2)
                 {
                     var obj = DalOfAddress.AbtractModels.GetAbtractModelItem(list[i].Trim());
-
-
-                    var returnObj = new
                     {
-                        objText = obj.objText,
-                        mtlText = obj.mtlText,
-                        imgBase64 = obj.imageBase64,
-                        AmID = list[i],
-                        modelType = obj.modelType
-                    };
-                    var json = Newtonsoft.Json.JsonConvert.SerializeObject(returnObj);
-                    Aliyun.Json.Add($"objmodel/{list[i]}.json", json);
+                        string base64Image = obj.imageBase64;
+                        string base64Data = base64Image.Substring(base64Image.IndexOf(',') + 1);
+                        byte[] imageBytes = Convert.FromBase64String(base64Data);
+                        Aliyun.ByteData.Add($"objmodel/{list[i]}.jpg", imageBytes);
+                    }
+                    {
+
+                        var returnObj = new
+                        {
+                            objText = obj.objText,
+                            mtlText = obj.mtlText,
+                            imgBase64 = "",
+                            AmID = list[i],
+                            modelType = obj.modelType
+                        };
+                        var json = Newtonsoft.Json.JsonConvert.SerializeObject(returnObj);
+                        Aliyun.Json.Add($"objmodel/{list[i]}.json", json);
+                    }
                 }
             }
             {

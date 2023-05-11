@@ -807,7 +807,7 @@ var objMain =
                             bgm.oncanplaythrough = function () {
                                 if (objMain.music.on)
                                     this.play();
-                            }; 
+                            };
                             bgm.load();
                             //if (this.on)
                             //    bgm.play();
@@ -823,7 +823,8 @@ var objMain =
         path: '',
         change: function () {
             if (/^[A-Z]{10}$/.test(this.path)) {
-                if (objMain.background.backgroundData[this.path] == undefined) {
+                //if (objMain.background.backgroundData[this.path] == undefined)
+                {
                     var cubeTextureLoader = new THREE.CubeTextureLoader();
                     //http://yrqmodeldata.oss-cn-beijing.aliyuncs.com/fpbgimg/IJZJBCUKEK/nx.jpg
                     if (objMain.debug != 2)
@@ -831,62 +832,78 @@ var objMain =
                     else
                         cubeTextureLoader.setPath('https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/fpbgimg/' + this.path + '/');
                     // window.location.hostname + '/bgimg?key=1&y=2&p=px'
-                    var cubeTexture = cubeTextureLoader.load(
+                    cubeTextureLoader.load(
                         [
                             "px.jpg", "nx.jpg",
                             "py.jpg", "ny.jpg",
-                            "pz.jpg", "nz.jpg"]);
-                    objMain.background.backgroundData[this.path] = cubeTexture;
-                    objMain.scene.background = objMain.background.backgroundData[this.path];
+                            "pz.jpg", "nz.jpg"], function (newTexture) {
+                                objMain.scene.background.images[0] = newTexture.images[0]; // px
+                                objMain.scene.background.images[1] = newTexture.images[1]; // nx
+                                objMain.scene.background.images[2] = newTexture.images[2]; // py
+                                objMain.scene.background.images[3] = newTexture.images[3]; // ny
+                                objMain.scene.background.images[4] = newTexture.images[4]; // pz
+                                objMain.scene.background.images[5] = newTexture.images[5]; // nz
+                                objMain.scene.background.needsUpdate = true;
+                                cubeTextureLoader = null;
+                            });
+                    // objMain.background.backgroundData[this.path] = cubeTexture;
                 }
-                else {
-                    objMain.scene.background = objMain.background.backgroundData[this.path];
-                }
-                //var cubeTextureLoader = new THREE.CubeTextureLoader();
-                //cubeTextureLoader.setPath('Pic/' + this.path + '/');
-                //var cubeTexture = cubeTextureLoader.load([
-                //    "px.jpg", "nx.jpg",
-                //    "py.jpg", "ny.jpg",
-                //    "pz.jpg", "nz.jpg"
-                //]);
-                //objMain.background.backgroundData['main'] = cubeTexture;
-                //objMain.scene.background = objMain.background.backgroundData['main'];
+                //objMain.scene.background = objMain.background.backgroundData[this.path];
+                //delete objMain.background.backgroundData[this.path];
             }
             else {
                 switch (this.path) {
                     case '':
                         {
-                            var cubeTextureLoader = new THREE.CubeTextureLoader();
-                            cubeTextureLoader.setPath('Pic/');
-                            //var cubeTexture = cubeTextureLoader.load([
-                            //    "xi_r.jpg", "dong_r.jpg",
-                            //    "ding_r.jpg", "di_r.jpg",
-                            //    "nan_r.jpg", "bei_r.jpg"
-                            //]);
-                            var cubeTexture = cubeTextureLoader.load([
-                                "px.jpg", "nx.jpg",
-                                "py.jpg", "ny.jpg",
-                                "pz.jpg", "nz.jpg"
-                            ]);
-                            //var cubeTexture = cubeTextureLoader.load([
-                            //    "px.png", "nx.png",
-                            //    "py.jpg", "ny.jpg",
-                            //    "pz.png", "nz.png"
-                            //]);
-                            objMain.background.backgroundData['main'] = cubeTexture;
-                            objMain.scene.background = objMain.background.backgroundData['main'];
+                            //if (objMain.background.backgroundData['main'] == undefined)
+                            {
+                                var cubeTextureLoader = new THREE.CubeTextureLoader();
+                                cubeTextureLoader.setPath('Pic/');
+                                cubeTextureLoader.load([
+                                    "px.jpg", "nx.jpg",
+                                    "py.jpg", "ny.jpg",
+                                    "pz.jpg", "nz.jpg"
+                                ], function (newTexture) {
+                                    objMain.scene.background.images[0] = newTexture.images[0]; // px
+                                    objMain.scene.background.images[1] = newTexture.images[1]; // nx
+                                    objMain.scene.background.images[2] = newTexture.images[2]; // py
+                                    objMain.scene.background.images[3] = newTexture.images[3]; // ny
+                                    objMain.scene.background.images[4] = newTexture.images[4]; // pz
+                                    objMain.scene.background.images[5] = newTexture.images[5]; // nz
+                                    objMain.scene.background.needsUpdate = true;
+                                    cubeTextureLoader = null;
+                                });
+                                //objMain.background.backgroundData['main'] = cubeTexture;
+                                //objMain.scene.background = objMain.background.backgroundData['main'];
+                            }
+                            /* objMain.scene.background = objMain.background.backgroundData['main'];*/
+                            //delete objMain.background.backgroundData['main']; 
                         }; break;
                     default:
                         {
-                            var cubeTextureLoader = new THREE.CubeTextureLoader();
-                            cubeTextureLoader.setPath('Pic/' + this.path + '/');
-                            var cubeTexture = cubeTextureLoader.load([
-                                "px.jpg", "nx.jpg",
-                                "py.jpg", "ny.jpg",
-                                "pz.jpg", "nz.jpg"
-                            ]);
-                            objMain.background.backgroundData['main'] = cubeTexture;
-                            objMain.scene.background = objMain.background.backgroundData['main'];
+                            //if (objMain.background.backgroundData[this.path] == undefined)
+                            {
+                                var cubeTextureLoader = new THREE.CubeTextureLoader();
+                                cubeTextureLoader.setPath('Pic/' + this.path + '/');
+                                cubeTextureLoader.load([
+                                    "px.jpg", "nx.jpg",
+                                    "py.jpg", "ny.jpg",
+                                    "pz.jpg", "nz.jpg"
+                                ], function (newTexture) {
+                                    objMain.scene.background.images[0] = newTexture.images[0]; // px
+                                    objMain.scene.background.images[1] = newTexture.images[1]; // nx
+                                    objMain.scene.background.images[2] = newTexture.images[2]; // py
+                                    objMain.scene.background.images[3] = newTexture.images[3]; // ny
+                                    objMain.scene.background.images[4] = newTexture.images[4]; // pz
+                                    objMain.scene.background.images[5] = newTexture.images[5]; // nz
+                                    objMain.scene.background.needsUpdate = true;
+                                    cubeTextureLoader = null;
+                                });
+                                //  objMain.background.backgroundData[this.path] = cubeTexture;
+                            }
+                            //objMain.scene.background = objMain.background.backgroundData[this.path];
+                            //delete objMain.background.backgroundData[this.path];
+
                         }; break;
                 }
             }
@@ -894,56 +911,61 @@ var objMain =
         backgroundData: {},
         changeWhenIsCross: function (r) {
             if (r.IsDetalt) {
-                objMain.scene.background = objMain.background.backgroundData['main'];
+                var cubeTextureLoader = new THREE.CubeTextureLoader();
+                cubeTextureLoader.setPath('Pic/');
+                //var cubeTexture = cubeTextureLoader.load([
+                //    "xi_r.jpg", "dong_r.jpg",
+                //    "ding_r.jpg", "di_r.jpg",
+                //    "nan_r.jpg", "bei_r.jpg"
+                //]);
+                cubeTextureLoader.load([
+                    "px.jpg", "nx.jpg",
+                    "py.jpg", "ny.jpg",
+                    "pz.jpg", "nz.jpg"
+                ],
+                    function (newTexture) {
+                        objMain.scene.background.images[0] = newTexture.images[0]; // px
+                        objMain.scene.background.images[1] = newTexture.images[1]; // nx
+                        objMain.scene.background.images[2] = newTexture.images[2]; // py
+                        objMain.scene.background.images[3] = newTexture.images[3]; // ny
+                        objMain.scene.background.images[4] = newTexture.images[4]; // pz
+                        objMain.scene.background.images[5] = newTexture.images[5]; // nz
+                        objMain.scene.background.needsUpdate = true;
+                        cubeTextureLoader = null;
+                    }
+                );
+                //  objMain.scene.background = objMain.background.backgroundData['main'];
             }
             else {
-                if (objMain.background.backgroundData[r.Md5Key] == undefined) {
+                //if (objMain.background.backgroundData[r.Md5Key] == undefined)
+                {
+                    var cubeTextureLoader = new THREE.CubeTextureLoader();
                     if (objMain.debug != 2) {
-                        var cubeTextureLoader = new THREE.CubeTextureLoader();
                         cubeTextureLoader.setPath('http://127.0.0.1:11001/bgimg/' + r.Md5Key + '/');
-                        // window.location.hostname + '/bgimg?key=1&y=2&p=px'
-                        var cubeTexture = cubeTextureLoader.load(
-                            [
-                                "px.jpg", "nx.jpg",
-                                "py.jpg", "ny.jpg",
-                                "pz.jpg", "nz.jpg"]);
-                        objMain.background.backgroundData[r.Md5Key] = cubeTexture;
-                        objMain.scene.background = objMain.background.backgroundData[r.Md5Key];
                     }
                     else {
-                        var cubeTextureLoader = new THREE.CubeTextureLoader();
-                        //http://yrqmodeldata.oss-cn-beijing.aliyuncs.com/bgimg/b46fc059ea0a9d7aac06b539d469dfe5/ny.jpg
-                        cubeTextureLoader.setPath('https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/bgimg/' + r.Md5Key + '/');
+                        cubeTextureLoader.setPath('https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/bgimg/' + r.Md5Key + '/'); //http://yrqmodeldata.oss-cn-beijing.aliyuncs.com/bgimg/b46fc059ea0a9d7aac06b539d469dfe5/ny.jpg
                         // cubeTextureLoader.setPath('https://www.nyrq123.com/imgtaiyuan/' + r.Md5Key + '/');
-                        // window.location.hostname + '/bgimg?key=1&y=2&p=px'
-                        var cubeTexture = cubeTextureLoader.load(
-                            [
-                                "px.jpg", "nx.jpg",
-                                "py.jpg", "ny.jpg",
-                                "pz.jpg", "nz.jpg"]);
-                        objMain.background.backgroundData[r.Md5Key] = cubeTexture;
-                        objMain.scene.background = objMain.background.backgroundData[r.Md5Key];
                     }
+                    cubeTextureLoader.load(
+                        [
+                            "px.jpg", "nx.jpg",
+                            "py.jpg", "ny.jpg",
+                            "pz.jpg", "nz.jpg"],
+                        function (newTexture) {
+                            objMain.scene.background.images[0] = newTexture.images[0]; // px
+                            objMain.scene.background.images[1] = newTexture.images[1]; // nx
+                            objMain.scene.background.images[2] = newTexture.images[2]; // py
+                            objMain.scene.background.images[3] = newTexture.images[3]; // ny
+                            objMain.scene.background.images[4] = newTexture.images[4]; // pz
+                            objMain.scene.background.images[5] = newTexture.images[5]; // nz
+                            objMain.scene.background.needsUpdate = true;
+                            cubeTextureLoader = null;
+                        });
+                    //  objMain.background.backgroundData[r.Md5Key] = cubeTexture;
                 }
-                else {
-                    objMain.scene.background = objMain.background.backgroundData[r.Md5Key];
-                }
+                // objMain.scene.background = objMain.background.backgroundData[r.Md5Key];
             }
-            //else if (r.AddNew) {
-            //    var cubeTextureLoader = new THREE.CubeTextureLoader();
-            //    cubeTextureLoader.setPath('');
-            //    var cubeTexture = cubeTextureLoader.load([r.px, r.nx, r.py, r.ny, r.pz, r.nz]);
-            //    objMain.background.backgroundData[r.CrossID] = cubeTexture;
-            //    objMain.scene.background = objMain.background.backgroundData[r.CrossID];
-            //}
-            //else {
-            //    if (objMain.background.backgroundData[r.CrossID] == undefined) {
-            //        throw 'background data miss';
-            //    }
-            //    else {
-            //        objMain.scene.background = objMain.background.backgroundData[r.CrossID];
-            //    }
-            //}
         }
     },
     rightAndDuty:
@@ -2303,6 +2325,7 @@ var startA = function () {
                 session = sessionStorage['session'];
             }
             ws.send(JSON.stringify({ c: 'CheckSession', session: session }));
+            objMain.clicktrail = clicktrail.initialize();
         }
         //   alert("数据发送中...");
     };
@@ -2314,7 +2337,8 @@ var startA = function () {
     };
     ws.onclose = function () {
         // 关闭 websocket
-        alert("连接已关闭...");
+        connectionBroken();
+        alert("连接已关闭...不要慌，千万不要退出，刷新网页，重新连接");
     };
     objMain.ws = ws;
     $.notify.addStyle('happyblue', {
@@ -3579,9 +3603,14 @@ var set3DHtml = function () {
         "px.jpg", "nx.jpg",
         "py.jpg", "ny.jpg",
         "pz.jpg", "nz.jpg"
-    ]);
-    objMain.background.backgroundData['main'] = cubeTexture;
-    objMain.scene.background = objMain.background.backgroundData['main'];
+    ], function (newt) {
+        objMain.scene.background = newt;
+        objMain.scene.background.needsUpdate = true;
+        cubeTextureLoader = null;
+    }
+    );
+    // objMain.background.backgroundData['main'] = cubeTexture;
+    //objMain.background.backgroundData['main'];
 
     objMain.renderer = new THREE.WebGLRenderer({ alpha: true });
     objMain.renderer.setClearColor(0x000000, 0); // the default
@@ -3747,6 +3776,11 @@ function onWindowResize() {
             objMain.renderer.setSize(window.innerWidth, window.innerHeight);
         }; break;
     }
+
+
+    var touchTrail = document.getElementById('touch-trail');
+    touchTrail.width = window.innerWidth;
+    touchTrail.height = window.innerHeight;
 }
 
 
@@ -4193,6 +4227,31 @@ var SysOperatePanel =
                 else {
                     resistance.bindData(objMain.indexKey);
                 }
+
+                //if (objMain.directionGroup.children.length > 1) {
+                //    var rotationY = objMain.directionGroup.children[1].rotation.y;
+                //    var postionCrossKey = objMain.directionGroup.children[1].userData.postionCrossKey;
+                //    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey });
+                //    objMain.ws.send(json);
+                //    objMain.directionGroup.children[1].userData.objState = 1;
+                //    operatePanel.refresh();
+                //}
+                //if (objMain.directionGroup.children.length > 2) {
+                //    var rotationY = objMain.directionGroup.children[2].rotation.y;
+                //    var postionCrossKey = objMain.directionGroup.children[2].userData.postionCrossKey;
+                //    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey });
+                //    objMain.ws.send(json);
+                //    objMain.directionGroup.children[2].userData.objState = 1;
+                //    operatePanel.refresh();
+                //}
+                //if (objMain.directionGroup.children.length > 3) {
+                //    var rotationY = objMain.directionGroup.children[3].rotation.y;
+                //    var postionCrossKey = objMain.directionGroup.children[3].userData.postionCrossKey;
+                //    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey });
+                //    objMain.ws.send(json);
+                //    objMain.directionGroup.children[3].userData.objState = 1;
+                //    operatePanel.refresh();
+                //}
             };
             img.classList.add('costomButton');
             divSysOperatePanel.appendChild(img);
@@ -5825,7 +5884,8 @@ var stateSet =
                 }
             }
         },
-    }
+    },
+    clicktrail: null
 }
 var DirectionOperator =
 {
@@ -5895,6 +5955,8 @@ var BuildingModelObj =
                     objMain.mainF.lookAtPosition2();
                 }
                 QueryReward.lookAt();
+                objMain.buildingModel[amodel] = null;
+                delete objMain.buildingModel[amodel];
             }
         }
     },
@@ -5919,6 +5981,7 @@ var BuildingModelObj =
                 if (Date.now() - this.RequestTime[amodelID] > 30000) {
                     this.RequestTime[amodelID] = Date.now();
                     var url = "http://127.0.0.1:11001/objdata/" + amodelID;
+
                     if (objMain.debug != 2) {
                         url = "http://127.0.0.1:11001/objdata/" + amodelID;
 
@@ -5929,25 +5992,47 @@ var BuildingModelObj =
                         url = "https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/objmodel/" + amodelID + ".json";
                     }
                     $.getJSON(url, function (json) {
+                        var manager = new THREE.LoadingManager();
                         var amID = json.AmID;
                         var objText = json.objText;
                         var mtlText = json.mtlText;
                         var imgBase64 = json.imgBase64;
                         var modelType = json.modelType;
-                        if (objMain.buildingGroup.getObjectByName(amID) == undefined) {
-                            var manager = new THREE.LoadingManager();
-                            new THREE.MTLLoader(manager)
-                                .loadTextOnly(mtlText, 'data:image/jpeg;base64,' + imgBase64, function (materials) {
-                                    materials.preload();
-                                    new THREE.OBJLoader(manager)
-                                        .setMaterials(materials)
-                                        .loadTextOnly(objText, function (object) {
-                                            object.userData.modelType = modelType;
-                                            objMain.buildingModel[amID] = object;
-                                            BuildingModelObj.Refresh();
-                                        }, function () { }, function () { });
-                                });
+                        var mtlManaget = null;
+                        var mtlOnload = function (materials) {
+                            materials.preload();
+                            var objL = new THREE.OBJLoader(manager)
+                                .setMaterials(materials)
+                                .loadTextOnly(objText, function (object) {
+                                    object.userData.modelType = modelType;
+                                    objMain.buildingModel[amID] = object;
+                                    BuildingModelObj.Refresh();
+                                    objL = null;
+                                    manager = null;
+                                    mtlManaget = null;
+                                }, function () { }, function () { });
+                        };
+                        //var imgUrl=
+                        if (objMain.debug != 2) {
+                            //   url = "http://127.0.0.1:11001/objdata/" + amodelID;
+                            if (objMain.buildingGroup.getObjectByName(amID) == undefined) {
+                                //   var manager = new THREE.LoadingManager();
+                                mtlManaget = new THREE.MTLLoader(manager)
+                                    .loadTextOnly(mtlText, 'data:image/jpeg;base64,' + imgBase64, mtlOnload);
+                            }
                         }
+                        else {
+                            //  url = "https://www.nyrq123.com/objtaiyuan/" + amodelID;
+                            //  url = "http://127.0.0.1:11001/objdata/"
+                            //  url = "https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/objmodel/" + amodelID + ".json";
+                            //var ima
+                            if (objMain.buildingGroup.getObjectByName(amID) == undefined) {
+                                var imgUrl = "https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/objmodel/" + amodelID + ".jpg";
+                                var manager = new THREE.LoadingManager();
+                                mtlManaget = new THREE.MTLLoader(manager).loadTextWithImageUrl(mtlText, imgUrl, mtlOnload);
+                            }
+                        }
+
                     })
                 }
 

@@ -373,8 +373,7 @@
         if (div1 != null && div1 != undefined) {
             div1.appendChild(addDiv(teamJoinBroadInfo.Player.Description + '：', teamJoinBroadInfo.Player.Name, teamJoinBroadInfo.Player.GUID));
         }
-        else (div2 != null && div2 != undefined)
-        {
+        else if (div2 != null && div2 != undefined) {
             div2.appendChild(addDiv(teamJoinBroadInfo.Player.Description + '：', teamJoinBroadInfo.Player.Name, teamJoinBroadInfo.Player.GUID));
         }
     },

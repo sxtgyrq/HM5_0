@@ -900,7 +900,7 @@ THREE.OrbitControls = function (object, domElement) {
                             //state = STATE.touch;
                         }; break;
                 }
-
+                objMain.clicktrail.drawPoint0(event.touches[0].clientX, event.touches[0].clientY);
                 //handleTouchStartRotate(event);
 
                 //state = STATE.TOUCH_ROTATE;
@@ -914,6 +914,9 @@ THREE.OrbitControls = function (object, domElement) {
                 handleTouchStartDollyPan(event);
 
                 state = STATE.TOUCH_DOLLY_PAN;
+
+                objMain.clicktrail.drawPoint0(event.touches[0].clientX, event.touches[0].clientY);
+                objMain.clicktrail.drawPoint1(event.touches[1].clientX, event.touches[1].clientY);
 
                 break;
 
@@ -955,7 +958,7 @@ THREE.OrbitControls = function (object, domElement) {
                         }; break;
                 }
                 //handleTouchMoveRotate(event);
-
+                objMain.clicktrail.line0(event.touches[0].clientX, event.touches[0].clientY);
                 break;
 
             case 2: // two-fingered touch: dolly-pan
@@ -964,6 +967,8 @@ THREE.OrbitControls = function (object, domElement) {
                 if (state !== STATE.TOUCH_DOLLY_PAN) return; // is this needed?
 
                 handleTouchMoveDollyPan(event);
+                objMain.clicktrail.line0(event.touches[0].clientX, event.touches[0].clientY);
+                objMain.clicktrail.line1(event.touches[1].clientX, event.touches[1].clientY);
 
                 break;
 
@@ -985,6 +990,8 @@ THREE.OrbitControls = function (object, domElement) {
         scope.dispatchEvent(endEvent);
 
         state = STATE.NONE;
+
+        objMain.clicktrail.clear();
 
     }
 

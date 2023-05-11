@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
-<head> 
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
@@ -302,13 +302,13 @@
     <script src="fire.js"></script><!--24kb-->
     <script src="ThreeJs/CSS2DRenderer.js"></script><!--4kb-->
     <script src="Geometry/GetMapDetail.js"></script><!--5kb-->
-    <!--<script src="ThreeJs/OrbitControls.js"></script>--><!--33kb-->
+    <script src="ThreeJs/OrbitControls.js"></script>33kb
 
-    <script src="ThreeJs/OrbitControls.min.js"></script><!--13kb-->
+    <!--<script src="ThreeJs/OrbitControls.min.js"></script>--><!--13kb-->
     <script src="ThreeJs/WebGL.js"></script><!--2kb-->
     <!--<script src="ThreeJs/GLTFBase64Loader.js"></script>-->
-    <!--<script src="ThreeJs/MTLLoader.js"></script>--><!--27kb-->
-    <script src="ThreeJs/MTLLoader-min.js"></script><!--10kb-->
+    <script src="ThreeJs/MTLLoader.js"></script><!--27kb-->
+    <!--<script src="ThreeJs/MTLLoader-min.js"></script>--><!--10kb-->
     <!--<script src="ThreeJs/OBJLoader.js"></script>--><!--26kb-->
     <script src="ThreeJs/OBJLoader-min.js"></script><!--9kb-->
     <!--<script src="ThreeJs/LightningStrike.js"></script>--><!--34kb-->
@@ -331,8 +331,30 @@
     <script src="transactionBussiness.js"></script>
     <!--<script src="Scripts/qrcode.js"></script>--><!--33kb-->
     <script src="Scripts/qrcode.min.js"></script><!--24kb-->
+    <link href="css/clicktrail.css" rel="stylesheet" />
 </head>
 <body style="width: 100%; height: 100%;overflow:hidden;position:absolute;">
+    <div class="touched" id="touched"></div>
+    <canvas  id="touch-trail"></canvas>
+    <script src="clicktrail.js"></script>
+    <script>
+      
+            //var touched = document.getElementById('touched');
+            //document.body.addEventListener('mousedown', function (e) {
+            //    showTouched(e.clientX, e.clientY);
+            //});
+            //document.body.addEventListener('touchstart', function (e) {
+            //    showTouched(e.touches[0].clientX, e.touches[0].clientY);
+            //});
+            //function showTouched(x, y) {
+            //    touched.style.left = (x - 10) + 'px';
+            //    touched.style.top = (y - 10) + 'px';
+            //    touched.style.display = 'block';
+            //    setTimeout(function () {
+            //        touched.style.display = 'none';
+            //    }, 100);
+            //}
+    </script>
     <div style="text-shadow:0 0.1em 0.1em white;color:wheat;"></div>
     <audio id="backGroudMusick">
         <source src="bgm/changshoucunwai.ogg" type="audio/ogg" />
@@ -371,6 +393,7 @@
     <script src="createTeamObj.js"></script>
     <script src="whetherGo.js"></script>
     <script src="smallMap.js"></script>
+    <script src="connectionBroken.js"></script>
     <!--<div id="dialog" class="dialog show">
         <div class="dialogPanel1">
             <header id="panelHeader-5" class="dialogPanelheader">
@@ -551,6 +574,6 @@
     </div>-->
 
 
-    
+
 </body>
 </html>

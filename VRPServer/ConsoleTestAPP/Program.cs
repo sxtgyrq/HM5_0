@@ -24,25 +24,46 @@ namespace ConsoleTestAPP
             // Console.WriteLine(a);
             //Console.Read();
             //Console.Read();
-            FileStream imageFs = File.OpenRead("Car_01.png");
-            var c = new CommonClass.Img.Combine(imageFs, "105.jpg");
-            var base64 = c.GetBase64();
-            byte[] imageArray = Convert.FromBase64String(base64);
-            File.WriteAllBytes("r22change.png", imageArray);
+            //FileStream imageFs = File.OpenRead("Car_01.png");
+            //var c = new CommonClass.Img.Combine(imageFs, "105.jpg");
+            //var base64 = c.GetBase64();
+            //byte[] imageArray = Convert.FromBase64String(base64);
+            //File.WriteAllBytes("r22change.png", imageArray);
 
-            //   CommonClass.Img.DrawFont.Draw("你");
-            var data = CommonClass.Img.DrawFont.FontCodeResult.Data.Get(Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.Img.DrawFont.FontCodeResult.Data.objTff2>);
-            CommonClass.Img.DrawFont.Initialize(data);
+            ////   CommonClass.Img.DrawFont.Draw("你");
+            //var data = CommonClass.Img.DrawFont.FontCodeResult.Data.Get(Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.Img.DrawFont.FontCodeResult.Data.objTff2>);
+            //CommonClass.Img.DrawFont.Initialize(data);
+            //{
+            //    var dr = new CommonClass.Img.DrawFont("国", data, "red");
+            //    dr.SaveAsImg();
+            //}
+            //{
+            //    var dr = new CommonClass.Img.DrawFonts("耗时1小时38分49.24秒", data, "green");
+            //    dr.SaveAsImg();
+            //    // CommonClass.Img.DrawFont.Draw("你", data);
+            //}
+            // var black = 0x333333;
+            var collect = 0xF9B42D;
+            var home = 0xF9F9F9;
+            var speed = 0x000000;
+            var volume = 0x0000ff;
+            var mile = 0xff0000;
+            var minValue = double.MaxValue;
+            int result = -1;
+            for (int i = 0; i < 0xffffff; i++)
             {
-                var dr = new CommonClass.Img.DrawFont("国", data, "red");
-                dr.SaveAsImg();
+                var ss = 1.0 / ((collect - i) * (collect - i)) +
+                    1.0 / ((home - i) * (home - i)) +
+                    1.0 / ((speed - i) * (speed - i)) +
+                    1.0 / ((volume - i) * (volume - i)) +
+                     1.0 / ((mile - i) * (mile - i));
+                if (ss < minValue)
+                {
+                    minValue = ss;
+                    result = i;
+                }
             }
-            {
-                var dr = new CommonClass.Img.DrawFonts("耗时1小时38分49.24秒", data, "green");
-                dr.SaveAsImg();
-                // CommonClass.Img.DrawFont.Draw("你", data);
-            }
-
+            Console.WriteLine($"0x{result.ToString("X")}");
             while (Console.ReadLine().ToLower() == "exit")
             {
                 break;

@@ -257,9 +257,9 @@ namespace HouseManager5_0.RoomMainF
 
             if (!string.IsNullOrEmpty(checkItem.GroupKey))
             {
-                if (this._Groups.ContainsKey(checkItem.Key))
+                if (this._Groups.ContainsKey(checkItem.GroupKey))
                 {
-                    var group = this._Groups[checkItem.Key];
+                    var group = this._Groups[checkItem.GroupKey];
                     return group.UpdatePlayer(checkItem);
                 }
                 else

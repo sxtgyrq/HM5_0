@@ -17,7 +17,10 @@ namespace HouseManager5_0
 
         internal string Display(GetResistanceObj r)
         {
-
+            if (string.IsNullOrEmpty(r.GroupKey)||string.IsNullOrEmpty(r.key)) 
+            {
+                return "";
+            }
             GroupClassF.GroupClass group = null;
             lock (that.PlayerLock)
             {
