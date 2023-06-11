@@ -382,7 +382,14 @@ namespace HouseManager5_0
                         player.getCar().setState(player, ref notifyMsg, oldState);
                         player.SendBG(player, ref notifyMsg);
 
- 
+
+                    }
+                    if (player.Group.Live)
+                    {
+                        if (!string.IsNullOrEmpty(player.direcitonAndID.DYUid))
+                        {
+                            player.Group.AdviseIsRight(player, ref notifyMsg);
+                        }
                     }
                     this.sendSeveralMsgs(notifyMsg);
                     p();
@@ -395,6 +402,14 @@ namespace HouseManager5_0
                     SelectionIsWrong(player, selectionCenter, reduceValue, notifyMsg);
                     this.sendSeveralMsgs(notifyMsg);
                     player.playerSelectDirectionTh = new Thread(() => StartSelectThreadB(selections, selectionCenter, player, oldState, p));
+
+                    if (player.Group.Live)
+                    {
+                        if (!string.IsNullOrEmpty(player.direcitonAndID.DYUid))
+                        {
+                            player.Group.AdviseIsWrong(player, ref notifyMsg);
+                        }
+                    }
                 }
             }
             else

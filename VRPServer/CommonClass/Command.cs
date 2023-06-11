@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommonClass.douyin;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -576,6 +577,7 @@ namespace CommonClass
         public double rotationY { get; set; }
         public string GroupKey { get; set; }
         public string postionCrossKey { get; set; }
+        public string Uid { get; set; }
     }
     public class TakeApart : Command
     {
@@ -1130,5 +1132,45 @@ namespace CommonClass
     public class BradCastAllDouyinPlayerIsWaiting : Command
     {
         public List<string> DetailInfo { get; set; }
+    }
+
+    public class Douyin
+    {
+        public class DouyinAdviseSelect : CommandNotify
+        {
+            public string select { get; set; }
+            public log Detail { get; set; }
+        }
+
+        public class DouyinZoomIn : CommandNotify
+        {
+            //public string select { get; set; }
+            //public log Detail { get; set; }
+        }
+        public class DouyinZoomOut : CommandNotify
+        {
+            //public string select { get; set; }
+            //public log Detail { get; set; }
+        }
+        public class DouyinRotateLeft : CommandNotify
+        {
+            //public string select { get; set; }
+            //public log Detail { get; set; }
+        }
+        public class DouyinRotateRight : CommandNotify
+        {
+            //public string select { get; set; }
+            //public log Detail { get; set; }
+        }
+        public class DouyinRotateHigh : CommandNotify
+        {
+            //public string select { get; set; }
+            //public log Detail { get; set; }
+        }
+        public class DouyinRotateLow : CommandNotify
+        {
+            //public string select { get; set; }
+            //public log Detail { get; set; }
+        }
     }
 }

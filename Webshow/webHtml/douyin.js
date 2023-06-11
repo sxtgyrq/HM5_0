@@ -166,9 +166,9 @@
             //  var list = [];
             for (var i = 0; i < list.length; i += 3) {
                 detailAdvise += `<tr>
-                    <td style="border-right: dashed 1px #ffd800ff;" colspan="5">${list[i + 0]}</td>
-                    <td style="border-right: dashed 1px #ffd800ff;" colspan="5">${list[i + 1]}</td>
-                    <td style="border-right: dashed 1px #ffd800ff;" colspan="5">${list[i + 2]}</td>
+                    <td style="border-right: dashed 1px #ffd800ff;word-break:break-all;word-wrap:anywhere;" colspan="5">${list[i + 0]}</td>
+                    <td style="border-right: dashed 1px #ffd800ff;word-break:break-all;word-wrap:anywhere;" colspan="5">${list[i + 1]}</td>
+                    <td style="border-right: dashed 1px #ffd800ff;word-break:break-all;word-wrap:anywhere;" colspan="5">${list[i + 2]}</td>
                 </tr>`;
             }
             var html = `<div id="${that.operateID}" style="overflow-y: scroll; width: 80%; height: 80%; max-width: 30em; max-height: calc(100% - 10em); margin-left: auto; margin-right: auto; margin-top: 5em; border: dotted 2px blue; border-top-left-radius: 1em; color: greenyellow; background-color: #722732; opacity: 0.85; background-size: 74px 74px; background-image: repeating-linear-gradient(0deg, #852732, #852732 3.7px, #722732 3.7px, #722732);z-index:9;position:relative;">

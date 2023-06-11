@@ -551,11 +551,11 @@ namespace HouseManager5_0.GroupClassF
                 {
                     if (string.IsNullOrEmpty(Fp.region))
                     {
-                        msg = $"<b>到【{Fp.FastenPositionName}】找【{owner.dyNickName}】收集1.00元？</b>";
+                        msg = $"<b>到【{Fp.FastenPositionName}】找【<span style=\"color:blue;text-shadow:1px 1px white;\">{owner.dyNickName}</span>】收集1.00元？</b>";
                     }
                     else
                     {
-                        msg = $"<b>到[{Fp.region}]【{Fp.FastenPositionName}】找【{owner.dyNickName}】收集1.00元？</b>";
+                        msg = $"<b>到[{Fp.region}]【{Fp.FastenPositionName}】找【<span style=\"color:blue;text-shadow:1px 1px white;\">{owner.dyNickName}</span>】收集1.00元？</b>";
                     }
                 }
             }
@@ -581,13 +581,23 @@ namespace HouseManager5_0.GroupClassF
                     var priceStr = player.Ts.costPriceStr;
                     if (string.IsNullOrEmpty(Fp.region))
                     {
-                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到【{Fp.FastenPositionName}】找【{owner.dyNickName}】收集1.00元？</b>";
+                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到【{Fp.FastenPositionName}】找【<span style=\"color:blue;text-shadow:1px 1px white;\">{owner.dyNickName}</span>】收集1.00元？</b>";
                         // msg = $"<b>是否花费<span>{priceStr}<span>到【{Fp.FastenPositionName}】收集1.00元？</b>";
                     }
                     else
                     {
-                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到[{Fp.region}]【{Fp.FastenPositionName}】找【{owner.dyNickName}】收集1.00元？</b>";
+                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到[{Fp.region}]【{Fp.FastenPositionName}】找【<span style=\"color:blue;text-shadow:1px 1px white;\">{owner.dyNickName}</span>】收集1.00元？</b>";
                         // msg = $"<b>是否花费<span>{priceStr}<span>到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00元？</b>";
+                    }
+                }
+            }
+            if (owner != null)
+            {
+                if (this.Live)
+                {
+                    if (this.GiftByViewer.Count(item => item.C.Log.Uid == owner.uid) > 0)
+                    {
+                        that.WebNotify(player, $"提示抖音用户【{owner.dyNickName}】，刷到排行榜的第一名，下个目的地，有10倍的热度奖励！", 30);
                     }
                 }
             }

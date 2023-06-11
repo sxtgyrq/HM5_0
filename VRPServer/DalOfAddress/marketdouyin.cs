@@ -26,7 +26,7 @@ namespace DalOfAddress
                     {
                         int influencedRow;
                         {
-                            string sQL = $@"UPDATE marketdouyin SET dyNickName=@dyNickName,passCount=passCount+{(samePlace ? "10" : "1")} WHERE FpID=@FpID AND uid=@uid ";
+                            string sQL = $@"UPDATE marketdouyin SET dyNickName=@dyNickName,passCount=passCount+{(samePlace ? "10" : "1")},OperateTime='{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}' WHERE FpID=@FpID AND uid=@uid ";
                             // long moneycount;
                             using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                             {
@@ -34,13 +34,13 @@ namespace DalOfAddress
                                 command.Parameters.AddWithValue("@FpID", FpID);
                                 command.Parameters.AddWithValue("@uid", uid);
                                 influencedRow = command.ExecuteNonQuery();
-                              //  doubleAdded = true;
+                                //  doubleAdded = true;
                             }
 
                         }
                         if (influencedRow == 0)
                         {
-                            string sQL = @"INSERT INTO marketdouyin(FpID,uid,dyNickName,passCount)VALUES(@FpID,@uid,@dyNickName,@passCount)";
+                            string sQL = $@"INSERT INTO marketdouyin(FpID,uid,dyNickName,passCount,OperateTime)VALUES(@FpID,@uid,@dyNickName,@passCount,'{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}')";
                             // long moneycount;
                             using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                             {
@@ -50,7 +50,7 @@ namespace DalOfAddress
                                 command.Parameters.AddWithValue("@dyNickName", dyNickName);
                                 command.Parameters.AddWithValue("@passCount", passCount);
                                 influencedRow = command.ExecuteNonQuery();
-                               // doubleAdded = false;
+                                // doubleAdded = false;
                             }
                         }
                         if (influencedRow == 1)
@@ -58,7 +58,7 @@ namespace DalOfAddress
                             int passCount;
                             {
                                 string sQL = "SELECT passCount FROM marketdouyin WHERE FpID=@FpID AND uid=@uid";
-                                using (MySqlCommand command = new MySqlCommand(sQL, con, tran)) 
+                                using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                                 {
                                     command.Parameters.AddWithValue("@FpID", FpID);
                                     command.Parameters.AddWithValue("@uid", uid);
@@ -94,7 +94,7 @@ namespace DalOfAddress
                 data.Add(new CommonClass.databaseModel.marketdouyin()
                 {
                     dyNickName = ds.Tables[0].Rows[i]["dyNickName"] == DBNull.Value || ds.Tables[0].Rows[i]["dyNickName"] == null ? "" : Convert.ToString(ds.Tables[0].Rows[i]["dyNickName"]).Trim(),
-                    FpID = ds.Tables[0].Rows[i]["dyNickName"] == DBNull.Value || ds.Tables[0].Rows[i]["dyNickName"] == null ? "" : Convert.ToString(ds.Tables[0].Rows[i]["dyNickName"]).Trim(),
+                    FpID = ds.Tables[0].Rows[i]["FpID"] == DBNull.Value || ds.Tables[0].Rows[i]["FpID"] == null ? "" : Convert.ToString(ds.Tables[0].Rows[i]["FpID"]).Trim(),
                     passCount = ds.Tables[0].Rows[i]["passCount"] == DBNull.Value || ds.Tables[0].Rows[i]["passCount"] == null ? 1 : Convert.ToInt32(ds.Tables[0].Rows[i]["passCount"]),
                     uid = ds.Tables[0].Rows[i]["uid"] == DBNull.Value || ds.Tables[0].Rows[i]["uid"] == null ? "" : Convert.ToString(ds.Tables[0].Rows[i]["uid"]).Trim(),
                 });

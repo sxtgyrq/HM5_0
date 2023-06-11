@@ -31,7 +31,7 @@ namespace HouseManager5_0
             }
             if (group != null)
             {
-
+                
                 if (group.Live)
                 {
                     return group.ShowLiveDisplay();

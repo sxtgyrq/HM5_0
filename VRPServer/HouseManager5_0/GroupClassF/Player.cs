@@ -216,7 +216,8 @@ namespace HouseManager5_0.GroupClassF
                     new Player.DirecitonAndSelectID()
                     {
                         direciton = that.getComplex(gp.GetFpByIndex(this.StartFPIndex)),
-                        PostionCrossKey = ""
+                        PostionCrossKey = "",
+                        DYUid = ""
                     };
                 //  newPlayer.
                 ((Player)this._PlayerInGroup[addItem.Key]).modelHasShowed = new Dictionary<string, bool>();

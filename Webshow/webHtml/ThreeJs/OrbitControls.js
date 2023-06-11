@@ -296,6 +296,7 @@ THREE.OrbitControls = function (object, domElement) {
         sphericalDelta.theta -= angle;
 
     }
+    this.rotateLeft = rotateLeft;
 
     function rotateUp(angle) {
 
@@ -425,7 +426,7 @@ THREE.OrbitControls = function (object, domElement) {
         }
 
     }
-
+    this.dollyOut = dollyOut;
     //
     // event callbacks - update the object state
     //

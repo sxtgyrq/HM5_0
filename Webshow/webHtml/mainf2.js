@@ -2258,6 +2258,29 @@ var objMain =
                 {
                     douyinPanleShow.add3(received_obj);
                 }; break;
+            case 'DouyinAdviseSelect':
+                {
+                    DirectionOperator.AdviseSelect(received_obj);
+                }; break;
+            case 'DouyinZoomIn':
+                {
+                    objMain.controls.dollyOut(0.98);
+                    objMain.controls.update();
+                }; break;
+            case 'DouyinZoomOut':
+                {
+                    objMain.controls.dollyOut(1.02);
+                    objMain.controls.update();
+                }; break;
+            case 'DouyinRotateLeft':
+                {
+                    objMain.controls.rotateLeft(0.05);
+                    objMain.controls.update();
+                }; break;
+            case 'DouyinRotateRight': {
+                objMain.controls.rotateLeft(-0.05);
+                objMain.controls.update();
+            }; break;
             default:
                 {
                     console.log('命令未注册', received_obj.c + "__没有注册。");
@@ -3742,7 +3765,7 @@ var set3DHtml = function () {
                 if (objMain.directionGroup.children[selectIndex].userData.objState > 0) {
                 }
                 else {
-                    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': objMain.directionGroup.children[selectIndex].userData.postionCrossKey });
+                    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': objMain.directionGroup.children[selectIndex].userData.postionCrossKey, 'uid': '' });
                     objMain.ws.send(json);
                     //userData.objState
                     objMain.directionGroup.children[selectIndex].userData.objState = 1;
@@ -4902,7 +4925,7 @@ var operatePanel =
                         if (objMain.directionGroup.children.length > 1) {
                             var rotationY = objMain.directionGroup.children[1].rotation.y;
                             var postionCrossKey = objMain.directionGroup.children[1].userData.postionCrossKey;
-                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey });
+                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey, 'uid': '' });
                             objMain.ws.send(json);
                             objMain.directionGroup.children[1].userData.objState = 1;
                             operatePanel.refresh();
@@ -4915,7 +4938,7 @@ var operatePanel =
                         if (objMain.directionGroup.children.length > 2) {
                             var rotationY = objMain.directionGroup.children[2].rotation.y;
                             var postionCrossKey = objMain.directionGroup.children[2].userData.postionCrossKey;
-                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey });
+                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey, 'uid': '' });
                             objMain.ws.send(json);
                             objMain.directionGroup.children[2].userData.objState = 1;
                             operatePanel.refresh();
@@ -4928,7 +4951,7 @@ var operatePanel =
                         if (objMain.directionGroup.children.length > 3) {
                             var rotationY = objMain.directionGroup.children[3].rotation.y;
                             var postionCrossKey = objMain.directionGroup.children[3].userData.postionCrossKey;
-                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey });
+                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey, 'uid': '' });
                             objMain.ws.send(json);
                             objMain.directionGroup.children[3].userData.objState = 1;
                             operatePanel.refresh();
@@ -5954,6 +5977,39 @@ var DirectionOperator =
         for (var i = 1; i < objMain.directionGroup.children.length; i++) {
             if (objMain.directionGroup.children[i].userData.objState == 1 && objMain.directionGroup.children[i].userData.postionCrossKey == postionCrossKey) {
                 objMain.directionGroup.children[i].userData.objState = 2;
+            }
+        }
+    },
+    AdviseSelect: function (adviseObj) {
+        if (objMain.directionGroup.visible) {
+            //var minAngle = Math.PI / 20;
+            var selectIndex = -1;
+            for (var i = 1; i < objMain.directionGroup.children.length; i++) {
+
+                if (i == 1 && adviseObj.select == 'A') {
+                    selectIndex = i;
+                }
+                else if (i == 2 && adviseObj.select == 'B') {
+                    selectIndex = i;
+                }
+                else if (i == 3 && adviseObj.select == 'C') {
+                    selectIndex = i;
+                }
+            }
+            if (selectIndex > 0) {
+
+                var rotationY = objMain.directionGroup.children[selectIndex].rotation.y;
+
+                if (objMain.directionGroup.children[selectIndex].userData.objState > 0) {
+                }
+                else {
+                    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': objMain.directionGroup.children[selectIndex].userData.postionCrossKey, 'uid': adviseObj.Detail.Uid });
+                    objMain.ws.send(json);
+                    //userData.objState
+                    objMain.directionGroup.children[selectIndex].userData.objState = 1;
+
+                }
+                operatePanel.refresh();
             }
         }
     }

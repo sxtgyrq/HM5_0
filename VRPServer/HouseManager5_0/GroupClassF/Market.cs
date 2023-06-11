@@ -11,7 +11,10 @@ using System.Net.WebSockets;
 using System.Numerics;
 using System.Security.Policy;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
+using static CommonClass.Douyin;
 using static HouseManager5_0.Car;
 
 namespace HouseManager5_0.GroupClassF
@@ -101,102 +104,219 @@ namespace HouseManager5_0.GroupClassF
             {
                 // List<string> sendMsgs = new List<string>();
                 var player = this._PlayerInGroup.First().Value;
-                if (douyinLog.Log.ctype == "进入直播间")
+                if (douyinLog.Log.ActionType == "进入")
                 {
-                    that.WebNotify(player, $"欢迎【{douyinLog.Log.nickname}】进入了直播间！",15);
+                    that.WebNotify(player, $"欢迎【{douyinLog.Log.Nickname}】进入了直播间！", 15);
                     this.GiftByViewer.Add(new gift()
                     {
                         C = douyinLog,
                         GiftT = giftType.enter,
-                        number = 0,
                     });
                 }
-                else if (douyinLog.Log.ctype == "赠送礼物")
+                else if (douyinLog.Log.ActionType == "送礼")
                 {
-                    that.WebNotify(player, $"【{douyinLog.Log.nickname}】{douyinLog.Log.msg}！",25);
-
-
-                    if (douyinLog.Log.msg.Contains("小心心"))
+                    that.WebNotify(player, $"【{douyinLog.Log.Nickname}】{douyinLog.Log.Action}！", 25);
+                    this.GiftByViewer.Add(new gift()
                     {
-                        var startIndex = douyinLog.Log.msg.IndexOf("播") + 1;
-                        if (startIndex != 4)
-                        {
-                            Console.WriteLine("出现播的传输错误");
-                            return;
-                        }
-                        else
-                        {
-                            var endIndex = douyinLog.Log.msg.IndexOf("个");
-                            if (endIndex != 6)
-                            {
-                                Console.WriteLine("出现个的传输错误");
-                                return;
-                            }
-                            var number = Convert.ToInt32(douyinLog.Log.msg.Substring(startIndex, endIndex - startIndex).Trim());
-                            // addaddvise(ref this.addvise_A, douyinLog, number);
+                        C = douyinLog,
+                        GiftT = giftType.xiaoxx,
+                    });
 
-                            this.GiftByViewer.Add(new gift()
-                            {
-                                C = douyinLog,
-                                GiftT = giftType.xiaoxx,
-                                number = number,
-                            });
-                        }
-                    }
-
-                    else if (douyinLog.Log.msg.Contains("玫瑰"))
+                    Regex reg_douyin = new Regex("^送礼:送给主播[1-9][0-9]{0,7}个抖音$");
+                    Regex reg_xxx = new Regex("^送礼:送给主播[1-9][0-9]{0,7}个小心心$");
+                    Regex reg_meigui = new Regex("^送礼:送给主播[1-9][0-9]{0,7}个玫瑰$");
+                    if (reg.IsMatch(douyinLog.Log.Action.Trim()))
                     {
-                        var startIndex = douyinLog.Log.msg.IndexOf("播") + 1;
-                        if (startIndex != 4)
-                        {
-                            Console.WriteLine("出现播的传输错误");
-                            return;
-                        }
-                        else
-                        {
-                            var endIndex = douyinLog.Log.msg.IndexOf("个");
-                            if (endIndex != 6)
-                            {
-                                Console.WriteLine("出现个的传输错误");
-                                return;
-                            }
-                            var number = Convert.ToInt32(douyinLog.Log.msg.Substring(startIndex, endIndex - startIndex).Trim());
-                            this.GiftByViewer.Add(new gift()
-                            {
-                                C = douyinLog,
-                                GiftT = giftType.meigi,
-                                number = number,
-                            });
-                        }
-                    }
-                    else if (douyinLog.Log.msg.Contains("抖音"))
-                    {
-                        var startIndex = douyinLog.Log.msg.IndexOf("播") + 1;
-                        if (startIndex != 4)
-                        {
-                            Console.WriteLine("出现播的传输错误");
-                            return;
-                        }
-                        else
-                        {
-                            var endIndex = douyinLog.Log.msg.IndexOf("个");
-                            if (endIndex != 6)
-                            {
-                                Console.WriteLine("出现个的传输错误");
-                                return;
-                            }
-                            var number = Convert.ToInt32(douyinLog.Log.msg.Substring(startIndex, endIndex - startIndex).Trim());
-                            this.GiftByViewer.Add(new gift()
-                            {
-                                C = douyinLog,
-                                GiftT = giftType.douyin,
-                                number = number,
-                            });
 
-                        }
                     }
                 }
+                else if (douyinLog.Log.ActionType == "发言")
+                {
+                    //  that.WebNotify(player, $"【{douyinLog.Log.Nickname}】{douyinLog.Log.Action}！", 25);
+                    if (douyinLog.Log.Action.Trim().ToUpper() == "发言:A")
+                    {
+                        if (player.getCar().state == CarState.selecting)
+                        {
+                            if (player.Group.Live)
+                            {
+                                DouyinAdviseSelect s = new DouyinAdviseSelect()
+                                {
+                                    c = "DouyinAdviseSelect",
+                                    select = "A",
+                                    WebSocketID = player.WebSocketID,
+                                    Detail = douyinLog.Log
+                                };
+                                msgsNeedToSend.Add(player.FromUrl);
+                                msgsNeedToSend.Add(Newtonsoft.Json.JsonConvert.SerializeObject(s));
+                            }
+                        }
+                    }
+                    else if (douyinLog.Log.Action.Trim().ToUpper() == "发言:B")
+                    {
+                        if (player.getCar().state == CarState.selecting)
+                        {
+                            if (player.Group.Live)
+                            {
+                                DouyinAdviseSelect s = new DouyinAdviseSelect()
+                                {
+                                    c = "DouyinAdviseSelect",
+                                    select = "B",
+                                    WebSocketID = player.WebSocketID,
+                                    Detail = douyinLog.Log
+                                };
+                                msgsNeedToSend.Add(player.FromUrl);
+                                msgsNeedToSend.Add(Newtonsoft.Json.JsonConvert.SerializeObject(s));
+                            }
+                        }
+                    }
+                    else if (douyinLog.Log.Action.Trim().ToUpper() == "发言:C")
+                    {
+                        if (player.getCar().state == CarState.selecting)
+                        {
+                            if (player.Group.Live)
+                            {
+                                DouyinAdviseSelect s = new DouyinAdviseSelect()
+                                {
+                                    c = "DouyinAdviseSelect",
+                                    select = "C",
+                                    WebSocketID = player.WebSocketID,
+                                    Detail = douyinLog.Log
+                                };
+                                msgsNeedToSend.Add(player.FromUrl);
+                                msgsNeedToSend.Add(Newtonsoft.Json.JsonConvert.SerializeObject(s));
+                            }
+                        }
+                    }
+                    else if (douyinLog.Log.Action.Trim().ToUpper() == "发言:大")
+                    {
+                        DouyinZoomIn dzi = new DouyinZoomIn()
+                        {
+                            c = "DouyinZoomIn",
+                            WebSocketID = player.WebSocketID,
+                        };
+                        msgsNeedToSend.Add(player.FromUrl);
+                        msgsNeedToSend.Add(Newtonsoft.Json.JsonConvert.SerializeObject(dzi));
+                    }
 
+                    else if (douyinLog.Log.Action.Trim().ToUpper() == "发言:小")
+                    {
+                        DouyinZoomOut dzo = new DouyinZoomOut()
+                        {
+                            c = "DouyinZoomOut",
+                            WebSocketID = player.WebSocketID,
+                        };
+                        msgsNeedToSend.Add(player.FromUrl);
+                        msgsNeedToSend.Add(Newtonsoft.Json.JsonConvert.SerializeObject(dzo));
+                    }
+                    else if (douyinLog.Log.Action.Trim().ToUpper() == "发言:出发")
+                    {
+                        if (player.getCar().state == CarState.waitAtBaseStation)
+                        {
+                            //   this.
+                            var rank = (from cItem in this._collectPosition
+                                        orderby this.getLength(gp.GetFpByIndex(cItem.Value), gp.GetFpByIndex(player.StartFPIndex)) ascending
+                                        select cItem.Key).ToList();
+                            //rank[0]
+                            that.updateCollect(new SetCollect()
+                            {
+                                c = "SetCollect",
+                                collectIndex = rank[0],
+                                cType = "findWork",
+                                fastenpositionID = gp.GetFpByIndex(this._collectPosition[rank[0]]).FastenPositionID,
+                                GroupKey = this.GroupKey,
+                                Key = player.Key,
+                            }, gp);
+                        }
+                    }
+                    else if (douyinLog.Log.Action.Trim().ToUpper() == "发言:走")
+                    {
+                        if (player.getCar().state == CarState.waitOnRoad)
+                        {
+                            //   this.
+                            var rank = (from cItem in this._collectPosition
+                                        orderby this.getLength(gp.GetFpByIndex(cItem.Value), gp.GetFpByIndex(player.getCar().targetFpIndex)) ascending
+                                        select cItem.Key).ToList();
+                            //rank[0]
+                            that.updateCollect(new SetCollect()
+                            {
+                                c = "SetCollect",
+                                collectIndex = rank[0],
+                                cType = "findWork",
+                                fastenpositionID = gp.GetFpByIndex(this._collectPosition[rank[0]]).FastenPositionID,
+                                GroupKey = this.GroupKey,
+                                Key = player.Key,
+                            }, gp);
+                        }
+                    }
+                    else if (douyinLog.Log.Action.Trim().ToUpper() == "发言:回")
+                    {
+                        if (player.getCar().state == CarState.waitOnRoad)
+                        {
+                            this.that.OrderToReturn(new OrderToReturn()
+                            {
+                                c = "OrderToReturn",
+                                Key = player.Key,
+                                GroupKey = this.GroupKey,
+                            }, grp);
+                            //objI.OrderToReturn(otr, Program.dt);
+                        }
+                    }
+                    else if (douyinLog.Log.Action.Trim().ToUpper() == "发言:左")
+                    {
+                        DouyinRotateLeft dzo = new DouyinRotateLeft()
+                        {
+                            c = "DouyinRotateLeft",
+                            WebSocketID = player.WebSocketID,
+                        };
+                        msgsNeedToSend.Add(player.FromUrl);
+                        msgsNeedToSend.Add(Newtonsoft.Json.JsonConvert.SerializeObject(dzo));
+                    }
+                    else if (douyinLog.Log.Action.Trim().ToUpper() == "发言:右")
+                    {
+                        DouyinRotateRight dzo = new DouyinRotateRight()
+                        {
+                            c = "DouyinRotateRight",
+                            WebSocketID = player.WebSocketID,
+                        };
+                        msgsNeedToSend.Add(player.FromUrl);
+                        msgsNeedToSend.Add(Newtonsoft.Json.JsonConvert.SerializeObject(dzo));
+                    }
+                    else if (douyinLog.Log.Action.Trim().ToUpper() == "发言:高")
+                    {
+                        DouyinRotateRight dzo = new DouyinRotateRight()
+                        {
+                            c = "DouyinRotateRight",
+                            WebSocketID = player.WebSocketID,
+                        };
+                        msgsNeedToSend.Add(player.FromUrl);
+                        msgsNeedToSend.Add(Newtonsoft.Json.JsonConvert.SerializeObject(dzo));
+                    }
+                    else if (douyinLog.Log.Action.Trim().ToUpper() == "发言:低")
+                    {
+                        DouyinRotateRight dzo = new DouyinRotateRight()
+                        {
+                            c = "DouyinRotateRight",
+                            WebSocketID = player.WebSocketID,
+                        };
+                        msgsNeedToSend.Add(player.FromUrl);
+                        msgsNeedToSend.Add(Newtonsoft.Json.JsonConvert.SerializeObject(dzo));
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"{douyinLog.Log.ActionType}没有注册");
+                    that.WebNotify(player, $"【{douyinLog.Log.Nickname}】{douyinLog.Log.Action}！", 5);
+                    if (douyinLog.Log.PriceValue > 0)
+                        this.GiftByViewer.Add(new gift()
+                        {
+                            C = douyinLog,
+                            GiftT = giftType.xiaoxx,
+                        });
+                }
                 UpdateWeb(ref msgsNeedToSend, player);
                 //break;
             }
@@ -219,7 +339,7 @@ namespace HouseManager5_0.GroupClassF
 
         List<gift> GiftByViewer = null;
 
-        enum giftType { xiaoxx, douyin, meigi, enter }
+        enum giftType { xiaoxx, douyin, meigi, enter, advise }
 
         enum ridingType { riding, waiting }
 
@@ -236,19 +356,19 @@ namespace HouseManager5_0.GroupClassF
             /// <summary>
             /// 礼物个数
             /// </summary>
-            public int number { get; set; }
+            public int number { get { return this.C.Log.PriceValue; } }
         }
 
         internal string ShowLiveDisplay()
         {
             var xx = (from item in this.GiftByViewer
-                      group item by item.C.Log.uid into SumGiftOfOnePlayer
+                      group item by item.C.Log.Uid into SumGiftOfOnePlayer
                       select new
                       {
                           key = SumGiftOfOnePlayer.Key,
                           sumCount = SumGiftOfOnePlayer.Sum(gItem => gItem.number),
-                          addtime = SumGiftOfOnePlayer.First().C.Log.addtime
-                      }).OrderByDescending(x => x.sumCount).ThenBy(x => x.addtime).ToList();
+                          addtime = SumGiftOfOnePlayer.First().C.Log.Addtime
+                      }).OrderByDescending(x => x.sumCount).ThenByDescending(x => x.addtime).ToList();
 
             //  var length = Math.Min(3, xx.Count);
             var nickName = this.GetAllNickNames();
@@ -279,12 +399,12 @@ namespace HouseManager5_0.GroupClassF
             Dictionary<string, string> nickNames = new Dictionary<string, string>();
             for (int i = 0; i < this.GiftByViewer.Count; i++)
             {
-                if (nickNames.ContainsKey(this.GiftByViewer[i].C.Log.uid))
+                if (nickNames.ContainsKey(this.GiftByViewer[i].C.Log.Uid))
                 {
                 }
                 else
                 {
-                    nickNames.Add(this.GiftByViewer[i].C.Log.uid, this.GiftByViewer[i].C.Log.nickname);
+                    nickNames.Add(this.GiftByViewer[i].C.Log.Uid, this.GiftByViewer[i].C.Log.Nickname);
                 }
             }
             return nickNames;
@@ -326,12 +446,12 @@ namespace HouseManager5_0.GroupClassF
             if (this.GiftByViewer.Count > 0)
             {
                 var xx = (from item in this.GiftByViewer
-                          group item by item.C.Log.uid into SumGiftOfOnePlayer
+                          group item by item.C.Log.Uid into SumGiftOfOnePlayer
                           select new
                           {
                               key = SumGiftOfOnePlayer.Key,
                               sumCount = SumGiftOfOnePlayer.Sum(gItem => gItem.number),
-                              addtime = SumGiftOfOnePlayer.First().C.Log.addtime
+                              addtime = SumGiftOfOnePlayer.First().C.Log.Addtime
                           }).OrderByDescending(x => x.sumCount).ThenBy(x => x.addtime).ToList();
                 var nickName = this.GetAllNickNames();
 
@@ -364,7 +484,7 @@ namespace HouseManager5_0.GroupClassF
 
                 var key = xx[0].key;
 
-                var newXX = (from item in this.GiftByViewer where item.C.Log.uid != key select item).ToList();
+                var newXX = (from item in this.GiftByViewer where item.C.Log.Uid != key select item).ToList();
 
                 if (newXX.Count < 30)
                 {
@@ -372,7 +492,7 @@ namespace HouseManager5_0.GroupClassF
                     long timestamp = now.ToUnixTimeMilliseconds(); // 获取毫秒级时间戳
                     var editedItem = xx[0];
 
-                    var first = this.GiftByViewer.First(gItem => gItem.C.Log.uid == key);
+                    var first = this.GiftByViewer.First(gItem => gItem.C.Log.Uid == key);
 
 
                     var editedGift = new gift()
@@ -382,19 +502,16 @@ namespace HouseManager5_0.GroupClassF
                             c = "DouyinLogContent",
                             Log = new CommonClass.douyin.log()
                             {
-                                addtime = timestamp,
-                                ctype = "进入直播间",
-                                id = first.C.Log.id,
-                                msg = first.C.Log.msg,
-                                nickname = first.C.Log.nickname,
-                                roomid = first.C.Log.roomid,
-                                secKey = first.C.Log.secKey,
-                                uid = first.C.Log.uid,
+                                Addtime = timestamp,
+                                ActionType = "进入",
+                                Action = "进入:进入直播间",
+                                Nickname = first.C.Log.Nickname,
+                                Uid = first.C.Log.Uid,
+                                PriceValue = 0
                             }
                         },
                         GiftT = giftType.enter,
-                        number = 0,
-                    }
+                    };
                     newXX.Add(editedGift);
                 }
 
@@ -410,13 +527,13 @@ namespace HouseManager5_0.GroupClassF
         private void UpdateWeb(ref List<string> notifyMsg, Player player)
         {
             var xx = (from item in this.GiftByViewer
-                      group item by item.C.Log.uid into SumGiftOfOnePlayer
+                      group item by item.C.Log.Uid into SumGiftOfOnePlayer
                       select new
                       {
                           key = SumGiftOfOnePlayer.Key,
                           sumCount = SumGiftOfOnePlayer.Sum(gItem => gItem.number),
-                          addtime = SumGiftOfOnePlayer.First().C.Log.addtime
-                      }).OrderByDescending(x => x.sumCount).ThenBy(x => x.addtime).ToList();
+                          addtime = SumGiftOfOnePlayer.First().C.Log.Addtime
+                      }).OrderByDescending(x => x.sumCount).ThenByDescending(x => x.addtime).ToList();
 
             var length = Math.Min(3, xx.Count);
             var nickName = this.GetAllNickNames();
@@ -465,6 +582,54 @@ namespace HouseManager5_0.GroupClassF
         {
             return gp.GetDouyinNameByFpID(fp.FastenPositionID, ref that.rm);
             //gr
+            // throw new NotImplementedException();
+        }
+
+        internal void AdviseIsRight(Player player, ref List<string> notifyMsg)
+        {
+            string uid = player.direcitonAndID.DYUid;
+            DateTimeOffset now = DateTimeOffset.Now;
+            long timestamp = now.ToUnixTimeMilliseconds(); // 获取毫秒级时间戳
+            if (this.GiftByViewer.Exists(item => item.C.Log.Uid == uid))
+            {
+                var operateItem = this.GiftByViewer.Find(item => item.C.Log.Uid == uid);
+                this.GiftByViewer.Add(new gift()
+                {
+                    C = new DouyinLogContent()
+                    {
+                        c = "DouyinLogContent",
+                        Log = new CommonClass.douyin.log()
+                        {
+                            Action = "建议:正确",
+                            ActionType = "建议",
+                            Addtime = timestamp,
+                            Nickname = operateItem.C.Log.Nickname,
+                            PriceValue = 2,
+                            Uid = uid,
+                        }
+                    },
+                    GiftT = giftType.advise,
+                });
+                this.UpdateWeb(ref notifyMsg, player);
+                this.that.WebNotify(player, $"【{operateItem.C.Log.Nickname}】提的意见正确。", 8);
+            }
+
+            // throw new NotImplementedException();
+        }
+
+        //AdviseIsWrong
+
+        internal void AdviseIsWrong(Player player, ref List<string> notifyMsg)
+        {
+            string uid = player.direcitonAndID.DYUid;
+            DateTimeOffset now = DateTimeOffset.Now;
+            long timestamp = now.ToUnixTimeMilliseconds(); // 获取毫秒级时间戳
+            if (this.GiftByViewer.Exists(item => item.C.Log.Uid == uid))
+            {
+                var operateItem = this.GiftByViewer.Find(item => item.C.Log.Uid == uid);
+                this.that.WebNotify(player, $"【{operateItem.C.Log.Nickname}】提的意见错误。", 8);
+            }
+
             // throw new NotImplementedException();
         }
     }

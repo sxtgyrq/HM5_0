@@ -242,6 +242,7 @@ namespace HouseManager5_0.RoomMainF
                         {
                             ((Player)player).direcitonAndID.direciton = getComplex(v, ((Player)player).direcitonAndID.direciton);
                             ((Player)player).direcitonAndID.PostionCrossKey = v.postionCrossKey;
+                            ((Player)player).direcitonAndID.DYUid = v.Uid;
 
                             if (((Player)player).getCar().state == CarState.selecting)
                             {

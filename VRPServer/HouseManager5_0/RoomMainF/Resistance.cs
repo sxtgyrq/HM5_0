@@ -53,7 +53,7 @@ namespace HouseManager5_0.RoomMainF
                     var group = this._Groups[liveObj.GroupKey];
                     if (group.SetGroupIsLive(liveObj))
                     {
-                        douyinZhiboGroupKey = liveObj.GroupKey;
+                        RoomMain.douyinZhiboGroupKey = liveObj.GroupKey;
                     }
                 }
             }
