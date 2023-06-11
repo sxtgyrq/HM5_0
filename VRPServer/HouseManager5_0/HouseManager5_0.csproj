@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <PackageId>HouseManager5_0</PackageId>
+    <Title>YrqSGame</Title>
+    <AssemblyVersion>5.0.0.0</AssemblyVersion>
+    <FileVersion>5.0.0.0</FileVersion>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.3" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aliyun\Aliyun.csproj" />
+    <ProjectReference Include="..\BitCoin\BitCoin.csproj" />
+    <ProjectReference Include="..\CityRunFunction\CityRunFunction.csproj" />
+    <ProjectReference Include="..\CommonClass\CommonClass.csproj" />
+    <ProjectReference Include="..\ConsoleBitcoinChainApp\ConsoleBitcoinChainApp.csproj" />
+    <ProjectReference Include="..\DalOfAddress\DalOfAddress.csproj" />
+    <ProjectReference Include="..\Geometry\Geometry.csproj" />
+    <ProjectReference Include="..\LogClass\LogClass.csproj" />
+    <ProjectReference Include="..\Model\Model.csproj" />
+    <ProjectReference Include="..\TcpFunction\TcpFunction.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Doc\" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title></title>
+    <style type="text/css">
+        .container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            margin-top: 0px;
+        }
+
+        .renderDom {
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .labelRenderer {
+            position: absolute;
+            top: 0px;
+            overflow: hidden;
+            z-index: 3;
+            left: 0px;
+            right: 0px;
+            width: 100%;
+            height: 100%;
+            /*cursor: pointer;*/
+            /*labelRenderer .domElement.style.position = 'absolute';
+            labelRenderer .domElement.style.top = 0;
+            labelRenderer .domElement.style.overflow = 'hidden';
+            labelRenderer .domElement.style.z = 'hidden';*/
+        }
+        /*
+
+        */
+        @keyframes mymove {
+            0% {
+                background: rgba(255, 216, 0, 0.00);
+                border-color: yellowgreen;
+            }
+
+            50% {
+                background: rgba(255, 0, 220, 0.99);
+                border-color: #ff00dc;
+            }
+
+            100% {
+                background: rgba(255, 216, 0, 0.00);
+                border-color: yellowgreen;
+            }
+        }
+
+        .chatdialog {
+        }
+
+            .chatdialog.msg {
+                animation: mymove 1.9s infinite;
+                -webkit-animation: mymove 1.9s infinite;
+            }
+
+        .friendMsg {
+            animation: mymove 1.9s infinite;
+            -webkit-animation: mymove 1.9s infinite;
+        }
+
+        #abilityCanvasContainer {
+            z-index: 4;
+            position: absolute;
+            top: 4px;
+            right: calc(50% - 100px - 1px);
+            border: double 2px rgba(247, 245, 126, 0.28);
+            height: 60px;
+            width: 200px;
+            font-size: 14px;
+            color: white;
+            text-align: center;
+            border-radius: 3px;
+        }
+
+            #abilityCanvasContainer.Horizontal {
+                top: calc(4px + 3em);
+                left: 5px;
+            }
+
+        #chanleOfCarAbility {
+            width: 140px;
+            height: 60px;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            opacity: 0.6;
+        }
+
+        #TextOfCarAbility {
+            width: 140px;
+            height: calc(100%);
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .TextOfCarAbilityItem {
+            width: 100%;
+            height: calc(33.3%);
+            background-color: transparent;
+            text-align: center;
+        }
+
+        .speedValueContainer {
+            vertical-align: middle;
+            position: absolute;
+            top: 0px;
+            left: 140px;
+            border: solid 1px red;
+            width: 58px;
+            height: 58px;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+            .speedValueContainer > span {
+                vertical-align: middle;
+                width: 100%;
+                height: 100%;
+                line-height: 60px;
+            }
+
+        @keyframes isWaiting {
+            0% {
+                background: rgba(0, 0, 0, 0.00);
+            }
+
+            50% {
+                background: rgba(0,191,255, 0.5);
+            }
+
+            100% {
+                background: rgba(0, 0, 0, 0.00);
+            }
+        }
+
+        .carState {
+            border: 1px solid transparent;
+            width: calc( 1em - 2px);
+            height: calc(100% - 3px);
+            text-align: center;
+            border-radius: 0.5em;
+            /*margin-top: 2px;
+            margin-bottom: 2px;*/
+            /* position:relative;*/
+            /* position:absolute;*/
+            left: 0px;
+            display: inline-block;
+            /*position:*/
+        }
+
+            .carState.wait {
+                animation: isWaiting 1.9s infinite;
+                -webkit-animation: isWaiting 1.9s infinite;
+                border: 1px solid deepskyblue;
+            }
+
+            .carState.volumefull {
+                border-bottom-left-radius: 0.1em;
+                border-bottom-right-radius: 0.1em;
+                /*border: 1px solid deepskyblue;*/
+            }
+
+            .carState.businessfull {
+                border-top-left-radius: 0.1em;
+                border-top-right-radius: 0.1em;
+                /*border: 1px solid deepskyblue;*/
+            }
+
+        .notifyjs-foo-base {
+            opacity: 0.85;
+            width: 90%;
+            max-width: 90%;
+            background: #F5F5F5;
+            padding: 5px;
+            border-radius: 10px;
+        }
+    </style>
+    <script src="ThreeJs/three.js"></script>
+    <script src="fire.js"></script>
+    <script src="ThreeJs/CSS2DRenderer.js"></script>
+    <script src="Geometry/GetMapDetail.js"></script>
+    <script src="ThreeJs/OrbitControls_me.js"></script>
+    <script src="ThreeJs/WebGL.js"></script>
+    <!--<script src="ThreeJs/GLTFBase64Loader.js"></script>-->
+    <script src="ThreeJs/MTLLoader.js"></script>
+
+    <script src="ThreeJs/OBJLoader.js"></script>
+    <script src="ThreeJs/LightningStrike.js"></script>
+    <script src="ThreeJs/EffectComposer.js"></script>
+    <script src="ThreeJs/ShaderPass.js"></script>
+    <script src="ThreeJs/CopyShader.js"></script>
+    <script src="ThreeJs/RenderPass.js"></script>
+    <script src="ThreeJs/SimplexNoise.js"></script>
+    <script src="ThreeJs/OutlinePass.js"></script>
+    <link href="css/ChatHtml.css" rel="stylesheet" />
+    <link href="css/mainSet.css" rel="stylesheet" />
+    <link href="css/driver.css" rel="stylesheet" />
+    <script src="Scripts/jquery-3.5.1.js"></script>
+    <script src="Scripts/notify.min.js"></script>
+
+</head>
+<body style="width:100%;height:100%;">
+    <audio id="backGroudMusick">
+        <source src="bgm/changshoucunwai.ogg" type="audio/ogg" />
+        <source src="bgm/changshoucunwai.mp3" type="audio/mpeg" />
+    </audio>
+
+    <div id="rootContainer" style="width: 100%; height: 100%; overflow: hidden;position:absolute;left:0px;top:0px;">
+
+    </div>
+    <script src="SocialResponsibility.js"></script>
+    <script src="theLargestHolderKeyChanged.js"></script>
+    <script src="Tax.js"></script>
+    <script src="frequencyShow.js"></script>
+    <script src="selectSingleTeamJoinHtml.js"></script>
+    <script src="bitcoin/signandverify.js"></script>
+    <!--<script src="bitcoinCheck.js"></script>-->
+    <script src="moneySys.js"></script>
+    <script src="subsidize.js"></script>
+    <script src="carAbility.js"></script>
+    <script src="dialogSys.js"></script>
+    <script src="notify.js"></script>
+    <script src="driver.js"></script>
+    <script src="mainf2MapEditor.js"></script>
+    <img id="confirmAlert" style="z-index:-10;position:absolute;left:calc(50% - 182px);top:calc(50% - 42px);" src="Pic/editor/delConfirm.png" />
+
+    <img id="instruction" style="z-index:-10;position:absolute;left:calc(50% - 302px);top:calc(50% - 163px);" src="Pic/editor/instruction.png" />
+
+    <div id="dataInputFrame" style="z-index:999;width:100%;height:100%;position:absolute;top:0px;left:0px;">
+        <div style="height:2em;">
+            <button id="windowsEditBtn">最小化</button>
+            <script>
+                var maxWindow = function () {
+                    var el = document.getElementById('dataInputFrame');;
+                    el.style.height = '100%';
+                    el.style.overflow = '';
+                    document.getElementById('windowsEditBtn').innerText = '最小化';
+                    document.getElementById('windowsEditBtn').onclick = function () {
+                        minWindow();
+                    }
+                }
+                var minWindow = function () {
+                    var el = document.getElementById('dataInputFrame');;
+                    el.style.height = '2em';
+                    el.style.overflow = 'hidden';
+                    document.getElementById('windowsEditBtn').innerText = '最大化';
+                    document.getElementById('windowsEditBtn').onclick = function () {
+                        maxWindow();
+                    }
+                }
+                minWindow();
+            </script>
+
+        </div>
+        <div style="background :yellowgreen;">
+            <span>建筑名:</span>
+            <textarea id="modelName" style="width:60%;" rows="1"></textarea>
+        </div>
+        <div id="dropObj_zone" style="border:1px solid black;height:50px;width:calc(100% - 10px); background:#ffffffb8">Drop obj file here</div>
+        <textarea id="objTextareaValue" style="width:80%; height:100px;" readonly></textarea>
+        <div id="dropMtl_zone" style="border:1px solid black;height:50px;width:calc(100% - 10px); background:#ffffffb8">Drop mtl file here</div>
+        <textarea id="mtlTextareaValue" style="width:80%; height:100px;" readonly></textarea>
+        <div id="dropPic_zone" style="border:1px solid black;height:50px;width:calc(100% - 10px); background:#ffffffb8">Drop pic here</div>
+        <output id="picList"></output>
+        <textarea id="jpgBase64TextareaValue" style="width:80%; height:100px;" readonly></textarea>
+        <!--<div id="dropImg_zone" style="border:1px solid black;height:50px;width:calc(100% - 10px); background:#ffffffb8">Drop pic here</div>
+        <output id="imgList"></output>-->
+        <script>
+            var loadText = function (operateID, showID) {
+                function handleFileSelect(evt) {
+                    evt.stopPropagation();
+                    evt.preventDefault();
+
+                    var files = evt.dataTransfer.files; // FileList object.
+
+                    var reader = new FileReader();
+                    var file = files[0];
+                    var name = file.name;
+                    var length = name.lastIndexOf('.');
+                    if (length > 0) {
+                        name = name.substr(0, length)
+                    }
+                    switch (showID) {
+                        case 'objTextareaValue':
+                            {
+                                document.getElementById('modelName').value = name;
+                            }; break;
+                    }
+
+                    //  console.log('file', file);
+                    reader.onloadend = function (evt) {
+                        if (evt.target.readyState == FileReader.DONE) {
+                            document.getElementById(showID).value = evt.target.result;
+                        }
+                    };
+                    reader.readAsBinaryString(file);
+                }
+
+                function handleDragOver(evt) {
+                    evt.stopPropagation();
+                    evt.preventDefault();
+                    evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+                }
+
+                // Setup the dnd listeners.
+                var dropObj_zone = document.getElementById(operateID);
+                dropObj_zone.addEventListener('dragover', handleDragOver, false);
+                dropObj_zone.addEventListener('drop', handleFileSelect, false);
+            }
+            loadText('dropObj_zone', 'objTextareaValue');
+            loadText('dropMtl_zone', 'mtlTextareaValue');
+            var loadImg = function (operateID, showID, dataShowID) {
+                function handleFileSelect(evt) {
+                    evt.stopPropagation();
+                    evt.preventDefault();
+
+                    var files = evt.dataTransfer.files; // FileList object.
+
+                    var reader = new FileReader();
+                    var file = files[0];
+                    console.log('type', file.type);
+                    if (file.type != 'image/jpeg') {
+                        alert('请上传jpg格式的图片');
+                        return;
+                    }
+                    reader.onload = (function (theFile) {
+                        return function (e) {
+                            // Render thumbnail.
+                            console.log('dd', e.target.result);
+                            var span = document.createElement('span');
+                            span.innerHTML = ['<img class="thumb" src="', e.target.result,
+                                '" title="', escape(theFile.name), '"/>'].join('');
+                            document.getElementById(showID).insertBefore(span, null);
+                            document.getElementById(dataShowID).value = e.target.result.split(',')[1];
+                        };
+                    })(file);
+                    reader.readAsDataURL(file);
+                }
+
+                function handleDragOver(evt) {
+                    evt.stopPropagation();
+                    evt.preventDefault();
+                    evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+                }
+
+                // Setup the dnd listeners.
+                var dropObj_zone = document.getElementById(operateID);
+                dropObj_zone.addEventListener('dragover', handleDragOver, false);
+                dropObj_zone.addEventListener('drop', handleFileSelect, false);
+            }
+            loadImg('dropPic_zone', 'picList', 'jpgBase64TextareaValue');
+            /*  loadImg('dropImg_zone', 'imgList');*/
+        </script>
+        <div>
+            <select id="modelTypes">
+                <!--<option value="volvo">Volvo</option>
+                <option value="saab">Saab</option>
+                <option value="mercedes">Mercedes</option>
+                <option value="audi">Audi</option>-->
+            </select>
+        </div>
+        <div style="background :#ffffff64;" id="BTCAddress"></div>
+
+        <div>
+
+            <!--<div>
+                <input type="range" id="zoomValue" name="points" min="0.1" max="2" step="0.01">
+                <div>1</div>
+            </div>-->
+
+
+            <button>清空</button>
+            <button id="useDataBtn" onclick="useDataF();">引用</button>
+            <script>
+                var useDataF = function () {
+                    var obj = document.getElementById('objTextareaValue').value;
+                    var mtl = document.getElementById('mtlTextareaValue').value;
+                    var base64 = document.getElementById('jpgBase64TextareaValue').value;
+                    var modelTypes = document.getElementById('modelTypes').value;
+                    var modelName = document.getElementById('modelName').value;
+                    uploadObj.setValue(obj, mtl, base64, modelTypes, modelName);
+                }
+            </script>
+        </div>
+
+    </div>
+
+    <div id="rmbChargingDataInputFrame" style="z-index:999;width:calc(100% - 100px);height:100%;position:absolute;top:0;left:100px;">
+        <div style="height:2em;left:calc(100% - 100px);">
+            <button id="rmbChargingDataInputFrameEditBtn">最小化</button>
+            <script>
+                var maxWindow2 = function () {
+                    var el = document.getElementById('rmbChargingDataInputFrame');;
+                    el.style.height = '100%';
+                    el.style.overflow = '';
+                    document.getElementById('rmbChargingDataInputFrameEditBtn').innerText = '最小化';
+                    document.getElementById('rmbChargingDataInputFrameEditBtn').onclick = function () {
+                        minWindow2();
+                    }
+                }
+                var minWindow2 = function () {
+                    var el = document.getElementById('rmbChargingDataInputFrame');;
+                    el.style.height = '2em';
+                    el.style.overflow = 'hidden';
+                    document.getElementById('rmbChargingDataInputFrameEditBtn').innerText = '最大化';
+                    document.getElementById('rmbChargingDataInputFrameEditBtn').onclick = function () {
+                        maxWindow2();
+                    }
+                }
+                minWindow2();
+            </script>
+
+        </div>
+        <div>
+            <div><label>支付方式</label></div>
+            <select id="rmbChargingDatalTypes">
+                <option value="alipay">支付宝</option>
+                <option value="wechat" selected>微信打赏</option>
+            </select>
+        </div>
+        <div>
+            <div><label>绑定词</label></div>
+            <input id="rmbChargingDatalWord" type="text" />
+        </div>
+        <div>
+            <div><label>充值</label></div>
+            <input id="rmbChargingDatalNum" type="number" />元
+        </div>
+        <div>
+            <div><label>时间</label></div>
+            <input id="rmbChargingDatalDateTime" type="datetime-local" step="1" />元
+        </div>
+        <!--<div id="dropImg_zone" style="border:1px solid black;height:50px;width:calc(100% - 10px); background:#ffffffb8">Drop pic here</div>
+        <output id="imgList"></output>-->
+        <script>
+            //var loadText = function (operateID, showID) {
+            //    function handleFileSelect(evt) {
+            //        evt.stopPropagation();
+            //        evt.preventDefault();
+
+            //        var files = evt.dataTransfer.files; // FileList object.
+
+            //        var reader = new FileReader();
+            //        var file = files[0];
+            //        var name = file.name;
+            //        var length = name.lastIndexOf('.');
+            //        if (length > 0) {
+            //            name = name.substr(0, length)
+            //        }
+            //        switch (showID) {
+            //            case 'objTextareaValue':
+            //                {
+            //                    document.getElementById('modelName').value = name;
+            //                }; break;
+            //        }
+
+            //        //  console.log('file', file);
+            //        reader.onloadend = function (evt) {
+            //            if (evt.target.readyState == FileReader.DONE) {
+            //                document.getElementById(showID).value = evt.target.result;
+            //            }
+            //        };
+            //        reader.readAsBinaryString(file);
+            //    }
+
+            //    function handleDragOver(evt) {
+            //        evt.stopPropagation();
+            //        evt.preventDefault();
+            //        evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+            //    }
+
+            //    // Setup the dnd listeners.
+            //    var dropObj_zone = document.getElementById(operateID);
+            //    dropObj_zone.addEventListener('dragover', handleDragOver, false);
+            //    dropObj_zone.addEventListener('drop', handleFileSelect, false);
+            //}
+            //var loadImg = function (operateID, showID, dataShowID) {
+            //    function handleFileSelect(evt) {
+            //        evt.stopPropagation();
+            //        evt.preventDefault();
+
+            //        var files = evt.dataTransfer.files; // FileList object.
+
+            //        var reader = new FileReader();
+            //        var file = files[0];
+            //        console.log('type', file.type);
+            //        if (file.type != 'image/jpeg') {
+            //            alert('请上传jpg格式的图片');
+            //            return;
+            //        }
+            //        reader.onload = (function (theFile) {
+            //            return function (e) {
+            //                // Render thumbnail.
+            //                console.log('dd', e.target.result);
+            //                var span = document.createElement('span');
+            //                span.innerHTML = ['<img class="thumb" src="', e.target.result,
+            //                    '" title="', escape(theFile.name), '"/>'].join('');
+            //                document.getElementById(showID).insertBefore(span, null);
+            //                document.getElementById(dataShowID).value = e.target.result.split(',')[1];
+            //            };
+            //        })(file);
+            //        reader.readAsDataURL(file);
+            //    }
+
+            //    function handleDragOver(evt) {
+            //        evt.stopPropagation();
+            //        evt.preventDefault();
+            //        evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+            //    }
+
+            //    // Setup the dnd listeners.
+            //    var dropObj_zone = document.getElementById(operateID);
+            //    dropObj_zone.addEventListener('dragover', handleDragOver, false);
+            //    dropObj_zone.addEventListener('drop', handleFileSelect, false);
+            //}
+            //loadImg('dropPicPx_zone', 'picList_Px', 'jpgBase64Text_Px');
+            /*  loadImg('dropImg_zone', 'imgList');*/
+        </script>
+
+
+
+        <div>
+
+            <!--<div>
+                <input type="range" id="zoomValue" name="points" min="0.1" max="2" step="0.01">
+                <div>1</div>
+            </div>-->
+            <!--<button>清空</button>-->
+            <button id="chargingBtn" onclick="chargingDataF();">充值</button>
+            <script>
+                var chargingDataF = function () {
+                    var type = document.getElementById('rmbChargingDatalTypes').value;
+                    var word = document.getElementById('rmbChargingDatalWord').value;
+                    var num = document.getElementById('rmbChargingDatalNum').value;
+                    var dt = document.getElementById('rmbChargingDatalDateTime').value;
+                    var obj =
+                    {
+                        c: 'addChargingWithWord',
+                        ChargingType: type,
+                        ChargingWord: word,
+                        ChargingNum: num,
+                        ChargingDt: dt,
+                        ChargingAddr: ''
+                    };
+                    objMain.ws.send(JSON.stringify(obj));
+                    clearTable();
+                    //var modelName = document.getElementById('modelName').value;
+                    //uploadObj.setValue(obj, mtl, base64, modelTypes, modelName);
+                }
+                var chargingDataRefreshF = function () {
+                    var obj =
+                    {
+                        c: 'chargingRefresh'
+                    };
+                    objMain.ws.send(JSON.stringify(obj));
+                    clearTable();
+                };
+                var clearTable = function () {
+                    var tt = document.getElementById('chargingTable');
+                    if (tt != null) {
+                        for (var row = 0; row < 10; row++) {
+                            tt.children[0].children[row + 1].children[0].innerText = '';
+                            tt.children[0].children[row + 1].children[1].innerText = '';
+                            tt.children[0].children[row + 1].children[2].innerText = '';
+                            tt.children[0].children[row + 1].children[3].innerText = '';
+                            tt.children[0].children[row + 1].children[4].innerText = '';
+                        }
+                    }
+                }
+                var chargingDataNextPage = function () {
+                    //  objMain.pageIndex += 1;
+                    // clearTable();
+                    var obj =
+                    {
+                        c: 'chargingNextPage'
+                    };
+                    objMain.ws.send(JSON.stringify(obj));
+                    clearTable();
+                }
+                var chargingDataPreviousPage = function () {
+                    var obj =
+                    {
+                        c: 'chargingPreviousPage'
+                    };
+                    objMain.ws.send(JSON.stringify(obj));
+                    clearTable();
+                }
+            </script>
+        </div>
+        <div style="background :black;max-height:calc(50%);overflow-y:scroll;color:antiquewhite;">
+            <button id="chargingRefreshBtn" onclick="chargingDataRefreshF();">刷新</button>
+            <table id="chargingTable" class="tableOfReward">
+                <tr>
+                    <th>时间</th>
+                    <th>绑定词</th>
+                    <th>地址</th>
+                    <th>方式</th>
+                    <th>金额</th>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+            </table>
+            <button id="chargingRefreshBtn" onclick="chargingDataNextPage();">下一页</button>
+            <label>第<span>&nbsp;&nbsp;&nbsp;</span>页</label>
+            <button id="chargingRefreshBtn" onclick="chargingDataPreviousPage();">上一页</button>
+        </div>
+    </div>
+
+    <!--<div id="redPockedGiveOutRecordInputFrame" style="z-index:999;width:calc(100% - 100px);height:100%;position:absolute;top:2em;left:0px;">
+        <div style="height:auto;left:200px;position:absolute;">
+            <button id="redPockedGiveOutRecordInputFrameEditBtn">最小化</button>
+            <script>
+                var maxWindow3 = function () {
+                    var el = document.getElementById('redPockedGiveOutRecordInputFrame');;
+                    el.style.height = '100%';
+                    el.style.overflow = '';
+                    document.getElementById('redPockedGiveOutRecordInputFrameEditBtn').innerText = '最小化';
+                    document.getElementById('redPockedGiveOutRecordInputFrameEditBtn').onclick = function () {
+                        minWindow3();
+                    }
+                }
+                var minWindow3 = function () {
+                    var el = document.getElementById('redPockedGiveOutRecordInputFrame');;
+                    el.style.height = '2em';
+                    el.style.overflow = 'hidden';
+                    document.getElementById('redPockedGiveOutRecordInputFrameEditBtn').innerText = '最大化';
+                    document.getElementById('redPockedGiveOutRecordInputFrameEditBtn').onclick = function () {
+                        maxWindow3();
+                    }
+                }
+                minWindow3();
+            </script>
+
+        </div>
+        <div style="margin-top:2em;">
+            <div><label>任务代码</label></div>
+            <select id="taskCodeSelectCom">
+                <option value="GLSTOCK" selected>GLSTOCK</option>
+                <option value="URLSHARE">URLSHARE</option>
+            </select>
+        </div>
+        <div>
+            <div><label>地址</label></div>
+            <input id="taskAddrForSearch" type="text" style="width:80%;" />
+        </div>
+        <div>
+            <div><label>任务代码查询结果Json</label></div>
+            <textarea id="jsonResultForSearchShow" readonly style="width:80%;"></textarea>
+        </div>
+        <div>
+            <div><label>任务代码翻译结果</label></div>
+            <textarea id="resultForSearchShow" readonly style="width:80%;"></textarea>
+        </div>
+        <div>
+            <script type="text/javascript">
+                var findContentInServer = function () {
+                    var code = document.getElementById('taskCodeSelectCom').value;
+                    var addr = document.getElementById('taskAddrForSearch').value;
+                    var obj =
+                    {
+                        'c': 'LookForTaskCopy',
+                        'code': code,
+                        'addr': addr
+                    };
+                    objMain.ws.send(JSON.stringify(obj));
+                }
+                var pass = function (pass) {
+                    var code = document.getElementById('taskCodeSelectCom').value;
+                    var addr = document.getElementById('taskAddrForSearch').value;
+                    var obj =
+                    {
+                        'c': 'TaskCopyPassOrNG',
+                        'code': code,
+                        'addr': addr,
+                        'pass': pass
+                    };
+                    objMain.ws.send(JSON.stringify(obj));
+                }
+            </script>
+            <button id="redPocketSearchBtn" onclick="findContentInServer();">查询</button>
+            <button id="redPocketRecordBtn" onclick="pass(true);">Pass</button>
+            <button id="redPocketRecordBtn" onclick="pass(false);">NG</button>
+        </div>
+        <div style="background :black;max-height:calc(50%);overflow-y:scroll;color:antiquewhite;">
+
+        </div>
+    </div>-->
+</body>
+</html>
