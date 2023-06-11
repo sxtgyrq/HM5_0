@@ -51,12 +51,12 @@ namespace HouseManager5_0.interfaceOfHM
         /// <returns></returns>
         string updateCollect(SetCollect sc, GetRandomPos grp);
 
-        /// <summary>
-        /// 攻击
-        /// </summary>
-        /// <param name="sa"></param>
-        /// <returns></returns>
-        string updateAttack(SetAttack sa, GetRandomPos grp);
+        ///// <summary>
+        ///// 攻击
+        ///// </summary>
+        ///// <param name="sa"></param>
+        ///// <returns></returns>
+        //string updateAttack(SetAttack sa, GetRandomPos grp);
 
 
 

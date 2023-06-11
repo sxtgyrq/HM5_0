@@ -262,37 +262,41 @@ namespace HouseManager5_0
                               MarketdouyinData = fpsGroup.ToList()
                           }).ToList();
             //this.marketdouyinData = xx;
-            lock (marketdouyinDataLock)
+
+            var newMarketdouyinData = new Dictionary<string, FPSDouyinGroup>();
+            // this.marketdouyinData = new Dictionary<string, FPSDouyinGroup>();
+            for (int IndexOfFP = 0; IndexOfFP < fpList.Count; IndexOfFP++)
             {
-                this.marketdouyinData = new Dictionary<string, FPSDouyinGroup>();
-                for (int IndexOfFP = 0; IndexOfFP < fpList.Count; IndexOfFP++)
+                var MarketdouyinDataItem = fpList[IndexOfFP].MarketdouyinData;
+                var UserList = (from mItem in MarketdouyinDataItem
+                                group mItem by mItem.uid into userGroup
+                                select new
+                                {
+                                    uid = userGroup.Key,
+                                    dyNickName = userGroup.Last().dyNickName,
+                                    sumpassCount = userGroup.Sum(mmItem => mmItem.passCount)
+                                }).ToList();
+                List<UserSDouyinGroup> ug = new List<UserSDouyinGroup>();
+                for (int indexOfUserLIst = 0; indexOfUserLIst < UserList.Count; indexOfUserLIst++)
                 {
-                    var MarketdouyinDataItem = fpList[IndexOfFP].MarketdouyinData;
-                    var UserList = (from mItem in MarketdouyinDataItem
-                                    group mItem by mItem.uid into userGroup
-                                    select new
-                                    {
-                                        uid = userGroup.Key,
-                                        dyNickName = userGroup.Last().dyNickName,
-                                        sumpassCount = userGroup.Sum(mmItem => mmItem.passCount)
-                                    }).ToList();
-                    List<UserSDouyinGroup> ug = new List<UserSDouyinGroup>();
-                    for (int indexOfUserLIst = 0; indexOfUserLIst < UserList.Count; indexOfUserLIst++)
+                    ug.Add(new UserSDouyinGroup()
                     {
-                        ug.Add(new UserSDouyinGroup()
-                        {
-                            dyNickName = UserList[indexOfUserLIst].dyNickName,
-                            SumpassCount = UserList[indexOfUserLIst].sumpassCount,
-                            uid = UserList[indexOfUserLIst].uid,
-                        });
-                    }
-                    this.marketdouyinData.Add(fpList[IndexOfFP].FpID, new FPSDouyinGroup()
-                    {
-                        FpID = fpList[IndexOfFP].FpID,
-                        SumpassCount = fpList[IndexOfFP].SumpassCount,
-                        UserInDouyin = ug
+                        dyNickName = UserList[indexOfUserLIst].dyNickName,
+                        SumpassCount = UserList[indexOfUserLIst].sumpassCount,
+                        uid = UserList[indexOfUserLIst].uid,
                     });
                 }
+                newMarketdouyinData.Add(fpList[IndexOfFP].FpID, new FPSDouyinGroup()
+                {
+                    FpID = fpList[IndexOfFP].FpID,
+                    SumpassCount = fpList[IndexOfFP].SumpassCount,
+                    UserInDouyin = ug
+                });
+
+            }
+            lock (marketdouyinDataLock)
+            {
+                this.marketdouyinData = newMarketdouyinData;
             }
         }
     }

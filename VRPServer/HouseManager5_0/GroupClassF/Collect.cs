@@ -12,25 +12,25 @@ namespace HouseManager5_0.GroupClassF
         internal void CheckCollectState(string key)
         {
             List<string> sendMsgs = new List<string>();
-            lock (this.PlayerLock)
-                if (this._PlayerInGroup.ContainsKey(key))
-                    for (var i = 0; i < 38; i++)
+
+            if (this._PlayerInGroup.ContainsKey(key))
+                for (var i = 0; i < 38; i++)
+                {
+                    if (this._PlayerInGroup[key].CollectPosition[i] == this._collectPosition[i])
+                    { }
+                    else
                     {
-                        if (this._PlayerInGroup[key].CollectPosition[i] == this._collectPosition[i])
-                        { }
-                        else
+                        if (this._PlayerInGroup[key].playerType == Player.PlayerType.player)
                         {
-                            if (this._PlayerInGroup[key].playerType == Player.PlayerType.player)
-                            {
-                                var infomation = this.GetCollectInfomation(((Player)this._PlayerInGroup[key]).WebSocketID, i);
-                                var url = ((Player)this._PlayerInGroup[key]).FromUrl;
-                                var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(infomation);
-                                sendMsgs.Add(url);
-                                sendMsgs.Add(sendMsg);
-                            }
-                            this._PlayerInGroup[key].CollectPosition[i] = this._collectPosition[i];
+                            var infomation = this.GetCollectInfomation(((Player)this._PlayerInGroup[key]).WebSocketID, i);
+                            var url = ((Player)this._PlayerInGroup[key]).FromUrl;
+                            var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(infomation);
+                            sendMsgs.Add(url);
+                            sendMsgs.Add(sendMsg);
                         }
+                        this._PlayerInGroup[key].CollectPosition[i] = this._collectPosition[i];
                     }
+                }
 
             Startup.sendSeveralMsgs(sendMsgs);
         }

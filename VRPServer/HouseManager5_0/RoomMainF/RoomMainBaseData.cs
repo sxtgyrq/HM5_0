@@ -16,7 +16,7 @@ namespace HouseManager5_0.RoomMainF
         /// <summary>
         /// 操作锁！
         /// </summary>
-        public object PlayerLock = new object();
+        //public object PlayerLock = new object();
 
         /// <summary>
         /// 玩家字典

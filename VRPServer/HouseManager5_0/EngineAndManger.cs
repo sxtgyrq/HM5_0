@@ -65,9 +65,9 @@ namespace HouseManager5_0
             return Startup.sendSingleMsg(controllerUrl, json);
         }
 
-        public List<int> sendSeveralMsgs(List<string> notifyMsg)
+        public void sendSeveralMsgs(List<string> notifyMsg)
         {
-            return Startup.sendSeveralMsgs(notifyMsg);
+              Startup.sendSeveralMsgs(notifyMsg);
         }
         //public List<string> sendMsg(List<string> notifyMsg)
         //{

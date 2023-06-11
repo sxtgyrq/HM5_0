@@ -9,8 +9,16 @@ namespace HouseManager5_0
 {
     public class TargetForSelect
     {
+        public const int PriceStep = 5;
         public enum TargetForSelectType { collect, mile, volume, speed }
 
+        /// <summary>
+        /// 此对象作为二次操作，传输数据之用
+        /// </summary>
+        /// <param name="select_">对应的地址序号。当collect 对应._collectPosition 的Key，当收集时，取[0-37]；当promote，直接取promote***Position，如直接取promoteMilePosition的值</param>
+        /// <param name="tsType_"></param>
+        /// <param name="rank_">实际上，收集是，搁在中间的数量。</param>
+        /// <param name="hasValueToImproveSpeed_">是否有提速效果！</param>
         public TargetForSelect(int select_, TargetForSelectType tsType_, int rank_, bool hasValueToImproveSpeed_)
         {
             this.select = select_;
@@ -19,6 +27,14 @@ namespace HouseManager5_0
             HasValueToImproveSpeed = hasValueToImproveSpeed_;
             this.owner = null;
         }
+        /// <summary>
+        /// 此对象作为二次操作，传输数据之用
+        /// </summary>
+        /// <param name="select_">对应的地址序号。当collect 对应._collectPosition 的Key，当收集时，取[0-37]；当promote，直接取promote***Position，如直接取promoteMilePosition的值</param>
+        /// <param name="tsType_"></param>
+        /// <param name="rank_">实际上，收集是，搁在中间的数量。</param>
+        /// <param name="hasValueToImproveSpeed_">是否有提速效果！</param>
+        /// <param name="owner_">抖音传输数据，起营销的作用！</param>
         public TargetForSelect(int select_, TargetForSelectType tsType_, int rank_, bool hasValueToImproveSpeed_, Data.UserSDouyinGroup owner_)
         {
             this.select = select_;
@@ -44,7 +60,7 @@ namespace HouseManager5_0
                         {
                             if (this.HasValueToImproveSpeed)
                             {
-                                return (this.rank / 5) * 500;
+                                return (this.rank / TargetForSelect.PriceStep) * 500;
                             }
                             else
                             {

@@ -174,6 +174,7 @@
             {
                 var objssss = { 'c': 'SetGroupLive', 'Key': '', 'GroupKey': '' };
                 objMain.ws.send(JSON.stringify(objssss));
+               
             }
         }
     },

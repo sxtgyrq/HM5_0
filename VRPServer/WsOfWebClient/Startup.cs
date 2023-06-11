@@ -338,12 +338,15 @@ namespace WsOfWebClient
                     {
                         requestBody = await reader.ReadToEndAsync();
                     };
-                    CommonClass.douyin.log logObj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.douyin.log>(requestBody);
+                    Console.WriteLine(requestBody);
+                    List<CommonClass.douyin.log> logObjs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CommonClass.douyin.log>>(requestBody);
                     // context.Request.BodyReader
 
-                    Console.WriteLine(requestBody);
-                    Room.SendZhiBoContent(logObj);
-
+                    for (int i = 0; i < logObjs.Count; i++)
+                    {
+                        var logObj = logObjs[i];
+                        Room.SendZhiBoContent(logObj);
+                    } 
                     var bytes = Encoding.UTF8.GetBytes("ok");
                     await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
 

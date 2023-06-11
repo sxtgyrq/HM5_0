@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Server.IIS.Core;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading;
 using static HouseManager5_0.Car;
 using static HouseManager5_0.RoomMainF.RoomMain;
 
@@ -149,11 +150,8 @@ namespace HouseManager5_0
         {
             if (c.c == "SetCollect")
             {
-
-                {
-                    var sc = (SetCollect)c;
-                    return this.collect(player, car, sc, grp, ref notifyMsg, out mrr);
-                }
+                var sc = (SetCollect)c;
+                return this.collect(player, car, sc, grp, ref notifyMsg, out mrr);
             }
             else
             {
@@ -186,13 +184,20 @@ namespace HouseManager5_0
                     car.setState(player, ref notifyMsg, CarState.working);
                     StartArriavalThread(startT, 0, player, car, sc, ro, goMile, goPath, grp);
                     Mrr = MileResultReason.Abundant;//返回原因
-                    if (player.Money - player.Ts.costPrice > 0)
+                    if (player.Ts != null)
                     {
-                        player.MoneySet(player.Money - player.Ts.costPrice, ref notifyMsg);
+                        if (player.Money - player.Ts.costPrice > 0)
+                        {
+                            player.MoneySet(player.Money - player.Ts.costPrice, ref notifyMsg);
+                        }
+                        else
+                        {
+                            player.MoneySet(0, ref notifyMsg);
+                        }
                     }
                     else
                     {
-                        player.MoneySet(0, ref notifyMsg);
+                        throw new Exception("");
                     }
                     return ro;
                 }
@@ -261,7 +266,7 @@ namespace HouseManager5_0
                 {
                     Action p = () =>
                     {
-                        lock (that.PlayerLock)
+                        // lock (that.PlayerLock)
                         {
                             List<string> notifyMsg = new List<string>();
                             int newStartT;
@@ -303,7 +308,9 @@ namespace HouseManager5_0
                 var group = that._Groups[pa.groupKey];
                 List<string> notifyMsg = new List<string>();
                 bool needUpdateCollectState = false;
-                lock (that.PlayerLock)
+
+                //  int timeNeedToWait = 0;
+                // lock (that.PlayerLock)
                 {
                     var player = group._PlayerInGroup[pa.key];
                     player.canGetReward = true;
@@ -315,6 +322,12 @@ namespace HouseManager5_0
 
                 }
                 this.sendSeveralMsgs(notifyMsg);
+
+                //if (timeNeedToWait > 0)
+                //{
+                //    Thread.Sleep(timeNeedToWait);
+                //}
+
                 if (needUpdateCollectState)
                 {
                     that.CheckAllPlayersCollectState(group);
@@ -326,6 +339,7 @@ namespace HouseManager5_0
 
         private void arriveThenDoCollect(ref Player role, GetRandomPos gps, ref Car car, commandWithTime.placeArriving pa, ref List<string> notifyMsg, out bool needUpdateCollectState)
         {
+         //   timeNeedToWait = 0;
             //   throw new Exception();
             var group = role.Group;
 
@@ -364,7 +378,7 @@ namespace HouseManager5_0
 
                     if (role.Group.Live)
                     {
-                        role.Group.UpdateDouyinRole(gps.GetFpByIndex(taxPostion), ref notifyMsg);
+                        role.Group.UpdateDouyinRole(gps.GetFpByIndex(taxPostion), ref notifyMsg, gps);
                         // if(role.Ts.)
                     }
                 }
@@ -414,7 +428,8 @@ namespace HouseManager5_0
                 {
                     if (that.rm.Next(100) < player.SendTransmitMsg)
                     {
-                        this.WebNotify(player, "转发，能获得转发奖励！");
+                        if (!player.Group.Live)
+                            this.WebNotify(player, "转发，能获得转发奖励！");
                         player.SendTransmitMsg = player.SendTransmitMsg * 9 / 10;
                     }
                 }
@@ -431,6 +446,11 @@ namespace HouseManager5_0
             if (role.playerType == Player.PlayerType.player)
             {
                 group.askWhetherGoToPositon(role.Key, that.GetRandomPosObj);
+            }
+            if (group.Live)
+            {
+                group.ThreadAfterCollect = new Thread(() => group.CollectFinished(gps));
+                group.ThreadAfterCollect.Start();
             }
         }
 

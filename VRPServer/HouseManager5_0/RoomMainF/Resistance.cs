@@ -31,8 +31,7 @@ namespace HouseManager5_0.RoomMainF
                 if (this._Groups.ContainsKey(douyinZhiboGroupKey))
                 {
                     var group = this._Groups[douyinZhiboGroupKey];
-                    List<string> msgsNeedToSend = new List<string>();
-                    lock (group.PlayerLock)
+                    List<string> msgsNeedToSend = new List<string>(); 
                     {
                         group.DouyinLogContentF(douyinLog, Program.dt, ref msgsNeedToSend);
                     }
@@ -53,7 +52,7 @@ namespace HouseManager5_0.RoomMainF
                     var group = this._Groups[liveObj.GroupKey];
                     if (group.SetGroupIsLive(liveObj))
                     {
-                        douyinZhiboGroupKey = liveObj.GroupKey;
+                        RoomMain.douyinZhiboGroupKey = liveObj.GroupKey;
                     }
                 }
             }

@@ -42,11 +42,14 @@ namespace Model
 
             public override int GetHashCode()
             {
-                int hash = 23;
-                hash = (hash * 17) + this.roadCode.GetHashCode();
-                hash = (hash * 17) + this.roadOrder.GetHashCode();
-                hash = (hash * 17) + this.percent.GetHashCode();
-                return hash;
+                unchecked
+                {
+                    int hash = 23;
+                    hash = (hash * 17) + this.roadCode.GetHashCode();
+                    hash = (hash * 17) + this.roadOrder.GetHashCode();
+                    hash = (hash * 17) + this.percent.GetHashCode();
+                    return hash;
+                }
             }
             public nyrqPosition_Simple ToSimple()
             {
@@ -89,11 +92,14 @@ namespace Model
             }
             public override int GetHashCode()
             {
-                int hash = 23;
-                hash = (hash * 17) + this.r.GetHashCode();
-                hash = (hash * 17) + this.o.GetHashCode();
-                hash = (hash * 17) + this.p.GetHashCode();
-                return hash;
+                unchecked
+                {
+                    int hash = 23;
+                    hash = (hash * 17) + this.r.GetHashCode();
+                    hash = (hash * 17) + this.o.GetHashCode();
+                    hash = (hash * 17) + this.p.GetHashCode();
+                    return hash;
+                }
             }
         }
     }

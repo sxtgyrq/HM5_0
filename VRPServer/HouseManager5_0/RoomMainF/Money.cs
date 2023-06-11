@@ -61,7 +61,7 @@ namespace HouseManager5_0.RoomMainF
         public string SaveMoney(SaveMoney saveMoney)
         {
             GroupClassF.GroupClass group = null;
-            lock (this.PlayerLock)
+            //  lock (this.PlayerLock)
             {
                 if (string.IsNullOrEmpty(saveMoney.GroupKey)) { }
                 else if (this._Groups.ContainsKey(saveMoney.GroupKey))
@@ -73,7 +73,7 @@ namespace HouseManager5_0.RoomMainF
             {
                 long money = 0;
                 List<string> notifyMsg = new List<string>();
-                lock (group.PlayerLock)
+                // lock (group.PlayerLock)
                 {
                     if (group._PlayerInGroup.ContainsKey(saveMoney.Key))
                     {
@@ -142,7 +142,7 @@ namespace HouseManager5_0.RoomMainF
             if (BitCoin.Sign.checkSign(ots.signature, ots.Key, ots.address))
             {
                 GroupClassF.GroupClass group = null;
-                lock (this.PlayerLock)
+               // lock (this.PlayerLock)
                 {
 
                     if (string.IsNullOrEmpty(ots.GroupKey)) { }
@@ -153,7 +153,7 @@ namespace HouseManager5_0.RoomMainF
                 }
                 if (group != null)
                 {
-                    lock (group.PlayerLock)
+                   // lock (group.PlayerLock)
                     {
                         if (group._PlayerInGroup.ContainsKey(ots.Key))
                         {

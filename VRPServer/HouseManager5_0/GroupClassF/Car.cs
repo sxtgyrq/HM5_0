@@ -50,8 +50,6 @@ namespace HouseManager5_0.GroupClassF
 
         internal void SetAnimateChanged(Player player, Car car, ref List<string> notifyMsg)
         {
-
-            lock (this.PlayerLock)
             {
                 if (!this._PlayerInGroup.ContainsKey(player.Key)) { return; }
                 else

@@ -28,10 +28,30 @@ namespace HouseManager5_0
 
         internal void StartDiamondOwnerThread(int startT, int step, Player player, Car car, SetPromote sp, RoomMainF.RoomMain.commandWithTime.ReturningOjb ro, int goMile, Node goPath, GetRandomPos grp)
         {
+            //if (player.Group.Live)
+            //{
+            //    if (string.IsNullOrEmpty(sp.Uid)) { }
+            //    else
+            //    {
+            //        player.Group.AddMarketDiamondReward(player,sp);
+            //        sp.Uid = "";
+            //    }
+            //}
+
 
             System.Threading.Thread th = new System.Threading.Thread(() =>
             {
                 if (step >= goPath.path.Count - 1)
+                {
+                    if (player.Group.Live)
+                    {
+                        if (string.IsNullOrEmpty(sp.Uid)) { }
+                        else
+                        {
+                            player.Group.AddMarketDiamondReward(sp, player, grp.GetFpByIndex(car.targetFpIndex));
+                            sp.Uid = "";
+                        }
+                    }
                     this.startNewThread(startT + 100, new commandWithTime.diamondOwner()
                     {
                         c = "diamondOwner",
@@ -43,6 +63,9 @@ namespace HouseManager5_0
                         returningOjb = ro,
                         diamondType = sp.pType
                     }, this, grp);
+
+
+                }
                 //that.debtE.setDebtT(startT, car, sa, goMile, ro);
                 //this.startNewThread(startT, new commandWithTime.defenseSet()
                 //{
@@ -91,18 +114,20 @@ namespace HouseManager5_0
         private void setDiamondOwner(commandWithTime.diamondOwner dor, GetRandomPos grp)
         {
             //  throw new Exception();
-            lock (that.PlayerLock)
+            // lock (that.PlayerLock)
             {
                 if (string.IsNullOrEmpty(dor.groupKey)) { }
                 else if (that._Groups.ContainsKey(dor.groupKey))
                 {
                     var group = that._Groups[dor.groupKey];
-                    group.setDiamondOwner(dor, grp);
+                  //  lock (group.PlayerLock_)
+                    {
+                        group.setDiamondOwner(dor, grp);
+                    }
                 }
-                { }
             }
 
-            
+
         }
     }
 }

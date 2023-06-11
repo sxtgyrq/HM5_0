@@ -1,4 +1,5 @@
 ﻿using CommonClass;
+using HouseManager5_0.interfaceOfHM;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -18,7 +19,7 @@ namespace HouseManager5_0.GroupClassF
         internal void setReturn(commandWithTime.returnning rObj, GetRandomPos grp)
         {
             List<string> notifyMsg = new List<string>();
-            lock (that.PlayerLock)
+            //  lock (that.PlayerLock)
             {
                 var player = this._PlayerInGroup[rObj.key];
                 var car = this._PlayerInGroup[rObj.key].getCar();
@@ -47,7 +48,7 @@ namespace HouseManager5_0.GroupClassF
         internal void setBack(commandWithTime.comeBack comeBack, GetRandomPos grp)
         {
             List<string> notifyMsg = new List<string>();
-            lock (that.PlayerLock)
+            //  lock (that.PlayerLock)
             {
                 var player = this._PlayerInGroup[comeBack.key];
                 var car = player.getCar();
@@ -121,6 +122,7 @@ namespace HouseManager5_0.GroupClassF
                         }
                     }
 
+
                 }
                 else
                 {
@@ -128,6 +130,16 @@ namespace HouseManager5_0.GroupClassF
                 }
             }
             Startup.sendSeveralMsgs(notifyMsg);
+            if (this.Live)
+            {
+                // var player = this._PlayerInGroup.First().Value;
+                var player = this._PlayerInGroup[comeBack.key];
+                var isFinished = this.taskFineshedTime.ContainsKey(player.Key);
+                if (!isFinished)
+                {
+                    CollectFunctionWhenAuto(player, grp);
+                }
+            }
         }
         Dictionary<string, string> recordErrorMsgs = new Dictionary<string, string>();
         Dictionary<string, bool> records = new Dictionary<string, bool>();
@@ -203,7 +215,6 @@ namespace HouseManager5_0.GroupClassF
             List<string> notifyMsg = new List<string>();
             bool needUpdatePromoteState = false;
             GroupClass group;
-            lock (this.PlayerLock)
             {
                 var player = this._PlayerInGroup[dor.key];
                 group = player.Group;
@@ -266,18 +277,14 @@ namespace HouseManager5_0.GroupClassF
                             //player.
 
                         }
-
-
                     }
                     else
                     {
                         throw new Exception("car.state == CarState.buying!或者 dor.changeType不是四种类型");
                     }
                 }
-
             }
             Startup.sendSeveralMsgs(notifyMsg);
-
             if (needUpdatePromoteState)
             {
                 that.CheckAllPlayersPromoteState(dor.diamondType, group);
@@ -287,7 +294,6 @@ namespace HouseManager5_0.GroupClassF
         internal bool MoneyIsEnoughForSelect(string key)
         {
             var player = this._PlayerInGroup[key];
-
             return player.Ts.costPrice < player.Money;
         }
 
@@ -299,6 +305,13 @@ namespace HouseManager5_0.GroupClassF
             }
         }
 
-       
+
+
+        //internal void LiveAnimate()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+
     }
 }

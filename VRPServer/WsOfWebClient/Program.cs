@@ -13,7 +13,8 @@ namespace WsOfWebClient
         {
             Console.WriteLine(@"
 A.游戏WebSocket服务(默认)
-B.地图编辑器WebSocket服务");
+B.地图编辑器WebSocket服务,
+P.元素周期(Periodictable)表服务");
             var select = Console.ReadLine().ToUpper();
 
             if (select == "B")
@@ -43,6 +44,32 @@ B.地图编辑器WebSocket服务");
                 CreateWebHostBuilder2(new string[] { $"http://{ip}:{websocketPort}" }).Build().Run();
 
                 // return;
+            }
+            else if (select == "P")
+            {
+                var ip = "127.0.0.1";
+                int websocketPort = 21001;
+                Console.WriteLine($"输入ip，如{ip}  (默认)");
+                var inputIp = Console.ReadLine();
+                if (string.IsNullOrEmpty(inputIp)) { }
+                else
+                {
+                    ip = inputIp;
+                }
+                Console.WriteLine($"输入端口≠15000,如“{websocketPort}”");
+                var inputWebsocketPort = Console.ReadLine();
+                if (string.IsNullOrEmpty(inputWebsocketPort)) { }
+                else
+                {
+                    int num;
+                    if (int.TryParse(inputWebsocketPort, out num))
+                    {
+                        websocketPort = num;
+                    }
+                }
+                //Consol.WriteLine($"地址为：http://{ip}:{websocketPort}");
+                CreateWebHostBuilder3(new string[] { $"http://{ip}:{websocketPort}" }).Build().Run();
+
             }
             else
             {
@@ -102,15 +129,37 @@ B.地图编辑器WebSocket服务");
 .UseUrls(args[0])
    .UseStartup<Startup>();
 
-        public static IWebHostBuilder CreateWebHostBuilder2(string[] args) =>
-WebHost.CreateDefaultBuilder(args).Configure(item => item.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
-})).UseKestrel(options =>
-{
-    options.AllowSynchronousIO = true;
-})
-.UseUrls(args[0])
- .UseStartup<MapEditor.Editor>();
+        public static IWebHostBuilder CreateWebHostBuilder2(
+            string[] args) =>
+            WebHost.CreateDefaultBuilder(args).Configure(
+                item => item.UseForwardedHeaders(
+                    new ForwardedHeadersOptions
+                    {
+                        ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                        ForwardedHeaders.XForwardedProto,
+                    })).
+            UseKestrel(
+                options =>
+                {
+                    options.AllowSynchronousIO = true;
+                })
+            .UseUrls(args[0]).UseStartup<MapEditor.Editor>();
+
+        public static IWebHostBuilder CreateWebHostBuilder3(
+          string[] args) =>
+          WebHost.CreateDefaultBuilder(args).Configure(
+              item => item.UseForwardedHeaders(
+                  new ForwardedHeadersOptions
+                  {
+                      ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                      ForwardedHeaders.XForwardedProto,
+                  })).
+          UseKestrel(
+              options =>
+              {
+                  options.AllowSynchronousIO = true;
+              })
+          .UseUrls(args[0]).UseStartup<MapEditor.Editor>();
     }
+
 }

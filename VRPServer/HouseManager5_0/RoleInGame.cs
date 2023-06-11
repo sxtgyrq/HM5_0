@@ -897,11 +897,13 @@ namespace HouseManager5_0
         {
             public System.Numerics.Complex direciton { get; set; }
             public string PostionCrossKey { get; set; }
+            public string DYUid { get; set; }
         }
         public DirecitonAndSelectID direcitonAndID = new DirecitonAndSelectID()
         {
             direciton = 0,
-            PostionCrossKey = ""
+            PostionCrossKey = "",
+            DYUid = ""
         };
 
 

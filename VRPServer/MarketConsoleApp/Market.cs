@@ -122,27 +122,36 @@ namespace MarketConsoleApp
                 // Console.WriteLine(msg);
                 for (var j = 0; j < this.servers.Length; j++)
                 {
-                    var server = this.servers[j];
-                    var controllerUrl = server;
-                    var json = Newtonsoft.Json.JsonConvert.SerializeObject(
-                            new CommonClass.ServerStatictis()
-                            {
-                                c = "ServerStatictis"
-                            });
-                    var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes(controllerUrl, json);
-
-                    var rResult = t.GetAwaiter().GetResult();
-                    // var r = t;
-                    //var r =  <string>(() => TcpFunction.WithResponse.SendInmationToUrlAndGetRes(controllerUrl, json));
-                    if (string.IsNullOrEmpty(rResult)) { }
-                    else
+                    try
                     {
-                        List<int> count = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(rResult);
-                        var fileName = server.Replace('.', '_').Replace(':', '_');
-                        fileName = $"log/{fileName}.txt";
-                        var msg = $"{server},{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")},总共:{count[0]},玩家:{count[1]},NPC:{count[2]},在线玩家:{count[3]}.{Environment.NewLine}";
-                        Console.WriteLine(msg);
-                        File.AppendAllText(fileName, msg);
+                        var server = this.servers[j];
+                        var controllerUrl = server;
+                        var json = Newtonsoft.Json.JsonConvert.SerializeObject(
+                                new CommonClass.ServerStatictis()
+                                {
+                                    c = "ServerStatictis"
+                                });
+                        var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes(controllerUrl, json);
+
+                        var rResult = t.GetAwaiter().GetResult();
+                        // var r = t;
+                        //var r =  <string>(() => TcpFunction.WithResponse.SendInmationToUrlAndGetRes(controllerUrl, json));
+                        if (string.IsNullOrEmpty(rResult)) { }
+                        else
+                        {
+                            List<int> count = Newtonsoft.Json.JsonConvert.DeserializeObject<List<int>>(rResult);
+                            var fileName = server.Replace('.', '_').Replace(':', '_');
+                            fileName = $"log/{fileName}.txt";
+                            var msg = $"{server},{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")},总共:{count[0]},玩家:{count[1]},NPC:{count[2]},在线玩家:{count[3]}.{Environment.NewLine}";
+                            Console.WriteLine(msg);
+                            File.AppendAllText(fileName, msg);
+                        }
+                    }
+                    catch(Exception ex) 
+                    {
+                        Console.WriteLine($"{this.servers[j]}统计失败！");
+                        Console.WriteLine(ex.Message);
+                        Console.WriteLine(ex.ToString());
                     }
                 }
                 Thread.Sleep(60 * 1000);

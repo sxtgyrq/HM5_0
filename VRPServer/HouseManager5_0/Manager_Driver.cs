@@ -1059,9 +1059,13 @@ namespace HouseManager5_0
             long _speedValue = 0;
             public long SpeedValue { get { return this._speedValue; } }
             public bool HasValueToImproveSpeed { get { return this._speedValue >= 10; } }
+
+            //   public DateTime LastTimeOfSpeedImproved { get; set; }
+
             public ImproveManager()
             {
                 this._speedValue = 0;
+                // LastTimeOfSpeedImproved = DateTime.Now.AddDays(10);
             }
             internal void addSpeed(Player role, int addValue, ref List<string> notifyMsg)
             {
@@ -1072,6 +1076,10 @@ namespace HouseManager5_0
                 this._speedValue += addValue;
                 {
                     role.speedMagicChanged(role, ref notifyMsg);
+                }
+                if (this.HasValueToImproveSpeed)
+                {
+                    //  this.LastTimeOfSpeedImproved = DateTime.Now;
                 }
             }
             /// <summary>

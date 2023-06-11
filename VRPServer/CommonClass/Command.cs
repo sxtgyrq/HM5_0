@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommonClass.douyin;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -431,6 +432,7 @@ namespace CommonClass
         public string msg { get; set; }
         public int select { get; set; }
         public string tsType { get; set; }
+        public bool Live { get; set; }
     }
 
     public class BradCastWhereToGoInSmallMap : CommandNotify
@@ -447,11 +449,17 @@ namespace CommonClass
         public bool isFineshed { get; set; }
         public string TimeStr { get; set; }
         public string ResultMsg { get; set; }
+
+        /// <summary>
+        /// 前台会依据此项，决定显示颜色
+        /// </summary>
         public bool RecordedInDB { get; set; }
         public int groupNumber { get; set; }
         public string TaskName { get; set; }
         public string BTCAddr { get; set; }
         public bool HasValueToImproveSpeed { get; set; }
+
+        public bool Live { get; set; }
 
         public class DataItem
         {
@@ -535,6 +543,11 @@ namespace CommonClass
         /// </summary>
         public string pType { get; set; }
         //   public string car { get; set; }
+
+        /// <summary>
+        /// 抖音ID
+        /// </summary>
+        public string Uid { get; set; }
     }
     public class SetCollect : Command
     {
@@ -576,6 +589,7 @@ namespace CommonClass
         public double rotationY { get; set; }
         public string GroupKey { get; set; }
         public string postionCrossKey { get; set; }
+        public string Uid { get; set; }
     }
     public class TakeApart : Command
     {
@@ -1089,6 +1103,10 @@ namespace CommonClass
     {
         public string Key { get; set; }
         public string GroupKey { get; set; }
+
+        /// <summary>
+        /// true，就是直接collect promote return操作；false当调用ConfirmPanelSelectResult 对象时，回询问！
+        /// </summary>
         public bool GoToPosition { get; set; }
         public string FastenPositionID { get; set; }
     }
@@ -1124,11 +1142,89 @@ namespace CommonClass
         //   public List<string> DetailInfo { get; set; }
         public string NickName { get; set; }
         public int PositionIndex { get; set; }
-        public string Point { get; set; }
+        public string Score { get; set; }
+        //  public string AttackLength { get; set; }
+        // public string Point { get; set; }
     }
 
     public class BradCastAllDouyinPlayerIsWaiting : Command
     {
         public List<string> DetailInfo { get; set; }
+    }
+
+    public class Douyin
+    {
+        public class DouyinAdviseSelect : CommandNotify
+        {
+            public string select { get; set; }
+            public log Detail { get; set; }
+        }
+
+        public class DouyinZoomIn : CommandNotify
+        {
+            //public string select { get; set; }
+            //public log Detail { get; set; }
+        }
+        public class DouyinZoomOut : CommandNotify
+        {
+            //public string select { get; set; }
+            //public log Detail { get; set; }
+        }
+        public class DouyinRotateLeft : CommandNotify
+        {
+            //public string select { get; set; }
+            //public log Detail { get; set; }
+        }
+        public class DouyinRotateRight : CommandNotify
+        {
+            //public string select { get; set; }
+            //public log Detail { get; set; }
+        }
+        public class DouyinRotateHigh : CommandNotify
+        {
+            //public string select { get; set; }
+            //public log Detail { get; set; }
+        }
+        public class DouyinRotateLow : CommandNotify
+        {
+            //public string select { get; set; }
+            //public log Detail { get; set; }
+        }
+        //public class MarketFlag : CommandNotify
+        //{
+        //    public string stance;
+
+        //    public int x { get; set; }
+        //    public int y { get; set; }
+        //    public int z { get; set; }
+        //    public string nickName { get; set; }
+        //    public string Msg { get; set; }
+        //}
+        public class MarketFlags : CommandNotify
+        {
+            //public string stance;
+
+            //public int x { get; set; }
+            //public int y { get; set; }
+            //public int z { get; set; }
+            //public string nickName { get; set; }
+            //public string Msg { get; set; }
+            public List<MarketFlagsWebShowObj> Flags { get; set; }
+
+            public class MarketFlagsWebShowObj
+            {
+                public string imgUrl { get; set; }
+                public string stance { get; set; }
+                /// <summary>
+                /// add or existed
+                /// </summary>
+                public string type { get; set; }
+                public int x { get; set; }
+                public int y { get; set; }
+                public int z { get; set; }
+                public string nickName { get; set; }
+                public string uid { get; set; }
+            }
+        }
     }
 }

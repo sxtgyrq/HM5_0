@@ -74,49 +74,11 @@ namespace HouseManager5_0.RoomMainF
         }
         public void SetAnimateChanged(Player player, Car car, ref List<string> notifyMsg)
         {
-            //throw new Exception();
             var group = player.Group;
-            group.SetAnimateChanged(player, car, ref notifyMsg);
-            //lock (this.PlayerLock)
-            //{
-            //    var key = player.Key;
-            //    var players = getGetAllRoles();
-            //    for (var i = 0; i < players.Count; i++)
-            //    {
-            //        if (players[i].Key == key)
-            //        {
-
-            //        }
-            //        else
-            //        {
-            //            {
-            //                /*
-            //                 * 告诉自己，场景中有哪些别人的车！
-            //                 * 告诉别人，场景中有哪些车是我的的！
-            //                 */
-            //                {
-            //                    var self = this._Players[key];
-            //                    var other = players[i];
-            //                    if (self.playerType == Player.PlayerType.player)
-            //                        addPlayerCarRecord((Player)self, other, ref notifyMsg);
-
-            //                }
-            //                {
-            //                    var self = players[i];
-            //                    var other = this._Players[key];
-            //                    if (self.playerType == Player.PlayerType.player)
-            //                        addPlayerCarRecord((Player)self, other, ref notifyMsg);
-            //                }
-
-            //            }
-            //        }
-            //    }
-            //    {
-            //        var self = this._Players[key];
-            //        if (self.playerType == Player.PlayerType.player)
-            //            addSelfCarSingleRecord((Player)self, car, ref notifyMsg);
-            //    }
-            //}
+           // lock (group.PlayerLock_)
+            {
+                group.SetAnimateChanged(player, car, ref notifyMsg);
+            }
         }
 
         private void addPlayerCarRecord_bak(Player self, Player other, ref List<string> msgsWithUrl)

@@ -18,7 +18,7 @@ namespace HouseManager5_0.GroupClassF
             if (actionDo.conditionsOk(c, grp, out conditionNotReason))
             {
                 List<string> notifyMsg = new List<string>();
-                lock (this.PlayerLock)
+
                 {
                     if (this._PlayerInGroup.ContainsKey(operateKey))
                     {
@@ -109,9 +109,11 @@ namespace HouseManager5_0.GroupClassF
                         }
                     }
                 }
-                var msgL = Startup.sendSeveralMsgs(notifyMsg).Count;
-                msgL++;
-                return $"{msgL}".Length > 0 ? "" : "";
+                Startup.sendSeveralMsgs(notifyMsg);
+                //var msgL = Startup.sendSeveralMsgs(notifyMsg).Count;
+                //msgL++;
+                return "";
+                //return $"{msgL}".Length > 0 ? "" : "";
             }
             else
             {

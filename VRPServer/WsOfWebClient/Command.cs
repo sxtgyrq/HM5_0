@@ -97,6 +97,7 @@ namespace WsOfWebClient
     {
         public double rotationY { get; set; }
         public string postionCrossKey { get; set; }
+        public string uid { get; set; }
     }
     public class Bust : Attack
     {

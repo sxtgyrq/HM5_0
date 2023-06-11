@@ -122,11 +122,13 @@ namespace Geometry
 
             public override int GetHashCode()
             {
-
-                int hash = 17;
-                hash = (hash * 23 + this.numerato.GetHashCode()) % int.MaxValue;
-                hash = (hash * 23 + this.denominator.GetHashCode()) % int.MaxValue;
-                return hash;
+                unchecked
+                {
+                    int hash = 17;
+                    hash = (hash * 23 + this.numerato.GetHashCode()) % int.MaxValue;
+                    hash = (hash * 23 + this.denominator.GetHashCode()) % int.MaxValue;
+                    return hash;
+                }
             }
 
             private BigInteger getMaxApproximateNumber(BigInteger[] sumVNew)

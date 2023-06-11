@@ -26,7 +26,7 @@ namespace HouseManager5_0
         {
             //throw new Exception();
 
-            lock (that.PlayerLock)
+            //   lock (that.PlayerLock)
             {
                 if (string.IsNullOrEmpty(rObj.groupKey)) { }
                 else
@@ -386,7 +386,7 @@ namespace HouseManager5_0
             //throw new Exception();
 
 
-            lock (that.PlayerLock)
+            //    lock (that.PlayerLock)
             {
                 if (string.IsNullOrEmpty(comeBack.groupKey))
                 {

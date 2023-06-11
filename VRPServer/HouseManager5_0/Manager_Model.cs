@@ -24,7 +24,7 @@ namespace HouseManager5_0
         internal bool setModel(Player player, Data.detailmodel cloesdMaterial, ref List<string> notifyMsgs)
         {
             // bool AddRecord = false;
-            lock (player.Group.PlayerLock)
+
             {
                 if (player.modelHasShowed.ContainsKey(cloesdMaterial.modelID))
                 {
@@ -70,7 +70,7 @@ namespace HouseManager5_0
         {
             {
                 List<string> notifyMsg = new List<string>();
-                lock (that.PlayerLock)
+                //  lock (that.PlayerLock)
                 {
                     if (that._Groups.ContainsKey(m.GroupKey))
                     {
@@ -139,12 +139,15 @@ namespace HouseManager5_0
                                                         }
                                                         player.improvementRecord.addSpeed(player, defendLevel, ref notifyMsg);
                                                         // rewardLittleReason = $"！;
-                                                        this.WebNotify(player, $"{rewardLittleReason}液氮+{defendLevel},现有{player.improvementRecord.SpeedValue}。");
+                                                        if (!player.Group.Live)
+                                                            this.WebNotify(player, $"{rewardLittleReason}液氮+{defendLevel},现有{player.improvementRecord.SpeedValue}。");
                                                     }
                                                 }; break;
                                             default:
                                                 {
-                                                    WebNotify(player, "当前状态，求福不顶用！");
+                                                    if (group.Live) { }
+                                                    else
+                                                        WebNotify(player, "当前状态，求福不顶用！");
                                                 }; break;
                                         }
                                     }
@@ -158,8 +161,9 @@ namespace HouseManager5_0
                     }
 
                 }
-                var msgL = this.sendSeveralMsgs(notifyMsg).Count;
-                msgL++;
+                this.sendSeveralMsgs(notifyMsg);
+                //var msgL = this.sendSeveralMsgs(notifyMsg).Count;
+                //msgL++;
                 //for (var i = 0; i < notifyMsg.Count; i += 2)
                 //{
                 //    var url = notifyMsg[i];
@@ -169,7 +173,8 @@ namespace HouseManager5_0
                 //        Startup.sendMsg(url, sendMsg);
                 //    }
                 //}
-                return $"{msgL}".Length > 0 ? "" : "";
+                return "";
+                //return $"{msgL}".Length > 0 ? "" : "";
             }
 
         }

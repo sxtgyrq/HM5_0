@@ -186,17 +186,45 @@ namespace HouseManager5_0.RoomMainF
             //}
         }
 
-
-
-        internal void ClearPlayers()
+        internal void GroupLiveDoAction(GetRandomPos gp)
         {
-            lock (this.PlayerLock)
+            //  lock (this.PlayerLock)
             {
                 List<string> keysNeedToClear = new List<string>();
                 foreach (var item in this._Groups)
                 {
                     var group = item.Value;
-                    if (group.ActiveTime.AddHours(1) < DateTime.Now)
+                    if (group.GroupKey == RoomMain.douyinZhiboGroupKey)
+                    {
+                        if (group.Live)
+                        {
+                            group.CollectFinished(gp);
+                        }
+                        /*
+                         * 保护了正在直播的房间！
+                         */
+                    }
+                }
+
+            }
+
+        }
+
+        internal void ClearPlayers()
+        {
+            //  lock (this.PlayerLock)
+            {
+                List<string> keysNeedToClear = new List<string>();
+                foreach (var item in this._Groups)
+                {
+                    var group = item.Value;
+                    if (group.GroupKey == RoomMain.douyinZhiboGroupKey)
+                    {
+                        /*
+                         * 保护了正在直播的房间！
+                         */
+                    }
+                    else if (group.ActiveTime.AddHours(1) < DateTime.Now)
                     {
                         keysNeedToClear.Add(item.Key);
                     }
@@ -205,9 +233,13 @@ namespace HouseManager5_0.RoomMainF
                 {
                     var key = keysNeedToClear[i];
                     var group = this._Groups[key];
-                    group.Clear();
+                    //  lock (group.PlayerLock_)
+                    {
+                        group.Clear();
+                    }
                     group = null;
                     this._Groups.Remove(key);
+
                 }
             }
             //   return;

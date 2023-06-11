@@ -15,7 +15,7 @@ namespace HouseManager5_0.RoomMainF
             if (Group != null)
             {
                 List<string> notifyMsg = new List<string>();
-                lock (Group.PlayerLock)
+               // lock (Group.PlayerLock)
                 {
                     if (Group._PlayerInGroup.ContainsKey(dm.Key))
                     {

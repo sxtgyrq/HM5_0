@@ -22,7 +22,7 @@ namespace HouseManager5_0
                 return "";
             }
             GroupClassF.GroupClass group = null;
-            lock (that.PlayerLock)
+            // lock (that.PlayerLock)
             {
                 if (this.that._Groups.ContainsKey(r.GroupKey))
                 {
@@ -38,7 +38,7 @@ namespace HouseManager5_0
                 }
                 else
                 {
-                    lock (group.PlayerLock)
+
                     {
                         for (int i = 0; i < group._PlayerInGroup.Count; i++)
                         {

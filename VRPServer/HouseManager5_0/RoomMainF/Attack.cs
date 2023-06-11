@@ -9,11 +9,11 @@ namespace HouseManager5_0.RoomMainF
 {
     public partial class RoomMain : interfaceOfHM.Attack
     {
-        const string AttackFailedReturn = "attack-failed-return";
-        public string updateAttack(SetAttack sa, GetRandomPos grp)
-        {
-            return this.attackE.updateAttack(sa, grp);
-        }
+        // const string AttackFailedReturn = "attack-failed-return";
+        //public string updateAttack(SetAttack sa, GetRandomPos grp)
+        //{
+        //    return this.attackE.updateAttack(sa, grp);
+        //}
 
 
 

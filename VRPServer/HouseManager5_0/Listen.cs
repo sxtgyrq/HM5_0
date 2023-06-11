@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using static CommonClass.Finance;
@@ -76,6 +77,7 @@ namespace HouseManager5_0
                     case "SetPromote":
                         {
                             //有了Player.Ts,此方法在后台调用！
+                            //后台调用需要有后台调用的放发。先设置Player.Ts，再调用！
                             //CommonClass.SetPromote sp = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.SetPromote>(notifyJson);
                             //var result = objI.updatePromote(sp, Program.dt);
                             outPut = "ok";
@@ -96,6 +98,7 @@ namespace HouseManager5_0
                     case "SetCollect":
                         {
                             //有了Player.Ts,此方法在后台调用！
+                            //后台调用需要有后台调用的放发。先设置Player.Ts，再调用！
                             //CommonClass.SetCollect sc = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.SetCollect>(notifyJson);
                             //var result = objI.updateCollect(sc, Program.dt);
                             outPut = "ok";
@@ -103,8 +106,8 @@ namespace HouseManager5_0
                         }; break;
                     case "SetAttack":
                         {
-                            CommonClass.SetAttack sa = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.SetAttack>(notifyJson);
-                            var result = objI.updateAttack(sa, Program.dt);
+                            //CommonClass.SetAttack sa = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.SetAttack>(notifyJson);
+                            //var result = objI.updateAttack(sa, Program.dt);
                             outPut = "ok";
                             //await context.Response.WriteAsync("ok");
                         }; break;
@@ -123,6 +126,7 @@ namespace HouseManager5_0
                         {
                             CommonClass.OrderToReturn otr = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.OrderToReturn>(notifyJson);
                             objI.OrderToReturn(otr, Program.dt);
+                           
                             outPut = "ok";
                         }; break;
                     case "SaveMoney":

@@ -167,6 +167,24 @@
             }
         }
     },
+    minus: function () {
+        var btn = document.getElementById('minOrMax');
+        if (btn == null) {
+            return;
+        }
+        var panelToAskWhetherGoto = document.getElementById('panelToAskWhetherGoto');
+        if (panelToAskWhetherGoto == null) {
+            return;
+        }
+        else {
+            btn.innerText = "最大化";
+            panelToAskWhetherGoto.style.maxWidth = "3.5em";
+            panelToAskWhetherGoto.style.maxHeight = "1.5em";
+
+            panelToAskWhetherGoto.style.top = "calc(68px + 3em)";
+            panelToAskWhetherGoto.style.left = "5px";
+        }
+    },
     obj: null,
     show2: function () {
         var that = whetherGo;

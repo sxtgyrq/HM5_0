@@ -17,7 +17,7 @@ namespace HouseManager5_0
         {
             // throw new Exception();
 
-            lock (that.PlayerLock)
+            //  lock (that.PlayerLock)
             {
                 if (string.IsNullOrEmpty(groupKey))
                 {
@@ -26,7 +26,10 @@ namespace HouseManager5_0
                 else if (that._Groups.ContainsKey(groupKey))
                 {
                     var group = that._Groups[groupKey];
-                    return group.updateAction(actionDo, c, grp, operateKey);
+                  //  lock (group.PlayerLock_)
+                    {
+                        return group.updateAction(actionDo, c, grp, operateKey);
+                    }
                 }
                 else
                 {
@@ -301,7 +304,7 @@ namespace HouseManager5_0
                         // if (!bgHasSet) { }
                         Action showCross = () =>
                         {
-                            lock (that.PlayerLock)
+                            // lock (that.PlayerLock)
                             {
                                 List<string> notifyMsg = new List<string>();
                                 player.getCar().setState(player, ref notifyMsg, CarState.selecting);
@@ -382,8 +385,15 @@ namespace HouseManager5_0
                         player.getCar().setState(player, ref notifyMsg, oldState);
                         player.SendBG(player, ref notifyMsg);
 
- 
                     }
+                    //if (player.Group.Live)
+                    //{
+                    //    if (!string.IsNullOrEmpty(player.direcitonAndID.DYUid))
+                    //    {
+                    //        player.Group.AdviseIsRight(player, ref notifyMsg);
+                    //        player.direcitonAndID.DYUid = "";
+                    //    }
+                    //}
                     this.sendSeveralMsgs(notifyMsg);
                     p();
                 }
@@ -415,7 +425,11 @@ namespace HouseManager5_0
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             notifyMsg.Add(player.FromUrl);
             notifyMsg.Add(json);
-            this.WebNotify(player, $"错误的选择让您损失了{reduceValue / 100}.{(reduceValue % 100) / 10}{(reduceValue % 10)}。");
+            if (player.Group.Live) { }
+            else
+            {
+                this.WebNotify(player, $"错误的选择让您损失了{reduceValue / 100}.{(reduceValue % 100) / 10}{(reduceValue % 10)}。");
+            }
         }
 
         /// <summary>
@@ -552,8 +566,12 @@ namespace HouseManager5_0
             if (step == 0)
             {
                 this.ThreadSleep(startT + 50);
-
-                if (player.playerType == Player.PlayerType.NPC || player.Bust)//如果是NPC或者是破产用户，直接过，不选择。
+                if (player.Group.Live)
+                {
+                    this.ThreadSleep(5);
+                    p();
+                }
+                else if (player.playerType == Player.PlayerType.NPC || player.Bust)//如果是NPC或者是破产用户，直接过，不选择。
                 {
                     p();
                 }
@@ -561,13 +579,7 @@ namespace HouseManager5_0
                   player.playerType == Player.PlayerType.player &&
                   player.improvementRecord.HasValueToImproveSpeed)
                 {
-                    if (that.rm.Next(0, 100) < 100)
-                    {
-                        //加速效果100%，直接过。
-                        this.ThreadSleep(5);
-                        p();
-                    }
-                    else if (player.getCar().ability.costVolume == 0)
+                    if (player.getCar().ability.costVolume == 0)
                     {
                         this.ThreadSleep(10);
                         p();
@@ -585,7 +597,13 @@ namespace HouseManager5_0
             else
             {
                 this.ThreadSleep(Math.Max(5, startT));
-                if (player.playerType == Player.PlayerType.NPC || player.Bust)
+                if (player.Group.Live)
+                {
+                    player.Group.LiveAnimate(step, goPath);
+                    this.ThreadSleep(50);
+                    p();
+                }
+                else if (player.playerType == Player.PlayerType.NPC || player.Bust)
                 {
                     this.ThreadSleep(50);
                     p();

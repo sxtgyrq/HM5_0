@@ -136,7 +136,7 @@ namespace HouseManager5_0
 
             // throw new Exception("");
 
-            lock (that.PlayerLock)
+            // lock (that.PlayerLock)
             {
                 if (string.IsNullOrEmpty(sp.GroupKey))
                 { }

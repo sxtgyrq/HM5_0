@@ -1212,7 +1212,8 @@ namespace WsOfWebClient
                 GroupKey = s.GroupKey,
                 //car = "car" + m.Groups["car"].Value,
                 rotationY = va.rotationY,
-                postionCrossKey = va.postionCrossKey
+                postionCrossKey = va.postionCrossKey,
+                Uid = va.uid
             };
             var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ms);
             Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
@@ -1299,31 +1300,31 @@ namespace WsOfWebClient
             return "";
         }
 
-        internal static async Task<string> sellDiamond(State s, BuyDiamond bd)
-        {
-            {
-                switch (bd.pType)
-                {
-                    case "mile":
-                    case "business":
-                    case "volume":
-                    case "speed":
-                        {
-                            SetSellDiamond ssd = new SetSellDiamond()
-                            {
-                                c = "SetSellDiamond",
-                                Key = s.Key,
-                                pType = bd.pType,
-                                count = Math.Min(bd.count, 50)
-                            };
-                            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ssd);
-                            Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
-                        }; break;
-                    default: { }; break;
-                }
-            }
-            return "";
-        }
+        //internal static async Task<string> sellDiamond(State s, BuyDiamond bd)
+        //{
+        //    {
+        //        switch (bd.pType)
+        //        {
+        //            case "mile":
+        //            case "business":
+        //            case "volume":
+        //            case "speed":
+        //                {
+        //                    SetSellDiamond ssd = new SetSellDiamond()
+        //                    {
+        //                        c = "SetSellDiamond",
+        //                        Key = s.Key,
+        //                        pType = bd.pType,
+        //                        count = Math.Min(bd.count, 50)
+        //                    };
+        //                    var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ssd);
+        //                    Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+        //                }; break;
+        //            default: { }; break;
+        //        }
+        //    }
+        //    return "";
+        //}
         internal static State GetRewardFromBuildingF(State s, GetRewardFromBuildings grfb, ConnectInfo.ConnectInfoDetail connectInfoDetail)
         {
             return s;
@@ -1754,7 +1755,8 @@ namespace WsOfWebClient
                     c = "SetPromote",
                     Key = s.Key,
                     GroupKey = s.GroupKey,
-                    pType = promote.pType
+                    pType = promote.pType,
+                    Uid = ""
                 };
                 var msg = Newtonsoft.Json.JsonConvert.SerializeObject(getPosition);
                 Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
@@ -1846,6 +1848,11 @@ namespace WsOfWebClient
             var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gfs);
             Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
         }
+
+        /// <summary>
+        /// 此方法，对应Web选择页面（是否前往xxx）选择了否
+        /// </summary>
+        /// <param name="s"></param>
         internal static void NotWantToGoNeedToBackF(State s)
         {
             CommonClass.ConfirmPanelSelectResult cps = new CommonClass.ConfirmPanelSelectResult()

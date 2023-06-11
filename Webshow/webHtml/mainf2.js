@@ -94,6 +94,7 @@ var objMain =
     absorbGroup: null,
     directionGroup: null,
     targetGroup: null,
+    marketGroup: null,
     clock: null,
     leaveGameModel: null,
     profileModel: null,
@@ -757,66 +758,232 @@ var objMain =
     {
         theme: '',
         change: function () {
-            var bgm = document.getElementById('backGroudMusick');
-            //   var paused = bgm.paused;
-            if (bgm.currentTime === 0 || bgm.ended) {
-                switch (this.theme) {
-                    case '':
-                        {
-                            var itemCount = bgm.children.length - 1;
-                            for (var i = itemCount; i >= 0; i--) {
-                                bgm.children[i].remove();
-                            }
-                            var source1 = document.createElement('source');
-                            source1.src = 'bgm/changshoucunwai.ogg';
-                            source1.type = 'audio/ogg';
+            //if(dou)
+            if (whetherGo.obj != null && whetherGo.obj.Live) {
+                var bgm = document.getElementById('backGroudMusick');
+                //   var paused = bgm.paused;
+                if (bgm.currentTime === 0 || bgm.ended) {
 
-                            var source2 = document.createElement('source');
-                            source2.src = 'bgm/changshoucunwai.mp3';
-                            source2.type = 'audio/mpeg';
+                    var itemCount = bgm.children.length - 1;
+                    for (var i = itemCount; i >= 0; i--) {
+                        bgm.children[i].remove();
+                    }
+                    var source1 = document.createElement('source');
+                    source1.src = 'bgm/windyhillbgm.ogg';
+                    source1.type = 'audio/ogg';
 
-                            bgm.appendChild(source1);
-                            bgm.appendChild(source2);
+                    var source2 = document.createElement('source');
+                    source2.src = 'bgm/windyhillbgm.mp3';
+                    source2.type = 'audio/mpeg';
 
-                            bgm.oncanplaythrough = function () {
-                                if (objMain.music.on)
-                                    this.play();
-                            };
+                    bgm.appendChild(source1);
+                    bgm.appendChild(source2);
 
-                            bgm.load();
-                            //if (this.on)
-                            //    bgm.play();
-                        }; break;
-                    default:
-                        {
-                            var itemCount = bgm.children.length - 1;
-                            for (var i = itemCount; i >= 0; i--) {
-                                bgm.children[i].remove();
-                            }
-                            var source1 = document.createElement('source');
-                            source1.src = 'bgm/' + this.theme + '.ogg';
-                            source1.type = 'audio/ogg';
+                    bgm.oncanplaythrough = function () {
+                        if (objMain.music.on)
+                            this.play();
+                    };
 
-                            var source2 = document.createElement('source');
-                            source2.src = 'bgm/' + this.theme + '.mp3';
-                            source2.type = 'audio/mpeg';
-
-                            bgm.appendChild(source1);
-                            bgm.appendChild(source2);
-
-                            bgm.oncanplaythrough = function () {
-                                if (objMain.music.on)
-                                    this.play();
-                            };
-                            bgm.load();
-                            //if (this.on)
-                            //    bgm.play();
-                        }; break;
+                    bgm.load();
+                    bgm.addEventListener('ended', function () {
+                        // 当音频播放完成时，将当前播放时间重置为0，实现单曲循环
+                        this.currentTime = 0;
+                        this.play();
+                    });
                 }
+            }
+            else {
+                var bgm = document.getElementById('backGroudMusick');
+                //   var paused = bgm.paused;
+                if (bgm.currentTime === 0 || bgm.ended) {
+                    switch (this.theme) {
+                        case '':
+                            {
+                                var itemCount = bgm.children.length - 1;
+                                for (var i = itemCount; i >= 0; i--) {
+                                    bgm.children[i].remove();
+                                }
+                                var source1 = document.createElement('source');
+                                source1.src = 'bgm/changshoucunwai.ogg';
+                                source1.type = 'audio/ogg';
 
+                                var source2 = document.createElement('source');
+                                source2.src = 'bgm/changshoucunwai.mp3';
+                                source2.type = 'audio/mpeg';
+
+                                bgm.appendChild(source1);
+                                bgm.appendChild(source2);
+
+                                bgm.oncanplaythrough = function () {
+                                    if (objMain.music.on)
+                                        this.play();
+                                };
+
+                                bgm.load();
+                                //if (this.on)
+                                //    bgm.play();
+                            }; break;
+                        default:
+                            {
+                                var itemCount = bgm.children.length - 1;
+                                for (var i = itemCount; i >= 0; i--) {
+                                    bgm.children[i].remove();
+                                }
+                                var source1 = document.createElement('source');
+                                source1.src = 'bgm/' + this.theme + '.ogg';
+                                source1.type = 'audio/ogg';
+
+                                var source2 = document.createElement('source');
+                                source2.src = 'bgm/' + this.theme + '.mp3';
+                                source2.type = 'audio/mpeg';
+
+                                bgm.appendChild(source1);
+                                bgm.appendChild(source2);
+
+                                bgm.oncanplaythrough = function () {
+                                    if (objMain.music.on)
+                                        this.play();
+                                };
+                                bgm.load();
+                                //if (this.on)
+                                //    bgm.play();
+                            }; break;
+                    }
+
+                }
             }
         },
-        on: true
+        on: true,
+        MarketRepeat: function () {
+            //var changeMusic = function (musicFileName) {
+            //    var mainMusicSetOnOFFFunc = function (on) {
+            //        var AnotherBgm = document.getElementById('backGroudMusick');
+            //        if (on) {
+            //            if (objMain.music.on) {
+            //                AnotherBgm.volume = 0.4;
+            //                AnotherBgm.play();
+            //            }
+            //        }
+            //        else {
+            //            AnotherBgm.pause();
+            //        }
+            //    }
+            //    var bgm = document.getElementById('marketSoundMusick');
+            //    //  bgm.loop = false;
+            //    if (bgm.currentTime === 0 || bgm.ended) {
+
+            //        var itemCount = bgm.children.length - 1;
+            //        for (var i = itemCount; i >= 0; i--) {
+            //            bgm.children[i].remove();
+            //        }
+            //        var source1 = document.createElement('source');
+            //        source1.src = 'bgm/' + musicFileName + '.ogg';
+            //        source1.type = 'audio/ogg';
+
+            //        var source2 = document.createElement('source');
+            //        source2.src = 'bgm/' + musicFileName + '.mp3';
+            //        source2.type = 'audio/mpeg';
+
+            //        bgm.appendChild(source1);
+            //        bgm.appendChild(source2);
+            //        bgm.musicFileName = musicFileName;
+            //        bgm.oncanplaythrough = function () {
+            //            this.play();
+
+            //            //if (objMain.music.on)
+            //            //var AnotherBgm = document.getElementById('backGroudMusick');
+            //            //AnotherBgm.volume = 0.4;
+            //            //AnotherBgm.pause();
+            //        };
+
+            //        bgm.load();
+            //        bgm.addEventListener('ended', function () {
+            //            //   objMain.music.MarketRepeat(); 
+            //            var AnotherBgm = document.getElementById('backGroudMusick');
+            //            AnotherBgm.volume = 0.4;
+            //            switch (objMain.carState.car) {
+            //                case 'waitAtBaseStation':
+            //                    {
+            //                        if (this.musicFileName == 'notifySound_StartAndLookfor') {
+            //                            //this.currentTime = 0;
+            //                            //this.play();
+            //                            //var thatMusic = this;
+            //                            //setTimeout(function () {
+            //                            //    if (thatMusic.ended) {
+            //                            //        thatMusic.currentTime = 0;
+            //                            //        thatMusic.play();
+            //                            //    }
+            //                            //}, 10000);
+            //                            mainMusicSetOnOFFFunc(false);
+            //                        }
+            //                        else {
+            //                            mainMusicSetOnOFFFunc(true);
+            //                        }
+            //                    }; break;
+            //                case 'waitOnRoad':
+            //                    {
+            //                        if (this.musicFileName == 'notifySound_diamond' ||
+            //                            this.musicFileName == 'notifySound_GoOrReturn') {
+            //                            // var thatMusic = this;
+            //                            //setTimeout(function () {
+            //                            //    if (thatMusic.ended) {
+            //                            //        thatMusic.currentTime = 0;
+            //                            //        thatMusic.play();
+            //                            //    }
+            //                            //}, 10000);
+            //                            mainMusicSetOnOFFFunc(false);
+            //                        }
+            //                        else {
+            //                            mainMusicSetOnOFFFunc(true);
+            //                        }
+            //                    }; break;
+            //                case 'selecting': {
+            //                    if (this.musicFileName == 'notifySound_ABC') {
+            //                        var thatMusic = this;
+            //                        //setTimeout(function () {
+            //                        //    if (thatMusic.ended) {
+            //                        //        thatMusic.currentTime = 0;
+            //                        //        thatMusic.play();
+            //                        //    }
+            //                        //}, 10000);
+            //                        mainMusicSetOnOFFFunc(false);
+            //                    }
+            //                    else {
+            //                        mainMusicSetOnOFFFunc(true);
+            //                    }
+            //                }; break;
+            //                default:
+            //                    {
+            //                        mainMusicSetOnOFFFunc(true);
+            //                    }; break;
+            //            }
+
+            //        });
+            //    }
+            //}
+            //if (whetherGo.obj != null && whetherGo.obj.Live) {
+            //    //   console.log(objMain.carState.car + '-----------Live Music');
+            //    switch (objMain.carState.car) {
+            //        case 'waitAtBaseStation':
+            //            {
+            //                changeMusic('notifySound_StartAndLookfor');
+            //            }; break;
+            //        case 'waitOnRoad':
+            //            {
+            //                if (stateSet.speed.selfHasFire()) {
+            //                    changeMusic('notifySound_diamond');
+            //                }
+            //                else {
+            //                    changeMusic('notifySound_GoOrReturn');
+            //                }
+            //            }; break;
+            //        case 'selecting':
+            //            {
+            //                changeMusic('notifySound_ABC');
+            //            }; break;
+            //    }
+            //}
+        }
     },
     background:
     {
@@ -1842,6 +2009,10 @@ var objMain =
                         objMain.carStateTimestamp[received_obj.carID] = { 't': Date.now(), 'l': oldLength };
                         objNotify.notifyCar(received_obj.carID, received_obj.State);
                         operatePanel.refresh();
+                        //setInterval(function () {
+                        //    objMain.music.MarketRepeat();
+                        //}, 1000);//这里要用setTimeOut主要是考虑加速时，carState 与speed 传输不一致，加个时间，做缓冲。
+
                     }
                 }; break;
             case 'BradCastCollectInfoDetail_v2':
@@ -2240,6 +2411,13 @@ var objMain =
                         smallMapClass.draw(received_obj);
                         whetherGo.obj = received_obj;
                         whetherGo.show2();
+
+                        if (received_obj.Live) {
+
+                        }
+                        //if (document.getElementById(douyinPanleShow.operateAddress) != null) {
+                        //    whetherGo.minus();
+                        //}
                     }
                 }; break;
             case 'TeamStartFailed':
@@ -2257,6 +2435,45 @@ var objMain =
             case 'BradCastDouyinPlayerIsWaiting':
                 {
                     douyinPanleShow.add3(received_obj);
+                }; break;
+            case 'DouyinAdviseSelect':
+                {
+                    DirectionOperator.AdviseSelect(received_obj);
+                }; break;
+            case 'DouyinZoomIn':
+                {
+                    objMain.controls.dollyOut(0.8);
+                    objMain.controls.update();
+                }; break;
+            case 'DouyinZoomOut':
+                {
+                    objMain.controls.dollyOut(1.2);
+                    objMain.controls.update();
+                }; break;
+            case 'DouyinRotateLeft':
+                {
+                    objMain.controls.rotateLeft(Math.PI / 12);
+                    objMain.controls.update();
+                }; break;
+            case 'DouyinRotateRight': {
+                objMain.controls.rotateLeft(-Math.PI / 12);
+                objMain.controls.update();
+            }; break;
+            case 'DouyinRotateHigh': {
+                objMain.controls.rotateUp(Math.PI / 30)
+                objMain.controls.update();
+            }; break;
+            case 'DouyinRotateLow': {
+                objMain.controls.rotateUp(-Math.PI / 30)
+                objMain.controls.update();
+            }; break;
+            case 'MarketFlag':
+                {
+                    douyinPanleShow.drawFlag(received_obj);
+                }; break;
+            case 'MarketFlags':
+                {
+                    douyinPanleShow.drawFlags(received_obj);
                 }; break;
             default:
                 {
@@ -3017,6 +3234,17 @@ function animate() {
                             objMain.directionGroup.children[selectIndex].children[0].material = objMain.ModelInput.directionArrowC.newM;
                         }
                     }
+
+                    //for (var i = 0; i < objMain.marketGroup.children.length; i++) {
+                    //    var itemLength = objMain.mainF.getLength(objMain.marketGroup.children[i].position, objMain.controls.target);
+                    //    if (itemLength > 40) {
+                    //        objMain.marketGroup.children[i].visible = false;
+                    //    }
+                    //    else {
+                    //        objMain.marketGroup.children[i].visible = true;
+                    //    }
+                    //}
+                    douyinPanleShow.animate();
                 }; break;
             case 'LookForBuildings':
                 {
@@ -3286,6 +3514,7 @@ var QueryReward =
         var operateStart = function (event) {
             objMain.canSelect = true;
             objMain.music.change();
+            objMain.music.MarketRepeat();
         }
         objMain.labelRenderer.domElement.addEventListener('mouseup', operateEnd, false);
         objMain.labelRenderer.domElement.addEventListener('mousedown', operateStart, false);
@@ -3516,6 +3745,7 @@ var setTransactionHtml =
         var operateStart = function (event) {
             objMain.canSelect = true;
             objMain.music.change();
+            objMain.music.MarketRepeat();
         }
         objMain.labelRenderer.domElement.addEventListener('mouseup', operateEnd, false);
         objMain.labelRenderer.domElement.addEventListener('mousedown', operateStart, false);
@@ -3686,6 +3916,7 @@ var set3DHtml = function () {
         objMain.buildingSelectionGroup = registGroup(objMain.buildingSelectionGroup);
         objMain.fightSituationGroup = registGroup(objMain.fightSituationGroup);
         objMain.groupOfTaskCopy = registGroup(objMain.groupOfTaskCopy);
+        objMain.marketGroup = registGroup(objMain.marketGroup);
     }
     if (false) {
 
@@ -3742,7 +3973,7 @@ var set3DHtml = function () {
                 if (objMain.directionGroup.children[selectIndex].userData.objState > 0) {
                 }
                 else {
-                    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': objMain.directionGroup.children[selectIndex].userData.postionCrossKey });
+                    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': objMain.directionGroup.children[selectIndex].userData.postionCrossKey, 'uid': '' });
                     objMain.ws.send(json);
                     //userData.objState
                     objMain.directionGroup.children[selectIndex].userData.objState = 1;
@@ -3757,6 +3988,7 @@ var set3DHtml = function () {
     var operateStart = function (event) {
         objMain.canSelect = true;
         objMain.music.change();
+        objMain.music.MarketRepeat();
     }
     objMain.labelRenderer.domElement.addEventListener('mouseup', operateEnd, false);
     objMain.labelRenderer.domElement.addEventListener('mousedown', operateStart, false);
@@ -3769,6 +4001,8 @@ var set3DHtml = function () {
     //drawCarBtnsFrame();
     //objNotify.carNotifyShow();
     window.addEventListener('resize', onWindowResize, false);
+    douyinPanleShow.drawFlagThemeDetail('Ukraine');
+    douyinPanleShow.drawFlagThemeDetail('Russia');
 }
 function onWindowResize() {
     switch (objMain.state) {
@@ -4243,38 +4477,22 @@ var SysOperatePanel =
                 //subsidizeSys.add();
                 //moneyOperator.add();
 
-                resistance.bindData(objMain.indexKey);
-                //if (objMain.Task.state == 'attack') {
-                //    resistance.bindData(objMain.selectObj.obj.name.split('_')[1]);
-                //}
-                //else {
-                //    resistance.bindData(objMain.indexKey);
-                //}
+                var removePanel = function (panelId) {
+                    if (document.getElementById(panelId) == null) {
+                    }
+                    else {
+                        document.getElementById(panelId).remove();
+                    }
+                }
+                removePanel("douyinRankPanle");
+                removePanel("douyinPanleShow_DouyiOperatePanle");
 
-                //if (objMain.directionGroup.children.length > 1) {
-                //    var rotationY = objMain.directionGroup.children[1].rotation.y;
-                //    var postionCrossKey = objMain.directionGroup.children[1].userData.postionCrossKey;
-                //    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey });
-                //    objMain.ws.send(json);
-                //    objMain.directionGroup.children[1].userData.objState = 1;
-                //    operatePanel.refresh();
-                //}
-                //if (objMain.directionGroup.children.length > 2) {
-                //    var rotationY = objMain.directionGroup.children[2].rotation.y;
-                //    var postionCrossKey = objMain.directionGroup.children[2].userData.postionCrossKey;
-                //    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey });
-                //    objMain.ws.send(json);
-                //    objMain.directionGroup.children[2].userData.objState = 1;
-                //    operatePanel.refresh();
-                //}
-                //if (objMain.directionGroup.children.length > 3) {
-                //    var rotationY = objMain.directionGroup.children[3].rotation.y;
-                //    var postionCrossKey = objMain.directionGroup.children[3].userData.postionCrossKey;
-                //    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey });
-                //    objMain.ws.send(json);
-                //    objMain.directionGroup.children[3].userData.objState = 1;
-                //    operatePanel.refresh();
-                //}
+                if (document.getElementById("douyinPanleShow") == null) {
+                    resistance.bindData(objMain.indexKey);
+                }
+                else {
+                    document.getElementById("douyinPanleShow").remove();
+                }
             };
             img.classList.add('costomButton');
             divSysOperatePanel.appendChild(img);
@@ -4902,7 +5120,7 @@ var operatePanel =
                         if (objMain.directionGroup.children.length > 1) {
                             var rotationY = objMain.directionGroup.children[1].rotation.y;
                             var postionCrossKey = objMain.directionGroup.children[1].userData.postionCrossKey;
-                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey });
+                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey, 'uid': '' });
                             objMain.ws.send(json);
                             objMain.directionGroup.children[1].userData.objState = 1;
                             operatePanel.refresh();
@@ -4915,7 +5133,7 @@ var operatePanel =
                         if (objMain.directionGroup.children.length > 2) {
                             var rotationY = objMain.directionGroup.children[2].rotation.y;
                             var postionCrossKey = objMain.directionGroup.children[2].userData.postionCrossKey;
-                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey });
+                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey, 'uid': '' });
                             objMain.ws.send(json);
                             objMain.directionGroup.children[2].userData.objState = 1;
                             operatePanel.refresh();
@@ -4928,7 +5146,7 @@ var operatePanel =
                         if (objMain.directionGroup.children.length > 3) {
                             var rotationY = objMain.directionGroup.children[3].rotation.y;
                             var postionCrossKey = objMain.directionGroup.children[3].userData.postionCrossKey;
-                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey });
+                            var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey, 'uid': '' });
                             objMain.ws.send(json);
                             objMain.directionGroup.children[3].userData.objState = 1;
                             operatePanel.refresh();
@@ -5233,6 +5451,14 @@ var stateSet =
                     }
                 }
         },
+        selfHasFire: function () {
+            var car = objMain.carGroup.getObjectByName('car_' + objMain.indexKey);
+            var fire0 = car.getObjectByName('fire0_' + objMain.indexKey);
+            if (fire0 == undefined || fire == null) {
+                return false;
+            }
+            else return true;
+        }
     },
     attck:
     {
@@ -5954,6 +6180,39 @@ var DirectionOperator =
         for (var i = 1; i < objMain.directionGroup.children.length; i++) {
             if (objMain.directionGroup.children[i].userData.objState == 1 && objMain.directionGroup.children[i].userData.postionCrossKey == postionCrossKey) {
                 objMain.directionGroup.children[i].userData.objState = 2;
+            }
+        }
+    },
+    AdviseSelect: function (adviseObj) {
+        if (objMain.directionGroup.visible) {
+            //var minAngle = Math.PI / 20;
+            var selectIndex = -1;
+            for (var i = 1; i < objMain.directionGroup.children.length; i++) {
+
+                if (i == 1 && adviseObj.select == 'A') {
+                    selectIndex = i;
+                }
+                else if (i == 2 && adviseObj.select == 'B') {
+                    selectIndex = i;
+                }
+                else if (i == 3 && adviseObj.select == 'C') {
+                    selectIndex = i;
+                }
+            }
+            if (selectIndex > 0) {
+
+                var rotationY = objMain.directionGroup.children[selectIndex].rotation.y;
+
+                if (objMain.directionGroup.children[selectIndex].userData.objState > 0) {
+                }
+                else {
+                    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': objMain.directionGroup.children[selectIndex].userData.postionCrossKey, 'uid': adviseObj.Detail.Uid });
+                    objMain.ws.send(json);
+                    //userData.objState
+                    objMain.directionGroup.children[selectIndex].userData.objState = 1;
+
+                }
+                operatePanel.refresh();
             }
         }
     }

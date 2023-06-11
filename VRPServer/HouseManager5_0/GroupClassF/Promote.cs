@@ -67,10 +67,7 @@ namespace HouseManager5_0.GroupClassF
             }
             set
             {
-                lock (this.PlayerLock)
-                {
-                    this._promoteMilePosition = value;
-                }
+                this._promoteMilePosition = value;
             }
         }
         public int promoteVolumePosition
@@ -78,10 +75,7 @@ namespace HouseManager5_0.GroupClassF
             get { return this._promoteVolumePosition; }
             set
             {
-                lock (this.PlayerLock)
-                {
-                    this._promoteVolumePosition = value;
-                }
+                this._promoteVolumePosition = value;
             }
         }
         public int promoteSpeedPosition
@@ -89,10 +83,7 @@ namespace HouseManager5_0.GroupClassF
             get { return this._promoteSpeedPosition; }
             set
             {
-                lock (this.PlayerLock)
-                {
-                    this._promoteSpeedPosition = value;
-                }
+                this._promoteSpeedPosition = value;
             }
         }
 
@@ -119,19 +110,19 @@ namespace HouseManager5_0.GroupClassF
         {
             string url = "";
             string sendMsg = "";
-            lock (this.PlayerLock)
-                if (this._PlayerInGroup.ContainsKey(key))
-                    if (this._PlayerInGroup[key].playerType == Player.PlayerType.player)
-                        if (((Player)this._PlayerInGroup[key]).PromoteState[promoteType] == this.getPromoteState(promoteType))
-                        {
-                        }
-                        else
-                        {
-                            var infomation = this.GetPromoteInfomation(((Player)this._PlayerInGroup[key]).WebSocketID, promoteType);
-                            url = ((Player)this._PlayerInGroup[key]).FromUrl;
-                            sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(infomation);
-                            ((Player)this._PlayerInGroup[key]).PromoteState[promoteType] = this.getPromoteState(promoteType);
-                        }
+
+            if (this._PlayerInGroup.ContainsKey(key))
+                if (this._PlayerInGroup[key].playerType == Player.PlayerType.player)
+                    if (((Player)this._PlayerInGroup[key]).PromoteState[promoteType] == this.getPromoteState(promoteType))
+                    {
+                    }
+                    else
+                    {
+                        var infomation = this.GetPromoteInfomation(((Player)this._PlayerInGroup[key]).WebSocketID, promoteType);
+                        url = ((Player)this._PlayerInGroup[key]).FromUrl;
+                        sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(infomation);
+                        ((Player)this._PlayerInGroup[key]).PromoteState[promoteType] = this.getPromoteState(promoteType);
+                    }
             if (!string.IsNullOrEmpty(url))
             {
                 Startup.sendSingleMsg(url, sendMsg);
@@ -228,6 +219,72 @@ namespace HouseManager5_0.GroupClassF
                     };
             }
         }
+
+        void PromoteClickFunctionWhenAuto(Player player, string pType, GetRandomPos gp, string Uid)
+        {
+            int promotePosition;
+            //  string diamondName;
+            HouseManager5_0.TargetForSelect.TargetForSelectType tsType;
+            switch (pType)
+            {
+                case "mile":
+                    {
+                        promotePosition = this.promoteMilePosition;
+                        //   diamondName = "红宝石";
+                        tsType = TargetForSelect.TargetForSelectType.mile;
+                    }; break;
+                case "volume":
+                    {
+                        promotePosition = this.promoteVolumePosition;
+                        // diamondName = "蓝宝石";
+                        tsType = TargetForSelect.TargetForSelectType.volume;
+                    }; break;
+                case "speed":
+                    {
+                        promotePosition = this.promoteSpeedPosition;
+                        //diamondName = "黑宝石";
+                        tsType = TargetForSelect.TargetForSelectType.speed;
+                    }; break;
+                default:
+                    {
+                        throw new Exception($"wrong parameter \"{pType}\"");
+                    }
+            };
+            OssModel.FastonPosition fpResult;
+            var car = player.getCar();
+            var distanceIsEnoughToStart = that.theNearestToDiamondIsCarNotMoney(player, car, pType, Program.dt, out fpResult);
+            if (distanceIsEnoughToStart)
+            {
+                player.Ts = new TargetForSelect(promotePosition, tsType, 0, player.improvementRecord.HasValueToImproveSpeed);
+                that.updatePromote(new SetPromote()
+                {
+                    c = "SetPromote",
+                    GroupKey = this.GroupKey,
+                    Key = player.Key,
+                    pType = pType,
+                    Uid = Uid
+                }, gp);
+            }
+            else if (player.improvementRecord.HasValueToImproveSpeed && player.getCar().state == CarState.waitOnRoad)
+            {
+                List<string> sendMsgs = new List<string>();
+                //var Fp = fps[0];
+                var lengthToDiamond = this.getLength(gp.GetFpByIndex(promotePosition), gp.GetFpByIndex(player.getCar().targetFpIndex));
+                var rank = (from item in this._collectPosition
+                            where this.getLength(gp.GetFpByIndex(item.Value), gp.GetFpByIndex(player.getCar().targetFpIndex)) < lengthToDiamond
+                            select gp.GetFpByIndex(item.Value)).ToList();
+                var rankNum = rank.Count;
+                player.Ts = new TargetForSelect(promotePosition, tsType, rankNum, player.improvementRecord.HasValueToImproveSpeed);
+                that.updatePromote(new SetPromote()
+                {
+                    c = "SetPromote",
+                    GroupKey = this.GroupKey,
+                    Key = player.Key,
+                    pType = pType,
+                    Uid = Uid
+                }, gp);
+            }
+        }
         private void PromoteClickFunction(Player player, List<OssModel.FastonPosition> fps, string pType, GetRandomPos gp, ref List<string> notifyMsgs)
         {
             int promotePosition;
@@ -269,7 +326,8 @@ namespace HouseManager5_0.GroupClassF
                     c = "SetPromote",
                     GroupKey = this.GroupKey,
                     Key = player.Key,
-                    pType = pType
+                    pType = pType,
+                    Uid = ""
                 }, gp);
             }
             else if (player.improvementRecord.HasValueToImproveSpeed && player.getCar().state == CarState.waitOnRoad)
@@ -283,7 +341,7 @@ namespace HouseManager5_0.GroupClassF
                 var rankNum = rank.Count;
                 player.Ts = new TargetForSelect(promotePosition, tsType, rankNum, player.improvementRecord.HasValueToImproveSpeed);
 
-               
+
 
                 var msg = "";
                 {
@@ -305,18 +363,22 @@ namespace HouseManager5_0.GroupClassF
             }
             else
             {
+                /*
+                 * promote distanceIsEnoughToStart=false当执行 promote方法之时，该方法回告诉前台，离宝石最近的选择
+                 */
                 player.Ts = new TargetForSelect(promotePosition, tsType, 100, player.improvementRecord.HasValueToImproveSpeed);
                 that.updatePromote(new SetPromote()
                 {
                     c = "SetPromote",
                     GroupKey = this.GroupKey,
                     Key = player.Key,
-                    pType = pType
+                    pType = pType,
+                    Uid = ""
                 }, gp);
             }
         }
 
-        
+
 
         public Dictionary<string, long> promotePrice = new Dictionary<string, long>()
         {

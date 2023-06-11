@@ -22,7 +22,7 @@ namespace HouseManager5_0.RoomMainF
 
         public RoomMain(GetRandomPos gp)
         {
-            this.PlayerLock = new object();
+            // this.PlayerLock = new object();
 
             this.rm = new System.Random(DateTime.Now.GetHashCode());
             this.Market = new Market(this.priceChanged);
@@ -50,7 +50,7 @@ namespace HouseManager5_0.RoomMainF
             this.modelL = new Manager_Level(this);
             this.taskM = new Manager_TaskCopy(this);
 
-            lock (PlayerLock)
+            // lock (PlayerLock)
             {
                 this._Groups = new Dictionary<string, GroupClass>();
                 //    this._FpOwner = new Dictionary<int, string>();
@@ -182,7 +182,7 @@ namespace HouseManager5_0.RoomMainF
         public string Statictis(ServerStatictis ss)
         {
             var r = new List<int>(4) { 0, 0, 0, 0 };
-            lock (this.PlayerLock)
+            // lock (this.PlayerLock)
             {
 
                 foreach (var groupItem in this._Groups)
@@ -230,7 +230,7 @@ namespace HouseManager5_0.RoomMainF
 
         public string updateView(View v)
         {
-            lock (this.PlayerLock)
+            // lock (this.PlayerLock)
             {
                 if (this._Groups.ContainsKey(v.GroupKey))
                 {
@@ -242,6 +242,7 @@ namespace HouseManager5_0.RoomMainF
                         {
                             ((Player)player).direcitonAndID.direciton = getComplex(v, ((Player)player).direcitonAndID.direciton);
                             ((Player)player).direcitonAndID.PostionCrossKey = v.postionCrossKey;
+                            ((Player)player).direcitonAndID.DYUid = v.Uid;
 
                             if (((Player)player).getCar().state == CarState.selecting)
                             {
@@ -266,7 +267,7 @@ namespace HouseManager5_0.RoomMainF
 
         public string ExitF(ExitObj obj)
         {
-            lock (this.PlayerLock)
+            //  lock (this.PlayerLock)
             {
                 if (this._Groups.ContainsKey(obj.GroupKey))
                 {
@@ -378,7 +379,7 @@ namespace HouseManager5_0.RoomMainF
         {
             //List<string> notifyMsgs = new List<string>();
             GroupClass group = null;
-            lock (this.PlayerLock)
+            //  lock (this.PlayerLock)
             {
                 if (this._Groups.ContainsKey(smc.GroupKey))
                 {
@@ -396,7 +397,7 @@ namespace HouseManager5_0.RoomMainF
         public string ConfirmPanelSelectResultF(ConfirmPanelSelectResult cpsr)
         {
             GroupClass group = null;
-            lock (this.PlayerLock)
+            //   lock (this.PlayerLock)
             {
                 if (this._Groups.ContainsKey(cpsr.GroupKey))
                 {

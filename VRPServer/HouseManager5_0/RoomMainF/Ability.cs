@@ -76,7 +76,7 @@ namespace HouseManager5_0.RoomMainF
                 sa.count = 1;
                 List<string> notifyMsg = new List<string>();
                 GroupClassF.GroupClass group = null;
-                lock (this.PlayerLock)
+                //lock (this.PlayerLock)
                 {
                     if (this._Groups.ContainsKey(sa.GroupKey))
                     {
@@ -87,7 +87,7 @@ namespace HouseManager5_0.RoomMainF
                 }
                 if (group != null)
                 {
-                    lock (group.PlayerLock)
+                    //  lock (group.PlayerLock)
                     {
                         if (group._PlayerInGroup.ContainsKey(sa.Key))
                         {

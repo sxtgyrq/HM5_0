@@ -11,7 +11,11 @@ namespace HouseManager5_0.RoomMainF
     {
         public string OrderToReturn(OrderToReturn otr, GetRandomPos grp)
         {
-            return this.retutnE.OrderToReturn(otr, grp);
+            var result = this.retutnE.OrderToReturn(otr, grp); 
+            
+            Thread.Sleep(10 * 1000);//这里让线程坚持10秒，确保动画数据再线程被取消前，传值前台！
+
+            return result;
         }
 
         /// <summary>

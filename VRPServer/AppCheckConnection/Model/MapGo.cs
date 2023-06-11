@@ -26,10 +26,13 @@ namespace AppCheckConnection.Model
             }
             public override int GetHashCode()
             {
-                int hash = 23;
-                hash = (hash * 17) + this.roadCode.GetHashCode();
-                hash = (hash * 17) + this.roadOrder.GetHashCode();
-                return hash;
+                unchecked
+                {
+                    int hash = 23;
+                    hash = (hash * 17) + this.roadCode.GetHashCode();
+                    hash = (hash * 17) + this.roadOrder.GetHashCode();
+                    return hash;
+                }
             }
 
             public passedRoad copy()

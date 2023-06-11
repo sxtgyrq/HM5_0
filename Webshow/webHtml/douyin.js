@@ -2,90 +2,14 @@
 {
     operateAddress: '',
     operateID: 'douyinPanleShow',
-    html: `<div id="subsidizePanel"  style="position:absolute;z-index:8;top:calc(10% - 1px);width:24em; left:calc(50% - 12em);height:auto;border:solid 1px red;text-align:center;background:rgba(104, 48, 8, 0.85);color:#83ffff;overflow-y: scroll;max-height: calc(90%);  ">
-        <table style="width:100%;">
-            <tr>
-                <th>剩余资助</th>
-                <th>现有资助</th>
-            </tr>
-            <tr>
-                <td id="moneyOfSumSubsidizing" >未知</td>
-                <td id="moneyOfSumSubsidized">0</td>
-            </tr>
-        </table>
-        <div style="
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;border:1px solid gray;">
-
-            <label  onclick="subsidizeSys.readStr('bitcoinSubsidizeAddressInput');">
-                --↓↓↓输入1打头的比特币地址↓↓↓--
-            </label>
-            <input id="bitcoinSubsidizeAddressInput" type="text" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(127, 255, 127, 0.6);" />
-        </div>
-        <div style="
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;border:1px solid gray;">
-
-            <label onclick="subsidizeSys.copyStr();">
-                --↓↓↓对以下信息进行签名↓↓↓--
-            </label> 
-            <input  id="msgNeedToSign" type="text" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(127, 255, 127, 0.6);" readonly onclick="subsidizeSys.copyStr();" />
-        </div>
-        <div style="
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;border:1px solid gray;">
-
-            <label onclick="subsidizeSys.readStr('signatureInputTextArea');">
-                --↓↓↓输入签名↓↓↓--
-            </label>
-            <textarea id="signatureInputTextArea" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(127, 255, 127, 0.6);height:4em;overflow:hidden;">1111111111111111111111</textarea>
-
-        </div> 
-
-        <table style="width:100%">
-            <tr>
-                <td style="width:50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(50000)" >
-                        资助500
-                    </div>
-                </td>
-                <td style="width: 50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;"  onclick="subsidizeSys.subsidize(100000)" >
-                        资助1000
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td style="width:50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(200000)" >
-                        资助2000
-                    </div>
-                </td>
-                <td style="width: 50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(500000)">
-                        资助5000
-                    </div>
-                </td>
-            </tr> 
-            <tr>
-                <td style="width:50%">
-                    <div id="bthNeedToUpdateLevel" style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.updateLevel();" >
-                        同步等级
-                    </div>
-                </td>
-                <td style="width: 50%">
-                    <div id="btnSignOnLineWhenSubsidize" style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.signOnline();">
-                        线上私钥签名
-                    </div>
-                </td>
-            </tr>
-        </table> 
-        <div style="background: orange;
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.add();">
-            取消
-        </div>
-    </div>`,
+    Live: function () {
+        if (document.getElementById('douyinRankPanle') == null) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    },
     add: function (list) {
         var that = douyinPanleShow;
         if (document.getElementById(that.operateID) == null) {
@@ -159,16 +83,20 @@
 
         }
     },
+
     add2: function (list) {
+
         var that = douyinPanleShow;
         if (document.getElementById(that.operateID) == null) {
             var detailAdvise = '';
             //  var list = [];
-            for (var i = 0; i < list.length; i += 3) {
+            for (var i = 0; i < list.length; i += 5) {
                 detailAdvise += `<tr>
-                    <td style="border-right: dashed 1px #ffd800ff;" colspan="5">${list[i + 0]}</td>
-                    <td style="border-right: dashed 1px #ffd800ff;" colspan="5">${list[i + 1]}</td>
-                    <td style="border-right: dashed 1px #ffd800ff;" colspan="5">${list[i + 2]}</td>
+                    <td style="border-right: dashed 1px #ffd800ff;word-break:break-all;word-wrap:anywhere;" colspan="5">${list[i + 0]}</td>
+                    <td style="border-right: dashed 1px #ffd800ff;word-break:break-all;word-wrap:anywhere;" colspan="5">${list[i + 1]}</td>
+                    <td style="border-right: dashed 1px #ffd800ff;word-break:break-all;word-wrap:anywhere;" colspan="5">${list[i + 2]}</td>
+                    <td style="border-right: dashed 1px #ffd800ff;word-break:break-all;word-wrap:anywhere;" colspan="5">${list[i + 3]}</td>
+                    <td style="border-right: dashed 1px #ffd800ff;word-break:break-all;word-wrap:anywhere;" colspan="5">${list[i + 4]}</td>
                 </tr>`;
             }
             var html = `<div id="${that.operateID}" style="overflow-y: scroll; width: 80%; height: 80%; max-width: 30em; max-height: calc(100% - 10em); margin-left: auto; margin-right: auto; margin-top: 5em; border: dotted 2px blue; border-top-left-radius: 1em; color: greenyellow; background-color: #722732; opacity: 0.85; background-size: 74px 74px; background-image: repeating-linear-gradient(0deg, #852732, #852732 3.7px, #722732 3.7px, #722732);z-index:9;position:relative;">
@@ -191,7 +119,9 @@
                 <tr>
                     <th colspan="5" style="border-right: dashed 1px #ffd800ff;">排名</th>
                     <th colspan="5" style="border-right: dashed 1px #ffd800ff;">昵称</th>
-                    <th colspan="5" style="border-right: dashed 1px #ffd800ff;">分量</th>
+                    <th colspan="5" style="border-right: dashed 1px #ffd800ff;">支持量</th>
+                    <th colspan="5" style="border-right: dashed 1px #ffd800ff;">影响距离</th>
+                    <th colspan="5" style="border-right: dashed 1px #ffd800ff;">立场</th>
                 </tr>
                  ${detailAdvise}
             </table>
@@ -206,10 +136,34 @@
         else {
             document.getElementById(that.operateID).remove();
 
+
         }
+
+    },
+    waitListData: {
+        0: { 'NickName': '', 'Point': '' },
+        1: { 'NickName': '', 'Point': '' },
+        2: { 'NickName': '', 'Point': '' },
+        3: { 'NickName': '', 'Point': '' },
+        4: { 'NickName': '', 'Point': '' },
+        5: { 'NickName': '', 'Point': '' },
+        6: { 'NickName': '', 'Point': '' },
+        7: { 'NickName': '', 'Point': '' },
+        8: { 'NickName': '', 'Point': '' },
+        9: { 'NickName': '', 'Point': '' },
+        10: { 'NickName': '', 'Point': '' },
+        11: { 'NickName': '', 'Point': '' }
     },
     add3: function (obj) {
+        var that = douyinPanleShow;
+        that.waitListData[obj.PositionIndex] =
+        {
+            'NickName': obj.NickName,
+            'Point': obj.Score,
+        };
         //z-index 是，应该比 panelToAskWhetherGoto (z-index: 8)  低一层
+
+
         var id = "douyinRankPanle";
         var html = `<div id="${id}" style="z-index: 7; position: absolute; top: 4px; right: 4px; border: double 2px #000000; height: auto; width: calc(50% - 100px - 12px); max-width: calc(50% - 100px - 12px); font-size: 0.2em; text-align: center;">
         <table style="width: calc(100% - 2px); max-width: calc(100% - 2px); ">
@@ -219,32 +173,66 @@
                 <th>分量</th>
             </tr>
             <tr style="background-color:gold;">
-                <td style="border:solid 1px #000000;">1</td>
+                <td style="border:solid 1px #000000;">No.1</td>
                 <td id="douyinRank_1" style="border:solid 1px #000000;"></td>
                 <td id="douyinRank_1_Point" style="border:solid 1px #000000;"></td>
             </tr>
             <tr style="background-color: lightgreen;">
-                <td style="border:solid 1px #000000;">2</td>
+                <td style="border:solid 1px #000000;">No.2</td>
                 <td id="douyinRank_2" style="border:solid 1px #000000;"></td>
                 <td id="douyinRank_2_Point" style="border:solid 1px #000000;"></td>
             </tr>
             <tr style="background-color: lightgreen;">
-                <td style="border:solid 1px #000000;">3</td>
+                <td style="border:solid 1px #000000;">No.3</td>
                 <td id="douyinRank_3" style="border:solid 1px #000000;"></td>
                 <td id="douyinRank_3_Point" style="border:solid 1px #000000;"></td>
             </tr>
-        </table>
-        <div>
-            <span>
-                <img style="width: calc(33% - 3px); height: auto;" src="Pic/market/douyin/douyin.png" />
-            </span>
-            <span>
-                <img style="width: calc(33% - 3px); height: auto;" src="Pic/market/douyin/meigui.png" />
-            </span>
-            <span>
-                <img style="width: calc(33% - 3px); height: auto;" src="Pic/market/douyin/xiaoxinxin.png" />
-            </span>
-        </div>
+            <tr style="background-color: lightgreen;">
+                <td style="border:solid 1px #000000;">No.4</td>
+                <td id="douyinRank_4" style="border:solid 1px #000000;"></td>
+                <td id="douyinRank_4_Point" style="border:solid 1px #000000;"></td>
+            </tr>
+            <tr style="background-color: lightgreen;">
+                <td style="border:solid 1px #000000;">No.5</td>
+                <td id="douyinRank_5" style="border:solid 1px #000000;"></td>
+                <td id="douyinRank_5_Point" style="border:solid 1px #000000;"></td>
+            </tr>
+            <tr style="background-color: lightgreen;">
+                <td style="border:solid 1px #000000;">No.6</td>
+                <td id="douyinRank_6" style="border:solid 1px #000000;"></td>
+                <td id="douyinRank_6_Point" style="border:solid 1px #000000;"></td>
+            </tr>
+            <tr style="background-color: lightgreen;">
+                <td style="border:solid 1px #000000;">No.7</td>
+                <td id="douyinRank_7" style="border:solid 1px #000000;"></td>
+                <td id="douyinRank_7_Point" style="border:solid 1px #000000;"></td>
+            </tr>
+            <tr style="background-color: lightgreen;">
+                <td style="border:solid 1px #000000;">No.8</td>
+                <td id="douyinRank_8" style="border:solid 1px #000000;"></td>
+                <td id="douyinRank_8_Point" style="border:solid 1px #000000;"></td>
+            </tr>
+            <tr style="background-color: lightgreen;">
+                <td style="border:solid 1px #000000;">No.9</td>
+                <td id="douyinRank_9" style="border:solid 1px #000000;"></td>
+                <td id="douyinRank_9_Point" style="border:solid 1px #000000;"></td>
+            </tr>
+            <tr style="background-color: lightgreen;">
+                <td style="border:solid 1px #000000;">No.10</td>
+                <td id="douyinRank_10" style="border:solid 1px #000000;"></td>
+                <td id="douyinRank_10_Point" style="border:solid 1px #000000;"></td>
+            </tr> 
+            <tr style="background-color: lightgreen;">
+                <td style="border:solid 1px #000000;">Winer</td>
+                <td id="douyinRank_11" style="border:solid 1px #000000;"></td>
+                <td id="douyinRank_11_Point" style="border:solid 1px #000000;"></td>
+            </tr> 
+            <tr style="background-color: lightgreen;">
+                <td style="border:solid 1px #000000;">Losser</td>
+                <td id="douyinRank_12" style="border:solid 1px #000000;"></td>
+                <td id="douyinRank_12_Point" style="border:solid 1px #000000;"></td>
+            </tr> 
+        </table> 
     </div>`
 
         if (document.getElementById(id) == null) {
@@ -253,15 +241,317 @@
 
             document.body.appendChild(frag);
         }
-        {
-            var operateID = 'douyinRank_' + (obj.PositionIndex + 1);
-            document.getElementById(operateID).innerText = obj.NickName;
+        for (var i = 0; i < 12; i++) {
+            {
+                var operateID = 'douyinRank_' + (i + 1);
+                document.getElementById(operateID).innerText = that.waitListData[i].NickName;
+            }
+            {
+                var operateID = 'douyinRank_' + (i + 1) + '_Point';
+                document.getElementById(operateID).innerText = that.waitListData[i].Point;
+            }
         }
-        {
-            var operateID = 'douyinRank_' + (obj.PositionIndex + 1) + '_Point';
-            document.getElementById(operateID).innerText = obj.Point;
+        douyinPanleShow.add4();
+    },
+    add4: function () {
+        var operateID_Panel = "douyinPanleShow_DouyiOperatePanle";
+        var html = `<div id="${operateID_Panel}" style="z-index: 4; position: absolute; top: 68px; left: calc(3.5em + 12px); border: double 2px #000000; height: auto; width: calc(50% + 86px - 3.5em); max-width: calc(50% + 86px - 3.5em); font-size: 1em; text-align: center; color: #efef11; text-shadow: #000000 1px 1px 1px;">
+                <table style="width: calc(100% - 2px); max-width: calc(100% - 2px); font-size:0.8em;opacity:0.618">
+            <tr style="background-color:aqua;">
+                <th>
+                    <span>发言</span>
+                    <span style="background:#2ddada">1</span>
+                </th>
+                <th>
+                    <span>发言</span>
+                    <span style="background:#2ddada">2</span>
+                </th>
+                <th>
+                    <span>礼物</span>
+                </th>
+
+            </tr>
+            <tr style="background-color:aqua;">
+                <td style="border-bottom:solid double 1px;">支持乌克兰</td>
+                <td style="border-bottom:solid double 1px;">支持俄罗斯</td>
+                <td style="border-bottom:solid double 1px;">增加影响距离</td>
+
+            </tr>
+            <tr style="background-color:aqua;">
+                <th colspan="2">
+                    <span>转发</span>
+                </th>
+                <th>
+                    <span>点赞</span>
+                </th>
+            </tr>
+            <tr style="background-color:aqua;">
+                <td colspan="2" style="border-bottom:solid double 1px;">影响距离从1.0提升至2.0</td>
+                <td style="border-bottom:solid double 1px;">查属性</td>
+            </tr>
+
+        </table>
+        <div>
+        </div>
+    </div>`;
+        if (document.getElementById(operateID_Panel) == null) {
+            var frag = document.createRange().createContextualFragment(html);
+            frag.id = operateID_Panel;
+            document.body.appendChild(frag);
         }
-        //if (obj.PositionIndex == 0) { }
-        //else 
+        else {
+            if (document.getElementById('douyinRankPanle') == null) {
+                document.getElementById(operateID_Panel).remove();
+            }
+        }
+    },
+    flagObj:
+    {
+        'Ukraine': null,
+        'Russia': null
+    },
+
+    drawFlagThemeDetail: function (theme) {
+        var manager = new THREE.LoadingManager();
+        $.ajax({
+            url: 'ThreeDModel/' + theme + '/untitled.mtl',
+            dataType: 'text',
+            success: function (mtlData) {
+
+                var mtlOnload = function (materials) {
+                    materials.preload();
+
+                    $.ajax({
+                        url: 'ThreeDModel/' + theme + '/untitled.obj',
+                        dataType: 'text',
+                        success: function (objText) {
+                            var objL = new THREE.OBJLoader(manager)
+                                .setMaterials(materials)
+                                .loadTextOnly(objText, function (object) {
+                                    object.scale.set(0.2, 0.2, 0.2);
+                                    douyinPanleShow.flagObj[theme] = object;
+                                }, function () { }, function () { });
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+
+                };
+
+                var imgUrl = 'ThreeDModel/' + theme + '/Cube2.png';
+
+                mtlManaget = new THREE.MTLLoader(manager).loadTextWithImageUrl(mtlData, imgUrl, mtlOnload);
+                // console.log(data);
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+
+        $.ajax({
+            url: 'ThreeDModel/Ukraine/untitled.obj',
+            dataType: 'text',
+            success: function (objData) {
+
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    },
+    drawFlagObjDetail: function (x, y, z, name, theme, dataObj) {
+        //
+        var animateLastMinites = 1;
+        if (objMain.marketGroup.getObjectByName(name) == undefined) {
+            var object = douyinPanleShow.flagObj[theme].clone();
+            object.position.set(x, y, z)
+            object.scale.set(0.2, 0.2, 0.2);
+            object.name = name;
+            object.UserTag = {};
+            object.UserTag.objType = "flag";
+            object.UserTag.startTime = Date.now();
+            object.UserTag.endTime = Date.now() + animateLastMinites * 60 * 1000;
+            object.UserTag.dataObj = dataObj;
+            objMain.marketGroup.add(object);
+        }
+        else {
+            var obj = objMain.marketGroup.getObjectByName(name);
+            obj.UserTag.endTime = Date.now() + animateLastMinites * 60 * 1000;
+        }
+    },
+    drawFlag: function (obj) {
+        switch (obj.stance) {
+            case 'sOne':
+                {
+                    douyinPanleShow.drawFlagObjDetail(obj.x + 0.5, obj.z * objMain.heightAmplify + 1, -(obj.y + 0.5), obj.x + "_" + obj.y + "flag", 'Ukraine', obj);
+                }; break;
+            case 'sTwo':
+                {
+                    douyinPanleShow.drawFlagObjDetail(obj.x + 0.5, obj.z * objMain.heightAmplify + 1, -(obj.y + 0.5), obj.x + "_" + obj.y + "flag", 'Russia', obj);
+                }; break;
+        }
+    },
+    cubeData: {
+        cubeGeometry: null, material: {}
+    },
+    drawCube: function (obj, name) {
+
+        if (objMain.marketGroup.getObjectByName(name) == undefined) {
+            if (douyinPanleShow.cubeData.cubeGeometry == null) {
+                douyinPanleShow.cubeData.cubeGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+            }
+            //  var geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+            if (douyinPanleShow.cubeData.material[obj.uid] == undefined) {
+                var textureLoader = new THREE.TextureLoader();
+                var texture = textureLoader.load(obj.imgUrl);
+                texture.flipY = true; // 垂直翻转纹理 
+                //通过将纹理的 repeat 设置为(1, 1)，offset 设置为(0, 0)，并将 wrapS 和 wrapT 设置为 THREE.RepeatWrapping，你可以将顶部面的纹理坐标范围设置为透明。
+                var material = new THREE.MeshBasicMaterial({ map: texture });
+                douyinPanleShow.cubeData.material[obj.uid] = material;
+            }
+            var cube = new THREE.Mesh(douyinPanleShow.cubeData.cubeGeometry, douyinPanleShow.cubeData.material[obj.uid]);
+            cube.position.set(obj.x + 0.5, obj.z * objMain.heightAmplify + 0.5, -(obj.y + 0.5));
+            // scene.add(cube);
+            cube.rotation.x = Math.PI;
+            cube.UserTag = {};
+            cube.UserTag.objType = "cube";
+            cube.UserTag.startTime = Date.now();
+            cube.UserTag.endTime = Date.now() + 1 * 60 * 1000;
+            cube.UserTag.dataObj = obj;
+
+            objMain.marketGroup.add(cube);
+        }
+        else {
+            var obj = objMain.marketGroup.getObjectByName(name);
+            obj.UserTag.endTime = Date.now() + 1 * 60 * 1000;
+        }
+    },
+    drawFlags: function (obj) {
+        for (var i = 0; i < obj.Flags.length; i++) {
+            var flagObj = JSON.parse(JSON.stringify(obj.Flags[i]));
+            douyinPanleShow.drawCube(flagObj);
+            douyinPanleShow.drawCSS2DObject(flagObj);
+            douyinPanleShow.drawFlag(flagObj);
+        }
+    },
+    animate: function () {
+        var indexsToRemove = [];
+        var objCount = objMain.marketGroup.children.length;
+        var endIndex = objCount - 1;
+        for (var i = endIndex; i >= 0; i--) {
+            var endTime = objMain.marketGroup.children[i].UserTag.endTime;
+            if (endTime < Date.now()) {
+                indexsToRemove.push(i);
+                //switch (objMain.marketGroup.children[i].UserTag.objType) {
+                //    case 'flag':
+                //        {
+                //            objMain.marketGroup.children[i].children[0].geometry.dispose();
+                //            objMain.marketGroup.children[i].children[0].material.dispose();
+                //        };
+                //};
+                //objMain.marketGroup.remove(objMain.marketGroup.children[i]);
+
+            }
+            else {
+                switch (objMain.marketGroup.children[i].UserTag.objType) {
+                    case 'cube':
+                        {
+                            switch (objMain.marketGroup.children[i].UserTag.dataObj.type) {
+                                case 'add':
+                                    {
+                                        var deltaT = Date.now() - objMain.marketGroup.children[i].UserTag.startTime;
+                                        if (deltaT > 5000) {
+                                            objMain.marketGroup.children[i].UserTag.dataObj.type = 'existed';
+                                            objMain.marketGroup.children[i].scale.set(1, 1, 1);//.dataObj.type = 'existed';
+                                        }
+                                        else {
+                                            var percent = (deltaT % 1000) / 1000;
+                                            objMain.marketGroup.children[i].scale.set(1 + percent * 0.5, 1 + percent * 0.5, 1 + percent * 0.5);//.dataObj.type = 'existed';
+                                        }
+                                    }; break;
+                                case 'existed': { }; break;
+                            }
+                            //if (objMain.marketGroup.children[i].UserTag.dataObj.type=="")
+                            //{ }
+                        }; break;
+                    case 'flag':
+                        {
+                            switch (objMain.marketGroup.children[i].UserTag.dataObj.type) {
+                                case 'add':
+                                    {
+                                        var deltaT = Date.now() - objMain.marketGroup.children[i].UserTag.startTime;
+                                        if (deltaT > 500000) {
+                                            objMain.marketGroup.children[i].UserTag.dataObj.type = 'existed';
+                                            var newX = objMain.marketGroup.children[i].UserTag.dataObj.x + 0.5;
+                                            var newY = objMain.marketGroup.children[i].UserTag.dataObj.z * objMain.heightAmplify + 1;
+                                            var newZ = -(objMain.marketGroup.children[i].UserTag.dataObj.y + 0.5);
+                                            objMain.marketGroup.children[i].position.set(newX, newY, newZ);
+                                        }
+                                        else {
+                                            var percent = (deltaT % 1000) / 1000;
+                                            var newX = objMain.marketGroup.children[i].UserTag.dataObj.x + 0.5;
+                                            var newY = objMain.marketGroup.children[i].UserTag.dataObj.z * objMain.heightAmplify + 1 + percent * 0.5;
+                                            var newZ = -(objMain.marketGroup.children[i].UserTag.dataObj.y + 0.5);
+                                            objMain.marketGroup.children[i].position.set(newX, newY, newZ);
+                                        }
+                                    }; break;
+                                case 'existed': { }; break;
+                            }
+                        }; break;
+                    case 'lable': { }; break;
+                    default:
+                        {
+                            objMain.marketGroup.remove(objMain.marketGroup.children[i]);
+                        }; break;
+                }
+            }
+        }
+
+        for (var i = 0; i < indexsToRemove.length; i++) {
+            var indexOperate = indexsToRemove[i];
+            switch (objMain.marketGroup.children[indexOperate].UserTag.objType) {
+                case 'flag':
+                    {
+                        objMain.marketGroup.children[indexOperate].children[0].geometry.dispose();
+                        objMain.marketGroup.children[indexOperate].children[0].material.dispose();
+                    };
+            };
+            objMain.marketGroup.remove(objMain.marketGroup.children[indexOperate]);
+        }
+    },
+    drawCSS2DObject: function (obj_Input) {
+        if (obj_Input.type == "add") {
+            var element = document.createElement('div');
+            element.style.height = '0.2em';
+            element.style.marginTop = '0.1em';
+            // var color = '#ff0000'; 
+            element.style.border = 'none';
+            element.style.borderTopLeftRadius = '0.5em';
+            element.style.backgroundColor = 'rgba(155, 55, 255, 0.3)';
+            element.style.color = '#effefe';
+
+            var div2 = document.createElement('div');
+            div2.style.fontSize = '0.2em';
+
+            var b = document.createElement('b');
+            b.innerText = obj_Input.nickName;
+            div2.appendChild(b);
+
+            element.appendChild(div2);
+
+            var object = new THREE.CSS2DObject(element);
+
+            object.UserTag = {};
+            object.UserTag.objType = 'lable';
+            object.UserTag.startTime = Date.now();
+            object.UserTag.endTime = Date.now() + 1 * 60 * 1000;
+            //   var fp = objMain.CollectPosition[i].Fp;
+            object.position.set(obj_Input.x + 0.5, obj_Input.z * objMain.heightAmplify + 0.5, -(obj_Input.y + 0.5));
+            //  object.position.set(MercatorGetXbyLongitude(fp.Longitude), 0, -MercatorGetYbyLatitude(fp.Latitde));
+
+            objMain.marketGroup.add(object);
+        }
+
     }
 } 

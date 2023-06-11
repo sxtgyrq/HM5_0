@@ -146,8 +146,7 @@
                                             drawShap(triangle, Radius, smallMap.data[i], width, height, smallMap, ctx, '#F9B42DA0');
                                         }
                                     }
-                                    else
-                                    {
+                                    else {
                                         if (i < 4) {
                                             const Radius = 16;
                                             drawShap(triangle_Rank0, Radius, smallMap.data[i], width, height, smallMap, ctx, '#F9C33CA0');
@@ -156,7 +155,7 @@
                                             const Radius = 15;
                                             drawShap(triangle, Radius, smallMap.data[i], width, height, smallMap, ctx, '#F9B42DA0');
                                         }
-                                    } 
+                                    }
                                 }
                             }; break;
                         case "home":
@@ -294,6 +293,10 @@
             if (document.getElementById('imageOfSmallMap') != null)
                 document.getElementById('imageOfSmallMap').src = pngUrl;
 
+
+            if (whetherGo.obj != null && whetherGo.obj.Live) {
+                whetherGo.minus();
+            }
             //return pngUrl;
         }
 

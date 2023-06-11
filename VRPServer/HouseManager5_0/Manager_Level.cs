@@ -20,31 +20,31 @@ namespace HouseManager5_0
             if (BitCoin.Sign.checkSign(signature, key, addr))
             {
                 var group = that._Groups[groupKey];
-                lock (group.PlayerLock)
-                    if (group._PlayerInGroup.ContainsKey(key))
+
+                if (group._PlayerInGroup.ContainsKey(key))
+                {
+                    if (!group._PlayerInGroup[key].Bust)
                     {
-                        if (!group._PlayerInGroup[key].Bust)
+                        var role = group._PlayerInGroup[key];
+                        if (role.playerType == Player.PlayerType.player)
                         {
-                            var role = group._PlayerInGroup[key];
-                            if (role.playerType == Player.PlayerType.player)
+                            var player = (Player)role;
+                            if (string.IsNullOrEmpty(player.levelObj.BtcAddr))
                             {
-                                var player = (Player)role;
-                                if (string.IsNullOrEmpty(player.levelObj.BtcAddr))
-                                {
-                                    player.levelObj.SetAddr(addr);
-                                }
-                                else if (player.levelObj.BtcAddr == addr)
-                                {
-                                }
-                                else
-                                {
-                                    this.WebNotify(player, $"只能设置一次积分存储地址，且你的积分存储地址为{player.levelObj.BtcAddr}");
-                                    return false;
-                                }
-                               // this.synchronize(player, ref notifyMsg);
+                                player.levelObj.SetAddr(addr);
                             }
+                            else if (player.levelObj.BtcAddr == addr)
+                            {
+                            }
+                            else
+                            {
+                                this.WebNotify(player, $"只能设置一次积分存储地址，且你的积分存储地址为{player.levelObj.BtcAddr}");
+                                return false;
+                            }
+                            // this.synchronize(player, ref notifyMsg);
                         }
                     }
+                }
             }
             else
             {

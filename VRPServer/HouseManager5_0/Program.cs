@@ -136,6 +136,9 @@ namespace HouseManager5_0
 
                 Thread th = new Thread(() => PlayersSysOperate(Program.dt));
                 th.Start();
+
+                //Thread threadLiveOperate = new Thread(() => GroupLive(Program.dt));
+                //threadLiveOperate.Start();
                 //int tcpServerPort = 30000 - websocketPort;
                 //ConnectInfo.HostIP = ip;
                 //ConnectInfo.webSocketPort = websocketPort;
@@ -154,7 +157,7 @@ namespace HouseManager5_0
         {
             while (true)
             {
-                ;
+
                 Program.rm.SetReturn(grp);
                 Program.rm.ClearPlayers();
                 Program.rm.SetNPC();
@@ -163,5 +166,14 @@ namespace HouseManager5_0
             }
             //  throw new NotImplementedException();
         }
+
+        //private static void GroupLive(GetRandomPos grp)
+        //{
+        //    while (true)
+        //    {
+        //      Program.rm.GroupLiveDoAction(grp);
+        //        Thread.Sleep(3 * 1000);
+        //    }
+        //}
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace HouseManager5_0.GroupClassF
@@ -17,7 +18,11 @@ namespace HouseManager5_0.GroupClassF
         {
             _collectPosition = new Dictionary<int, int>();
             GroupKey = gkey;
-            PlayerLock = new object();
+            //this.PlayerLock_ = new LockObj()
+            //{
+            //    IsUsing = false,
+            //    ThreadName = ""
+            //};
             that = roomMain;
             this._PlayerInGroup = new Dictionary<string, Player>();
             this.Money = 0;
@@ -28,7 +33,16 @@ namespace HouseManager5_0.GroupClassF
         }
 
         public Dictionary<int, int> _collectPosition = new Dictionary<int, int>();
-        public object PlayerLock = new object();
+        //public LockObj PlayerLock_ = new LockObj()
+        //{
+        //    IsUsing = false,
+        //    ThreadName = ""
+        //};
+        public class LockObj
+        {
+            public bool IsUsing { get; set; }
+            public string ThreadName { get; set; }
+        }
         public string GroupKey { get; private set; }
         public Dictionary<string, Player> _PlayerInGroup { get; set; }
         public int StartFPIndex { get; private set; }
@@ -41,7 +55,7 @@ namespace HouseManager5_0.GroupClassF
         //public
         public void LookFor(GetRandomPos gp)
         {
-            lock (PlayerLock)
+            //lock (this.PlayerLock_)
             {
                 //var now = Convert.ToInt32((DateTime.Now - new DateTime(2000, 1, 1)).TotalDays);
                 string c = File.ReadAllText("config/RewardFastenPositionIDAndDate.txt");
@@ -99,7 +113,7 @@ namespace HouseManager5_0.GroupClassF
 
         internal void Clear()
         {
-            lock (this.PlayerLock)
+            // lock (this.PlayerLock)
             {
                 List<string> keys = new List<string>();
                 foreach (var item in this._PlayerInGroup)

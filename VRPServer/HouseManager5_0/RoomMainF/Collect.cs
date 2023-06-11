@@ -24,7 +24,10 @@ namespace HouseManager5_0.RoomMainF
             if (this._Groups.ContainsKey(groupKey))
             {
                 var group = this._Groups[groupKey];
-                group.CheckCollectState(key);
+                //  lock (group.PlayerLock_)
+                {
+                    group.CheckCollectState(key);
+                }
             }
             //  throw new Exception();
 
@@ -148,7 +151,9 @@ namespace HouseManager5_0.RoomMainF
         {
             //this.collectE.SingleColect(sc, grp);
             //return "";
-            return this.collectE.updateCollect(sc, grp);
+            var result = this.collectE.updateCollect(sc, grp);
+            Thread.Sleep(10 * 1000);//这里让线程坚持10秒，确保动画数据再线程被取消前，传值前台！
+            return result;
         }
 
 

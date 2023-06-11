@@ -1,4 +1,5 @@
-﻿using CommonClass;
+﻿using Aliyun.OSS;
+using CommonClass;
 using HouseManager5_0.interfaceOfHM;
 using Microsoft.VisualBasic;
 using Model;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
@@ -26,49 +28,49 @@ namespace HouseManager5_0.GroupClassF
             GetFineshedInfomation(key, out isFinished, out FinishedMsg);
 
             List<string> sendMsgs = new List<string>();
-            lock (this.PlayerLock)
-                if (this._PlayerInGroup.ContainsKey(key))
+
+            if (this._PlayerInGroup.ContainsKey(key))
+            {
+                double minX = 360;
+                double minY = 360;
+                double maxX = -360;
+                double maxY = -360;
+                var player = this._PlayerInGroup[key];
+                FastonPosition from;
+                if (player.getCar().targetFpIndex >= 0)
+                    from = gp.GetFpByIndex(player.getCar().targetFpIndex);
+                else
+                    from = gp.GetFpByIndex(player.StartFPIndex);
+                setBoundry(from, ref minX, ref minY, ref maxX, ref maxY);
+                foreach (var item in this._collectPosition)
                 {
-                    double minX = 360;
-                    double minY = 360;
-                    double maxX = -360;
-                    double maxY = -360;
-                    var player = this._PlayerInGroup[key];
-                    FastonPosition from;
-                    if (player.getCar().targetFpIndex >= 0)
-                        from = gp.GetFpByIndex(player.getCar().targetFpIndex);
-                    else
-                        from = gp.GetFpByIndex(player.StartFPIndex);
-                    setBoundry(from, ref minX, ref minY, ref maxX, ref maxY);
-                    foreach (var item in this._collectPosition)
-                    {
-                        var collectPosition = gp.GetFpByIndex(item.Value);
-                        setBoundry(collectPosition, ref minX, ref minY, ref maxX, ref maxY);
-                    }
-
-                    {
-                        var milePosition = gp.GetFpByIndex(this.promoteMilePosition);
-                        setBoundry(milePosition, ref minX, ref minY, ref maxX, ref maxY);
-
-                        var volumePosition = gp.GetFpByIndex(this.promoteVolumePosition);
-                        setBoundry(volumePosition, ref minX, ref minY, ref maxX, ref maxY);
-
-                        var speedPosition = gp.GetFpByIndex(this.promoteSpeedPosition);
-                        setBoundry(speedPosition, ref minX, ref minY, ref maxX, ref maxY);
-                    }
-
-
-
-                    var length = Math.Max(maxY - minY, maxX - minX) * 1.1;
-
-                    var centerX = (minX + maxX) / 2;
-                    var centerY = (minY + maxY) / 2;
-                    minX = centerX - length / 2;
-                    maxX = centerX + length / 2;
-                    minY = centerY - length / 2;
-                    maxY = centerY + length / 2;
-                    this.SetData(minX, maxX, minY, maxY, from, player, isFinished, FinishedMsg, key, gp, ref sendMsgs);
+                    var collectPosition = gp.GetFpByIndex(item.Value);
+                    setBoundry(collectPosition, ref minX, ref minY, ref maxX, ref maxY);
                 }
+
+                {
+                    var milePosition = gp.GetFpByIndex(this.promoteMilePosition);
+                    setBoundry(milePosition, ref minX, ref minY, ref maxX, ref maxY);
+
+                    var volumePosition = gp.GetFpByIndex(this.promoteVolumePosition);
+                    setBoundry(volumePosition, ref minX, ref minY, ref maxX, ref maxY);
+
+                    var speedPosition = gp.GetFpByIndex(this.promoteSpeedPosition);
+                    setBoundry(speedPosition, ref minX, ref minY, ref maxX, ref maxY);
+                }
+
+
+
+                var length = Math.Max(maxY - minY, maxX - minX) * 1.1;
+
+                var centerX = (minX + maxX) / 2;
+                var centerY = (minY + maxY) / 2;
+                minX = centerX - length / 2;
+                maxX = centerX + length / 2;
+                minY = centerY - length / 2;
+                maxY = centerY + length / 2;
+                this.SetData(minX, maxX, minY, maxY, from, player, isFinished, FinishedMsg, key, gp, ref sendMsgs);
+            }
             Startup.sendSeveralMsgs(sendMsgs);
         }
 
@@ -78,7 +80,13 @@ namespace HouseManager5_0.GroupClassF
             if (isFinished)
             {
                 var ts = this.taskFineshedTime[key] - this.startTime;
-                FinishedMsg = $"耗时{ts.Hours}时{ts.Minutes}分{(ts.TotalSeconds % 60).ToString("f2")}秒";
+                if (this.Live)
+                {
+                    var list = this.GetRankedWithScoreList();
+                    FinishedMsg = $"最终第一名：{GetNickName(list[0].key)}";
+                }
+                else
+                    FinishedMsg = $"耗时{ts.Hours}时{ts.Minutes}分{(ts.TotalSeconds % 60).ToString("f2")}秒";
             }
             else
             {
@@ -98,29 +106,64 @@ namespace HouseManager5_0.GroupClassF
             maxY = centerY + length / 2;
 
             var taskValue = HouseManager5_0.AbilityAndState.GetTaskValueByGroupNumber(this.groupNumber);
-            var taskName = $"模拟收集{(taskValue / 100)}.{(taskValue % 100).ToString("D2")}元任务";
-
-            BradCastWhereToGoInSmallMap smallMap = new BradCastWhereToGoInSmallMap()
+            string taskName;
+            if (this.Live)
             {
-                minX = Convert.ToSingle(minX),
-                minY = Convert.ToSingle(minY),
-                maxX = Convert.ToSingle(maxX),
-                maxY = Convert.ToSingle(maxY),
-                c = "BradCastWhereToGoInSmallMap",
-                currentX = Convert.ToSingle(from.Longitude),
-                currentY = Convert.ToSingle(from.Latitde),
-                data = new List<BradCastWhereToGoInSmallMap.DataItem>() { },
-                WebSocketID = player.WebSocketID,
-                isFineshed = isFinished,
-                TimeStr = FinishedMsg,
-                ResultMsg = this.recordErrorMsgs.ContainsKey(key) ? this.recordErrorMsgs[key] : "",
-                RecordedInDB = this.records.ContainsKey(key),
-                base64 = "",
-                groupNumber = player.Group.groupNumber,
-                TaskName = taskName,
-                BTCAddr = string.IsNullOrEmpty(player.BTCAddress) ? "" : player.BTCAddress,
-                HasValueToImproveSpeed = player.improvementRecord.HasValueToImproveSpeed
-            };
+                taskName = $"支持";
+            }
+            else
+                taskName = $"模拟收集{(taskValue / 100)}.{(taskValue % 100).ToString("D2")}元任务";
+            BradCastWhereToGoInSmallMap smallMap;
+            if (this.Live)
+            {
+                smallMap = new BradCastWhereToGoInSmallMap()
+                {
+                    minX = Convert.ToSingle(minX),
+                    minY = Convert.ToSingle(minY),
+                    maxX = Convert.ToSingle(maxX),
+                    maxY = Convert.ToSingle(maxY),
+                    c = "BradCastWhereToGoInSmallMap",
+                    currentX = Convert.ToSingle(from.Longitude),
+                    currentY = Convert.ToSingle(from.Latitde),
+                    data = new List<BradCastWhereToGoInSmallMap.DataItem>() { },
+                    WebSocketID = player.WebSocketID,
+                    isFineshed = isFinished,
+                    TimeStr = FinishedMsg,
+                    ResultMsg = $"{Stance.StanceSShow(this.RoomStanceWinner)}方获胜",
+                    RecordedInDB = true,
+                    base64 = "",
+                    groupNumber = player.Group.groupNumber,
+                    TaskName = taskName,
+                    BTCAddr = string.IsNullOrEmpty(player.BTCAddress) ? "" : player.BTCAddress,
+                    HasValueToImproveSpeed = player.improvementRecord.HasValueToImproveSpeed,
+                    Live = this.WhetherGoLive
+                };
+            }
+            else
+            {
+                smallMap = new BradCastWhereToGoInSmallMap()
+                {
+                    minX = Convert.ToSingle(minX),
+                    minY = Convert.ToSingle(minY),
+                    maxX = Convert.ToSingle(maxX),
+                    maxY = Convert.ToSingle(maxY),
+                    c = "BradCastWhereToGoInSmallMap",
+                    currentX = Convert.ToSingle(from.Longitude),
+                    currentY = Convert.ToSingle(from.Latitde),
+                    data = new List<BradCastWhereToGoInSmallMap.DataItem>() { },
+                    WebSocketID = player.WebSocketID,
+                    isFineshed = isFinished,
+                    TimeStr = FinishedMsg,
+                    ResultMsg = this.recordErrorMsgs.ContainsKey(key) ? this.recordErrorMsgs[key] : "",
+                    RecordedInDB = this.records.ContainsKey(key),
+                    base64 = "",
+                    groupNumber = player.Group.groupNumber,
+                    TaskName = taskName,
+                    BTCAddr = string.IsNullOrEmpty(player.BTCAddress) ? "" : player.BTCAddress,
+                    HasValueToImproveSpeed = player.improvementRecord.HasValueToImproveSpeed,
+                    Live = this.WhetherGoLive
+                };
+            }
             if (player.getCar().targetFpIndex >= 0)
             {
                 AddPath(ref smallMap, player.getCar().targetFpIndex, this.promoteMilePosition, "mile", gp);
@@ -226,6 +269,16 @@ namespace HouseManager5_0.GroupClassF
                 maxY = positon.Latitde;
             }
         }
+        bool WhetherGoLive
+        {
+            get
+            {
+                /*
+                 * 之所以嵌套，不直接引用，是为了调试方便而已！
+                 */
+                return this.Live;
+            }
+        }
 
         public BradCastWhetherGoTo GetConfirmInfomation(int webSocketID, Model.FastonPosition fp, string msg, TargetForSelect ts)
         {
@@ -236,7 +289,8 @@ namespace HouseManager5_0.GroupClassF
                 Fp = fp,
                 msg = msg,
                 select = ts.select,
-                tsType = ts.tsType.ToString()
+                tsType = ts.tsType.ToString(),
+                Live = WhetherGoLive
             };
             return obj;
         }
@@ -259,6 +313,7 @@ namespace HouseManager5_0.GroupClassF
                                 GroupKey = nwtgntb.GroupKey,
                                 Key = nwtgntb.Key,
                             }, gp);
+                           
                         }; break;
                     case TargetForSelect.TargetForSelectType.mile:
                         {
@@ -270,8 +325,9 @@ namespace HouseManager5_0.GroupClassF
                                     pType = player.Ts.tsType.ToString(),
                                     GroupKey = nwtgntb.GroupKey,
                                     Key = nwtgntb.Key,
-
+                                    Uid = ""
                                 }, gp);
+                                Thread.Sleep(10 * 1000);//这里让线程坚持10秒，确保动画数据再线程被取消前，传值前台！
                             }
                             else
                             {
@@ -289,7 +345,7 @@ namespace HouseManager5_0.GroupClassF
                                     pType = player.Ts.tsType.ToString(),
                                     GroupKey = nwtgntb.GroupKey,
                                     Key = nwtgntb.Key,
-
+                                    Uid = ""
                                 }, gp);
                             }
                             else
@@ -308,6 +364,7 @@ namespace HouseManager5_0.GroupClassF
                                     pType = player.Ts.tsType.ToString(),
                                     GroupKey = nwtgntb.GroupKey,
                                     Key = nwtgntb.Key,
+                                    Uid = ""
 
                                 }, gp);
                             }
@@ -330,11 +387,12 @@ namespace HouseManager5_0.GroupClassF
         internal void SmallMapClickF(SmallMapClick smc, GetRandomPos gp)
         {
             List<string> notifyMsgs = new List<string>();
-            lock (this.PlayerLock)
+
             {
                 List<FastonPosition> fps = new List<FastonPosition>();
                 List<string> selection = new List<string>();
-                int collectSelect = -1;
+
+                int collectSelect = -1;//有结果0-37，无结果-1
                 if (this._PlayerInGroup.ContainsKey(smc.Key))
                 {
                     var player = this._PlayerInGroup[smc.Key];
@@ -551,11 +609,11 @@ namespace HouseManager5_0.GroupClassF
                 {
                     if (string.IsNullOrEmpty(Fp.region))
                     {
-                        msg = $"<b>到【{Fp.FastenPositionName}】找【{owner.dyNickName}】收集1.00元？</b>";
+                        msg = $"<b>到【{Fp.FastenPositionName}】找【<span style=\"color:blue;text-shadow:1px 1px white;\">{owner.dyNickName}</span>】收集1.00元？</b>";
                     }
                     else
                     {
-                        msg = $"<b>到[{Fp.region}]【{Fp.FastenPositionName}】找【{owner.dyNickName}】收集1.00元？</b>";
+                        msg = $"<b>到[{Fp.region}]【{Fp.FastenPositionName}】找【<span style=\"color:blue;text-shadow:1px 1px white;\">{owner.dyNickName}</span>】收集1.00元？</b>";
                     }
                 }
             }
@@ -581,14 +639,24 @@ namespace HouseManager5_0.GroupClassF
                     var priceStr = player.Ts.costPriceStr;
                     if (string.IsNullOrEmpty(Fp.region))
                     {
-                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到【{Fp.FastenPositionName}】找【{owner.dyNickName}】收集1.00元？</b>";
+                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到【{Fp.FastenPositionName}】找【<span style=\"color:blue;text-shadow:1px 1px white;\">{owner.dyNickName}</span>】收集1.00元？</b>";
                         // msg = $"<b>是否花费<span>{priceStr}<span>到【{Fp.FastenPositionName}】收集1.00元？</b>";
                     }
                     else
                     {
-                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到[{Fp.region}]【{Fp.FastenPositionName}】找【{owner.dyNickName}】收集1.00元？</b>";
+                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到[{Fp.region}]【{Fp.FastenPositionName}】找【<span style=\"color:blue;text-shadow:1px 1px white;\">{owner.dyNickName}</span>】收集1.00元？</b>";
                         // msg = $"<b>是否花费<span>{priceStr}<span>到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00元？</b>";
                     }
+                }
+            }
+            if (owner != null)
+            {
+                if (this.Live)
+                {
+                    //if (this.GiftByViewer.Count(item => item.C.Log.Uid == owner.uid) > 0)
+                    //{
+                    //    that.WebNotify(player, $"提示抖音用户【{owner.dyNickName}】，刷到排行榜的第一名，下个目的地，有10倍的热度奖励！", 30);
+                    //}
                 }
             }
             var obj = GetConfirmInfomation(player.WebSocketID, Fp, msg, player.Ts);
@@ -599,32 +667,97 @@ namespace HouseManager5_0.GroupClassF
             Startup.sendSeveralMsgs(sendMsgs);
         }
 
+        /// <summary>
+        /// 后台直接调用，如抖音直播，观众传输命令之时。
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="gp"></param>
+        /// <returns></returns>
+        public bool CollectFunctionWhenAuto(Player player, GetRandomPos gp)
+        {
+            /*后太直接操作，没有必要通知前台*/
+
+            bool success;
+            if (this.Live)
+            {
+                if (player.getCar().state == Car.CarState.waitAtBaseStation)
+                {
+                    this.ThreadAfterCollect = new Thread(() => this.CollectFinished(gp));
+                    var rank = (from cItem in this._collectPosition
+                                orderby this.getLength(gp.GetFpByIndex(cItem.Value), gp.GetFpByIndex(player.StartFPIndex)) ascending
+                                select cItem.Key).ToList();
+                    int collectSelect = rank[0];
+                    player.Ts = new TargetForSelect(collectSelect, TargetForSelect.TargetForSelectType.collect, 0, player.improvementRecord.HasValueToImproveSpeed);
+
+                    this.ConfirmPanelSelectResultF(new ConfirmPanelSelectResult()
+                    {
+                        c = "ConfirmPanelSelectResult",
+                        FastenPositionID = gp.GetFpByIndex(this._collectPosition[rank[0]]).FastenPositionID,
+                        GoToPosition = true,
+                        GroupKey = this.GroupKey,
+                        Key = player.Key,
+                        //  GoToPosition
+                    }, gp);
+                    success = true;
+                }
+                else if (player.getCar().state == Car.CarState.waitOnRoad)
+                {
+                    var rank = (from cItem in this._collectPosition
+                                orderby this.getLength(gp.GetFpByIndex(cItem.Value), gp.GetFpByIndex(player.getCar().targetFpIndex)) ascending
+                                select cItem.Key).ToList();
+                    int rankIndex = 0;
+                    rankIndex = player.improvementRecord.HasValueToImproveSpeed ? that.rm.Next(0, TargetForSelect.PriceStep) : rankIndex;
+                    int collectSelect = rank[rankIndex];
+                    player.Ts = new TargetForSelect(collectSelect, TargetForSelect.TargetForSelectType.collect, rankIndex, player.improvementRecord.HasValueToImproveSpeed);
+                    this.ConfirmPanelSelectResultF(new ConfirmPanelSelectResult()
+                    {
+                        c = "ConfirmPanelSelectResult",
+                        FastenPositionID = gp.GetFpByIndex(this._collectPosition[rank[rankIndex]]).FastenPositionID,
+                        GoToPosition = true,
+                        GroupKey = this.GroupKey,
+                        Key = player.Key,
+                        //  GoToPosition
+                    }, gp);
+                    success = true;
+                }
+                else
+                {
+                    success = false;
+                }
+            }
+            else
+            {
+                success = false;
+            }
+            return success;
+        }
+
         private void askWhetherGoToPositon3(string key, GetRandomPos gp, SmallMapClick smc, double minLength)
         {
             bool isFinished;
             string FinishedMsg;
             GetFineshedInfomation(key, out isFinished, out FinishedMsg);
             List<string> sendMsgs = new List<string>();
-            lock (this.PlayerLock)
-                if (this._PlayerInGroup.ContainsKey(key))
-                {
-                    var player = this._PlayerInGroup[key];
-                    FastonPosition from;
-                    if (player.getCar().targetFpIndex >= 0)
-                        from = gp.GetFpByIndex(player.getCar().targetFpIndex);
-                    else
-                        from = gp.GetFpByIndex(player.StartFPIndex);
 
-                    var length = minLength / 2 * 24;//这里保证新的图像，不从在复选。
+            if (this._PlayerInGroup.ContainsKey(key))
+            {
+                var player = this._PlayerInGroup[key];
+                FastonPosition from;
+                if (player.getCar().targetFpIndex >= 0)
+                    from = gp.GetFpByIndex(player.getCar().targetFpIndex);
+                else
+                    from = gp.GetFpByIndex(player.StartFPIndex);
 
-                    var centerX = smc.lon;
-                    var centerY = smc.lat;
-                    double minX = centerX - length / 2;
-                    double maxX = centerX + length / 2;
-                    double minY = centerY - length / 2;
-                    double maxY = centerY + length / 2;
-                    this.SetData(minX, maxX, minY, maxY, from, player, isFinished, FinishedMsg, key, gp, ref sendMsgs);
-                }
+                var length = minLength / 2 * 24;//这里保证新的图像，不从在复选。
+
+                var centerX = smc.lon;
+                var centerY = smc.lat;
+                double minX = centerX - length / 2;
+                double maxX = centerX + length / 2;
+                double minY = centerY - length / 2;
+                double maxY = centerY + length / 2;
+                this.SetData(minX, maxX, minY, maxY, from, player, isFinished, FinishedMsg, key, gp, ref sendMsgs);
+            }
             Startup.sendSeveralMsgs(sendMsgs);
         }
 

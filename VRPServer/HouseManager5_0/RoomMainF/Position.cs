@@ -81,7 +81,7 @@ namespace HouseManager5_0.RoomMainF
             int OpenMore = -1;//第一次打开？
             var notifyMsgs = new List<string>();
             GroupClassF.GroupClass gc = null;
-            lock (this.PlayerLock)
+         //   lock (this.PlayerLock)
             {
                 if (string.IsNullOrEmpty(getPosition.GroupKey))
                 {
@@ -94,7 +94,7 @@ namespace HouseManager5_0.RoomMainF
             }
             if (gc != null)
             {
-                lock (gc.PlayerLock)
+               // lock (gc.PlayerLock)
                 {
                     if (gc._PlayerInGroup.ContainsKey(getPosition.Key))
                     {

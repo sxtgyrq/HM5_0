@@ -7,6 +7,9 @@ namespace HouseManager5_0
 {
     class Startup
     {
+        static object addObj = new object();
+        // static List<string> msgsNeedToSend = new List<string>();
+
         public static string sendSingleMsg(string controllerUrl, string json)
         {
             if (string.IsNullOrEmpty(controllerUrl))
@@ -15,12 +18,27 @@ namespace HouseManager5_0
             }
             else
             {
-                var t1 = TcpFunction.WithResponse.SendInmationToUrlAndGetRes(controllerUrl, json);
-                return t1.GetAwaiter().GetResult();
+                lock (addObj)
+                {
+                    //msgsNeedToSend.Add(controllerUrl);
+                    //msgsNeedToSend.Add(json);
+                    var t1 = TcpFunction.WithResponse.SendInmationToUrlAndGetRes(controllerUrl, json);
+                    return t1.GetAwaiter().GetResult();
+                }
+
             }
         }
 
-        public static List<int> sendSeveralMsgs(List<string> sendMsgs)
+        public static void sendSeveralMsgs(List<string> sendMsgs)
+        {
+
+            for (var i = 0; i < sendMsgs.Count; i += 2)
+            {
+                sendSingleMsg(sendMsgs[i], sendMsgs[i + 1]);
+            }
+        }
+
+        public static List<int> sendSeveralMsgs_bak(List<string> sendMsgs)
         {
             List<Task<int>> tasks = new List<Task<int>>();
             for (var i = 0; i < sendMsgs.Count; i += 2)
@@ -55,7 +73,7 @@ namespace HouseManager5_0
                     Result.RemoveAt(0);
                 }
                 else throw new Exception("sendSeveralMsgs 方法报异常！");
-            } 
+            }
             return Result;
         }
     }
