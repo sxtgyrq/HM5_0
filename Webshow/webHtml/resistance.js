@@ -4,7 +4,7 @@
 
     bindData: function (key) {
         var that = resistance;
-        that.positionF(key);
+       // that.positionF(key);
         //objMain.othersBasePoint['0703abae622a0ec9cff4b3f85f8de7ff'].basePoint
 
         if (document.getElementById(that.operateID) == null) {

@@ -1442,7 +1442,7 @@ var objMain =
                                 'newM': newM
                             };//objectInput;
                         },
-                        transparent: { opacity: 0.3 },
+                        transparent: { opacity: 0.61 },
                         //color: { r: 1, g: 1, b: 1 }
                         //transparent: { opacity: 0 }
                     });
@@ -1465,7 +1465,7 @@ var objMain =
                                 'newM': newM
                             };//objectInput;
                         },
-                        transparent: { opacity: 0.3 },
+                        transparent: { opacity: 0.61 },
                         //color: { r: 1, g: 1, b: 1 }
                         //transparent: { opacity: 0 }
                     });
@@ -1488,7 +1488,7 @@ var objMain =
                                 'newM': newM
                             };//objectInput;
                         },
-                        transparent: { opacity: 0.3 },
+                        transparent: { opacity: 0.61 },
                         //color: { r: 1, g: 1, b: 1 }
                         //transparent: { opacity: 0 }
                     });
@@ -1880,7 +1880,12 @@ var objMain =
                 }; break;
             case 'WMsg':
                 {
-                    $.notify(received_obj.Msg, { style: "happyblue" })
+                    $.notify(received_obj.Msg, { style: "happyblue", autoHideDelay: 15000 });
+                }; break;
+            case 'WMsg_WithShowTime':
+                {
+                    // $.notify('你好', { style: "happyblue" });
+                    $.notify(received_obj.Msg, { style: "happyblue", autoHideDelay: received_obj.ShowTime });
                 }; break;
             case 'BradDiamondPrice':
                 {
@@ -2237,6 +2242,22 @@ var objMain =
                         whetherGo.show2();
                     }
                 }; break;
+            case 'TeamStartFailed':
+                {
+                    creatTeamObj.teamStartFailed();
+                }; break;
+            case 'BradCastDouyinReward1':
+                {
+                    douyinPanleShow.add(received_obj.DetailInfo);
+                }; break;
+            case 'BradCastAllDouyinPlayerIsWaiting':
+                {
+                    douyinPanleShow.add2(received_obj.DetailInfo);
+                }; break;
+            case 'BradCastDouyinPlayerIsWaiting':
+                {
+                    douyinPanleShow.add3(received_obj);
+                }; break;
             default:
                 {
                     console.log('命令未注册', received_obj.c + "__没有注册。");
@@ -2324,7 +2345,7 @@ var startA = function () {
             else {
                 session = sessionStorage['session'];
             }
-            ws.send(JSON.stringify({ c: 'CheckSession', session: session }));
+            ws.send(JSON.stringify({ c: 'CheckSession', session: session, RefererAddr: nyrqUrl.get() }));
             objMain.clicktrail = clicktrail.initialize();
         }
         //   alert("数据发送中...");
@@ -4221,12 +4242,14 @@ var SysOperatePanel =
                 //alert('弹出对话框');
                 //subsidizeSys.add();
                 //moneyOperator.add();
-                if (objMain.Task.state == 'attack') {
-                    resistance.bindData(objMain.selectObj.obj.name.split('_')[1]);
-                }
-                else {
-                    resistance.bindData(objMain.indexKey);
-                }
+
+                resistance.bindData(objMain.indexKey);
+                //if (objMain.Task.state == 'attack') {
+                //    resistance.bindData(objMain.selectObj.obj.name.split('_')[1]);
+                //}
+                //else {
+                //    resistance.bindData(objMain.indexKey);
+                //}
 
                 //if (objMain.directionGroup.children.length > 1) {
                 //    var rotationY = objMain.directionGroup.children[1].rotation.y;

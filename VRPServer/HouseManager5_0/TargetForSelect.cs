@@ -10,14 +10,26 @@ namespace HouseManager5_0
     public class TargetForSelect
     {
         public enum TargetForSelectType { collect, mile, volume, speed }
+
         public TargetForSelect(int select_, TargetForSelectType tsType_, int rank_, bool hasValueToImproveSpeed_)
         {
             this.select = select_;
             this.tsType = tsType_;
             this.rank = rank_;
             HasValueToImproveSpeed = hasValueToImproveSpeed_;
+            this.owner = null;
         }
+        public TargetForSelect(int select_, TargetForSelectType tsType_, int rank_, bool hasValueToImproveSpeed_, Data.UserSDouyinGroup owner_)
+        {
+            this.select = select_;
+            this.tsType = tsType_;
+            this.rank = rank_;
+            HasValueToImproveSpeed = hasValueToImproveSpeed_;
+            this.owner = owner_;
+        }
+        public Data.UserSDouyinGroup Owner { get { return this.owner; } }
 
+        Data.UserSDouyinGroup owner;
         public int select { get; private set; }
 
         public TargetForSelectType tsType { get; private set; }

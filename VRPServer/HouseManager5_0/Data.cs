@@ -34,6 +34,8 @@ namespace HouseManager5_0
             }
             return -1;
         }
+
+        Data.UserSDouyinGroup GetDouyinNameByFpID(string fastenPositionID, ref Random rm);
     }
 
     public partial class Data : GetRandomPos
@@ -189,8 +191,112 @@ namespace HouseManager5_0
             return fp;
             // throw new NotImplementedException();
         }
-       
+
+        public UserSDouyinGroup GetDouyinNameByFpID(string fastenPositionID, ref Random rm)
+        {
+            lock (marketdouyinDataLock)
+                if (this.marketdouyinData.ContainsKey(fastenPositionID))
+                {
+
+                    //var first =
+                    var fpDataItem = this.marketdouyinData[fastenPositionID];
+                    var random = rm.Next(0, fpDataItem.SumpassCount);
+
+                    int startIndex = 0;
+                    int selectIndex = -1;
+                    for (int i = 0; i < fpDataItem.UserInDouyin.Count;)
+                    {
+                        if (random < startIndex + fpDataItem.UserInDouyin[i].SumpassCount && random >= startIndex)
+                        {
+                            selectIndex = i;
+                            break;
+                        }
+                        else
+                        {
+                            startIndex += fpDataItem.UserInDouyin[i].SumpassCount;
+                            i++;
+                        }
+                    }
+                    return fpDataItem.UserInDouyin[selectIndex];
+                }
+                else
+                {
+                    return null;
+                }
+            // throw new NotImplementedException();
+        }
+
+
     }
+    public partial class Data
+    {
+        public class FPSDouyinGroup
+        {
+            public string FpID { get; set; }
+            public int SumpassCount { get; set; }
+            public List<UserSDouyinGroup> UserInDouyin { get; set; }
+        }
+        public class UserSDouyinGroup
+        {
+            public int SumpassCount { get; set; }
+            public string dyNickName { get; set; }
+            public string uid { get; set; }
+        }
+
+        Dictionary<string, FPSDouyinGroup> marketdouyinData;
+
+        object marketdouyinDataLock = new object();
+
+        internal void LoadDouyinMarketInfo()
+        {
+            var data = DalOfAddress.marketdouyin.GetAll();
+
+
+
+            var fpList = (from item in data
+                          group item by item.FpID into fpsGroup
+                          select new
+                          {
+                              FpID = fpsGroup.Key,
+                              SumpassCount = fpsGroup.ToList().Sum(gItem => gItem.passCount),
+                              MarketdouyinData = fpsGroup.ToList()
+                          }).ToList();
+            //this.marketdouyinData = xx;
+            lock (marketdouyinDataLock)
+            {
+                this.marketdouyinData = new Dictionary<string, FPSDouyinGroup>();
+                for (int IndexOfFP = 0; IndexOfFP < fpList.Count; IndexOfFP++)
+                {
+                    var MarketdouyinDataItem = fpList[IndexOfFP].MarketdouyinData;
+                    var UserList = (from mItem in MarketdouyinDataItem
+                                    group mItem by mItem.uid into userGroup
+                                    select new
+                                    {
+                                        uid = userGroup.Key,
+                                        dyNickName = userGroup.Last().dyNickName,
+                                        sumpassCount = userGroup.Sum(mmItem => mmItem.passCount)
+                                    }).ToList();
+                    List<UserSDouyinGroup> ug = new List<UserSDouyinGroup>();
+                    for (int indexOfUserLIst = 0; indexOfUserLIst < UserList.Count; indexOfUserLIst++)
+                    {
+                        ug.Add(new UserSDouyinGroup()
+                        {
+                            dyNickName = UserList[indexOfUserLIst].dyNickName,
+                            SumpassCount = UserList[indexOfUserLIst].sumpassCount,
+                            uid = UserList[indexOfUserLIst].uid,
+                        });
+                    }
+                    this.marketdouyinData.Add(fpList[IndexOfFP].FpID, new FPSDouyinGroup()
+                    {
+                        FpID = fpList[IndexOfFP].FpID,
+                        SumpassCount = fpList[IndexOfFP].SumpassCount,
+                        UserInDouyin = ug
+                    });
+                }
+            }
+        }
+    }
+
     public partial class Data
     {
 

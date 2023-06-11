@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static HouseManager5_0.Car;
 using static HouseManager5_0.RoomMainF.RoomMain;
@@ -232,7 +233,7 @@ namespace HouseManager5_0.GroupClassF
                         }
                         else if (dor.target == this.getPromoteState(dor.diamondType))
                         {
-                            that.setPromtePosition(dor.diamondType, this);
+                            that.setPromtePosition(dor.diamondType, this, grp);
                             //this.promoteMilePosition = GetRandomPosition();
                             needUpdatePromoteState = true;
                             car.ability.setDiamondInCar(dor.diamondType, player, car, ref notifyMsg);
@@ -297,5 +298,7 @@ namespace HouseManager5_0.GroupClassF
                 that.WebNotify(item.Value, sb.msg);
             }
         }
+
+       
     }
 }

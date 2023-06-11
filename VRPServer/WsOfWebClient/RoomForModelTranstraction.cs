@@ -913,7 +913,7 @@ namespace WsOfWebClient
             return ok;
         }
 
-        private static void NotifyMsg(ConnectInfo.ConnectInfoDetail connectInfoDetail, string info)
+        public static void NotifyMsg(ConnectInfo.ConnectInfoDetail connectInfoDetail, string info)
         {
             var notifyMsg = info;
             var passObj = new
@@ -995,18 +995,35 @@ namespace WsOfWebClient
             return r;
         }
 
-        internal static string GetResistanceF(State s, GetResistance gr)
+        internal static string GetResistanceF(State s, GetResistance gr, ConnectInfo.ConnectInfoDetail connectInfoDetail)
         {
             var grn = new CommonClass.GetResistanceObj()
             {
                 c = "GetResistanceObj",
                 KeyLookfor = gr.KeyLookfor,
                 key = s.Key,
-                RequestType = gr.RequestType
+                RequestType = gr.RequestType,
+                GroupKey = s.GroupKey,
             };
             var index = s.roomIndex;
             var msg = Newtonsoft.Json.JsonConvert.SerializeObject(grn);
             var respon = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+
+            if (string.IsNullOrEmpty(respon))
+            {
+                return respon;
+            }
+            else
+            {
+                CommonClass.Command cn = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.Command>(respon);
+
+                if (cn.c == "BradCastAllDouyinPlayerIsWaiting")
+                {
+                    CommonF.SendData(respon, connectInfoDetail, 0);
+                    return "";
+                }
+                //if(cn.)
+            }
             return respon;
         }
 
@@ -1022,102 +1039,107 @@ namespace WsOfWebClient
                 gra.Page = -52;
             }
             date = date.AddDays(gra.Page * 7);
+
             while (date.DayOfWeek != DayOfWeek.Monday)
             {
                 date = date.AddDays(-1);
             }
-            var objGet = exitPageF(date.ToString("yyyyMMdd"));
+            //if (date > new DateTime(2023, 5, 20)) { }
+            //else
+            {
+                var objGet = exitPageF(date.ToString("yyyyMMdd"));
 
-            if (objGet == null)
-            {
-                var passObj = new
+                if (objGet == null)
                 {
-                    c = "GetRewardInfomationHasNotResult",
-                    title = $"{date.ToString("yyyyMMdd")}期"
-                };
-                var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
-                CommonF.SendData(sendMsg, connectInfoDetail, 0);
-            }
-            else
-            {
-                var passObj = getResultObj(objGet, date);
-                if (passObj != null)
-                {
+                    var passObj = new
+                    {
+                        c = "GetRewardInfomationHasNotResult",
+                        title = $"{date.ToString("yyyyMMdd")}期"
+                    };
                     var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
                     CommonF.SendData(sendMsg, connectInfoDetail, 0);
                 }
-                //int indexNumber = 0;
-                //indexNumber = await GetIndexOfTrade(objGet.bussinessAddr, objGet.tradeAddress);
-                //List<CommonClass.databaseModel.traderewardapply> list;
-                //{
-                //    var grn = new CommonClass.ModelTranstraction.RewardInfomation()
-                //    {
-                //        c = "RewardApplyInfomation",
-                //        startDate = int.Parse(date.ToString("yyyyMMdd"))
-                //    };
-                //    var index = rm.Next(0, roomUrls.Count);
-                //    var msg = Newtonsoft.Json.JsonConvert.SerializeObject(grn);
-                //    Console.WriteLine(msg);
-                //    var respon = await Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
-                //    Console.WriteLine(respon);
-                //    list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CommonClass.databaseModel.traderewardapply>>(respon);
-                //}
-                //int sumStock = 0;
-                //{
-                //    for (int i = 0; i < list.Count; i++)
-                //    {
-                //        sumStock += list[i].applyLevel;
-                //    }
+                else
+                {
+                    var passObj = getResultObj(objGet, date);
+                    if (passObj != null)
+                    {
+                        var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
+                        CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                    }
+                    //int indexNumber = 0;
+                    //indexNumber = await GetIndexOfTrade(objGet.bussinessAddr, objGet.tradeAddress);
+                    //List<CommonClass.databaseModel.traderewardapply> list;
+                    //{
+                    //    var grn = new CommonClass.ModelTranstraction.RewardInfomation()
+                    //    {
+                    //        c = "RewardApplyInfomation",
+                    //        startDate = int.Parse(date.ToString("yyyyMMdd"))
+                    //    };
+                    //    var index = rm.Next(0, roomUrls.Count);
+                    //    var msg = Newtonsoft.Json.JsonConvert.SerializeObject(grn);
+                    //    Console.WriteLine(msg);
+                    //    var respon = await Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+                    //    Console.WriteLine(respon);
+                    //    list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CommonClass.databaseModel.traderewardapply>>(respon);
+                    //}
+                    //int sumStock = 0;
+                    //{
+                    //    for (int i = 0; i < list.Count; i++)
+                    //    {
+                    //        sumStock += list[i].applyLevel;
+                    //    }
 
-                //}
-                //if (sumStock <= objGet.passCoin)
-                //{
-                //    var satoshiPerStock = objGet.passCoin / sumStock;
-                //    var remainder = objGet.passCoin % sumStock;
-                //    var orderR = (from item in list
-                //                  orderby item.applyLevel descending
-                //                  select item).ToList();
-                //    list = orderR;
-                //    List<RewardApplyInDB> raList = new List<RewardApplyInDB>();
-                //    for (int i = 0; i < list.Count; i++)
-                //    {
-                //        int satoshiShouldGet = list[i].applyLevel * satoshiPerStock;
-                //        if (remainder > list[i].applyLevel)
-                //        {
-                //            satoshiShouldGet += list[i].applyLevel;
-                //            remainder -= list[i].applyLevel;
-                //        }
-                //        else if (remainder > 0)
-                //        {
-                //            satoshiShouldGet += remainder;
-                //            remainder = 0;
-                //        }
-                //        int percent = (satoshiShouldGet * 10000 / objGet.passCoin);
-                //        var percentStr = $"{percent / 100}.{(percent % 100).ToString("D2")}%";
-                //        raList.Add(new RewardApplyInDB()
-                //        {
-                //            applyAddr = list[i].applyAddr,
-                //            applyLevel = list[i].applyLevel,
-                //            applySign = list[i].applySign,
-                //            rankIndex = list[i].rankIndex,
-                //            startDate = list[i].startDate,
-                //            satoshiShouldGet = satoshiShouldGet,
-                //            percentStr = percentStr,
-                //        });
-                //    }
+                    //}
+                    //if (sumStock <= objGet.passCoin)
+                    //{
+                    //    var satoshiPerStock = objGet.passCoin / sumStock;
+                    //    var remainder = objGet.passCoin % sumStock;
+                    //    var orderR = (from item in list
+                    //                  orderby item.applyLevel descending
+                    //                  select item).ToList();
+                    //    list = orderR;
+                    //    List<RewardApplyInDB> raList = new List<RewardApplyInDB>();
+                    //    for (int i = 0; i < list.Count; i++)
+                    //    {
+                    //        int satoshiShouldGet = list[i].applyLevel * satoshiPerStock;
+                    //        if (remainder > list[i].applyLevel)
+                    //        {
+                    //            satoshiShouldGet += list[i].applyLevel;
+                    //            remainder -= list[i].applyLevel;
+                    //        }
+                    //        else if (remainder > 0)
+                    //        {
+                    //            satoshiShouldGet += remainder;
+                    //            remainder = 0;
+                    //        }
+                    //        int percent = (satoshiShouldGet * 10000 / objGet.passCoin);
+                    //        var percentStr = $"{percent / 100}.{(percent % 100).ToString("D2")}%";
+                    //        raList.Add(new RewardApplyInDB()
+                    //        {
+                    //            applyAddr = list[i].applyAddr,
+                    //            applyLevel = list[i].applyLevel,
+                    //            applySign = list[i].applySign,
+                    //            rankIndex = list[i].rankIndex,
+                    //            startDate = list[i].startDate,
+                    //            satoshiShouldGet = satoshiShouldGet,
+                    //            percentStr = percentStr,
+                    //        });
+                    //    }
 
-                //    var passObj = new
-                //    {
-                //        c = "GetRewardInfomationHasResult",
-                //        title = $"{date.ToString("yyyyMMdd")}期",
-                //        data = objGet,
-                //        list = raList,
-                //        indexNumber = indexNumber
-                //    };
-                //    var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
-                //    var sendData = Encoding.UTF8.GetBytes(sendMsg);
-                //    await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-                //}
+                    //    var passObj = new
+                    //    {
+                    //        c = "GetRewardInfomationHasResult",
+                    //        title = $"{date.ToString("yyyyMMdd")}期",
+                    //        data = objGet,
+                    //        list = raList,
+                    //        indexNumber = indexNumber
+                    //    };
+                    //    var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
+                    //    var sendData = Encoding.UTF8.GetBytes(sendMsg);
+                    //    await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+                    //}
+                }
             }
         }
         static RewardInfoHasResultObj getResultObj_V2(tradereward objGet, DateTime date)
@@ -1291,23 +1313,48 @@ namespace WsOfWebClient
                             list[i][j].rank = j + 1;
                         }
                     }
-                    while (remainder > 0)
+                    if (date > new DateTime(2023, 5, 08))
                     {
-                        for (int i = 0; i < list.Length; i++)
-                        {
-                            if (list[i].Count > 0)
+                        while (remainder > 0)
+                            for (int i = 0; i < list.Length; i++)
                             {
-                                list[i][0].rewardGiven++;
-                                remainder--;
-                                if (remainder <= 0)
+                                for (int j = 0; j < list[i].Count; j++)
                                 {
-                                    break;
+                                    if (j < 100)
+                                    {
+                                        if (remainder > 0)
+                                        {
+                                            list[i][j].rewardGiven++;
+                                            remainder--;
+                                        }
+                                    }
+                                    // sumStock += list[i][j].
                                 }
                             }
-                        }
-                        if (remainder <= 0)
+                    }
+                    else
+                    {
+                        /*
+                         * 这里做一个区分，以前的也需要！
+                         */
+                        while (remainder > 0)
                         {
-                            break;
+                            for (int i = 0; i < list.Length; i++)
+                            {
+                                if (list[i].Count > 0)
+                                {
+                                    list[i][0].rewardGiven++;
+                                    remainder--;
+                                    if (remainder <= 0)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                            if (remainder <= 0)
+                            {
+                                break;
+                            }
                         }
                     }
                     for (int i = 0; i < list.Length; i++)

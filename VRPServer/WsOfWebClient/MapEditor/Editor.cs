@@ -37,7 +37,7 @@ namespace WsOfWebClient.MapEditor
         class ModelUpdate : CommonClass.Command
         {
             public string newModel { get; set; }
-            public double oldModel { get; set; }
+            public string oldModel { get; set; }
         }
 
         class UseModelObj : CommonClass.Command

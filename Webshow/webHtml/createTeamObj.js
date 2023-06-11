@@ -440,5 +440,23 @@
         if (button != null && button != undefined) {
             button.remove();
         }
+    },
+    teamStartFailed: function () {
+        var button_Exit = document.getElementById("BtnToDismissWhenOrganize");
+        var button_Start = document.getElementById("BtnToStartGameWhenOrganize");
+
+        if (button_Exit != null && button_Start != null) {
+            button_Exit.onclick = function () {
+                objMain.ws.send(token.CommandStart + 'exit');
+                button_Start.onclick = function () { };
+                button_Exit.onclick = function () { };
+            };
+            button_Start.onclick = function () {
+                objMain.ws.send(token.CommandStart);
+                // this.onclick = function () { };
+                button_Start.onclick = function () { };
+                button_Exit.onclick = function () { };
+            };
+        }
     }
 };

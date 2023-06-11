@@ -1,4 +1,5 @@
 ﻿using CommonClass;
+using CommonClass.MateWsAndHouse;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using static Model.SaveRoad;
+using static WsOfWebClient.ConnectInfo;
 
 namespace WsOfWebClient
 {
@@ -1637,6 +1639,7 @@ namespace WsOfWebClient
             return s;
         }
 
+        // public static string RoomInfoRegexPattern = $"^\\{{\\\"Key\\\":\\\"{"[0-9a-f]{32}"}\\\",\\\"GroupKey\\\":\\\"{"[0-9a-f]{32}"}\\\",\\\"FromUrl\\\":\\\"\\\",\\\"RoomIndex\\\":{"[0-9]{1,5}"},\\\"Check\\\":\\\"{"[0-9a-f]{32}"}\\\",\\\"WebSocketID\\\":{"[0-9]{1,10}"},\\\"PlayerName\\\":\\\"{"[\u4e00-\u9fa5]{1}[a-zA-Z0-9\u4e00-\u9fa5]{1,8}"}\\\",\\\"RefererAddr\\\":\\\"{"[0-9a-zA-z]{0,99}"}\\\",\\\"groupMemberCount\\\":{"[0-9]{1,10}"},\\\"c\\\":\\\"{"PlayerAdd_V2"}\\\"\\}}$";
         static void WriteSession(PlayerAdd_V2 roomInfo, ConnectInfo.ConnectInfoDetail connectInfoDetail)
         {
             // roomNumber
@@ -1644,9 +1647,18 @@ namespace WsOfWebClient
              * 在发送到前台以前，必须将PlayerAdd对象中的FromUrl属性擦除
              */
             roomInfo.FromUrl = "";
-            var session = Newtonsoft.Json.JsonConvert.SerializeObject(roomInfo);
-            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(new { session = session, c = "setSession" });
-            CommonF.SendData(msg, connectInfoDetail, 0);
+            //var session = Newtonsoft.Json.JsonConvert.SerializeObject(roomInfo);
+            var session = $"{{\"Key\":\"{roomInfo.Key}\",\"GroupKey\":\"{roomInfo.GroupKey}\",\"FromUrl\":\"{roomInfo.FromUrl}\",\"RoomIndex\":{roomInfo.RoomIndex},\"Check\":\"{roomInfo.Check}\",\"WebSocketID\":{roomInfo.WebSocketID},\"PlayerName\":\"{roomInfo.PlayerName}\",\"RefererAddr\":\"{roomInfo.RefererAddr}\",\"groupMemberCount\":{roomInfo.groupMemberCount},\"c\":\"{roomInfo.c}\"}}";
+            Regex reg = new Regex(BLL.CheckSessionBLL.RoomInfoRegexPattern);
+            if (reg.IsMatch(session))
+            {
+                var msg = Newtonsoft.Json.JsonConvert.SerializeObject(new { session = session, c = "setSession" });
+                CommonF.SendData(msg, connectInfoDetail, 0);
+            }
+            else
+            {
+                throw new Exception("逻辑错误！");
+            }
         }
 
         internal static State setState(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail, LoginState ls)
@@ -1947,8 +1959,9 @@ namespace WsOfWebClient
             return result;
         }
 
-        internal static string findTeam2(int websocketID, string playerName, string command_start, string teamIndex)
+        internal static string findTeam2(int websocketID, string playerName, string command_start, string teamIndex, out string updateKey)
         {
+            updateKey = CommonClass.Random.GetMD5HashFromStr(DateTime.Now.ToString());
             var msg = Newtonsoft.Json.JsonConvert.SerializeObject(new CommonClass.TeamJoin()
             {
                 WebSocketID = websocketID,
@@ -1956,9 +1969,11 @@ namespace WsOfWebClient
                 FromUrl = $"{ConnectInfo.HostIP}:{ConnectInfo.tcpServerPort}",// ConnectInfo.ConnectedInfo + "/notify",
                 CommandStart = command_start,
                 PlayerName = playerName,
-                TeamIndex = teamIndex
+                TeamIndex = teamIndex,
+                UpdateKey = updateKey
             });
             string resStr = Startup.sendInmationToUrlAndGetRes($"{teamUrl}", msg);
+
             return resStr;
             //return Newtonsoft.Json.JsonConvert.DeserializeObject<TeamFoundResult>(json);
         }
@@ -2032,5 +2047,110 @@ namespace WsOfWebClient
             return int.Parse(result);
         }
 
+
+        public static string TeamCaptainInfoRegexPattern = $"^\\{{\\\"TeamNumber\\\":{"[0-9]{1,9}"},\\\"UpdateKey\\\":\\\"{"[0-9a-f]{32}"}\\\",\\\"c\\\":\\\"{"TeamUpdate"}\\\",\\\"FromUrl\\\":\\\"\\\",\\\"WebSocketID\\\":{"0"},\\\"CommandStart\\\":\\\"\\\"\\}}$";//commandStart
+
+        internal static void WriteSession(TeamResult team, ConnectInfo.ConnectInfoDetail connectInfoDetail)
+        {
+            //roomInfo.FromUrl = "";
+            //var session = Newtonsoft.Json.JsonConvert.SerializeObject(roomInfo);
+            var session = $"{{\"TeamNumber\":{team.TeamNumber},\"UpdateKey\":\"{team.UpdateKey}\",\"c\":\"TeamUpdate\",\"FromUrl\":\"\",\"WebSocketID\":{"0"},\"CommandStart\":\"\"}}";//CommandStart
+            Regex reg = new Regex(TeamCaptainInfoRegexPattern);
+            if (reg.IsMatch(session))
+            {
+                var msg = Newtonsoft.Json.JsonConvert.SerializeObject(new { session = session, c = "setSession" });
+                CommonF.SendData(msg, connectInfoDetail, 0);
+            }
+            else
+            {
+                throw new Exception("逻辑错误！");
+            }
+        }
+
+        internal static string checkIsOK(CheckSession checkSession, State s, out string command_start, out string updateKey, out string teamID)
+        {
+            command_start = CommonClass.Random.GetMD5HashFromStr(s.WebsocketID.ToString() + s.WebsocketID);
+
+            TeamUpdate teamUpdate = Newtonsoft.Json.JsonConvert.DeserializeObject<TeamUpdate>(checkSession.session);
+            updateKey = teamUpdate.UpdateKey;
+            teamID = teamUpdate.TeamNumber.ToString();
+            teamUpdate.FromUrl = $"{ConnectInfo.HostIP}:{ConnectInfo.tcpServerPort}";
+            teamUpdate.WebSocketID = s.WebsocketID;
+            teamUpdate.CommandStart = command_start;
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(teamUpdate);
+            var result = Startup.sendInmationToUrlAndGetRes($"{teamUrl}", msg);
+
+
+            return result;
+            // if (result == "captain") { }
+        }
+
+        internal static void UpdateTeammate(TeamResult team)
+        {
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(new CommonClass.UpdateTeammateOfCaptal()
+            {
+                c = "UpdateTeammateOfCaptal",
+                TeamNumber = team.TeamNumber,
+            });
+            var result = Startup.sendInmationToUrlAndGetRes($"{teamUrl}", msg);
+        }
+        public static string TeamMemberInfoRegexPattern = $"^\\{{\\\"c\\\":\\\"{"TeamUpdate"}\\\",\\\"FromUrl\\\":\\\"\\\",\\\"TeamNumber\\\":{"[0-9]{1,9}"},\\\"UpdateKey\\\":\\\"{"[0-9a-f]{32}"}\\\",\\\"WebSocketID\\\":{"0"},\\\"CommandStart\\\":\\\"\\\"\\}}$";//commandStart
+
+        /// <summary>
+        /// 此方法，作为队员写入session
+        /// </summary>
+        /// <param name="teamID"></param>
+        /// <param name="connectInfoDetail"></param>
+        /// <exception cref="Exception"></exception>
+        internal static void WriteSession(string teamID, string updateKey, ConnectInfoDetail connectInfoDetail)
+        {
+            var session = $"{{\"c\":\"TeamUpdate\",\"FromUrl\":\"\",\"TeamNumber\":{teamID},\"UpdateKey\":\"{updateKey}\",\"WebSocketID\":{"0"},\"CommandStart\":\"\"}}";//CommandStart
+            Regex reg = new Regex(TeamMemberInfoRegexPattern);
+            if (reg.IsMatch(session))
+            {
+                var msg = Newtonsoft.Json.JsonConvert.SerializeObject(new { session = session, c = "setSession" });
+                CommonF.SendData(msg, connectInfoDetail, 0);
+            }
+            else
+            {
+                throw new Exception("逻辑错误！");
+            }
+        }
+
+        internal static bool IsAllOnLine(TeamResult team, ConnectInfoDetail connectInfoDetail)
+        {
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(new CommonClass.CheckMembersIsAllOnLine()
+            {
+                c = "CheckMembersIsAllOnLine",
+                TeamNumber = team.TeamNumber,
+            });
+            var result = Startup.sendInmationToUrlAndGetRes($"{teamUrl}", msg);
+            var listResult = Newtonsoft.Json.JsonConvert.DeserializeObject<List<TeamJoin>>(result);
+            if (listResult.Count > 0)
+            {
+                TeamStartFailed(connectInfoDetail);
+                for (int i = 0; i < listResult.Count; i++)
+                {
+                    Room.NotifyMsg(connectInfoDetail, $"{i}-{listResult[i].PlayerName}现在处于离线！未能开始！");
+                }
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+            // return false;
+        }
+
+        public static void TeamStartFailed(ConnectInfo.ConnectInfoDetail connectInfoDetail)
+        {
+            // var notifyMsg = info;
+            var passObj = new
+            {
+                c = "TeamStartFailed"
+            };
+            var returnMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
+            CommonF.SendData(returnMsg, connectInfoDetail, 0);
+        }
     }
 }

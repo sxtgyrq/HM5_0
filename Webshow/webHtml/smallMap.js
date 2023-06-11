@@ -34,9 +34,9 @@
             ctx.stroke();
 
             ctx.beginPath();
-            //BB862A  "#01010160";
-            ctx.strokeStyle = '#BB862A60';
-            ctx.fillStyle = "#BB862A60";
+            //BB862A  "#01010160"; 00FEFE
+            ctx.strokeStyle = '#00FEFE60';
+            ctx.fillStyle = "#00FEFE60";
             ctx.fillRect(0, 0, 1200, 1200);
             ctx.stroke();
 

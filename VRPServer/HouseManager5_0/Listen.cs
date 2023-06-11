@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using static CommonClass.Finance;
+using static CommonClass.MapEditor;
 using static CommonClass.ModelTranstraction;
 
 namespace HouseManager5_0
@@ -514,8 +515,29 @@ namespace HouseManager5_0
                         }; break;
                     case "ModelReplace":
                         {
-
+                            ModelReplace mr = Newtonsoft.Json.JsonConvert.DeserializeObject<ModelReplace>(notifyJson);
+                            outPut = objI.ModelReplaceF(mr);
                         }; break;
+                    case "SetNextPlace":
+                        {
+                            SetNextPlace snp = Newtonsoft.Json.JsonConvert.DeserializeObject<SetNextPlace>(notifyJson);
+                            outPut = objI.SetNextPlaceF(snp);
+                            /*
+                             * 此方法是为了管理员用于营销拍视频而用！
+                             * 
+                             */
+                        }; break;
+                    case "DouyinLogContent": 
+                        {
+                            DouyinLogContent douyinLog = Newtonsoft.Json.JsonConvert.DeserializeObject<DouyinLogContent>(notifyJson);
+                            outPut = objI.DouyinLogContentF(douyinLog);
+                        };break;
+
+                    case "SetGroupLive": 
+                        {
+                            SetGroupLive sgl= Newtonsoft.Json.JsonConvert.DeserializeObject<SetGroupLive>(notifyJson);
+                            outPut = objI.SetGroupIsLive(sgl);
+                        };break;
 
                         //case "CopyTaskDisplay": 
                         //    {

@@ -290,7 +290,7 @@ namespace HouseManager5_0
         /// </summary>
         /// <param name="startT"></param>
         /// <param name="pa"></param>
-        private void setArrive(commandWithTime.placeArriving pa)
+        private void setArrive(commandWithTime.placeArriving pa, GetRandomPos grp)
         {
             /*
              * 到达地点某地点时，说明汽车在这个地点待命。
@@ -310,7 +310,7 @@ namespace HouseManager5_0
                     var car = group._PlayerInGroup[pa.key].getCar();
                     if (car.state == CarState.working)
                     {
-                        arriveThenDoCollect(ref player, ref car, pa, ref notifyMsg, out needUpdateCollectState);
+                        arriveThenDoCollect(ref player, grp, ref car, pa, ref notifyMsg, out needUpdateCollectState);
                     }
 
                 }
@@ -324,7 +324,7 @@ namespace HouseManager5_0
 
         }
 
-        private void arriveThenDoCollect(ref Player role, ref Car car, commandWithTime.placeArriving pa, ref List<string> notifyMsg, out bool needUpdateCollectState)
+        private void arriveThenDoCollect(ref Player role, GetRandomPos gps, ref Car car, commandWithTime.placeArriving pa, ref List<string> notifyMsg, out bool needUpdateCollectState)
         {
             //   throw new Exception();
             var group = role.Group;
@@ -361,6 +361,12 @@ namespace HouseManager5_0
                     that.GetBackground((Player)role, ref notifyMsg);
                     ((Player)role).RefererCount++;
                     ((Player)role).ActiveTime = DateTime.Now;
+
+                    if (role.Group.Live)
+                    {
+                        role.Group.UpdateDouyinRole(gps.GetFpByIndex(taxPostion), ref notifyMsg);
+                        // if(role.Ts.)
+                    }
                 }
             }
             else
@@ -409,7 +415,7 @@ namespace HouseManager5_0
                     if (that.rm.Next(100) < player.SendTransmitMsg)
                     {
                         this.WebNotify(player, "转发，能获得转发奖励！");
-                        player.SendTransmitMsg = player.SendTransmitMsg / 3;
+                        player.SendTransmitMsg = player.SendTransmitMsg * 9 / 10;
                     }
                 }
                 //that.goodsM.ShowConnectionModels(role, pa.target, ref notifyMsg);
@@ -591,7 +597,7 @@ namespace HouseManager5_0
             if (dObj.c == "placeArriving")
             {
                 commandWithTime.placeArriving pa = (commandWithTime.placeArriving)dObj;
-                this.setArrive(pa);
+                this.setArrive(pa, grp);
             }
             //  throw new NotImplementedException();
         }

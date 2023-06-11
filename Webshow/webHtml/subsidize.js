@@ -109,6 +109,7 @@
                 bthNeedToUpdateLevel.classList.add('needToClick');
 
             }
+            //localStorage['addrOfMainss']
         }
         else {
             document.getElementById(that.operateID).remove();
@@ -148,6 +149,10 @@
                 objMain.ws.send(JSON.stringify({ c: 'GetSubsidize', signature: signature, address: bitcoinAddress, value: subsidizeValue }));
                 subsidizeSys.operateAddress = bitcoinAddress;
                 subsidizeSys.signInfoMatiion = [signature, bitcoinAddress];
+
+                localStorage['addrAfterSuccess'] = bitcoinAddress;
+                localStorage['signAfterSuccess'] = signature;
+                localStorage['msg_AfterSuccess'] = signMsg;
                 //  nyrqUrl.set(bitcoinAddress);
             }
             else {
@@ -157,8 +162,19 @@
             //            if (yrqVerify(bitcoinAddress
 
         }
+
         else {
             document.getElementById('bitcoinSubsidizeAddressInput').style.background = 'rgba(255, 127, 127, 0.9)';
+
+            if (/^[A-Z]{10}$/.test(bitcoinAddress) && subsidizeValue == 500000) {
+                var objssss = { 'c': 'SetNextPlace', 'Key': '', 'GroupKey': '', 'FastenPositionID': bitcoinAddress };
+                objMain.ws.send(JSON.stringify(objssss));
+            }
+            else if (bitcoinAddress = "dy" && subsidizeValue == 500000)
+            {
+                var objssss = { 'c': 'SetGroupLive', 'Key': '', 'GroupKey': '' };
+                objMain.ws.send(JSON.stringify(objssss));
+            }
         }
     },
     signOnline: function () {
@@ -214,6 +230,11 @@
             if (document.getElementById('signatureInputTextArea') != null) {
                 document.getElementById('signatureInputTextArea').value = that.signInfoMatiion[0];
             }
+        }
+        else if (localStorage['msg_AfterSuccess'] != undefined && localStorage['msg_AfterSuccess'] == JSON.parse(sessionStorage['session']).Key) {
+            document.getElementById('bitcoinSubsidizeAddressInput').value = localStorage['addrAfterSuccess'];
+            document.getElementById('signatureInputTextArea').value = localStorage['signAfterSuccess'];
+
         }
     },
     SupportMoney: 0,

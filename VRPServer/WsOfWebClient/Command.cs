@@ -8,6 +8,7 @@ namespace WsOfWebClient
     public class CheckSession : CommonClass.Command
     {
         public string session { get; set; }
+        public string RefererAddr { get; set; }
     }
 
     public class MapRoadAndCrossMd5 : CommonClass.Command

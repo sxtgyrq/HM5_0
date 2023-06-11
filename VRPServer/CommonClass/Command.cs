@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace CommonClass
 {
@@ -209,6 +210,11 @@ namespace CommonClass
     public class WMsg : CommandNotify
     {
         public string Msg;
+    }
+    public class WMsg_WithShowTime : CommandNotify
+    {
+        public string Msg;
+        public int ShowTime { get; set; }
     }
     public class DebtsRemove : CommandNotify
     {
@@ -653,6 +659,8 @@ namespace CommonClass
         public int WebSocketID { get; set; }
         public string PlayerName { get; set; }
         public string GroupKey { get; set; }
+        public string UpdateKey { get; set; }
+
     }
     public class GetPromoteMiles : CommonClass.Command
     {
@@ -680,6 +688,7 @@ namespace CommonClass
         public string PlayerName { get; set; }
         public string TeamIndex { get; set; }
         public string Guid { get; set; }
+        public string UpdateKey { get; set; }
     }
 
     public class LeaveTeam : Command
@@ -688,6 +697,26 @@ namespace CommonClass
         public int WebSocketID { get; set; }
         public string TeamIndex { get; set; }
     }
+
+    public class TeamUpdate : Command
+    {
+        public string FromUrl { get; set; }
+        public int WebSocketID { get; set; }
+
+        public int TeamNumber { get; set; }
+        public string UpdateKey { get; set; }
+        public string CommandStart { get; set; }
+    }
+
+    public class UpdateTeammateOfCaptal : Command
+    {
+        public int TeamNumber { get; set; }
+    }
+    public class CheckMembersIsAllOnLine : Command
+    {
+        public int TeamNumber { get; set; }
+    }
+
     public class TeamMemberCount : Command
     {
         public int TeamNum { get; set; }
@@ -737,6 +766,11 @@ namespace CommonClass
         /// </summary>
         public int TeamNumber { get; set; }
         public int Hash { get; set; }
+
+        /// <summary>
+        /// 主要作用是web前台断开重新连接而用！再MateWsAndHouse赋值，并返回。
+        /// </summary>
+        public string UpdateKey { get; set; }
     }
     public class TeamResultForGameBegain : TeamResult
     {
@@ -823,7 +857,7 @@ namespace CommonClass
 
         public class Result
         {
-            public bool hasValue { get; set; } 
+            public bool hasValue { get; set; }
             public string px { get; set; }
             public string nx { get; set; }
             public string py { get; set; }
@@ -1064,5 +1098,37 @@ namespace CommonClass
         public string AmID { get; set; }
         public bool FromDB { get; set; }
         //public int Password { get; set; }
+    }
+
+
+    public class SetNextPlace : Command
+    {
+        public string Key { get; set; }
+        public string GroupKey { get; set; }
+        public string FastenPositionID { get; set; }
+        //public string car { get; set; }
+    }
+
+    public class DouyinLogContent : Command
+    {
+        public douyin.log Log { get; set; }
+    }
+    public class SetGroupLive : Command
+    {
+        public string Key { get; set; }
+        public string GroupKey { get; set; }
+    }
+
+    public class BradCastDouyinPlayerIsWaiting : CommandNotify
+    {
+        //   public List<string> DetailInfo { get; set; }
+        public string NickName { get; set; }
+        public int PositionIndex { get; set; }
+        public string Point { get; set; }
+    }
+
+    public class BradCastAllDouyinPlayerIsWaiting : Command
+    {
+        public List<string> DetailInfo { get; set; }
     }
 }

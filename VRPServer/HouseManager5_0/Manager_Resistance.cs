@@ -17,7 +17,7 @@ namespace HouseManager5_0
 
         internal string Display(GetResistanceObj r)
         {
-            if (string.IsNullOrEmpty(r.GroupKey)||string.IsNullOrEmpty(r.key)) 
+            if (string.IsNullOrEmpty(r.GroupKey) || string.IsNullOrEmpty(r.key))
             {
                 return "";
             }
@@ -31,14 +31,25 @@ namespace HouseManager5_0
             }
             if (group != null)
             {
-                lock (group.PlayerLock)
-                {
-                    for (int i = 0; i < group._PlayerInGroup.Count; i++)
-                    {
 
-                    }
+                if (group.Live)
+                {
+                    return group.ShowLiveDisplay();
                 }
-                ResistanceDisplay rd = new ResistanceDisplay();
+                else
+                {
+                    lock (group.PlayerLock)
+                    {
+                        for (int i = 0; i < group._PlayerInGroup.Count; i++)
+                        {
+
+                        }
+                    }
+                    ResistanceDisplay rd = new ResistanceDisplay();
+                }
+
+
+
                 //switch (r.RequestType)
                 //{
                 //    case 0:
@@ -589,67 +600,67 @@ namespace HouseManager5_0
             return "";
         }
 
-        private string GetSingleName(Player role)
-        {
-            throw new Exception();
-            //Regex reg = new Regex(@"^[\u4e00-\u9fa5]{0,}$");
+        //private string GetSingleName(Player role)
+        //{
+        //    throw new Exception();
+        //    //Regex reg = new Regex(@"^[\u4e00-\u9fa5]{0,}$");
 
-            //Dictionary<string, int> Characters = new Dictionary<string, int>();
-            //foreach (var item in that._Players)
-            //{
-            //    if (item.Key == role.Key)
-            //    {
-            //        continue;
-            //    }
-            //    else
-            //    {
-            //        var playerName = item.Value.PlayerName;
-            //        for (int i = 0; i < playerName.Length; i++)
-            //        {
-            //            var c = playerName.Substring(i, 1);
-            //            if (reg.IsMatch(c))
-            //            {
-            //                if (Characters.ContainsKey(c))
-            //                {
-            //                    Characters[c]++;
-            //                }
-            //                else
-            //                {
-            //                    Characters.Add(c, 1);
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
+        //    //Dictionary<string, int> Characters = new Dictionary<string, int>();
+        //    //foreach (var item in that._Players)
+        //    //{
+        //    //    if (item.Key == role.Key)
+        //    //    {
+        //    //        continue;
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        var playerName = item.Value.PlayerName;
+        //    //        for (int i = 0; i < playerName.Length; i++)
+        //    //        {
+        //    //            var c = playerName.Substring(i, 1);
+        //    //            if (reg.IsMatch(c))
+        //    //            {
+        //    //                if (Characters.ContainsKey(c))
+        //    //                {
+        //    //                    Characters[c]++;
+        //    //                }
+        //    //                else
+        //    //                {
+        //    //                    Characters.Add(c, 1);
+        //    //                }
+        //    //            }
+        //    //        }
+        //    //    }
+        //    //}
 
-            //int minCount = int.MaxValue;
-            //string result = "玩";
-            //{
-            //    var playerName = role.PlayerName;
-            //    for (int i = 0; i < playerName.Length; i++)
-            //    {
-            //        var c = playerName.Substring(i, 1);
-            //        if (reg.IsMatch(c))
-            //        {
-            //            if (Characters.ContainsKey(c))
-            //            {
-            //                if (Characters[c] < minCount)
-            //                {
-            //                    minCount = Characters[c];
-            //                    result = c;
-            //                }
-            //            }
-            //            else
-            //            {
-            //                minCount = 0;
-            //                result = c;
-            //            }
-            //        }
-            //    }
-            //}
-            //return result;
+        //    //int minCount = int.MaxValue;
+        //    //string result = "玩";
+        //    //{
+        //    //    var playerName = role.PlayerName;
+        //    //    for (int i = 0; i < playerName.Length; i++)
+        //    //    {
+        //    //        var c = playerName.Substring(i, 1);
+        //    //        if (reg.IsMatch(c))
+        //    //        {
+        //    //            if (Characters.ContainsKey(c))
+        //    //            {
+        //    //                if (Characters[c] < minCount)
+        //    //                {
+        //    //                    minCount = Characters[c];
+        //    //                    result = c;
+        //    //                }
+        //    //            }
+        //    //            else
+        //    //            {
+        //    //                minCount = 0;
+        //    //                result = c;
+        //    //            }
+        //    //        }
+        //    //    }
+        //    //}
+        //    //return result;
 
-        }
+        //}
     }
 
     public class Manager_Connection : Manager

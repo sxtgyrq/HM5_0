@@ -1,13 +1,16 @@
 ﻿using CommonClass;
 using HouseManager5_0.interfaceOfHM;
 using HouseManager5_0.RoomMainF;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using static HouseManager5_0.Car;
+using static HouseManager5_0.Engine;
 using static HouseManager5_0.RoomMainF.RoomMain;
 using OssModel = Model;
 
@@ -17,11 +20,40 @@ namespace HouseManager5_0.GroupClassF
     {
         public void SetLookForPromote(GetRandomPos gp)
         {
-            this.promoteMilePosition = GetRandomPosition(true, gp);
+            {
+                do
+                {
+                    this.promoteMilePosition = GetRandomPosition(true, gp);
+                }
+                while (IsOutTheAbility(gp));
+                // var from = this.GetFromWhenUpdateCollect(player, sc.cType, car);
+                //var to = getCollectPositionTo(sc.collectIndex, player.Group);//  this.promoteMilePosition;
+                //var fp1 = grp.GetFpByIndex(from);
+
+                //this.MaxMile
+            }
             //   this.promoteBusinessPosition = GetRandomPosition(true, gp);
             this.promoteVolumePosition = GetRandomPosition(true, gp);
             this.promoteSpeedPosition = GetRandomPosition(true, gp);
         }
+
+        private bool IsOutTheAbility(GetRandomPos grp)
+        {
+            List<string> notifyMsg = new List<string>();
+            var goPath = that.GetAFromB_v2(this.StartFPIndex, this.promoteMilePosition, grp, ref notifyMsg);
+            var returnPath = that.GetAFromB_v2(this.promoteMilePosition, this.StartFPIndex, grp, ref notifyMsg);
+
+            var goMile = that.GetMile(goPath);
+            var returnMile = that.GetMile(returnPath);
+
+            if (goMile + returnMile > this.MaxMile * 95 / 100)
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+
         int _promoteMilePosition = -1;
         //int _promoteBusinessPosition = -1;
         int _promoteVolumePosition = -1;
@@ -64,6 +96,24 @@ namespace HouseManager5_0.GroupClassF
             }
         }
 
+        public long MaxMile
+        {
+            get
+            {
+                long maxValue = 200;
+                foreach (var item in this._PlayerInGroup)
+                {
+                    if (item.Value.playerType == Player.PlayerType.player)
+                    {
+                        if (item.Value.getCar().ability.mile > maxValue)
+                        {
+                            maxValue = item.Value.getCar().ability.mile;
+                        }
+                    }
+                }
+                return maxValue;
+            }
+        }
 
         internal void CheckPromoteState(string key, string promoteType)
         {
@@ -233,12 +283,14 @@ namespace HouseManager5_0.GroupClassF
                 var rankNum = rank.Count;
                 player.Ts = new TargetForSelect(promotePosition, tsType, rankNum, player.improvementRecord.HasValueToImproveSpeed);
 
+               
+
                 var msg = "";
                 {
                     var priceStr = player.Ts.costPriceStr;
                     if (string.IsNullOrEmpty(Fp.region))
                     {
-                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到【{Fp.FastenPositionName}】收集{diamondName}？</b>";
+                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到【{Fp.FastenPositionName}】找收集{diamondName}？</b>";
                     }
                     else
                     {
@@ -263,6 +315,9 @@ namespace HouseManager5_0.GroupClassF
                 }, gp);
             }
         }
+
+        
+
         public Dictionary<string, long> promotePrice = new Dictionary<string, long>()
         {
             { "mile",1000},
@@ -459,10 +514,16 @@ namespace HouseManager5_0.GroupClassF
             }
         }
 
-        internal void setPromtePosition(string changeType)
+        internal void setPromtePosition(string changeType, GetRandomPos grp)
         {
             if (changeType == "mile")
-                this.promoteMilePosition = GetRandomPosition(true, Program.dt);
+            {
+                do
+                {
+                    this.promoteMilePosition = GetRandomPosition(true, Program.dt);
+                }
+                while (this.IsOutTheAbility(grp));
+            }
             else if (changeType == "volume")
                 this.promoteVolumePosition = GetRandomPosition(true, Program.dt);
             else if (changeType == "speed")

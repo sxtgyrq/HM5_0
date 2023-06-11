@@ -7,7 +7,7 @@ using static HouseManager5_0.RoomMainF.RoomMain;
 
 namespace HouseManager5_0.interfaceOfHM
 {
-    interface ListenInterface : MapEditor, ModelTranstractionI, Resistance
+    interface ListenInterface : MapEditor, ModelTranstractionI, Resistance, Marketing
     {
         /// <summary>
         /// 新增玩家
@@ -122,7 +122,7 @@ namespace HouseManager5_0.interfaceOfHM
         string SmallMapClickF(SmallMapClick smc);
         // string NotWantToGoNeedToBackF(NotWantToGoNeedToBack nwtgntb);
         string ConfirmPanelSelectResultF(ConfirmPanelSelectResult nwtgntb);
-       
+
     }
 
     interface MapEditor
@@ -156,6 +156,7 @@ namespace HouseManager5_0.interfaceOfHM
         string LookForTaskCopyF(LookForTaskCopy lftc);
         string TaskCopyPassOrNGF(TaskCopyPassOrNG pOrNG);
         string GetAbtractmodelsF(GetAbtractmodels ca);
+        string ModelReplaceF(CommonClass.MapEditor.ModelReplace mr);
     }
 
     interface ModelTranstractionI
@@ -187,5 +188,13 @@ namespace HouseManager5_0.interfaceOfHM
     interface Resistance
     {
         string GetResistance(GetResistanceObj r);
+    }
+
+    interface Marketing
+    {
+        string SetNextPlaceF(SetNextPlace snp);
+
+        string DouyinLogContentF(DouyinLogContent douyinLog);
+        string SetGroupIsLive(SetGroupLive sgl);
     }
 }

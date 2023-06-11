@@ -8,11 +8,11 @@
         var touchTrail = document.getElementById('touch-trail');
         touchTrail.width = window.innerWidth;
         touchTrail.height = window.innerHeight;
-        this.ctx = touchTrail.getContext('2d');
+        this.clickTrailctx = touchTrail.getContext('2d');
 
         // 设置画笔样式
-        this.ctx.strokeStyle = 'red';
-        this.ctx.lineWidth = 5;
+        this.clickTrailctx.strokeStyle = 'red';
+        this.clickTrailctx.lineWidth = 5;
 
         // 记录触摸开始时的位置
         this.startX_0 = -100;
@@ -117,42 +117,50 @@
         this.startX_0 = clientX;
         this.startY_0 = clientY;
 
-        this.ctx.beginPath();
-        this.ctx.moveTo(clientX, clientY);
-        this.ctx.arc(clientX, clientY, 5, 0, 2 * Math.PI);
-        this.ctx.stroke();
+        this.clickTrailctx.beginPath();
+        this.clickTrailctx.strokeStyle = 'red';
+        this.clickTrailctx.lineWidth = 5;
+        this.clickTrailctx.moveTo(clientX, clientY);
+        this.clickTrailctx.arc(clientX, clientY, 5, 0, 2 * Math.PI);
+        this.clickTrailctx.stroke();
         //  alert('ss');
     },
     drawPoint1: function (clientX, clientY) {
         this.startX_1 = clientX;
         this.startY_1 = clientY;
 
-        this.ctx.beginPath();
-        this.ctx.moveTo(clientX, clientY);
-        this.ctx.arc(clientX, clientY, 5, 0, 2 * Math.PI);
-        this.ctx.stroke();
+        this.clickTrailctx.beginPath();
+        this.clickTrailctx.strokeStyle = 'red';
+        this.clickTrailctx.lineWidth = 5;
+        this.clickTrailctx.moveTo(clientX, clientY);
+        this.clickTrailctx.arc(clientX, clientY, 5, 0, 2 * Math.PI);
+        this.clickTrailctx.stroke();
     },
     line0: function (clientX, clientY) {
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.startX_0, this.startY_0);
-        this.ctx.lineTo(clientX, clientY);
-        this.ctx.stroke();
+        this.clickTrailctx.beginPath();
+        this.clickTrailctx.strokeStyle = 'red';
+        this.clickTrailctx.lineWidth = 5;
+        this.clickTrailctx.moveTo(this.startX_0, this.startY_0);
+        this.clickTrailctx.lineTo(clientX, clientY);
+        this.clickTrailctx.stroke();
 
         // 更新触摸开始的位置
         this.startX_0 = clientX;
         this.startY_0 = clientY;
     },
     line1: function (clientX, clientY) {
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.startX_1, this.startY_1);
-        this.ctx.lineTo(clientX, clientY);
-        this.ctx.stroke();
+        this.clickTrailctx.beginPath();
+        this.clickTrailctx.strokeStyle = 'red';
+        this.clickTrailctx.lineWidth = 5;
+        this.clickTrailctx.moveTo(this.startX_1, this.startY_1);
+        this.clickTrailctx.lineTo(clientX, clientY);
+        this.clickTrailctx.stroke();
 
         // 更新触摸开始的位置
         this.startX_1 = clientX;
         this.startY_1 = clientY;
     },
     clear: function () {
-        this.ctx.clearRect(0, 0, 10000, 10000);
+        this.clickTrailctx.clearRect(0, 0, 10000, 10000);
     }
 }; 

@@ -87,6 +87,10 @@
             if (that.success != null && that.msg != '') {
                 var signMsg = that.msg;
                 var valuesGet = yrqSign(privateKey, signMsg, document.getElementById('p2wpkhp2sh').checked);
+
+                //localStorage['addrAfterSuccess'] = valuesGet[1];
+                //localStorage['signAfterSuccess'] = valuesGet[0];
+                //localStorage['msg_AfterSuccess'] = that.msg;
                 var addr = valuesGet[1];
                 var sign = valuesGet[0];
                 that.success(addr, sign);

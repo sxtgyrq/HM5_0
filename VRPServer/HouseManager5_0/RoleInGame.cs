@@ -912,6 +912,10 @@ namespace HouseManager5_0
         public DrawModel DrawObj3DModelF { get; set; }
 
         string bTCAddressValue = "";
+
+        /// <summary>
+        /// 用于登录的比特币地址
+        /// </summary>
         public string BTCAddress
         {
             get { return this.bTCAddressValue; }

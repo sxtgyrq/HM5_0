@@ -111,7 +111,7 @@ namespace HouseManager5_0.RoomMainF
                                 {
                                     if (BitCoin.CheckAddress.CheckAddressIsUseful(player.RefererAddr))
                                     {
-                                        DalOfAddress.MoneyRefererAdd.AddMoney(player.RefererAddr, player.RefererCount * 10);
+                                        DalOfAddress.MoneyRefererAdd.AddMoney(player.RefererAddr, player.RefererCount * 100);
                                         var tasks = DalOfAddress.TaskCopy.GetALLItem(player.RefererAddr);
                                         this.taskM.AddReferer(player.RefererCount, tasks);
                                         player.RefererCount = 0;

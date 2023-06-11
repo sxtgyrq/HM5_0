@@ -523,8 +523,9 @@ namespace HouseManager5_0.GroupClassF
         {
             List<string> sendMsgs = new List<string>();
             var Fp = fps[0];
+            var owner = this.GetOwner(Fp, gp);
             var rankNum = rank.FindIndex(item => item.FastenPositionID == Fp.FastenPositionID);
-            player.Ts = new TargetForSelect(collectSelect, TargetForSelect.TargetForSelectType.collect, rankNum, player.improvementRecord.HasValueToImproveSpeed);
+            player.Ts = new TargetForSelect(collectSelect, TargetForSelect.TargetForSelectType.collect, rankNum, player.improvementRecord.HasValueToImproveSpeed, owner);
             //{
             //    tsType = "collect",
             //    select = collectSelect,
@@ -535,27 +536,59 @@ namespace HouseManager5_0.GroupClassF
 
             if (player.Ts.costPrice == 0)
             {
-                if (string.IsNullOrEmpty(Fp.region))
+                if (owner == null)
                 {
-                    msg = $"<b>到【{Fp.FastenPositionName}】收集1.00元？</b>";
+                    if (string.IsNullOrEmpty(Fp.region))
+                    {
+                        msg = $"<b>到【{Fp.FastenPositionName}】收集1.00元？</b>";
+                    }
+                    else
+                    {
+                        msg = $"<b>到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00元？</b>";
+                    }
                 }
                 else
                 {
-                    msg = $"<b>到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00元？</b>";
+                    if (string.IsNullOrEmpty(Fp.region))
+                    {
+                        msg = $"<b>到【{Fp.FastenPositionName}】找【{owner.dyNickName}】收集1.00元？</b>";
+                    }
+                    else
+                    {
+                        msg = $"<b>到[{Fp.region}]【{Fp.FastenPositionName}】找【{owner.dyNickName}】收集1.00元？</b>";
+                    }
                 }
             }
             else
             {
-                var priceStr = player.Ts.costPriceStr;
-                if (string.IsNullOrEmpty(Fp.region))
+                //  var owner = this.GetOwner(Fp, gp);
+                if (owner == null)
                 {
-                    msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到【{Fp.FastenPositionName}】收集1.00元？</b>";
-                    // msg = $"<b>是否花费<span>{priceStr}<span>到【{Fp.FastenPositionName}】收集1.00元？</b>";
+                    var priceStr = player.Ts.costPriceStr;
+                    if (string.IsNullOrEmpty(Fp.region))
+                    {
+                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到【{Fp.FastenPositionName}】收集1.00元？</b>";
+                        // msg = $"<b>是否花费<span>{priceStr}<span>到【{Fp.FastenPositionName}】收集1.00元？</b>";
+                    }
+                    else
+                    {
+                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00元？</b>";
+                        // msg = $"<b>是否花费<span>{priceStr}<span>到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00元？</b>";
+                    }
                 }
                 else
                 {
-                    msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00元？</b>";
-                    // msg = $"<b>是否花费<span>{priceStr}<span>到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00元？</b>";
+                    var priceStr = player.Ts.costPriceStr;
+                    if (string.IsNullOrEmpty(Fp.region))
+                    {
+                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到【{Fp.FastenPositionName}】找【{owner.dyNickName}】收集1.00元？</b>";
+                        // msg = $"<b>是否花费<span>{priceStr}<span>到【{Fp.FastenPositionName}】收集1.00元？</b>";
+                    }
+                    else
+                    {
+                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到[{Fp.region}]【{Fp.FastenPositionName}】找【{owner.dyNickName}】收集1.00元？</b>";
+                        // msg = $"<b>是否花费<span>{priceStr}<span>到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00元？</b>";
+                    }
                 }
             }
             var obj = GetConfirmInfomation(player.WebSocketID, Fp, msg, player.Ts);

@@ -997,6 +997,7 @@ var objMain =
                         objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
                     }
                     var obj = objMain.buildingShowGroup.getObjectByName(received_obj.id);
+                    obj.scale.set(1, 1, 1);
                     objMain.buildingShowGroup.remove(obj);
                     objMain.buildingGroup.add(obj);
                 }; break;
@@ -1137,7 +1138,8 @@ var objMain =
         aModel: {},
         dModel: {}
     },
-    buildingModel: {}
+    buildingModel: {},
+    animateClosestObjName: true
 };
 var startA = function () {
     var connected = false;
@@ -1555,16 +1557,9 @@ function animate() {
                         objMain.closestObjName = objMain.buildingShowGroup.children[i].name;
                         minLength = length;
                     }
-                    /*
-                     * 初始化汽车的大小
-                     */
-                    //var scale = Math.sin(((Date.now() % 2000) / 2000) * Math.PI * 2) * 0.1 + 1;
-                    //if (objMain.buildingGroup.children[i].isGroup) {
-                    //    objMain.buildingGroup.children[i].scale.set(scale, scale, scale);
-                    //} 
                 }
             }
-            if (objMain.closestObjName != '') {
+            if (objMain.closestObjName != '' && objMain.animateClosestObjName) {
                 var scale = Math.sin(((Date.now() % 2000) / 2000) * Math.PI * 2) * 0.05 + 1.05;
                 objMain.buildingShowGroup.getObjectByName(objMain.closestObjName).scale.set(scale, scale, scale);
             }
@@ -3040,21 +3035,20 @@ var setScenseFromData = function (r, name) {
     }
 }
 
-var setFPScenseFromData = function (r)
-{
+var setFPScenseFromData = function (r) {
     if (r.hasValue) {
         var cubeTextureLoader = new THREE.CubeTextureLoader();
-        cubeTextureLoader.setPath(''); 
+        cubeTextureLoader.setPath('');
         var cubeTexture = cubeTextureLoader.load([
             r.px, r.nx,
             r.py, r.ny,
             r.pz, r.nz
         ]);
-        objMain.scene.background = cubeTexture; 
+        objMain.scene.background = cubeTexture;
     }
     else {
         objMain.scene.background = objMain.defaultCube;
-    } 
+    }
 }
 
 var uploadBackground = function () {
@@ -3182,6 +3176,27 @@ var BuildingModelObj =
     },
     RequestTime: {}
 };
+
+var ModelUpdate = function () {
+    var id_PlaceAndAddr = prompt('输入使用地址与位置的模型ID');
+    var geometry_PlaceAndAddr = prompt('输入使用模型数据的ID');
+
+    var backgroundData =
+    {
+        'c': 'ModelUpdate',
+        'oldModel': id_PlaceAndAddr,
+        'newModel': geometry_PlaceAndAddr
+    };
+    var json = JSON.stringify(backgroundData);
+    objMain.ws.send(json);
+};
+
+var ModelClear = function () {
+    objMain.mainF.removeF.clearGroup(objMain.buildingShowGroup);
+    //
+    //buildingGroup
+    objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
+}
 //////////
 /*
  * 手柄类，此游戏只支持单手柄操作。

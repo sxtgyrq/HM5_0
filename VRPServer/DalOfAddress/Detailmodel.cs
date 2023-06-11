@@ -368,6 +368,10 @@ WHERE modelID=@modelID and locked=0;";
             }
         }
 
+        /// <summary>
+        /// 仅仅是更像状态，不设计比特币业务地址！
+        /// </summary>
+        /// <param name="cn"></param>
         public static void UpdateUsed(MapEditor.UseModelObj cn)
         {
             int dmState;
@@ -872,7 +876,7 @@ WHERE locked=1 AND dmState=1 AND A.bussinessAddress='{bussinessAddr}';";
         /// <returns></returns>
         public static bool Replace(string replacingID, string replacedID)
         {
-            Regex rg = new Regex("^n$[0-9a-f]{32}$");
+            Regex rg = new Regex("^n[0-9a-f]{32}$");
             if (rg.IsMatch(replacedID) && rg.IsMatch(replacingID))
             {
                 using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))

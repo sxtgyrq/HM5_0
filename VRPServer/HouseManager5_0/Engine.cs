@@ -288,8 +288,8 @@ namespace HouseManager5_0
             // while (true)
             {
                 //if(selectionCenter.postionCrossKey!=player)
-
-                if (isRight(selections, player.direcitonAndID, true))
+                int rightItemIndex;
+                if (isRight(selections, player.direcitonAndID, true, out rightItemIndex))
                 {
                     selectionIsRight();//直接将State设置成Working
                                        //return false;
@@ -372,7 +372,8 @@ namespace HouseManager5_0
         {
             if (selectionCenter.postionCrossKey == player.direcitonAndID.PostionCrossKey)
             {
-                if (isRight(selections, player.direcitonAndID, false) || player.Bust)
+                int rightItemIndex;
+                if (isRight(selections, player.direcitonAndID, false, out rightItemIndex) || player.Bust)
                 {
                     List<string> notifyMsg = new List<string>();
                     if (player.getCar().state == CarState.selecting)
@@ -380,6 +381,8 @@ namespace HouseManager5_0
                         // List<string> notifyMsg = new List<string>();
                         player.getCar().setState(player, ref notifyMsg, oldState);
                         player.SendBG(player, ref notifyMsg);
+
+ 
                     }
                     this.sendSeveralMsgs(notifyMsg);
                     p();
@@ -454,7 +457,7 @@ namespace HouseManager5_0
                 animations.Add(animation);
             }
         }
-        private bool isRight(List<Node.direction> selections, HouseManager5_0.Player.DirecitonAndSelectID direcitonAndSelectID, bool firstCheck)
+        private bool isRight(List<Node.direction> selections, HouseManager5_0.Player.DirecitonAndSelectID direcitonAndSelectID, bool firstCheck, out int rightItemIndex)
         {
             var c2 = direcitonAndSelectID.direciton;
 
@@ -467,10 +470,12 @@ namespace HouseManager5_0
                 //else 
                 if (selections.Count < 2)
                 {
+                    rightItemIndex = -1;
                     return true;
                 }
                 else if (selections.Count(item => item.right) == 0)
                 {
+                    rightItemIndex = -1;
                     return true;
                 }
                 var first = (from item in selections
@@ -479,16 +484,41 @@ namespace HouseManager5_0
                        .ToList()[0];
                 if (that.rm.Next(100) < 20)
                 {
+                    rightItemIndex = -1;
                     return false;
                 }
                 else
+                {
+                    rightItemIndex = -1;
                     return first.right;
+                }
             }
             else
             {
                 var rightItem = (from item in selections
                                  where item.right
                                  select item).ToList()[0];
+                var ds1 = that.getDirection(selections, false);//没有加密的数据，服务器采用此排序方法
+
+                var ds2 = that.getDirection(selections);//加密后的排序，web前台采用此排序
+
+                ///key，对应的没有数组加密前的序数，Value对应的加密后的数组的序数
+                Dictionary<int, int> indexSheet = new Dictionary<int, int>();
+                for (int i = 0; i < ds1.Count; i++)
+                {
+                    var findEncryptedIndex = ds2.FindIndex(item => item == ds1[i]);
+                    if (findEncryptedIndex == -1)
+                    {
+                        throw new Exception("");
+                    }
+                    indexSheet.Add(i, findEncryptedIndex);
+                    //if(findRealIndex)
+                    //indexSheet.Add()
+                    // Dictionary<>
+                }
+                //
+                rightItemIndex = selections.FindIndex(item => item.right);
+                rightItemIndex = indexSheet[rightItemIndex]; //rightItemIndex 对应了前台
                 ////                var angle = that.getAngle(that.getComplex(rightItem) / c2);
                 ////#warning 这里要调试完 要删除
                 ////                Console.WriteLine(angle);

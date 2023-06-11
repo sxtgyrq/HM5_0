@@ -97,6 +97,7 @@ namespace HouseManager5_0
             Program.dt.LoadModel();
             Program.dt.LoadCrossBackground();
             Program.dt.LoadFPBackground();
+            Program.dt.LoadDouyinMarketInfo();
 
             Program.rm = new RoomMainF.RoomMain(Program.dt);
 

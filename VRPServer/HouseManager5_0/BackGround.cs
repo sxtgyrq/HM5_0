@@ -134,6 +134,7 @@ namespace HouseManager5_0
 
                     case "太谷区": { return "region/taigu"; };
                     case "祁县": { return "region/qixian"; };
+                    case "晋源区": { return "region/jinyuan"; };
                     default:
                         {
                             return "";

@@ -1,5 +1,6 @@
 ﻿using BitCoin;
 using CommonClass;
+using CommonClass.MateWsAndHouse;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -21,6 +23,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Ubiety.Dns.Core;
+using static BitCoin.Transtraction.TradeInfo;
 using static WsOfWebClient.ConnectInfo;
 
 namespace WsOfWebClient
@@ -90,6 +93,7 @@ namespace WsOfWebClient
             // app.UseCors("AllowAny");
             app.Map("/bgimg", BackGroundImg);
             app.Map("/objdata", ObjData);
+            app.Map("/douyindata", douyindata);
             //app.Map("/websocket", WebSocketF);
             // app.Map("/notify", notify);
 
@@ -256,7 +260,7 @@ namespace WsOfWebClient
                             }
                         }
                     }
-                    else if(regex_FP.IsMatch(pathValue)) 
+                    else if (regex_FP.IsMatch(pathValue))
                     {
                         indexOfCall++;
                         indexOfCall = indexOfCall % Room.roomUrls.Count;
@@ -310,6 +314,39 @@ namespace WsOfWebClient
                             }
                         }
                     }
+                }
+                catch (Exception e)
+                {
+                    //throw e;
+                }
+            });
+        }
+
+        internal static void douyindata(IApplicationBuilder app)
+        {
+            app.UseCors("AllowAny");
+            app.Run(async context =>
+            {
+                try
+                {
+                    //$.get("http://127.0.0.1:11001/objdata/04FF6C83E093F15D5E844ED94838D761/d/d")
+                    //$.getJSON("http://127.0.0.1:11001/objdata/04FF6C83E093F15D5E844ED94838D761/3/2")
+                    // throw new NotImplementedException();
+                    //var pathValue = context.Request.Path.Value;
+                    string requestBody;
+                    using (StreamReader reader = new StreamReader(context.Request.Body))
+                    {
+                        requestBody = await reader.ReadToEndAsync();
+                    };
+                    CommonClass.douyin.log logObj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.douyin.log>(requestBody);
+                    // context.Request.BodyReader
+
+                    Console.WriteLine(requestBody);
+                    Room.SendZhiBoContent(logObj);
+
+                    var bytes = Encoding.UTF8.GetBytes("ok");
+                    await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
+
                 }
                 catch (Exception e)
                 {
@@ -451,18 +488,94 @@ namespace WsOfWebClient
                                     {
                                         if (s.Ls == LoginState.empty)
                                         {
+                                            //var session = $"^\\{{\\\"Key\\\":\\\"{"[0-9a-f]{32}"}\\\",\\\"GroupKey\\\":\\\"{"[0-9a-f]{32}"}\\\",\\\"FromUrl\\\":\\\"\\\",\\\"RoomIndex\\\":{"[0-9]{1,5}"},\\\"Check\\\":\\\"{"[0-9a-f]{32}"}\\\",\\\"WebSocketID\\\":{"[0-9]{1,10}"},\\\"PlayerName\\\":\\\"{".*"}\\\",\\\"RefererAddr\\\":\\\"{"[0-9a-zA-z]{0,99}"}\\\",\\\"groupMemberCount\\\":{"[0-9]{1,10}"},\\\"c\\\":\\\"{"PlayerAdd_V2"}\\\"\\}}^";
+                                            //  Regex rx=new Regex("")
                                             CheckSession checkSession = Newtonsoft.Json.JsonConvert.DeserializeObject<CheckSession>(returnResult.result);
-                                            var checkResult = BLL.CheckSessionBLL.checkIsOK(checkSession, s);
-                                            if (checkResult.CheckOK)
+                                            if (string.IsNullOrEmpty(checkSession.session))
                                             {
-                                                s.Key = checkResult.Key;
-                                                s.roomIndex = checkResult.roomIndex;
-                                                s.GroupKey = checkResult.GroupKey;
-                                                s = Room.setOnLine(s, connectInfoDetail);
+                                                s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
                                             }
                                             else
                                             {
-                                                s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                                                Regex rg = new Regex(BLL.CheckSessionBLL.RoomInfoRegexPattern);
+                                                Regex regexOfCaptail = new Regex(Team.TeamCaptainInfoRegexPattern);
+                                                Regex regexOfTeamMember = new Regex(Team.TeamMemberInfoRegexPattern);
+                                                if (rg.IsMatch(checkSession.session))
+                                                {
+                                                    //  CheckSession checkSession = Newtonsoft.Json.JsonConvert.DeserializeObject<CheckSession>(returnResult.result);
+                                                    var checkResult = BLL.CheckSessionBLL.checkIsOK(checkSession, s);
+                                                    if (checkResult.CheckOK)
+                                                    {
+                                                        s.Key = checkResult.Key;
+                                                        s.roomIndex = checkResult.roomIndex;
+                                                        s.GroupKey = checkResult.GroupKey;
+                                                        s = Room.setOnLine(s, connectInfoDetail);
+                                                    }
+                                                    else
+                                                    {
+                                                        s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                                                    }
+                                                }
+                                                else if (regexOfCaptail.IsMatch(checkSession.session))
+                                                {
+                                                    {
+                                                        s = Room.setState(s, connectInfoDetail, LoginState.WaitingToStart);
+                                                    }
+                                                    string command_start;
+                                                    string updateKey;
+                                                    string teamID;
+                                                    var stringGet = Team.checkIsOK(checkSession, s, out command_start, out updateKey, out teamID);
+                                                    if (stringGet == "failed")
+                                                    {
+                                                        s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                                                    }
+                                                    else
+                                                    {
+                                                        CommonClass.Command objGet = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.Command>(stringGet);
+                                                        if (objGet.c == "TeamResult")
+                                                        {
+                                                            {
+
+                                                                var team = Newtonsoft.Json.JsonConvert.DeserializeObject<TeamResult>(stringGet);
+                                                                Team.UpdateTeammate(team);
+                                                                bool success;
+                                                                s = WaitCaptaiCommand(ref returnResult, ref s, command_start, team, playerName, checkSession.RefererAddr, connectInfoDetail, webWsSize, out success);
+                                                                if (success) { }
+                                                                else
+                                                                {
+                                                                    return;
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                                                        }
+                                                    }
+                                                }
+                                                else if (regexOfTeamMember.IsMatch(checkSession.session))
+                                                {
+                                                    s = Room.setState(s, connectInfoDetail, LoginState.WaitingToGetTeam);
+                                                    string command_start;
+                                                    string updateKey;
+                                                    string teamID;
+                                                    var stringGet = Team.checkIsOK(checkSession, s, out command_start, out updateKey, out teamID);
+                                                    if (stringGet == "failed")
+                                                    {
+                                                        s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                                                    }
+                                                    else
+                                                    {
+                                                        TeamJoin tj = Newtonsoft.Json.JsonConvert.DeserializeObject<TeamJoin>(stringGet);
+                                                        s = AfterFindTeam("ok", ref s, tj.CommandStart, tj.UpdateKey, teamID, connectInfoDetail);
+                                                    }
+
+
+                                                }
+                                                else
+                                                {
+                                                    s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                                                }
                                             }
                                         }
                                     }; break;
@@ -511,24 +624,33 @@ namespace WsOfWebClient
                                                     //
                                                     command_start = CommonClass.Random.GetMD5HashFromStr(s.WebsocketID.ToString() + s.WebsocketID);
                                                     team = Team.createTeam2(s.WebsocketID, playerName, command_start);
-                                                }
-                                                {
-                                                    //var command_start = CommonClass.Random.GetMD5HashFromStr(s.WebsocketID.ToString() + s.WebsocketID); 
-                                                    returnResult = ReceiveStringAsync(connectInfoDetail, webWsSize);
+                                                    Team.WriteSession(team, connectInfoDetail);
 
-                                                    wResult = returnResult.wr;
-                                                    if (returnResult.result == command_start)
-                                                    {
-                                                        s = Room.GetRoomThenStartAfterCreateTeam(s, connectInfoDetail, team, playerName, ct.RefererAddr);
-                                                    }
-                                                    else if (returnResult.result == command_start + "exit")
-                                                    {
-                                                        s = Room.CancelAfterCreateTeam(s, connectInfoDetail, team, playerName, ct.RefererAddr);
-                                                    }
-                                                    else
-                                                    {
-                                                        return;
-                                                    }
+
+                                                }
+
+                                                {
+                                                    bool success;
+                                                    s = WaitCaptaiCommand(ref returnResult, ref s, command_start, team, playerName, ct.RefererAddr, connectInfoDetail, webWsSize, out success);
+
+                                                    if (success) { }
+                                                    else { return; }
+                                                    //var command_start = CommonClass.Random.GetMD5HashFromStr(s.WebsocketID.ToString() + s.WebsocketID); 
+                                                    //returnResult = ReceiveStringAsync(connectInfoDetail, webWsSize);
+
+                                                    //wResult = returnResult.wr;
+                                                    //if (returnResult.result == command_start)
+                                                    //{
+                                                    //    s = Room.GetRoomThenStartAfterCreateTeam(s, connectInfoDetail, team, playerName, ct.RefererAddr);
+                                                    //}
+                                                    //else if (returnResult.result == command_start + "exit")
+                                                    //{
+                                                    //    s = Room.CancelAfterCreateTeam(s, connectInfoDetail, team, playerName, ct.RefererAddr);
+                                                    //}
+                                                    //else
+                                                    //{
+                                                    //    return;
+                                                    //}
                                                 }
                                             }
                                         }
@@ -550,41 +672,47 @@ namespace WsOfWebClient
                                                     wResult = returnResult.wr;
                                                     var teamID = returnResult.result;
                                                     command_start = CommonClass.Random.GetMD5HashFromStr(s.WebsocketID.ToString() + s.WebsocketID + DateTime.Now.ToString());
-                                                    var result = Team.findTeam2(s.WebsocketID, playerName, command_start, teamID);
-
-                                                    if (result == "ok")
-                                                    {
-                                                        s.CommandStart = command_start;
-                                                        s.teamID = teamID;
-                                                    }
-                                                    else if (result == "game has begun")
-                                                    {
-                                                        s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
-                                                        Room.Alert(connectInfoDetail, $"他们已经开始了！");
-                                                    }
-                                                    else if (result == "is not number")
-                                                    {
-                                                        s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
-                                                        Room.Alert(connectInfoDetail, $"请输入数字");
-                                                    }
-                                                    else if (result == "not has the team")
-                                                    {
-                                                        s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
-                                                        Room.Alert(connectInfoDetail, $"没有该队伍({teamID})");
-                                                    }
-                                                    else if (result == "team is full")
-                                                    {
-                                                        s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
-                                                        Room.Alert(connectInfoDetail, "该队伍已满员");
-                                                    }
-                                                    else if (result == "need to back")
-                                                    {
-                                                        s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
-                                                    }
-                                                    else
-                                                    {
-                                                        s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
-                                                    }
+                                                    string updateKey;
+                                                    var result = Team.findTeam2(s.WebsocketID, playerName, command_start, teamID, out updateKey);
+                                                    //if (result == "ok")
+                                                    //{
+                                                    //    Team.WriteSession(teamID, updateKey, connectInfoDetail);
+                                                    //}
+                                                    s = AfterFindTeam(result, ref s, command_start, updateKey, teamID, connectInfoDetail);
+                                                    //if (result == "ok")
+                                                    //{
+                                                    //    s.CommandStart = command_start;
+                                                    //    s.teamID = teamID;
+                                                    //    Team.WriteSession(teamID, connectInfoDetail);
+                                                    //}
+                                                    //else if (result == "game has begun")
+                                                    //{
+                                                    //    s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                                                    //    Room.Alert(connectInfoDetail, $"他们已经开始了！");
+                                                    //}
+                                                    //else if (result == "is not number")
+                                                    //{
+                                                    //    s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                                                    //    Room.Alert(connectInfoDetail, $"请输入数字");
+                                                    //}
+                                                    //else if (result == "not has the team")
+                                                    //{
+                                                    //    s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                                                    //    Room.Alert(connectInfoDetail, $"没有该队伍({teamID})");
+                                                    //}
+                                                    //else if (result == "team is full")
+                                                    //{
+                                                    //    s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                                                    //    Room.Alert(connectInfoDetail, "该队伍已满员");
+                                                    //}
+                                                    //else if (result == "need to back")
+                                                    //{
+                                                    //    s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                                                    //}
+                                                    //else
+                                                    //{
+                                                    //    s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                                                    //}
                                                 }
                                             }
                                         }
@@ -842,7 +970,7 @@ namespace WsOfWebClient
                                 case "GetResistance":
                                     {
                                         GetResistance gr = Newtonsoft.Json.JsonConvert.DeserializeObject<GetResistance>(returnResult.result);
-                                        var r = Room.GetResistanceF(s, gr);
+                                        var r = Room.GetResistanceF(s, gr, connectInfoDetail);
                                         if (!string.IsNullOrEmpty(r))
                                         {
                                             Room.GetMaterial(r, connectInfoDetail);
@@ -1022,6 +1150,22 @@ namespace WsOfWebClient
                                         //这里有必要，防止上面执行完，下面执行，直接跳入default
                                     }
                                     ; break;
+                                case "SetNextPlace":
+                                    {
+                                        if (s.Ls == LoginState.OnLine)
+                                        {
+                                            SetNextPlace snp = Newtonsoft.Json.JsonConvert.DeserializeObject<SetNextPlace>(returnResult.result);
+                                            Room.SetNextPlace(s, snp);
+                                        }
+                                    }; break;
+                                case "SetGroupLive":
+                                    {
+                                        if (s.Ls == LoginState.OnLine)
+                                        {
+                                            SetGroupLive snp = Newtonsoft.Json.JsonConvert.DeserializeObject<SetGroupLive>(returnResult.result);
+                                            Room.SetGroupLive(s, snp);
+                                        }
+                                    }; break;
                                 default:
                                     {
                                         // Console.WriteLine(returnResult.result);
@@ -1047,6 +1191,76 @@ namespace WsOfWebClient
                 Room.setOffLine(ref s);
                 return;
             };
+        }
+
+        private static State AfterFindTeam(string result, ref State s, string command_start, string updateKey, string teamID, ConnectInfo.ConnectInfoDetail connectInfoDetail)
+        {
+            if (result == "ok")
+            {
+                s.CommandStart = command_start;
+                s.teamID = teamID;
+                Team.WriteSession(teamID, updateKey, connectInfoDetail);
+            }
+            else if (result == "game has begun")
+            {
+                s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                Room.Alert(connectInfoDetail, $"他们已经开始了！");
+            }
+            else if (result == "is not number")
+            {
+                s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                Room.Alert(connectInfoDetail, $"请输入数字");
+            }
+            else if (result == "not has the team")
+            {
+                s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                Room.Alert(connectInfoDetail, $"没有该队伍({teamID})");
+            }
+            else if (result == "team is full")
+            {
+                s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+                Room.Alert(connectInfoDetail, "该队伍已满员");
+            }
+            else if (result == "need to back")
+            {
+                s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+            }
+            else
+            {
+                s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+            }
+            return s;
+        }
+
+        private static State WaitCaptaiCommand(ref ReceiveObj returnResult, ref State s, string command_start, TeamResult team, string playerName, string refererAddr, ConnectInfo.ConnectInfoDetail connectInfoDetail, int size, out bool success)
+        {
+            returnResult = ReceiveStringAsync(connectInfoDetail, webWsSize);
+
+            var wResult = returnResult.wr;
+            if (returnResult.result == command_start)
+            {
+                if (Team.IsAllOnLine(team, connectInfoDetail))
+                {
+                    s = Room.GetRoomThenStartAfterCreateTeam(s, connectInfoDetail, team, playerName, refererAddr);
+                    success = true;
+                    return s;
+                }
+                else
+                {
+                    return WaitCaptaiCommand(ref returnResult, ref s, command_start, team, playerName, refererAddr, connectInfoDetail, size, out success);
+                }
+            }
+            else if (returnResult.result == command_start + "exit")
+            {
+                s = Room.CancelAfterCreateTeam(s, connectInfoDetail, team, playerName, refererAddr);
+                success = true;
+                return s;
+            }
+            else
+            {
+                success = false;
+                return s;
+            }
         }
 
         //private static List<WebsocketClient> _clients = new List<WebsocketClient>();

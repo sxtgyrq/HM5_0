@@ -407,9 +407,9 @@ namespace HouseManager5_0.RoomMainF
         }
 
 
-        public void setPromtePosition(string changeType, GroupClass group)
+        public void setPromtePosition(string changeType, GroupClass group, GetRandomPos grp)
         {
-            group.setPromtePosition(changeType);
+            group.setPromtePosition(changeType, grp);
             //if (changeType == "mile")
             //    this.promoteMilePosition = GetRandomPosition(true, Program.dt);
             //else if (changeType == "business")

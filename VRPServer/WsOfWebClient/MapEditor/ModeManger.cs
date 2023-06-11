@@ -830,13 +830,13 @@ namespace WsOfWebClient.MapEditor
                     newModel = mu.newModel,
                     oldModel = mu.oldModel,
                 });
-                var json = Startup.sendInmationToUrlAndGetRes(roomUrl, sendMsg);
-
-                if (string.IsNullOrEmpty(json)) { }
-                else
-                {
-                    CommonF.SendData(json, connectInfoDetail, 0);
-                }
+                var result = Startup.sendInmationToUrlAndGetRes(roomUrl, sendMsg);
+                Console.WriteLine(result);
+                //if (string.IsNullOrEmpty(json)) { }
+                //else
+                //{
+                //   //CommonF.SendData(json, connectInfoDetail, 0);
+                //}
             }
 
 

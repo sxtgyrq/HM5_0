@@ -59,6 +59,9 @@
         else if (subsidizeSys.operateAddress != '') {
             document.getElementById('bitcoinAddressInput').value = subsidizeSys.operateAddress;
         }
+        else if (localStorage['msg_AfterSuccess'] != undefined && localStorage['msg_AfterSuccess'] == JSON.parse(sessionStorage['session']).Key) {
+            document.getElementById('bitcoinAddressInput').value = localStorage['addrAfterSuccess'];
+        }
     },
     updateMoneyForSave: function () {
         var that = moneyOperator;

@@ -112,18 +112,43 @@ namespace HouseManager5_0.GroupClassF
 
         internal void setCollectPosition(int target)
         {
-            int key = -1;
-            foreach (var item in this._collectPosition)
+            if (this.administratorNeedToshowAddrIndex >= 0)
             {
-                if (item.Value == target)
+                if (this.FpIsUsing(this.administratorNeedToshowAddrIndex))
+                { }
+                else
                 {
-                    key = item.Key;
-                    break;
+                    int key = -1;
+                    foreach (var item in this._collectPosition)
+                    {
+                        if (item.Value == target)
+                        {
+                            key = item.Key;
+                            break;
+                        }
+                    }
+                    if (key != -1)
+                    {
+                        this._collectPosition[key] = this.administratorNeedToshowAddrIndex;
+                    }
                 }
+                this.administratorNeedToshowAddrIndex = -1;
             }
-            if (key != -1)
+            else
             {
-                this._collectPosition[key] = this.GetRandomPosition(true, Program.dt);
+                int key = -1;
+                foreach (var item in this._collectPosition)
+                {
+                    if (item.Value == target)
+                    {
+                        key = item.Key;
+                        break;
+                    }
+                }
+                if (key != -1)
+                {
+                    this._collectPosition[key] = this.GetRandomPosition(true, Program.dt);
+                }
             }
         }
 

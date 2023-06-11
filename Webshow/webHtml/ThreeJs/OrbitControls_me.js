@@ -1110,6 +1110,7 @@ THREE.OrbitControls = function (object, domElement) {
                                             {
                                                 if (myGamepad.buttons[6].pressed && !myGamepad.buttons[7].pressed) {
                                                     if (objMain.closestObjName != '') {
+                                                        objMain.buildingShowGroup.getObjectByName(objMain.closestObjName).scale.set(1, 1, 1);
                                                         keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'EditModel', name: objMain.closestObjName })) }, buttonIndex);
                                                     }
                                                 }
@@ -1171,6 +1172,9 @@ THREE.OrbitControls = function (object, domElement) {
                                                             keyFunction(function () {
                                                                 var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
                                                                 objMain.ws.send(JSON.stringify({ c: 'DeleteModel', name: objMain.closestObjName, x: objOperate.position.x, z: objOperate.position.z }));
+                                                                objMain.buildingGroup.remove(objOperate);
+                                                                objMain.buildingShowGroup.remove(objOperate);
+                                                                //    objMain.buildingGroup.getObjectByName('ss')
                                                             }, buttonIndex);
                                                             objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
                                                             $.notify('do del');
@@ -1296,7 +1300,9 @@ THREE.OrbitControls = function (object, domElement) {
                                                     document.getElementById('confirmAlert').style.zIndex = '-10';
                                                 }
                                                 objMain.mainF.removeF.clearNearObj(objMain.controls.target.x, objMain.controls.target.z, objMain.buildingShowGroup);
-                                                keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'ShowOBJFile', x: objMain.controls.target.x, z: objMain.controls.target.z })) }, buttonIndex);
+                                                keyFunction(function () { 
+                                                    objMain.ws.send(JSON.stringify({ c: 'ShowOBJFile', x: objMain.controls.target.x, z: objMain.controls.target.z }));
+                                                }, buttonIndex);
                                             }
                                         }; break;
                                     case 'road':

@@ -471,8 +471,16 @@ namespace HouseManager5_0.RoomMainF
             return "";
         }
 
+        /// <summary>
+        /// 仅仅是更新状态，不处理业务地址。
+        /// </summary>
+        /// <param name="cn"></param>
+        /// <returns></returns>
         public string UseModelObj(MapEditor.UseModelObj cn)
         {
+            /*
+             * 仅仅是更新状态，不处理业务地址
+             */
             DalOfAddress.detailmodel.UpdateUsed(cn);
             return "";
             // throw new NotImplementedException();
@@ -855,6 +863,20 @@ namespace HouseManager5_0.RoomMainF
                     return "";
                 }
             }
+        }
+
+        public string ModelReplaceF(MapEditor.ModelReplace mr)
+        {
+            var success = DalOfAddress.detailmodel.Replace(mr.newModel, mr.oldModel);
+            if (success)
+            {
+                return "success";
+            }
+            else 
+            {
+                return "failure";
+            }
+            // throw new NotImplementedException();
         }
     }
 

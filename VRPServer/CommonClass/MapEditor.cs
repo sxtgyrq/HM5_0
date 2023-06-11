@@ -104,6 +104,9 @@ namespace CommonClass
             public double y { get; set; }
             public double z { get; set; }
             public bool locked { get; set; }
+            /// <summary>
+            /// 0,not using;1using;
+            /// </summary>
             public int dmState { get; set; }
             public string bussinessAddress { get; set; }
             public string Content { get; set; }
@@ -191,7 +194,7 @@ namespace CommonClass
         public class ModelReplace : Command 
         {
             public string newModel { get; set; }
-            public double oldModel { get; set; }
+            public string oldModel { get; set; }
         }
 
         public class UseBackgroundScene : Command

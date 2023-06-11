@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -217,6 +218,47 @@ namespace WsOfWebClient
             {
                 return "";
             }
+        }
+
+        internal static void SendZhiBoContent(CommonClass.douyin.log logItem)
+        {
+            for (int i = 0; i < Room.roomUrls.Count; i++)
+            {
+                int roomindex = i + 0;
+                var obj = new DouyinLogContent()
+                {
+                    c = "DouyinLogContent",
+                    Log = logItem
+                };
+                var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+                var receivedMsg = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[roomindex], sendMsg);
+            }
+        }
+
+
+        internal static void SetNextPlace(State s, SetNextPlace snp)
+        {
+            var gfma = new CommonClass.SetNextPlace()
+            {
+                c = "SetNextPlace",
+                GroupKey = s.GroupKey,
+                Key = s.Key,
+                FastenPositionID = snp.FastenPositionID,
+            };
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gfma);
+            var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+        }
+
+        internal static void SetGroupLive(State s, SetGroupLive snp)
+        {
+            var gfma = new CommonClass.SetGroupLive()
+            {
+                c = "SetGroupLive",
+                GroupKey = s.GroupKey,
+                Key = s.Key,
+            };
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gfma);
+            var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
         }
     }
 
