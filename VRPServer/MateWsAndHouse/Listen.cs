@@ -199,7 +199,8 @@ namespace MateWsAndHouse
                                     {
                                         if (Program.allTeams.ContainsKey(teamIndex))
                                         {
-                                            if (Program.allTeams[teamIndex].member.Count > 3)
+                                            const int teamMaxMemberExceptCaptain = 1;
+                                            if (Program.allTeams[teamIndex].member.Count > teamMaxMemberExceptCaptain)
                                             {
                                                 memberIsFull = true;
                                             }

@@ -22,9 +22,15 @@ namespace HouseManager5_0.RoomMainF
 
         public string updatePromote(SetPromote sp, GetRandomPos grp)
         {
-            var result = this.promoteE.updatePromote(sp, grp);
-            Thread.Sleep(10 * 1000);//这里让线程坚持10秒，确保动画数据再线程被取消前，传值前台！
-            return result;
+
+            WaitForAPeriodOfTime(new Action(() =>
+            {
+                this.promoteE.updatePromote(sp, grp);
+            }), 10 * 1000);
+            return "";
+            //var result =
+            //Thread.Sleep(10 * 1000);//这里让线程坚持10秒，确保动画数据再线程被取消前，传值前台！
+            //return result;
         }
 
         ///// <summary>

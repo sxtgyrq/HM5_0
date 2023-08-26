@@ -1243,7 +1243,7 @@ THREE.OrbitControls = function (object, domElement) {
                                             else if (objMain.buildingGroup.children.length > 0) {
                                                 if (objMain.useAddNew == true) {
                                                     var x = objMain.buildingGroup.children[0].position.x;
-                                                    var y = objMain.buildingGroup.children[0].position.y;
+                                                    var y = objMain.buildingGroup.children[0].position.y / objMain.heightAmplify;
                                                     var z = objMain.buildingGroup.children[0].position.z;
                                                     var rotationY = objMain.buildingGroup.children[0].rotation.y;
                                                     keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'CreateNewObj', x: x, y: y, z: z, rotationY: rotationY, objNew: uploadObj.objNew() })) }, buttonIndex);
@@ -1251,7 +1251,7 @@ THREE.OrbitControls = function (object, domElement) {
                                                 }
                                                 else {
                                                     var x = objMain.buildingGroup.children[0].position.x;
-                                                    var y = objMain.buildingGroup.children[0].position.y;
+                                                    var y = objMain.buildingGroup.children[0].position.y / objMain.heightAmplify;
                                                     var z = objMain.buildingGroup.children[0].position.z;
                                                     var rotationY = objMain.buildingGroup.children[0].rotation.y;
                                                     keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'SaveObj', x: x, y: y, z: z, rotationY: rotationY })) }, buttonIndex);
@@ -1300,7 +1300,7 @@ THREE.OrbitControls = function (object, domElement) {
                                                     document.getElementById('confirmAlert').style.zIndex = '-10';
                                                 }
                                                 objMain.mainF.removeF.clearNearObj(objMain.controls.target.x, objMain.controls.target.z, objMain.buildingShowGroup);
-                                                keyFunction(function () { 
+                                                keyFunction(function () {
                                                     objMain.ws.send(JSON.stringify({ c: 'ShowOBJFile', x: objMain.controls.target.x, z: objMain.controls.target.z }));
                                                 }, buttonIndex);
                                             }
@@ -1312,7 +1312,7 @@ THREE.OrbitControls = function (object, domElement) {
                                                 // showFPBackground();
                                             }
                                             else if (myGamepad.buttons[7].pressed && !myGamepad.buttons[6].pressed) {
-
+                                                keyFunction(function () { showFPBackgroundWithCode(); }, buttonIndex);
                                             }
                                             else if (myGamepad.buttons[7].pressed && myGamepad.buttons[6].pressed) {
 

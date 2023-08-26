@@ -141,8 +141,85 @@ namespace CommonClass
             {
                 public bool success { get; set; }
                 public string msg { get; set; }
+                public string btcAddr { get; set; }
             }
         }
+        public class ChargingLookFor : CommonClass.Command
+        {
+            public string bindWordMsg { get; set; }
+            public string verifyCodeValue { get; set; }
+            public class Result : CommonClass.Command
+            {
+                public string bindWordMsg { get; set; }
+                public string bindWordAddr { get; set; }
+                public List<DataItem> chargingData { get; set; }
+                public class DataItem
+                {
+                    public string date { get; set; }
+                    public string amount { get; set; }
+                }
+            }
+
+        }
+
+        public class ScoreTransferLookFor : CommonClass.Command
+        {
+            public string bindWordMsg { get; set; }
+            public string verifyCodeValue { get; set; }
+            /// <summary>
+            /// 0,代表转出，1代表转入
+            /// </summary>
+            public int transferType { get; set; }
+            public class InputScoreResult : CommonClass.Command
+            {
+                public string tabelName { get; set; }
+                public string bindWordMsg { get; set; }
+                public string bindWordAddr { get; set; }
+                public List<DataItem> scoreData { get; set; }
+                public class DataItem
+                {
+                    public string addrFrom { get; set; }
+                    public long amount { get; set; }
+                    public string date { get; set; }
+                    public string uuid { get; set; }
+                    public bool isVerified { get; set; }
+                }
+            }
+            public class OutputScoreResult : CommonClass.Command
+            {
+                public string tabelName { get; set; }
+                public string bindWordMsg { get; set; }
+                public string bindWordAddr { get; set; }
+                public List<DataItem> scoreData { get; set; }
+                public class DataItem
+                {
+                    public string addrTo { get; set; }
+                    public long amount { get; set; }
+                    public string date { get; set; }
+                    public bool isVerified { get; set; }
+                    public string uuid { get; set; }
+                }
+            }
+            //public class ScoreResult : CommonClass.Command
+            //{
+
+
+            //    public List<DataItem> chargingData { get; set; }
+            //    public class DataItem
+            //    {
+            //        public string addrFrom { get; set; }
+            //        public string addrTo { get; set; }
+            //        public string amount { get; set; }
+            //        public string date { get; set; }
+            //        public string uuid { get; set; }
+            //    }
+            //} 
+        }
+        public class ChargingBtcAddrLookFor : CommonClass.Command
+        {
+            public string btcAddr { get; set; }
+        }
+
         public class LookForBindInfo : CommonClass.Command
         {
             public string infomation { get; set; }
@@ -151,8 +228,87 @@ namespace CommonClass
             {
                 public bool success { get; set; }
                 public string msg { get; set; }
+                public string btcAddr { get; set; }
             }
         }
+        public class LookForChargingDetail : CommonClass.Command
+        {
+            public string btcAddr { get; set; }
+            //public class Result
+            //{
+            //    public string dateStr { get; set; }
+            //    public string chargeRMB { get; set; }
+            //}
+        }
+        public class LookForScoreOutPut : CommonClass.Command
+        {
+            public string btcAddr { get; set; }
+        }
+        public class LookForScoreInPut : CommonClass.Command
+        {
+            public string btcAddr { get; set; }
+        }
+        public class UpdateScoreItem : CommonClass.Command 
+        {
+            public string indexGuid { get; set; }
+            public string btcAddr { get; set; }
+        }
+        public class ScoreTransferRecordMark : CommonClass.Command
+        {
+            public string bindWordMsg { get; set; }
+            public string verifyCodeValue { get; set; }
+            public string uuid { get; set; }
+            public string Sinature { get; set; }
+            /// <summary>
+            /// 0,代表转出，1代表转入
+            /// </summary>
+            public int transferType { get; set; }
+            public class InputScoreResult : CommonClass.Command
+            {
+                public string tabelName { get; set; }
+                public string bindWordMsg { get; set; }
+                public string bindWordAddr { get; set; }
+                public List<DataItem> scoreData { get; set; }
+                public class DataItem
+                {
+                    public string addrFrom { get; set; }
+                    public long amount { get; set; }
+                    public string date { get; set; }
+                    public string uuid { get; set; }
+                    public bool isVerified { get; set; }
+                }
+            }
+            public class OutputScoreResult : CommonClass.Command
+            {
+                public string tabelName { get; set; }
+                public string bindWordMsg { get; set; }
+                public string bindWordAddr { get; set; }
+                public List<DataItem> scoreData { get; set; }
+                public class DataItem
+                {
+                    public string addrTo { get; set; }
+                    public long amount { get; set; }
+                    public string date { get; set; }
+                    public bool isVerified { get; set; }
+                    public string uuid { get; set; }
+                }
+            }
+            //public class ScoreResult : CommonClass.Command
+            //{
+
+
+            //    public List<DataItem> chargingData { get; set; }
+            //    public class DataItem
+            //    {
+            //        public string addrFrom { get; set; }
+            //        public string addrTo { get; set; }
+            //        public string amount { get; set; }
+            //        public string date { get; set; }
+            //        public string uuid { get; set; }
+            //    }
+            //} 
+        }
+
         public class RewardBuildingShow : CommonClass.Command
         {
             public string Title { get; set; }

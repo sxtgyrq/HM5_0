@@ -171,6 +171,7 @@ namespace HouseManager5_0.GroupClassF
                                 WebSocketID = self.WebSocketID,
                                 carID = getCarName() + "_" + other.Key,
                                 parentID = other.Key,
+                                AsynSend = false
                             };
                             var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
                             msgsWithUrl.Add(self.FromUrl);

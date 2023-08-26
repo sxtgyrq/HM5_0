@@ -11,6 +11,10 @@ namespace HouseManager5_0.GroupClassF
     public partial class GroupClass
     {
         RoomMainF.RoomMain that;
+
+        /// <summary>
+        /// 团队收集的总金钱
+        /// </summary>
         public long Money { get; private set; }
         public DateTime startTime { get; private set; }
         public Dictionary<string, DateTime> taskFineshedTime { get; private set; }
@@ -30,6 +34,19 @@ namespace HouseManager5_0.GroupClassF
             this.taskFineshedTime = new Dictionary<string, DateTime>();
             this.recordErrorMsgs = new Dictionary<string, string>();
             this.records = new Dictionary<string, bool>();
+
+            this.groupAbility = new Dictionary<string, int>()
+            {
+                {
+                    "mile",0
+                },
+                {
+                    "volume",0
+                },
+                {
+                    "speed",0
+                }
+            };
         }
 
         public Dictionary<int, int> _collectPosition = new Dictionary<int, int>();
@@ -51,7 +68,30 @@ namespace HouseManager5_0.GroupClassF
         /// <summary>
         /// 表征group里有多少人！
         /// </summary>
-        public int groupNumber { get; internal set; }
+        public int groupNumber { get { return this._groupNumber; } }
+
+        int _groupNumber;
+
+        public int GameStartBaseMoney
+        {
+            get
+            {
+                switch (groupNumber)
+                {
+                    case 1: { return 50000; }
+                    case 2: { return 60000 / groupNumber; }
+                    case 3: { return 60000 / groupNumber; }
+                    case 4: { return 60000 / groupNumber; }
+                    case 5: { return 60000 / groupNumber; }
+                    default: { return 0; }
+                }
+            }
+        }
+
+        public void SetGroupNumber(int input)
+        {
+            this._groupNumber = input;
+        }
         //public
         public void LookFor(GetRandomPos gp)
         {

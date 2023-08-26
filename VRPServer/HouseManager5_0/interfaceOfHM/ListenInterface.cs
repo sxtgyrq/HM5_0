@@ -122,7 +122,7 @@ namespace HouseManager5_0.interfaceOfHM
         string SmallMapClickF(SmallMapClick smc);
         // string NotWantToGoNeedToBackF(NotWantToGoNeedToBack nwtgntb);
         string ConfirmPanelSelectResultF(ConfirmPanelSelectResult nwtgntb);
-
+        
     }
 
     interface MapEditor
@@ -183,6 +183,10 @@ namespace HouseManager5_0.interfaceOfHM
         string ChargingLookForF(Finance.ChargingLookFor condition);
         string ChargingMax();
         string RewardBuildingShowF(ModelTranstraction.RewardBuildingShow rbs);
+        string LookForChargingDetailF(ModelTranstraction.LookForChargingDetail sfcd);
+        string LookForScoreOutPutF(ModelTranstraction.LookForScoreOutPut condition);
+        string LookForScoreInPutF(ModelTranstraction.LookForScoreInPut condition);
+        string UpdateScoreItemF(ModelTranstraction.UpdateScoreItem ucs);
     }
 
     interface Resistance

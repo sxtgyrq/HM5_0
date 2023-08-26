@@ -512,7 +512,7 @@ var animationF = function (roleKey, obj, now, isSelf, lengthOfCC) {
                     var itemIsAnimation = animationItemF(roleKey, now, isSelf, start, lengthOfCC, animateData);
                     if (itemIsAnimation) {
                         isAnimation = true;
-                    } 
+                    }
                 }
             }
         }
@@ -547,11 +547,22 @@ var animationItemF = function (roleKey, now, isSelf, start, lengthOfCC, animateD
                         var angle = objMain.controls.getPolarAngle();
                         var dCal = lengthOfCC;
                         var distance = 32;
-                        if (dCal >= 33) {
-                            distance = dCal * 0.99 - 0.01;
+                        if (whetherGo.obj != null && whetherGo.obj.Live) {
+                            distance = 16;
+                            if (dCal >= 18) {
+                                distance = dCal * 0.99 - 0.01;
+                            }
+                            else if (dCal <= 14) {
+                                distance = dCal * 1.01 + 0.01;
+                            }
                         }
-                        else if (dCal <= 31) {
-                            distance = dCal * 1.01 + 0.01;
+                        else {
+                            if (dCal >= 33) {
+                                distance = dCal * 0.99 - 0.01;
+                            }
+                            else if (dCal <= 31) {
+                                distance = dCal * 1.01 + 0.01;
+                            }
                         }
                         var unitY = distance * Math.cos(angle);
                         var unitZX = distance * Math.sin(angle);
@@ -560,7 +571,13 @@ var animationItemF = function (roleKey, now, isSelf, start, lengthOfCC, animateD
                         var unitX = unitZX * Math.sin(angleOfCamara);
                         var unitZ = unitZX * Math.cos(angleOfCamara);
 
-                        objMain.camera.position.set(x + unitX, unitY + z, -y + unitZ);
+                        //if (whetherGo.obj != null && whetherGo.obj.Live) {
+                        //    objMain.camera.position.set(x + unitX /1, unitY / 1 + z, -y + unitZ / 1);
+                        //}
+                        //    else
+                        {
+                            objMain.camera.position.set(x + unitX, unitY + z, -y + unitZ);
+                        }
                         objMain.camera.lookAt(x, z, -y);
                         isAnimation = true;
 

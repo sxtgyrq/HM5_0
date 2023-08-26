@@ -23,6 +23,23 @@ namespace CommonClass
     {
         public int WebSocketID { get; set; }
         //   public int TimeOut { get; set; }
+
+
+        /*
+         * 之所以引入此变量，是因为在2023年8月3日
+         * 发现，一个路口在距离完成路径终点很近时，
+         * 发生了传输数据的顺序颠倒，导致前台程序，
+         * 不能正常运行。
+         * 以上没有进行debug，只是推测。
+         * 所以引入了AsynSend变量。顾名思义，异步
+         * 发送。
+         * 当传输BradCastAnimateOfOthersCar4对象时，
+         * 所以引入了AsynSend=false
+         */
+        /// <summary>
+        /// 是否异步发送
+        /// </summary>
+        public bool AsynSend { get; set; } = true;
     }
 
     public class GetPositionNotify : CommandNotify
@@ -106,6 +123,11 @@ namespace CommonClass
     {
         public string Key { get; set; }
         public bool On { get; set; }
+    }
+    public class NitrogenValueNotify : CommandNotify
+    {
+        public string Key { get; set; }
+        public long NitrogenValue { get; set; }
     }
     public class ConfuseNotify : CommandNotify
     {
@@ -959,6 +981,36 @@ namespace CommonClass
         public string SpeedImprovePercent { get; set; }
     }
 
+    public class ResistanceDisplay_V3 : CommandNotify
+    {
+        public List<Item> Datas { get; set; }
+        public class Item
+        {
+            public string Name { get; set; }
+            public long Money { get; set; }
+
+            public long Mile { get; set; }
+            public int MileDiamond { get; set; }
+            public long Volume { get; set; }
+            public int VolumeDiamond { get; set; }
+
+            public long Speed { get; set; }
+            public int SpeedDiamond { get; set; }
+
+            public long CollectAmount { get; set; }
+            public long CollectPercent { get; set; }
+
+            public int SelectAmount { get; set; }
+            public int SelectRightPercent { get; set; }
+
+            public string BTCAddr { get; set; }
+            public bool OnLine { get; set; }
+
+            public bool isFinished { get; set; }
+
+        }
+    }
+
     public class ParameterToEditPlayerMaterial
     {
         /// <summary>
@@ -1111,9 +1163,15 @@ namespace CommonClass
         public string FastenPositionID { get; set; }
     }
 
+
+
     public class GetAbtractmodels : Command
     {
         public string AmID { get; set; }
+        //  public bool FromDB { get; set; }
+        /// <summary>
+        /// 是否从数据库获取，true，对应前台时editor，false，对应前台开启的debug机制调试，非
+        /// </summary>
         public bool FromDB { get; set; }
         //public int Password { get; set; }
     }

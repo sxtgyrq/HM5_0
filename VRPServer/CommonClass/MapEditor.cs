@@ -224,6 +224,9 @@ namespace CommonClass
         {
             public string ChargingType { get; set; }
             public string ChargingWord { get; set; }
+            /// <summary>
+            /// 单位是元
+            /// </summary>
             public decimal ChargingNum { get; set; }
             public string ChargingDt { get; set; }
             public string ChargingAddr { get; set; }

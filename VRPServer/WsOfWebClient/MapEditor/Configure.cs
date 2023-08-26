@@ -131,8 +131,10 @@ namespace WsOfWebClient.MapEditor
             });
         }
 
+        //[Obsolete]
         internal static string GetObjFileJson(string amid)
         {
+            //throw new Exception("走查此段函数应该报废了！");
             System.Random rm = new System.Random(DateTime.Now.GetHashCode());
             var roomindex = rm.Next(0, roomUrls.Count);
             if (roomindex >= 0 && roomindex < Room.roomUrls.Count)

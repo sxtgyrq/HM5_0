@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body style="width:100%;height:100%;overflow:hidden;">
+    <div id="rootContainer" style="width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        <div id="guidChargingPanel" style="width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+            <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
+                <h1 style="text-align:left;font-size:xx-large;">查询</h1>
+                <p style="text-align:left;margin-top: 1em;">
+
+                    &emsp;&emsp;输入验证码与绑定词即可查询！
+                </p>
+            </div>
+            <div style=" width:100%;">
+                <table style=" width:100%;">
+                    <tr>
+                        <th><label>绑定词</label> </th>
+                        <td> <textarea style="min-width: 20em;" id="bindWordMsg">欢迎来到我的游戏</textarea></td>
+                    </tr>
+
+                    <tr>
+                        <th><label>验证码</label> </th>
+                        <td>
+                            <textarea style="min-width: 4em;" id="verifyCodeValue"></textarea>
+                            <img id="verifyCodeImg" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div id="bindVerifyCodeNotifyMsg" style="text-align:center;"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td>
+                            <div>
+                                <button onclick="GuidObj.chargingLookingfor.scoreLookFor();" style="width: 9em;
+        height: 3em;
+        margin-top: 1em;
+        background-color:aqua;
+        ">
+                                    查询积分转移记录
+                                </button>
+                                <button onclick="GuidObj.charging.clearBindWordInfo();" style="width: 7em; height: 3em; margin-top: 1em; background-color:transparent;">
+                                    查询充值记录
+                                </button>
+                                <button onclick="GuidObj.chargingLookingfor.clearBindWordInfo();" style="width: 5em; height: 3em; margin-top: 1em; background-color:transparent;">
+                                    清空
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div style="text-align:center;">
+                <button onclick="GuidObj.gameIntroShow();" style="width: 5em;
+        height: 3em;
+        margin-top: 1em;margin-bottom:10em;">
+                    返回
+                </button>
+            </div>
+            <table id="chargingDetailTable">
+                <tr>
+                    <th>地址</th>
+                    <td style="text-align:center;border: dashed 1px #ffd80055;">1Sssssssssssssssssss</td>
+                </tr>
+                <tr>
+                    <th>绑定词</th>
+                    <td style="text-align: center; border: dashed 1px #ffd80055; ">啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊</td>
+                </tr>
+                <tr><th>日期</th><th>金额</th></tr>
+                <tr>
+                    <td style="text-align: center; border: dashed 1px #ffd80055; ">2021-03-01 12:00</td>
+                    <td style="text-align: center; border: dashed 1px #ffd80055; ">5.00</td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; border: dashed 1px #ffd80055; ">2021-03-02 12:00</td>
+                    <td style="text-align: center; border: dashed 1px #ffd80055; ">5.00</td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; border: dashed 1px #ffd80055; ">2021-03-02 12:00</td>
+                    <td style="text-align: center; border: dashed 1px #ffd80055; ">5.00</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center; border: dashed 1px #ffd80055; ">无记录</td>
+                    <td style="text-align: center; border: dashed 1px #ffd80055; ">5.00</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+
+    <!--<script src="mainf.js"></script>-->
+</body>
+</html>

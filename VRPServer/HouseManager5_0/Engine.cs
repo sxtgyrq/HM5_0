@@ -26,7 +26,7 @@ namespace HouseManager5_0
                 else if (that._Groups.ContainsKey(groupKey))
                 {
                     var group = that._Groups[groupKey];
-                  //  lock (group.PlayerLock_)
+                    //  lock (group.PlayerLock_)
                     {
                         return group.updateAction(actionDo, c, grp, operateKey);
                     }
@@ -376,6 +376,7 @@ namespace HouseManager5_0
             if (selectionCenter.postionCrossKey == player.direcitonAndID.PostionCrossKey)
             {
                 int rightItemIndex;
+                player.SelectCount++;
                 if (isRight(selections, player.direcitonAndID, false, out rightItemIndex) || player.Bust)
                 {
                     List<string> notifyMsg = new List<string>();
@@ -384,6 +385,11 @@ namespace HouseManager5_0
                         // List<string> notifyMsg = new List<string>();
                         player.getCar().setState(player, ref notifyMsg, oldState);
                         player.SendBG(player, ref notifyMsg);
+
+                        var randomV = this.that.rm.Next(0, 100);
+                        if (randomV < 9 && !player.improvementRecord.CollectIsDouble)
+                            player.improvementRecord.addAttack(player, ref notifyMsg);
+                        //player.getCar().
 
                     }
                     //if (player.Group.Live)
@@ -403,6 +409,12 @@ namespace HouseManager5_0
                     var reduceValue = player.getCar().ability.ReduceBusinessAndVolume(player, player.getCar(), ref notifyMsg);
                     reduceValue = Math.Max(0, reduceValue);
                     SelectionIsWrong(player, selectionCenter, reduceValue, notifyMsg);
+                    player.SelectWrongCount++;
+
+                    if (player.improvementRecord.CollectIsDouble)
+                    {
+                        player.improvementRecord.reduceAttack(player, ref notifyMsg);
+                    }
                     this.sendSeveralMsgs(notifyMsg);
                     player.playerSelectDirectionTh = new Thread(() => StartSelectThreadB(selections, selectionCenter, player, oldState, p));
                 }
@@ -429,6 +441,14 @@ namespace HouseManager5_0
             else
             {
                 this.WebNotify(player, $"错误的选择让您损失了{reduceValue / 100}.{(reduceValue % 100) / 10}{(reduceValue % 10)}。");
+            }
+
+            if (Program.dt.AllCrossesBGData.ContainsKey(selectionCenter.postionCrossKey))
+            {
+            }
+            else
+            {
+                DalOfAddress.backgroundneedjpg.Insert(selectionCenter.postionCrossKey, string.IsNullOrEmpty(selectionCenter.crossKey) ? "" : selectionCenter.crossKey);
             }
         }
 

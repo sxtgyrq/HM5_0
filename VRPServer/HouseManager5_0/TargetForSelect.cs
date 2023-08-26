@@ -71,7 +71,7 @@ namespace HouseManager5_0
                     case TargetForSelectType.volume:
                     case TargetForSelectType.speed:
                         {
-                            return this.rank * 500;
+                            return this.rank * 500 * 100 / 32;
                         }
                     default:
                         {

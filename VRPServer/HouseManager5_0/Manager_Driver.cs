@@ -1076,6 +1076,7 @@ namespace HouseManager5_0
                 this._speedValue += addValue;
                 {
                     role.speedMagicChanged(role, ref notifyMsg);
+                    role.nitrogenValueChanged(role, ref notifyMsg);
                 }
                 if (this.HasValueToImproveSpeed)
                 {
@@ -1098,13 +1099,49 @@ namespace HouseManager5_0
                         this._speedValue = 0;
                     }
                     role.speedMagicChanged(role, ref notifyMsg);
+                    role.nitrogenValueChanged(role, ref notifyMsg);
                 }
             }
 
 
 
+            bool _CollectIsDouble_p = false;
+            public bool CollectIsDouble
+            {
+                get { return this._CollectIsDouble_p; }
+                private set
+                {
+                    this._CollectIsDouble_p = value;
+                }
+            }
 
+            /// <summary>
+            /// 在选择时，有一定纪律增加。
+            /// </summary>
+            /// <param name="role"></param>
+            /// <param name="notifyMsg"></param>
+            internal void addAttack(Player role, ref List<string> notifyMsg)
+            {
+                CollectIsDouble = true;
+                // if (CollectIsDouble)
+                {
+                    role.attackMagicChanged(role, ref notifyMsg);
+                }
+            }
 
+            /// <summary>
+            /// 到达收集地点，收集数量翻倍
+            /// </summary>
+            /// <param name="role"></param>
+            /// <param name="notifyMsg"></param>
+            internal void reduceAttack(Player role, ref List<string> notifyMsg)
+            {
+                CollectIsDouble = false;
+                // if (CollectIsDouble)
+                {
+                    role.attackMagicChanged(role, ref notifyMsg);
+                }
+            }
         }
 
         internal bool controlledByMagic(Player victim, Car car, GetRandomPos grp, ref List<string> notifyMsg)

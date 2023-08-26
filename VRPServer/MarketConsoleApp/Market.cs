@@ -67,17 +67,17 @@ namespace MarketConsoleApp
                 if (now >= endTime)
                 {
                     sleepTime = 30000;//60s
-                    tellAllPlayer($"服务器随时可能关闭。请立即将收入保存。");
+                    tellAllPlayer($"服务器随时可能关闭。请立即将积分收入保存。");
                 }
                 else if ((endTime - now).TotalSeconds < 1800)
                 {
                     sleepTime = 60000;//60s
-                    tellAllPlayer($"服务器将于当日{endTime.ToString("HH点mm分")}进行维护。请将收入保存。");
+                    tellAllPlayer($"服务器将于当日{endTime.ToString("HH点mm分")}进行维护。请将积分收入保存。");
                 }
                 else if ((endTime - now).TotalSeconds < 7200)
                 {
                     sleepTime = 60000 * 10;//10min
-                    tellAllPlayer($"服务器将于当日{endTime.ToString("HH点mm分")}进行维护。请将收入保存。");
+                    tellAllPlayer($"服务器将于当日{endTime.ToString("HH点mm分")}进行维护。请将积分收入保存。");
                 }
                 else
                 {

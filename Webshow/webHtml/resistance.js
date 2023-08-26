@@ -4,7 +4,7 @@
 
     bindData: function (key) {
         var that = resistance;
-       // that.positionF(key);
+        // that.positionF(key);
         //objMain.othersBasePoint['0703abae622a0ec9cff4b3f85f8de7ff'].basePoint
 
         if (document.getElementById(that.operateID) == null) {
@@ -420,6 +420,112 @@
             };
             objMain.heightLevel = selectObj.position.y;
             objMain.camaraAnimateData = animationData;
+        }
+    },
+    operateV3ID: 'resistancePaneV3',
+    display_V3: function (obj) {
+        var that = resistance;
+        if (obj != null) {
+            var content = '';
+            for (var i = 0; i < obj.Datas.length; i++) {
+
+                var itemHtml = `<table border="0" style="width: 100%; padding-bottom: 20px;margin-top:5px;margin-bottom:5px; background-color: ${(i % 2 == 0 ? 'rgba(104, 48, 40, 0.85)' : 'rgba(104, 80, 8, 0.85)')}; ">
+
+            <tbody>
+                <tr style="border:solid 1px white">
+                    <td>${(obj.Datas[i].OnLine ? '在线' : '(离线)')}</td>
+                    <td></td>
+                    <th>资本:</th>
+                    <td>${(obj.Datas[i].Money / 100).toFixed(2)}</td>
+                </tr>
+                <tr style="border:solid 1px white">
+                    <td>${obj.Datas[i].Name}</td>
+                    <td></td>
+                    <th></th>
+                    <td>${(obj.Datas[i].isFinished ? '已完成' : '未完成')}</td>
+                </tr>
+
+                <tr style="border:solid 1px white;background-color:red;">
+                    <th>红宝石数量:</th>
+                    <td style="float:left">${obj.Datas[i].MileDiamond}</td>
+                    <th>能力:</th>
+                    <td style="float:left">${obj.Datas[i].Mile}</td>
+                </tr>
+                <tr style="border: solid 1px white; background-color: blue;">
+                    <th>蓝宝石数量:</th>
+                    <td style="float:left">${obj.Datas[i].VolumeDiamond}</td>
+                    <th>容量:</th>
+                    <td style="float:left">${obj.Datas[i].Volume}</td>
+                </tr>
+                <tr style="border: solid 1px white; background-color: black;">
+                    <th>黑宝石数量:</th>
+                    <td style="float:left">${obj.Datas[i].SpeedDiamond}</td>
+                    <th>速度:</th>
+                    <td style="float:left">${obj.Datas[i].Speed}</td>
+                </tr>
+                <tr style="border:solid 1px white">
+                    <th>收集贡献量:</th>
+                    <td style="float:left">${obj.Datas[i].CollectAmount}</td>
+                    <th>贡献率:</th>
+                    <td style="float:left">${(obj.Datas[i].CollectPercent / 10).toFixed(1)}%</td>
+                </tr>
+                <tr style="border:solid 1px white">
+                    <th>选择次数:</th>
+                    <td style="float:left">${obj.Datas[i].SelectAmount}</td>
+                    <th>正确率:</th>
+                    <td style="float:left">${(obj.Datas[i].SelectRightPercent / 10).toFixed(1)}%</td>
+                </tr> 
+                <tr>
+                    <th>存款地址:</th>
+                </tr>
+                <tr><td colspan="4" style="word-wrap:anywhere;word-break:break-all;">${obj.Datas[i].BTCAddr}</td></tr>
+            </tbody>
+
+        </table>`;
+                content += itemHtml;
+            }
+
+            var html1 = ` <div id="${that.operateV3ID}" style="position: absolute;
+        z-index: 8;
+        top: calc(10% - 1px);
+        width: 24em;
+        left: calc(50% - 12em);
+        height: auto;
+        max-height:calc(90% - 39px);
+        border: solid 1px red;
+        text-align: center;
+        background: rgba(104, 48, 8, 0.85);
+        color: #83ffff;
+        overflow: hidden;
+        overflow-y: scroll; 
+        padding-bottom:20px; 
+"> 
+${content} 
+        <div style="background: yellowgreen;
+        margin-bottom: 0.25em;
+        margin-top: 0.25em;" onclick="resistance.display_V3(null);">
+            取消
+        </div>
+    </div>`;
+
+            var that = resistance;
+            if (document.getElementById(that.operateV3ID) == null) {
+                // var obj = new DOMParser().parseFromString(that.html, 'text/html');
+                var frag = document.createRange().createContextualFragment(html1);
+                frag.id = that.operateV3ID;
+                document.body.appendChild(frag);
+            }
+            else {
+                document.getElementById(that.operateV3ID).remove();
+            }
+        }
+        else {
+            var that = resistance;
+            if (document.getElementById(that.operateV3ID) == null) {
+            }
+            else {
+                document.getElementById(that.operateV3ID).remove();
+            }
         }
     }
 }

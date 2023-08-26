@@ -149,35 +149,46 @@ namespace HouseManager5_0.RoomMainF
         }
         public string updateCollect(SetCollect sc, GetRandomPos grp)
         {
-            //this.collectE.SingleColect(sc, grp);
-            //return "";
-            var result = this.collectE.updateCollect(sc, grp);
-            Thread.Sleep(10 * 1000);//这里让线程坚持10秒，确保动画数据再线程被取消前，传值前台！
-            return result;
+            Action p = () =>
+            {
+                this.collectE.updateCollect(sc, grp);
+            };
+            WaitForAPeriodOfTime(p, 10 * 1000);
+            return ""; 
         }
 
-
-
-
-        /// <summary>
-        /// 将序号按距离进行排序
-        /// </summary>
-        /// <param name="target"></param>
-        /// <returns>返回的值为0至37的排序</returns>
-        internal List<int> getCollectPositionsByDistance(FastonPosition target, GetRandomPos grp)
+        private void WaitForAPeriodOfTime(Action p, int waitTime)
         {
-            throw new Exception();
-
-            //List<int> positions = new List<int>();
-            //for (int i = 0; i < 38; i++)
-            //{
-            //    positions.Add(i);
-            //    //var collectP = Program.dt.GetFpByIndex(this._collectPosition[i]);
-            //    //positions.Add(collectP);
-            //}
-            //positions = (from item in positions orderby CommonClass.Geography.getLengthOfTwoPoint.GetDistance(target.Latitde, target.Longitude, target.Height, grp.GetFpByIndex(this._collectPosition[item]).Latitde, grp.GetFpByIndex(this._collectPosition[item]).Longitude, grp.GetFpByIndex(this._collectPosition[item]).Height) select item).ToList();
-            //return positions;
+            Thread th = new Thread(() =>
+            {
+                p();
+                Thread.Sleep(waitTime);
+            });
+            th.Start();
         }
+
+
+
+
+        ///// <summary>
+        ///// 将序号按距离进行排序
+        ///// </summary>
+        ///// <param name="target"></param>
+        ///// <returns>返回的值为0至37的排序</returns>
+        //internal List<int> getCollectPositionsByDistance(FastonPosition target, GetRandomPos grp)
+        //{
+        //    throw new Exception();
+
+        //    //List<int> positions = new List<int>();
+        //    //for (int i = 0; i < 38; i++)
+        //    //{
+        //    //    positions.Add(i);
+        //    //    //var collectP = Program.dt.GetFpByIndex(this._collectPosition[i]);
+        //    //    //positions.Add(collectP);
+        //    //}
+        //    //positions = (from item in positions orderby CommonClass.Geography.getLengthOfTwoPoint.GetDistance(target.Latitde, target.Longitude, target.Height, grp.GetFpByIndex(this._collectPosition[item]).Latitde, grp.GetFpByIndex(this._collectPosition[item]).Longitude, grp.GetFpByIndex(this._collectPosition[item]).Height) select item).ToList();
+        //    //return positions;
+        //}
 
         //private long getCollectReWardByReward(int target)
         //{

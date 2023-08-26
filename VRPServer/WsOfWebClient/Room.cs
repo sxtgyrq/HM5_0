@@ -480,6 +480,13 @@ namespace WsOfWebClient
                     return null;
                 }
 
+                ModelConfig.nitrogenEffectIcon ne = new ModelConfig.nitrogenEffectIcon();
+                if (SetModelCopy(ne, connectInfoDetail)) { }
+                else
+                {
+                    return null;
+                }
+
                 result = setState(s, connectInfoDetail, LoginState.OnLine);
 
                 {
@@ -1216,7 +1223,8 @@ namespace WsOfWebClient
                 Uid = va.uid
             };
             var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ms);
-            Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+            Thread th = new Thread(() => Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg));
+            th.Start();
             return "";
             // throw new NotImplementedException();
         }
@@ -1432,39 +1440,39 @@ namespace WsOfWebClient
             return "";
         }
 
-        internal static string setCarAbility(State s, Ability a)
-        {
-            if (!(a.pType == "mile" || a.pType == "business" || a.pType == "volume" || a.pType == "speed"))
-            {
-                return "";
-            }
-            else
-            {
-                ////Regex r = new Regex("^car(?<car>[A-E]{1})_(?<key>[a-f0-9]{32})$");
-                ////var m = r.Match(a.car);
-                //// var m_Target = rex_Target.Match(attack.TargetOwner);
-                ////  if (m.Success)//&& m_Target.Success)
-                {
-                    //   var targetOwner = m_Target.Groups["target"].Value;
+        //internal static string setCarAbility(State s, Ability a)
+        //{
+        //    if (!(a.pType == "mile" || a.pType == "business" || a.pType == "volume" || a.pType == "speed"))
+        //    {
+        //        return "";
+        //    }
+        //    else
+        //    {
+        //        ////Regex r = new Regex("^car(?<car>[A-E]{1})_(?<key>[a-f0-9]{32})$");
+        //        ////var m = r.Match(a.car);
+        //        //// var m_Target = rex_Target.Match(attack.TargetOwner);
+        //        ////  if (m.Success)//&& m_Target.Success)
+        //        {
+        //            //   var targetOwner = m_Target.Groups["target"].Value;
 
-                    //  Consoe.WriteLine($"正则匹配成功：{m.Groups["car"] }+{m.Groups["key"] }");
-                    //if (m.Groups["key"].Value == s.Key)
-                    {
-                        var getPosition = new SetAbility()
-                        {
-                            c = "SetAbility",
-                            Key = s.Key,
-                            //   car = "car" + m.Groups["car"].Value,
-                            pType = a.pType,
-                            count = a.count
-                        };
-                        var msg = Newtonsoft.Json.JsonConvert.SerializeObject(getPosition);
-                        Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
-                    }
-                }
-                return "";
-            }
-        }
+        //            //  Consoe.WriteLine($"正则匹配成功：{m.Groups["car"] }+{m.Groups["key"] }");
+        //            //if (m.Groups["key"].Value == s.Key)
+        //            {
+        //                var getPosition = new SetAbility()
+        //                {
+        //                    c = "SetAbility",
+        //                    Key = s.Key,
+        //                    //   car = "car" + m.Groups["car"].Value,
+        //                    pType = a.pType,
+        //                    count = a.count
+        //                };
+        //                var msg = Newtonsoft.Json.JsonConvert.SerializeObject(getPosition);
+        //                Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+        //            }
+        //        }
+        //        return "";
+        //    }
+        //}
 
         internal static string passMsg(State s, Msg msg)
         {
@@ -1846,7 +1854,19 @@ namespace WsOfWebClient
                 radius = wgn.radius,
             };
             var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gfs);
-            Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+            SendMsgWithANewThread(msg, s);
+            //  Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+        }
+
+        private static void SendMsgWithANewThread(string msg, State s)
+        {
+            Thread th = new Thread(() =>
+            {
+                Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+                Thread.Sleep(1000);
+            });
+            th.Start();
+            //throw new NotImplementedException();
         }
 
         /// <summary>
@@ -1863,8 +1883,11 @@ namespace WsOfWebClient
                 GoToPosition = false,
                 FastenPositionID = ""
             };
+
             var msg = Newtonsoft.Json.JsonConvert.SerializeObject(cps);
-            Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+            SendMsgWithANewThread(msg, s);
+            //Thread th = new Thread(() => Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg));
+            //th.Start();
         }
         internal static void GoToDoCollectOrPromoteF(State s, GoToDoCollectOrPromote gcp)
         {
@@ -1876,8 +1899,11 @@ namespace WsOfWebClient
                 GoToPosition = true,
                 FastenPositionID = gcp.FastenPositionID
             };
+            // var msg = Newtonsoft.Json.JsonConvert.SerializeObject(cps);
             var msg = Newtonsoft.Json.JsonConvert.SerializeObject(cps);
-            Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+            SendMsgWithANewThread(msg, s);
+            //Thread th = new Thread(() => Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg));
+            //th.Start();
         }
 
         internal static State GetFightSituation(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail)

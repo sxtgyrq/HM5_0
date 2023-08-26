@@ -141,5 +141,9 @@ namespace WsOfWebClient
         public static string TeammateIconBase64 = "";
         public static string TeammateIconObj = "";
         public static string TeammateIconMtl = "";
+
+        public static string NitrogenIconBase64 = "";
+        public static string NitrogenIconObj = "";
+        public static string NitrogenIconMtl = "";
     }
 }

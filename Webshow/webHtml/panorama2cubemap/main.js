@@ -304,7 +304,7 @@ var writeToServerAndBindAddr = function () {
     }
     var addr = '';
     if (window.localStorage['fpBGAddr'] == undefined) {
-        addr = prompt('输入比特币地址');
+        addr = prompt('输入B地址');
         window.localStorage['fpBGAddr'] = addr;
     }
     else {

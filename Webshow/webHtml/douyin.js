@@ -259,11 +259,11 @@
                 <table style="width: calc(100% - 2px); max-width: calc(100% - 2px); font-size:0.8em;opacity:0.618">
             <tr style="background-color:aqua;">
                 <th>
-                    <span>发言</span>
+                    <span>扣</span>
                     <span style="background:#2ddada">1</span>
                 </th>
                 <th>
-                    <span>发言</span>
+                    <span>扣</span>
                     <span style="background:#2ddada">2</span>
                 </th>
                 <th>
@@ -277,9 +277,9 @@
                 <td style="border-bottom:solid double 1px;">增加影响距离</td>
 
             </tr>
-            <tr style="background-color:aqua;">
+              <tr style="background-color:aqua;">
                 <th colspan="2">
-                    <span>转发</span>
+                    <span>分享直播间</span>
                 </th>
                 <th>
                     <span>点赞</span>
@@ -288,6 +288,14 @@
             <tr style="background-color:aqua;">
                 <td colspan="2" style="border-bottom:solid double 1px;">影响距离从1.0提升至2.0</td>
                 <td style="border-bottom:solid double 1px;">查属性</td>
+            </tr>
+            <tr style="background-color:white;">
+                <th colspan="3">
+                    <span style="">↓敬告抖音直播识别系统或监管员↓</span>
+                </th>
+            </tr>
+            <tr style="background-color: white; ">
+                <td colspan="3" style="border-bottom:solid double 1px;">这是游戏，不是你的系统识别的“讲解售卖房产”。</td>
             </tr>
 
         </table>
@@ -366,7 +374,7 @@
         if (objMain.marketGroup.getObjectByName(name) == undefined) {
             var object = douyinPanleShow.flagObj[theme].clone();
             object.position.set(x, y, z)
-            object.scale.set(0.2, 0.2, 0.2);
+            object.scale.set(0.1, 0.1, 0.1);
             object.name = name;
             object.UserTag = {};
             object.UserTag.objType = "flag";
@@ -463,11 +471,11 @@
                                         var deltaT = Date.now() - objMain.marketGroup.children[i].UserTag.startTime;
                                         if (deltaT > 5000) {
                                             objMain.marketGroup.children[i].UserTag.dataObj.type = 'existed';
-                                            objMain.marketGroup.children[i].scale.set(1, 1, 1);//.dataObj.type = 'existed';
+                                            objMain.marketGroup.children[i].scale.set(1.236, 1.236, 1.236);//.dataObj.type = 'existed';
                                         }
                                         else {
                                             var percent = (deltaT % 1000) / 1000;
-                                            objMain.marketGroup.children[i].scale.set(1 + percent * 0.5, 1 + percent * 0.5, 1 + percent * 0.5);//.dataObj.type = 'existed';
+                                            objMain.marketGroup.children[i].scale.set(1 + percent * 1, 1 + percent * 1, 1 + percent * 1);//.dataObj.type = 'existed';
                                         }
                                     }; break;
                                 case 'existed': { }; break;
@@ -481,12 +489,13 @@
                                 case 'add':
                                     {
                                         var deltaT = Date.now() - objMain.marketGroup.children[i].UserTag.startTime;
-                                        if (deltaT > 500000) {
+                                        if (deltaT > 5000) {
                                             objMain.marketGroup.children[i].UserTag.dataObj.type = 'existed';
                                             var newX = objMain.marketGroup.children[i].UserTag.dataObj.x + 0.5;
                                             var newY = objMain.marketGroup.children[i].UserTag.dataObj.z * objMain.heightAmplify + 1;
                                             var newZ = -(objMain.marketGroup.children[i].UserTag.dataObj.y + 0.5);
                                             objMain.marketGroup.children[i].position.set(newX, newY, newZ);
+                                            objMain.marketGroup.children[i].scale.set(0.1, 0.1, 0.1);
                                         }
                                         else {
                                             var percent = (deltaT % 1000) / 1000;
@@ -494,6 +503,7 @@
                                             var newY = objMain.marketGroup.children[i].UserTag.dataObj.z * objMain.heightAmplify + 1 + percent * 0.5;
                                             var newZ = -(objMain.marketGroup.children[i].UserTag.dataObj.y + 0.5);
                                             objMain.marketGroup.children[i].position.set(newX, newY, newZ);
+                                            objMain.marketGroup.children[i].scale.set(0.2, 0.2, 0.2);
                                         }
                                     }; break;
                                 case 'existed': { }; break;

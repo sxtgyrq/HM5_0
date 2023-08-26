@@ -79,7 +79,8 @@ var objMain =
         directionArrowB: null,
         directionArrowC: null,
         Opponent: null,
-        Teammate: null
+        Teammate: null,
+        NitrogenEffect: null
     },
     shieldGroup: null,
     confusePrepareGroup: null,
@@ -237,6 +238,9 @@ var objMain =
                     model.userData = { objectType: 'car', parent: key, };
                     objMain.carGroup.add(model);
 
+                    if (isSelf) {
+                        stateSet.nitrogeneffect.add();
+                    }
                 }
             }
         },
@@ -475,32 +479,8 @@ var objMain =
                 }
                 var element = document.createElement('div');
                 element.style.width = '10em';
-                //element.style.marginLeft = 'calc(5em + 20px)';
                 element.style.marginTop = '3em';
                 var color = '#ff0000';
-                //var colorName = '红';
-                //switch (type) {
-                //    case 'mile':
-                //        {
-                //            color = '#ff0000';
-                //            colorName = '红';
-                //        }; break;
-                //    case 'business': {
-                //        color = '#00ff00';
-                //        colorName = '绿';
-                //    }; break;
-                //    case 'volume': {
-
-                //        color = '#0000ff';
-                //        colorName = '蓝';
-                //    }; break;
-                //    case 'speed': {
-
-                //        color = '#000000';
-                //        colorName = '黑';
-                //    }; break;
-
-                //}
                 element.style.border = '2px solid ' + color;
                 element.style.borderTopLeftRadius = '0.5em';
                 element.style.backgroundColor = 'rgba(155, 55, 255, 0.3)';
@@ -1428,7 +1408,6 @@ var objMain =
                                                 }
                                             }
                                         }
-                                        console.log('o', object);
                                         object.scale.set(0.003, 0.003, 0.003);
                                         object.rotateX(-Math.PI / 2);
                                         objMain.rmbModel[field] = object;
@@ -1513,7 +1492,6 @@ var objMain =
                         },
                         transparent: { opacity: 0.8 },
                         color: { r: 1.5, g: 1.5, b: 1.5 }
-                        //transparent: { opacity: 0 }
                     });
                     objMain.ws.send('SetConfusePrepareIcon');
                 }; break;
@@ -1705,6 +1683,28 @@ var objMain =
                     });
                     objMain.ws.send('SetTeammateIcon');
                 }; break;
+            case 'SetNitrogenEffectIcon':
+                {
+                    ModelOperateF.f(received_obj, {
+                        bind: function (objectInput) {
+                            //objMain.ModelInput.ambushPrepare = objectInput;
+                            //objMain.ModelInput.directionArrow = objectInput;
+                            //var oldM = objectInput.children[0].material;
+                            //var newM = objectInput.children[0].material.clone();
+                            //newM.transparent = false;
+                            //newM.color = new THREE.Color(1.2, 1.2, 1.2);
+                            objectInput.name = 'selfnitrogenEffectIcon'
+                            objMain.ModelInput.NitrogenEffect =
+                            {
+                                'obj': objectInput
+                            };//objectInput;
+                        },
+                        transparent: { opacity: 0.8 },
+                        scale: { x: 1, y: 1, z: 1 },
+                        rotateX: Math.PI
+                    });
+                    objMain.ws.send('SetNitrogenEffectIcon');
+                }; break;
             case 'BradCastAnimateOfOthersCar3':
                 {
                     var passObj = JSON.parse(evt.data);
@@ -1838,12 +1838,24 @@ var objMain =
 
                     var drawRoadInfomation = function () {
 
+                        {
+                            var group = objMain.roadGroup;
+                            var startIndex = group.children.length - 1;
+                            for (var i = startIndex; i >= 0; i--) {
+                                //if (group.children[i].type == "Mesh")
+                                {
+                                    group.children[i].geometry.dispose();
+                                    group.children[i].material.dispose();
+                                }
+                            }
+                        }
+
                         objMain.mainF.removeF.clearGroup(objMain.roadGroup);
                         //  objMain.F.clearGroup(
                         var obj = MapData.meshPoints;
 
                         var positions = [];
-                        var colors = [];
+                        //   var colors = [];
                         for (var i = 0; i < obj.length; i++) {
                             positions.push(
                                 MercatorGetXbyLongitude(obj[i][0]), MercatorGetXbyLongitude(obj[i][2]) * objMain.heightAmplify, -MercatorGetYbyLatitude(obj[i][1]),
@@ -2406,6 +2418,7 @@ var objMain =
                             smallMapClass.draw2(whetherGo.obj);
 
                         }
+                        moneyOperator.updateSaveMoneyNotify();
                     }
                     else {
                         smallMapClass.draw(received_obj);
@@ -2474,6 +2487,26 @@ var objMain =
             case 'MarketFlags':
                 {
                     douyinPanleShow.drawFlags(received_obj);
+                }; break;
+            case 'ResistanceDisplay_V3':
+                {
+                    resistance.display_V3(received_obj);
+                }; break;
+            case 'ChargingLookFor.Result':
+                {
+                    GuidObj.chargingLookingfor.addTabel(received_obj);
+                }; break;
+            case 'ScoreTransferLookFor.OutputScoreResult':
+                {
+                    GuidObj.scoreTransferLookingfor.addTabelOutput(received_obj);
+                }; break;
+            case 'ScoreTransferLookFor.InputScoreResult':
+                {
+                    GuidObj.scoreTransferLookingfor.addTabelInput(received_obj);
+                }; break;
+            case 'NitrogenValueNotify':
+                {
+                    stateSet.nitrogeneffect.showVisible(received_obj.NitrogenValue);
                 }; break;
             default:
                 {
@@ -2605,9 +2638,21 @@ startA();
 window.requestAnimationFrame =
     window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame
     || window.msRequestAnimationFrame;
+
+var lastTime = 0;
+var deltaTime = 0;
+var targetFPS = 60; // 目标帧率
 function animate() {
     {
+        var currentTime = Date.now()
+        deltaTime = currentTime - lastTime;
+
         objMain.animateObj = requestAnimationFrame(animate);
+        if (deltaTime > 1000 / targetFPS) {
+            lastTime = currentTime;
+        }
+        else { return; }
+
         if (objMain.state != objMain.receivedState) {
             objMain.state = objMain.receivedState;
         }
@@ -2662,8 +2707,8 @@ function animate() {
                                 stateSet.lostPrepare.Animate(objMain.playerGroup.children[i].name.split('_')[1]);
                                 stateSet.ambusePrepare.Animate(objMain.playerGroup.children[i].name.split('_')[1]);
                                 stateSet.water.Animate(objMain.playerGroup.children[i].name.split('_')[1]);
-                                stateSet.fire.Animate(objMain.playerGroup.children[i].name.split('_')[1]);
-                                stateSet.lightning.Animate(objMain.playerGroup.children[i].name.split('_')[1]);
+
+                                //  stateSet.lightning.Animate(objMain.playerGroup.children[i].name.split('_')[1]);
                             }
                         }
                     }
@@ -3130,6 +3175,9 @@ function animate() {
                             stateSet.attck.Animate(objMain.carGroup.children[i].name.split('_')[1]);
                             stateSet.confuse.Animate(objMain.carGroup.children[i].name.split('_')[1]);
                             stateSet.lost.Animate(objMain.carGroup.children[i].name.split('_')[1]);
+
+                            stateSet.lightning.Animate(objMain.carGroup.children[i].name.split('_')[1]);
+                            stateSet.fire.Animate(objMain.carGroup.children[i].name.split('_')[1]);
                         }
                     }
                     {
@@ -5822,6 +5870,17 @@ var stateSet =
         add: function (targetRoleID, actionRole) {
             {
                 this.clear(actionRole);
+                let targetCar = objMain.carGroup.getObjectByName('car_' + targetRoleID);
+                if (targetCar) {
+                    //lightningStrikeMesh.position.set(targetCar.position.x, targetCar.position.y, targetCar.position.z);
+                    //lightningStrikeMesh.userData = { startT: Date.now(), targetRoleID: targetRoleID };
+                    //objMain.lightningGroup.add(lightningStrikeMesh);
+                    //particleFireMesh1.position.set(targetCar.position.x, targetCar.position.y, targetCar.position.z);
+                    //particleFireMesh1.name = 'fire_' + actionRole;
+                    //particleFireMesh1.userData = { startT: Date.now(), targetRoleID: targetRoleID };
+                    //objMain.fireGroup.add(particleFireMesh1);
+                }
+
                 var flag = objMain.playerGroup.getObjectByName('flag_' + targetRoleID);
                 if (flag) {
                     //var O3d = new THREE.Object3D();
@@ -5912,13 +5971,26 @@ var stateSet =
             var height = window.innerHeight;
             material1.setPerspective(objMain.camera.fov, height);
             var particleFireMesh1 = new THREE.Points(geometry1, material1);
-            var flag = objMain.playerGroup.getObjectByName('flag_' + targetRoleID);
-            if (flag) {
-                //  mesh.position.set(flag.position.x, 0, flag.position.z);
-                particleFireMesh1.position.set(flag.position.x, flag.position.y, flag.position.z);
+
+            let targetCar = objMain.carGroup.getObjectByName('car_' + targetRoleID);
+            if (targetCar) {
+                //lightningStrikeMesh.position.set(targetCar.position.x, targetCar.position.y, targetCar.position.z);
+                //lightningStrikeMesh.userData = { startT: Date.now(), targetRoleID: targetRoleID };
+                //objMain.lightningGroup.add(lightningStrikeMesh);
+                particleFireMesh1.position.set(targetCar.position.x, targetCar.position.y, targetCar.position.z);
                 particleFireMesh1.name = 'fire_' + actionRole;
-                particleFireMesh1.userData = { startT: Date.now() };
+                particleFireMesh1.userData = { startT: Date.now(), targetRoleID: targetRoleID };
                 objMain.fireGroup.add(particleFireMesh1);
+            }
+            if (false) {
+                var flag = objMain.playerGroup.getObjectByName('flag_' + targetRoleID);
+                if (flag) {
+                    //  mesh.position.set(flag.position.x, 0, flag.position.z);
+                    particleFireMesh1.position.set(flag.position.x, flag.position.y, flag.position.z);
+                    particleFireMesh1.name = 'fire_' + actionRole;
+                    particleFireMesh1.userData = { startT: Date.now() };
+                    objMain.fireGroup.add(particleFireMesh1);
+                }
             }
         },
         Animate: function (actionRole) {
@@ -5944,9 +6016,17 @@ var stateSet =
 
                         }
                         fire.geometry.attributes.position.needsUpdate = true;
+
+                        var targetRoleID = fire.userData.targetRoleID;
+                        let targetCar = objMain.carGroup.getObjectByName('car_' + targetRoleID);
+                        if (targetCar) {
+                            fire.position.set(targetCar.position.x, targetCar.position.y, targetCar.position.z);
+                        }
                     }
                 }
                 else {
+                    fire.material.dispose();
+                    fire.geometry.dispose();
                     objMain.fireGroup.remove(fire);
                 }
             }
@@ -5955,6 +6035,8 @@ var stateSet =
             var name = 'fire_' + actionRole;
             var fire = objMain.fireGroup.getObjectByName(name);
             if (fire) {
+                fire.material.dispose();
+                fire.geometry.dispose();
                 objMain.fireGroup.remove(fire);
             }
         },
@@ -6028,10 +6110,16 @@ var stateSet =
             let lightningStrikeMesh = new THREE.Mesh(lightningStrike, lightningMaterial);
             lightningStrikeMesh.name = 'lightning_' + actionRole;
 
-            let flag = objMain.playerGroup.getObjectByName('flag_' + targetRoleID);
-            if (flag) {
-                lightningStrikeMesh.position.set(flag.position.x, flag.position.y, flag.position.z);
-                lightningStrikeMesh.userData = { startT: Date.now() };
+            //let flag = objMain.playerGroup.getObjectByName('flag_' + targetRoleID);
+            //if (flag) {
+            //    lightningStrikeMesh.position.set(flag.position.x, flag.position.y, flag.position.z);
+            //    lightningStrikeMesh.userData = { startT: Date.now() };
+            //    objMain.lightningGroup.add(lightningStrikeMesh);
+            //}
+            let targetCar = objMain.carGroup.getObjectByName('car_' + targetRoleID);
+            if (targetCar) {
+                lightningStrikeMesh.position.set(targetCar.position.x, targetCar.position.y, targetCar.position.z);
+                lightningStrikeMesh.userData = { startT: Date.now(), targetRoleID: targetRoleID };
                 objMain.lightningGroup.add(lightningStrikeMesh);
             }
         },
@@ -6039,7 +6127,7 @@ var stateSet =
             let name = 'lightning_' + actionRole;
             var lightningStrikeMesh = objMain.lightningGroup.getObjectByName(name);
             if (lightningStrikeMesh) {
-                var percent = (Date.now() - lightningStrikeMesh.userData.startT) / 10000;
+                var percent = (Date.now() - lightningStrikeMesh.userData.startT) / 15000;
                 if (percent < 1) {
                     //objMain.carGroup.getObjectByName('car_'+objMain.indexKey).position
                     var car = objMain.carGroup.getObjectByName('car_' + actionRole);
@@ -6051,8 +6139,16 @@ var stateSet =
                     lightningStrikeMesh.geometry.rayParameters.destOffset.copy(new THREE.Vector3(Math.sin(percent * Math.PI * 5) * 3.3, 0, Math.cos(percent * Math.PI * 1.5)));
                     lightningStrikeMesh.geometry.rayParameters.destOffset.y -= 1;
                     lightningStrikeMesh.geometry.update(Date.now() / 2000);
+
+                    var targetRoleID = lightningStrikeMesh.userData.targetRoleID;
+                    let targetCar = objMain.carGroup.getObjectByName('car_' + targetRoleID);
+                    if (targetCar) {
+                        lightningStrikeMesh.position.set(targetCar.position.x, targetCar.position.y, targetCar.position.z);
+                    }
                 }
                 else {
+                    lightningStrikeMesh.material.dispose();
+                    lightningStrikeMesh.geometry.dispose();
                     objMain.lightningGroup.remove(lightningStrikeMesh);
                 }
             }
@@ -6061,6 +6157,8 @@ var stateSet =
             let name = 'lightning_' + actionRole;
             var lightningStrikeMesh = objMain.lightningGroup.getObjectByName(name);
             if (lightningStrikeMesh) {
+                lightningStrikeMesh.material.dispose();
+                lightningStrikeMesh.geometry.dispose();
                 objMain.lightningGroup.remove(lightningStrikeMesh);
             }
         },
@@ -6134,7 +6232,39 @@ var stateSet =
             }
         },
     },
-    clicktrail: null
+    clicktrail: null,
+    nitrogeneffect:
+    {
+        add: function () {
+            var car = objMain.carGroup.getObjectByName('car_' + objMain.indexKey);
+            if (car) {
+                objMain.ModelInput.NitrogenEffect.obj.position.set(34, 25, 0);
+                objMain.ModelInput.NitrogenEffect.obj.scale.set(10, 10, 10);
+                objMain.ModelInput.NitrogenEffect.obj.rotateZ(1.021017612416683);
+                objMain.ModelInput.NitrogenEffect.obj.rotateY(Math.PI * 5 / 10);
+                car.add(objMain.ModelInput.NitrogenEffect.obj);
+                stateSet.nitrogeneffect.showVisible(0);
+            }
+        },
+        showVisible: function (level) {
+            var car = objMain.carGroup.getObjectByName('car_' + objMain.indexKey);
+            if (car) {
+                var oIcon = car.getObjectByName('selfnitrogenEffectIcon');
+                if (oIcon) {
+                    oIcon.getObjectByName('level1').visible = level > 0;
+                    oIcon.getObjectByName('level2').visible = level > 1;
+                    oIcon.getObjectByName('level3').visible = level > 2;
+                    oIcon.getObjectByName('level4').visible = level > 3;
+                    oIcon.getObjectByName('level5').visible = level > 4;
+                    oIcon.getObjectByName('level6').visible = level > 5;
+                    oIcon.getObjectByName('level7').visible = level > 6;
+                    oIcon.getObjectByName('level8').visible = level > 7;
+                    oIcon.getObjectByName('level9').visible = level > 8;
+                    oIcon.getObjectByName('levelfull').visible = level > 9;
+                }
+            }
+        }
+    }
 }
 var DirectionOperator =
 {

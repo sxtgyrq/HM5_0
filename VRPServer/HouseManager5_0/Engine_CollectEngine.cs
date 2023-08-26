@@ -339,7 +339,7 @@ namespace HouseManager5_0
 
         private void arriveThenDoCollect(ref Player role, GetRandomPos gps, ref Car car, commandWithTime.placeArriving pa, ref List<string> notifyMsg, out bool needUpdateCollectState)
         {
-         //   timeNeedToWait = 0;
+            //   timeNeedToWait = 0;
             //   throw new Exception();
             var group = role.Group;
 
@@ -361,7 +361,19 @@ namespace HouseManager5_0
                 }
 
                 long sumCollect = collectReWard; //DealWithTheFrequcy(this.CollectReWard);
-                var selfGet = sumCollect;
+                long selfGet;
+
+                if (role.improvementRecord.CollectIsDouble)
+                {
+                    selfGet = sumCollect * 2;
+                    this.WebNotify(role, "获得了双倍奖励！");
+                    role.improvementRecord.reduceAttack(role, ref notifyMsg);
+                }
+                else
+                {
+                    selfGet = sumCollect;
+                }
+                //  selfGet = sumCollect;
                 //  long sumDebet = 0;
                 car.ability.setCostVolume(car.ability.costVolume + selfGet, role, car, ref notifyMsg);
 
@@ -556,60 +568,60 @@ namespace HouseManager5_0
             else
                 throw new Exception("parameter is wrong!");
         }
-        public commandWithTime.ReturningOjb collectPassBossAddress(Player player, Player boss, Car car, SetCollect sc, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason mrr)
-        {
-            throw new Exception("");
+        //public commandWithTime.ReturningOjb collectPassBossAddress(Player player, Player boss, Car car, SetCollect sc, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason mrr)
+        //{
+        //    throw new Exception("");
 
-            //if (car.ability.leftVolume > 0)
-            //{
-            //    var from = this.GetFromWhenUpdateCollect(that._Players[sc.Key], sc.cType, car);
-            //    var to = getCollectPositionTo(sc.collectIndex);//  this.promoteMilePosition;
-            //                                                   //  return ActionInBoss(from, to);
-            //    var fp1 = Program.dt.GetFpByIndex(from);
-            //    var fp2 = Program.dt.GetFpByIndex(to);
-            //    var fbBase = Program.dt.GetFpByIndex(player.StartFPIndex);
-            //    //var goPath = Program.dt.GetAFromB(fp1, fp2.FastenPositionID);
-            //    //var goPath = Program.dt.GetAFromB(from, to);
-            //    var goPath = that.GetAFromB_v2(from, to, player, grp, ref notifyMsg);
-            //    var returnToBossPath = that.GetAFromB_v2(to, boss.StartFPIndex, player, grp, ref notifyMsg);
-            //    var returnToSelfPath = that.GetAFromB_v2(boss.StartFPIndex, player.StartFPIndex, player, grp, ref notifyMsg);
-            //    var goMile = that.GetMile(goPath);
-            //    var returnToBossMile = that.GetMile(returnToBossPath);
-            //    var returnToSelfMile = that.GetMile(returnToSelfPath);
+        //    //if (car.ability.leftVolume > 0)
+        //    //{
+        //    //    var from = this.GetFromWhenUpdateCollect(that._Players[sc.Key], sc.cType, car);
+        //    //    var to = getCollectPositionTo(sc.collectIndex);//  this.promoteMilePosition;
+        //    //                                                   //  return ActionInBoss(from, to);
+        //    //    var fp1 = Program.dt.GetFpByIndex(from);
+        //    //    var fp2 = Program.dt.GetFpByIndex(to);
+        //    //    var fbBase = Program.dt.GetFpByIndex(player.StartFPIndex);
+        //    //    //var goPath = Program.dt.GetAFromB(fp1, fp2.FastenPositionID);
+        //    //    //var goPath = Program.dt.GetAFromB(from, to);
+        //    //    var goPath = that.GetAFromB_v2(from, to, player, grp, ref notifyMsg);
+        //    //    var returnToBossPath = that.GetAFromB_v2(to, boss.StartFPIndex, player, grp, ref notifyMsg);
+        //    //    var returnToSelfPath = that.GetAFromB_v2(boss.StartFPIndex, player.StartFPIndex, player, grp, ref notifyMsg);
+        //    //    var goMile = that.GetMile(goPath);
+        //    //    var returnToBossMile = that.GetMile(returnToBossPath);
+        //    //    var returnToSelfMile = that.GetMile(returnToSelfPath);
 
-            //    if (car.ability.leftMile >= goMile + returnToBossMile + returnToSelfMile || IsNPCsFirstCollect(player))
-            //    {
-            //        that.magicE.TakeHalfMoneyWhenIsControlled(player, car, ref notifyMsg);
-            //        int startT;
-            //        this.EditCarStateWhenActionStartOK(player, ref car, to, fp1, goPath, grp, ref notifyMsg, out startT);
-            //        var ro = commandWithTime.ReturningOjb.ojbWithBoss(returnToBossPath, returnToSelfPath, boss);
-            //        car.setState(player, ref notifyMsg, CarState.working);
-            //        StartArriavalThread(startT, 0, player, car, sc, ro, goMile, goPath, grp);
-            //        //  getAllCarInfomations(sc.Key, ref notifyMsg);
-            //        mrr = MileResultReason.Abundant;//返回原因
-            //        return ro;
-            //    }
-            //    else if (car.ability.leftMile >= goMile)
-            //    {
-            //        //  printState(player, car, $"剩余里程为{car.ability.leftMile}去程{goMile}，回程{returnMile},你去了回不来。所以安排返回");
-            //        mrr = MileResultReason.CanNotReturn;
-            //        return player.returningOjb;
-            //    }
-            //    else
-            //    {
-            //        // printState(player, car, $"剩余里程为{car.ability.leftMile}去程{goMile}，回程{returnMile},去不了。所以安排返回");
-            //        mrr = MileResultReason.CanNotReach;
-            //        return player.returningOjb;
-            //        //   return false;
-            //    }
-            //}
-            //else
-            //{
-            //    mrr = MileResultReason.MoneyIsNotEnougt;
-            //    this.WebNotify(player, "你身上的剩余收集空间不够啦！");
-            //    return player.returningOjb;
-            //}
-        }
+        //    //    if (car.ability.leftMile >= goMile + returnToBossMile + returnToSelfMile || IsNPCsFirstCollect(player))
+        //    //    {
+        //    //        that.magicE.TakeHalfMoneyWhenIsControlled(player, car, ref notifyMsg);
+        //    //        int startT;
+        //    //        this.EditCarStateWhenActionStartOK(player, ref car, to, fp1, goPath, grp, ref notifyMsg, out startT);
+        //    //        var ro = commandWithTime.ReturningOjb.ojbWithBoss(returnToBossPath, returnToSelfPath, boss);
+        //    //        car.setState(player, ref notifyMsg, CarState.working);
+        //    //        StartArriavalThread(startT, 0, player, car, sc, ro, goMile, goPath, grp);
+        //    //        //  getAllCarInfomations(sc.Key, ref notifyMsg);
+        //    //        mrr = MileResultReason.Abundant;//返回原因
+        //    //        return ro;
+        //    //    }
+        //    //    else if (car.ability.leftMile >= goMile)
+        //    //    {
+        //    //        //  printState(player, car, $"剩余里程为{car.ability.leftMile}去程{goMile}，回程{returnMile},你去了回不来。所以安排返回");
+        //    //        mrr = MileResultReason.CanNotReturn;
+        //    //        return player.returningOjb;
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        // printState(player, car, $"剩余里程为{car.ability.leftMile}去程{goMile}，回程{returnMile},去不了。所以安排返回");
+        //    //        mrr = MileResultReason.CanNotReach;
+        //    //        return player.returningOjb;
+        //    //        //   return false;
+        //    //    }
+        //    //}
+        //    //else
+        //    //{
+        //    //    mrr = MileResultReason.MoneyIsNotEnougt;
+        //    //    this.WebNotify(player, "你身上的剩余收集空间不够啦！");
+        //    //    return player.returningOjb;
+        //    //}
+        //}
 
 
         public void newThreadDo(commandWithTime.baseC dObj, GetRandomPos grp)

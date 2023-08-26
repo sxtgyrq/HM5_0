@@ -18,7 +18,7 @@
         margin-top: 0.25em;border:1px solid gray;">
 
             <label  onclick="subsidizeSys.readStr('bitcoinSubsidizeAddressInput');">
-                --↓↓↓输入1打头的比特币地址↓↓↓--
+                --↓↓↓输入1打头的B地址↓↓↓--
             </label>
             <input id="bitcoinSubsidizeAddressInput" type="text" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(127, 255, 127, 0.6);" />
         </div>
@@ -150,9 +150,9 @@
                 subsidizeSys.operateAddress = bitcoinAddress;
                 subsidizeSys.signInfoMatiion = [signature, bitcoinAddress];
 
-                localStorage['addrAfterSuccess'] = bitcoinAddress;
-                localStorage['signAfterSuccess'] = signature;
-                localStorage['msg_AfterSuccess'] = signMsg;
+                sessionStorage['addrAfterSuccess'] = bitcoinAddress;
+                sessionStorage['signAfterSuccess'] = signature;
+                sessionStorage['msg_AfterSuccess'] = signMsg;
                 //  nyrqUrl.set(bitcoinAddress);
             }
             else {
@@ -232,9 +232,9 @@
                 document.getElementById('signatureInputTextArea').value = that.signInfoMatiion[0];
             }
         }
-        else if (localStorage['msg_AfterSuccess'] != undefined && localStorage['msg_AfterSuccess'] == JSON.parse(sessionStorage['session']).Key) {
-            document.getElementById('bitcoinSubsidizeAddressInput').value = localStorage['addrAfterSuccess'];
-            document.getElementById('signatureInputTextArea').value = localStorage['signAfterSuccess'];
+        else if (sessionStorage['msg_AfterSuccess'] != undefined && sessionStorage['msg_AfterSuccess'] == JSON.parse(sessionStorage['session']).Key) {
+            document.getElementById('bitcoinSubsidizeAddressInput').value = sessionStorage['addrAfterSuccess'];
+            document.getElementById('signatureInputTextArea').value = sessionStorage['signAfterSuccess'];
 
         }
     },
@@ -385,7 +385,7 @@ var debtInfoSys =
         margin-top: 0.25em;border:1px solid gray;">
 
             <label>
-                --↓↓↓输入1打头的比特币地址↓↓↓--
+                --↓↓↓输入1打头的B地址↓↓↓--
             </label>
             <input id="bitcoinSubsidizeAddressInput" type="text" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(127, 255, 127, 0.6);" />
         </div>

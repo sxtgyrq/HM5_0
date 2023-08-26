@@ -24,7 +24,7 @@
         <div style="text-align:left;">
             <p style="text-align:left;">
                 <h1 style="text-align:left;font-size:xx-large;">游戏剧情</h1>
-                &emsp;&emsp;在游戏中，模拟城市交通，通过选取目标、选择方向、到达目的地获得加速效果、<a href="javascript:void(null);" onclick="GuidObj.getDiamand.show();">收集宝石</a>，<a href="javascript:void(null);" onclick="GuidObj.getReward.show();">获得虚拟股份</a>，然后<a href="javascript:void(null);" onclick="GuidObj.BTC.show();">获得比特币</a>。
+                &emsp;&emsp;在游戏中，模拟城市交通，通过选取目标、选择方向、到达目的地获得加速效果、<a href="javascript:void(null);" onclick="GuidObj.collectMoney.show();">收集积分</a>、<a href="javascript:void(null);" onclick="GuidObj.getDiamand.show();">收集宝石</a>，<a href="javascript:void(null);" onclick="GuidObj.getReward.show();">获得虚拟股份</a>，然后<a href="javascript:void(null);" onclick="GuidObj.BTC.show();">获得B</a>。
             </p>
             <p style="text-align:left;margin-top: 1em;">
                 <h1 style="text-align:left;font-size:xx-large;">打赏</h1>
@@ -123,7 +123,7 @@
     developTeam:
     {
         html: function () {
-           return `<div id="developTeamPanel" style="${GuidObj.bgData}width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+            return `<div id="developTeamPanel" style="${GuidObj.bgData}width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;">
             <p style="text-align:left;">
                 <h1 style="text-align:left">团队介绍</h1>
@@ -138,7 +138,7 @@
             </button>
         </div>
     </div>`;
-},
+        },
         id: 'developTeamPanel',
         show: function () {
             var that = GuidObj.developTeam;
@@ -179,7 +179,9 @@
                 &emsp;&emsp;六，绑定成功后。你可以依靠绑定词进行<a href="javascript:void(null);" onclick="GuidObj.wechat.show('wechat');">微信扫码</a>或<a href="javascript:void(null);" onclick="GuidObj.wechat.show('alipay');">支付宝扫码</a>。
             </p>
             <p style="text-align:left;margin-top: 1em;">
-                &emsp;&emsp;七，也能用1或3打头的比特币<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>至今对建筑物<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>转账进行打赏，您将直接获得建筑物的股份！直接获得的股份，也可进行BTC提取。</p>
+                &emsp;&emsp;七，也能用1或3打头的B<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>至今对建筑物<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>转账进行打赏，您将直接获得建筑物的股份！直接获得的股份，也可进行BTC提取。</p>
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;八，用短语充值完毕，可以进入<a href="javascript:void(null);" onclick="GuidObj.chargingLookingfor.show();">查询界面</a>查询充值记录。</p>
         </div>
         <div style=" width:100%;">
             <table style=" width:100%;">
@@ -401,7 +403,7 @@
                     <th style="border: 1px solid #ccc;"><label>单价</label></th>
                 </tr>
                 <tr>
-                    <td  style="border:1px solid #ccc;">￥0.01~￥9.99</td>
+                    <td  style="border:1px solid #ccc;">￥5.00~￥9.99</td>
                     <td style="border:1px solid #ccc;">200.00积分~396积分</td>
                     <td style="border:1px solid #ccc;">40.00积分/￥</td>
                 </tr>
@@ -492,7 +494,7 @@
         html: function () {
             return `<div id="getBtcIntroPanel" style="${GuidObj.bgData}width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
-            <h1 style="text-align:left;font-size:xx-large;">获得比特币</h1>
+            <h1 style="text-align:left;font-size:xx-large;">获得B</h1>
             <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;一，选择场景内的建筑物，点击详情。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/getBtc1.jpg" />
@@ -506,7 +508,7 @@
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/getBtc2.jpg" />
             </p>
             <p style="text-align:left;margin-top: 1em;">
-                &emsp;&emsp;四，申请BTC提取后，管理员在72小时内，发送比特币至你持有的<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>。
+                &emsp;&emsp;四，申请BTC提取后，管理员在72小时内，发送B至你持有的<a href="javascript:void(null);" onclick="GuidObj.addr.show();">账号地址</a>。
             </p>
         </div>
         <div style="text-align:center;">
@@ -533,7 +535,8 @@
     },
     collectMoney:
     {
-        html: `<div id="collectMoneyGuidIntroPanle" style="width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        html: function () {
+            return `<div id="collectMoneyGuidIntroPanle" style="${GuidObj.bgData};width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
             <h1 style="text-align:left">收集奖励</h1>
             <p style="text-align:left;">
@@ -542,7 +545,7 @@
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_CollectMoney_01.jpg" />
             </p>
             <p style="text-align:left;">
-                &emsp;&emsp;二，经过路口，通过调整视角，选择小车到达目标最短路径的正确路口。选择错误会由损失。<br />
+                &emsp;&emsp;二，经过路口，通过调整视角，选择小车到达目标最短路径的正确路口。选择错误会造成积分的损失。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_CollectMoney_02.jpg" />
             </p>
             <p style="text-align:left;">
@@ -556,13 +559,14 @@
                 返回
             </button>
         </div>
-    </div>`,
+    </div>`
+        },
         id: 'collectMoneyGuidIntroPanle',
         show: function () {
             var that = GuidObj.collectMoney;
             if (document.getElementById(that.id) == null) {
                 document.getElementById('rootContainer').innerHTML = '';
-                var frag = document.createRange().createContextualFragment(that.html);
+                var frag = document.createRange().createContextualFragment(that.html());
                 frag.id = that.id;
                 document.getElementById('rootContainer').appendChild(frag);
             }
@@ -572,17 +576,18 @@
     },
     moneySave:
     {
-        html: ` <div id="moneySaveGuidIntroPanle" style="width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        html: function () {
+            return `<div id="moneySaveGuidIntroPanle" style="${GuidObj.bgData};width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
             <h1 style="text-align:left">积分存储</h1>
             <p style="text-align:left;">
-                &emsp;&emsp;一，通过<a href="javascript:void(null);" onclick="GuidObj.collectMoney.show();">收集奖励</a>、出售宝石等途径获得积分。当积分大于500.00时，可以将抛出500.00的剩余积分进行存储。<br />
+                &emsp;&emsp;一，通过<a href="javascript:void(null);" onclick="GuidObj.collectMoney.show();">收集奖励</a>与完成任务后获得积分。当完成任务后，可以将积分进行存储。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_scoresave_01.jpg" />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_scoresave_02.jpg" />
             </p>
             <p style="text-align:left;">
 
-                &emsp;&emsp;二，点击存储按钮。并输入正确的地址。<br />
+                &emsp;&emsp;二，点击存储按钮。并输入正确的地址。可以是自己的地址，实现存储；也可以是别人的地址，实现<a href="javascript:void(null);" onclick="GuidObj.scoreTransferLookingfor.show();">积分转移</a>。<br />
                 <img style="max-width:256px;width:80%;margin-left:10%" src="Pic/gameintro/guid_scoresave_03.jpg" />
             </p>
             <p style="text-align:left;">
@@ -596,13 +601,14 @@
                 返回
             </button>
         </div>
-    </div>`,
+    </div>`;
+        },
         id: 'moneySaveGuidIntroPanle',
         show: function () {
             var that = GuidObj.moneySave;
             if (document.getElementById(that.id) == null) {
                 document.getElementById('rootContainer').innerHTML = '';
-                var frag = document.createRange().createContextualFragment(that.html);
+                var frag = document.createRange().createContextualFragment(that.html());
                 frag.id = that.id;
                 document.getElementById('rootContainer').appendChild(frag);
             }
@@ -617,7 +623,7 @@
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
             <h1 style="text-align:left;font-size:xx-large;">地址</h1>
             <p style="text-align:left;margin-top: 1em;">
-                &emsp;&emsp;一，这里的地址指的是1或3打头的比特币地址。<br />
+                &emsp;&emsp;一，这里的地址指的是1或3打头的B地址。<br />
             </p>
             <p style="text-align:left;margin-top: 1em;">
 
@@ -625,7 +631,7 @@
 
             </p>
             <p style="text-align:left;margin-top: 1em;">
-                &emsp;&emsp;三，本系统暂不支持bc01打头的比特币的地址。<br />
+                &emsp;&emsp;三，本系统暂不支持bc01打头的B地址。<br />
             </p>
             <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;四，私钥和地址是成对获取的，详情<a href="javascript:void(null);" onclick="GuidObj.privateKey.show();">获取私钥</a>。请妥善保管好私钥。<br />
@@ -660,7 +666,7 @@
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
             <h1 style="text-align:left;font-size: xx-large;">获取私钥</h1>
             <p style="text-align:left;margin-top: 1em;">
-                &emsp;&emsp;支持1或3打头的比特币地址。可以在线获取与离线获取。<br />
+                &emsp;&emsp;支持1或3打头的B地址。可以在线获取与离线获取。<br />
             </p>
             <h2 style="text-align:left;font-size:xx-large;;">在线获取私钥</h2>
             <p style="text-align:left;margin-top: 1em;">
@@ -685,7 +691,7 @@
             </p>
             <h2 style="text-align:left;font-size:xx-large;">离线获取私钥</h2>
             <p style="text-align:left;1em;margin-top: 1em;">
-                &emsp;&emsp;用比特币钱包或者<a href="javascript:void(null);" onclick="GuidObj.wallet.show();">离线签名器</a>获取私钥和密码！<br />
+                &emsp;&emsp;用B钱包或者<a href="javascript:void(null);" onclick="GuidObj.wallet.show();">离线签名器</a>获取私钥和密码！<br />
             </p>
         </div>
         <div style="text-align:center;">
@@ -763,10 +769,10 @@
             </p>
             <h2 style="text-align:left;font-size:larger;">Android系统签名！</h2>
             <p style="text-align:left;">
-                &emsp;&emsp;你可以安装<a href="AndroidApk/bither.apk">bither</a>或其他可对消息进行签名与验证的比特币钱包来进行签名！这里的bither只是支持1开头的地址(P2PKH,Pay-to-Pubkey Hash)签名与验证！<br />
+                &emsp;&emsp;你可以安装<a href="AndroidApk/bither.apk">bither</a>或其他可对消息进行签名与验证的B钱包来进行签名！这里的bither只是支持1开头的地址(P2PKH,Pay-to-Pubkey Hash)签名与验证！<br />
             </p>
             <h2 style="text-align:left;font-size:larger;">Windows、macOS系统签名！</h2>
-            &emsp;&emsp;你可以安装<a href="https://electrum.org/#download">electrum</a>或其他可对消息进行签名与验证的比特币钱包来进行签名！这里的electrum支持1开头的地址(P2PKH,Pay-to-Pubkey Hash)与3开头的(P2SH)签名与验证！<br />
+            &emsp;&emsp;你可以安装<a href="https://electrum.org/#download">electrum</a>或其他可对消息进行签名与验证的B钱包来进行签名！这里的electrum支持1开头的地址(P2PKH,Pay-to-Pubkey Hash)与3开头的(P2SH)签名与验证！<br />
         </div>
         <div style="text-align:center;">
             <button onclick="GuidObj.gameIntroShow();" style="width: 5em;
@@ -806,7 +812,7 @@
         <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
            <h1 style="text-align:left;font-size: x-large;">挑战NPC</h1>
             <p style="text-align:left;margin-top:1em;">
-                &emsp;&emsp;在<a href="javascript:void(null);" onclick="GuidObj.login.show();">登录游戏</a>后，可以挑战NPC来完成等级的提升。提升等级，可用于<a href="javascript:void(null);" onclick="GuidObj.getReward.show();">申请某地点的虚拟股份</a>，虚拟股份可用于<a href="javascript:void(null);" onclick="GuidObj.BTC.show();">比特币提现</a>与游戏增强。<br />
+                &emsp;&emsp;在<a href="javascript:void(null);" onclick="GuidObj.login.show();">登录游戏</a>后，可以挑战NPC来完成等级的提升。提升等级，可用于<a href="javascript:void(null);" onclick="GuidObj.getReward.show();">申请某地点的虚拟股份</a>，虚拟股份可用于<a href="javascript:void(null);" onclick="GuidObj.BTC.show();">B提现</a>与游戏增强。<br />
             </p>
             <p style="text-align:left;margin-top:1em;">
                 &emsp;&emsp;1级玩家可挑战2级NPC，2级玩家可挑战3级NPC，依次类推N级玩家可挑战(N+1)级NPC<br />
@@ -1142,4 +1148,387 @@
             }
         }
     },
+    chargingLookingfor:
+    {
+        html: function () {
+            return `<div id="chargingLookingfor" style="${GuidObj.bgData};width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
+            <h1 style="text-align:left;font-size:xx-large;">查询打赏记录</h1>
+            <p style="text-align:left;margin-top: 1em;">
+
+                &emsp;&emsp;输入验证码与绑定词即可查询！
+            </p> 
+        </div>
+        <div style=" width:100%;">
+            <table style=" width:100%;"> 
+                <tr>
+                    <th><label>绑定词</label> </th>
+                    <td> <textarea style="min-width: 20em;" id="bindWordMsg">欢迎来到我的游戏</textarea></td>
+                </tr>
+               
+                <tr>
+                    <th><label>验证码</label> </th>
+                    <td><textarea style="min-width: 4em;" id="verifyCodeValue"></textarea>
+                    <img id="verifyCodeImg" />
+                    </td>
+                </tr>
+                 <tr>
+                    <td  colspan="2">
+                       <div id="bindVerifyCodeNotifyMsg" style="text-align:center;"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <div>
+                            <button onclick="GuidObj.chargingLookingfor.scoreLookFor();" style="width: 9em;
+        height: 3em;
+        margin-top: 1em;
+        background-color:aqua;
+        ">
+                                查询充值记录
+                            </button>  
+                            <button onclick="GuidObj.chargingLookingfor.clearBindWordInfo();" style="width: 5em; height: 3em; margin-top: 1em; background-color:transparent;">
+                                清空
+                            </button>
+                        </div>
+                    </td>
+                </tr> 
+            </table>
+
+        </div>
+        <div style="text-align:center;">
+            <button  onclick="GuidObj.gameIntroShow();"  style="width: 5em;
+        height: 3em;
+        margin-top: 1em;margin-bottom:10em;">
+                返回
+            </button>
+        </div>
+    </div>`;
+        },
+        id: 'chargingLookingfor',
+        show: function () {
+            var that = GuidObj.chargingLookingfor;
+            if (document.getElementById(that.id) == null) {
+                document.getElementById('rootContainer').innerHTML = '';
+                var frag = document.createRange().createContextualFragment(that.html());
+                frag.id = that.id;
+                document.getElementById('rootContainer').appendChild(frag);
+                document.getElementById('verifyCodeImg').src = 'data:image/gif;base64,' + localStorage['nyrqVerifyImg'];
+            }
+            else {
+                //that.updateSocialResponsibility();
+            }
+        },
+        scoreLookFor: function () {
+            var bindWordMsg = document.getElementById('bindWordMsg').value;
+            var verifyCodeValue = document.getElementById('verifyCodeValue').value;
+            var obj = {
+                c: 'ChargingLookFor',
+                bindWordMsg: bindWordMsg,
+                verifyCodeValue: verifyCodeValue
+            };
+            objMain.ws.send(JSON.stringify(obj));
+        },
+        clearBindWordInfo: function () {
+            // document.getElementById('bindWordAddr').value = '';
+            document.getElementById('bindWordMsg').value = '';
+            //document.getElementById('bindWordSign').value = '';
+        },
+        SetImage: function (base64) {
+            if (document.getElementById('verifyCodeImg') == null) {
+
+            }
+            else {
+                document.getElementById('verifyCodeImg').src = 'data:image/gif;base64,' + base64;
+            }
+        },
+        showNotifyMsg(msg) {
+            if (document.getElementById('bindVerifyCodeNotifyMsg') == null) {
+
+            }
+            else {
+                document.getElementById('bindVerifyCodeNotifyMsg').innerText = msg;
+            }
+        },
+        addTabel: function (dataAndList) {
+
+            var tradeDetailHtml = '';
+            if (dataAndList.chargingData.length == 0) {
+                var tr = `<tr>
+                    <td colspan="2" style="text-align: center; border: dashed 1px #ffffff; ">无充值记录</td> 
+                </tr>`;
+                tradeDetailHtml += tr;
+            }
+            else
+                for (var i = 0; i < dataAndList.chargingData.length; i++) {
+                    var tr = `<tr>
+                    <td style="text-align: center; border: dashed 1px #ffffff; ">${dataAndList.chargingData[i].date}</td>
+                    <td style="text-align: center; border: dashed 1px #ffffff; ">￥${dataAndList.chargingData[i].amount}</td>
+                </tr>`;
+                    tradeDetailHtml += tr;
+                }
+            var tabelHtml = `<table id="chargingDetailTable">
+                <tr>
+                    <th>地址</th>
+                    <td style="text-align:center;border: dashed 1px #ffffff;">${dataAndList.bindWordAddr}</td>
+                </tr>
+                <tr>
+                    <th>绑定词</th>
+                    <td style="text-align: center; border: dashed 1px #ffffff; ">${dataAndList.bindWordMsg}</td>
+                </tr>
+                <tr><th>日期</th><th>金额</th></tr>${tradeDetailHtml}  
+            </table>`;
+            var that = GuidObj.chargingLookingfor;
+            if (document.getElementById(that.id) == null) {
+            }
+            else {
+                if (document.getElementById("chargingDetailTable") == null) {
+
+                }
+                else {
+                    document.getElementById("chargingDetailTable").remove();
+                }
+                var frag = document.createRange().createContextualFragment(tabelHtml);
+                frag.id = "chargingDetailTable";
+                document.getElementById(that.id).appendChild(frag);
+            }
+        },
+    },
+    scoreTransferLookingfor:
+    {
+        html: function () {
+            return `<div id="scoreTransferLookingfor" style="${GuidObj.bgData};width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
+            <h1 style="text-align:left;font-size:xx-large;">查询积分转移记录</h1>
+            <p style="text-align:left;margin-top: 1em;">
+
+                &emsp;&emsp;输入验证码与绑定词即可查询！
+            </p> 
+            <p style="text-align:left;margin-top: 1em;">
+
+                &emsp;&emsp;输入地址对当天日期的yyyyMMdd，如20230203 格式的签名，可以进行标记！
+            </p> 
+        </div>
+        <div style=" width:100%;">
+            <table style=" width:100%;"> 
+                <tr>
+                    <th><label>绑定词</label> </th>
+                    <td> <textarea style="min-width: 20em;" id="bindWordMsg">欢迎来到我的游戏</textarea></td>
+                </tr>
+               
+                <tr>
+                    <th><label>验证码</label> </th>
+                    <td><textarea style="min-width: 4em;" id="verifyCodeValue"></textarea>
+                    <img id="verifyCodeImg" />
+                    </td>
+                </tr>
+                <tr>
+                    <th><label>签名</label> </th>
+                    <td> <textarea style="min-width: 20em;" id="bindWordSign"></textarea></td>
+                </tr>
+                 <tr>
+                    <td  colspan="2">
+                       <div id="bindVerifyCodeNotifyMsg" style="text-align:center;"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <div>
+                            <button onclick="GuidObj.scoreTransferLookingfor.scoreInputLookFor(0);" style="width: 9em;
+        height: 3em;
+        margin-top: 1em;
+        background-color:aqua;
+        ">
+                                积分转出记录
+                            </button>  
+                            <button onclick="GuidObj.scoreTransferLookingfor.scoreInputLookFor(1);" style="width: 9em;
+        height: 3em;
+        margin-top: 1em;
+        background-color:aqua;
+        ">
+                                积分转入记录
+                            </button>  
+                            <button onclick="GuidObj.scoreTransferLookingfor.clearBindWordInfo();" style="width: 5em; height: 3em; margin-top: 1em; background-color:transparent;">
+                                清空
+                            </button>
+                        </div>
+                    </td>
+                </tr> 
+            </table>
+
+        </div>
+        <div style="text-align:center;">
+            <button  onclick="GuidObj.gameIntroShow();"  style="width: 5em;
+        height: 3em;
+        margin-top: 1em;margin-bottom:10em;">
+                返回
+            </button>
+        </div>
+    </div>`;
+        },
+        id: 'scoreTransferLookingfor',
+        show: function () {
+            var that = GuidObj.scoreTransferLookingfor;
+            if (document.getElementById(that.id) == null) {
+                document.getElementById('rootContainer').innerHTML = '';
+                var frag = document.createRange().createContextualFragment(that.html());
+                frag.id = that.id;
+                document.getElementById('rootContainer').appendChild(frag);
+                document.getElementById('verifyCodeImg').src = 'data:image/gif;base64,' + localStorage['nyrqVerifyImg'];
+            }
+            else {
+                //that.updateSocialResponsibility();
+            }
+        },
+        scoreInputLookFor: function (transferType) {
+            var bindWordMsg = document.getElementById('bindWordMsg').value;
+            var verifyCodeValue = document.getElementById('verifyCodeValue').value;
+            var obj = {
+                c: 'ScoreTransferLookFor',
+                bindWordMsg: bindWordMsg,
+                verifyCodeValue: verifyCodeValue,
+                transferType: transferType
+            };
+            objMain.ws.send(JSON.stringify(obj));
+        },
+        clearBindWordInfo: function () {
+            // document.getElementById('bindWordAddr').value = '';
+            document.getElementById('bindWordMsg').value = '';
+            //document.getElementById('bindWordSign').value = '';
+        },
+        addTabelInput: function (dataAndList) {
+            var tradeDetailHtml = '';
+            if (dataAndList.scoreData.length == 0) {
+                var tr = `<tr>
+                    <td colspan="5" style="text-align: center; border: dashed 1px #ffffff; ">无充值记录</td> 
+                </tr>`;
+                tradeDetailHtml += tr;
+            }
+            else
+                for (var i = 0; i < dataAndList.scoreData.length; i++) {
+                    var tr = `<tr>
+                    <td style="text-align: center; border: dashed 1px #ffffff; ">${dataAndList.scoreData[i].date}</td>
+                    <td style="text-align: center; border: dashed 1px #ffffff;word-break:break-all;word-wrap:anywhere; ">${dataAndList.scoreData[i].addrFrom}</td>
+                    <td style="text-align: center; border: dashed 1px #ffffff; ">${(dataAndList.scoreData[i].amount / 100).toFixed(2)}</td>
+                    <td style="text-align: center; border: dashed 1px #ffffff; ">${(dataAndList.scoreData[i].isVerified ? '已标记' : '未标记')}</td>
+                    <td style="text-align: center; border: dashed 1px #ffffff; ">
+                        <button onclick="GuidObj.scoreTransferLookingfor.setRecordMark('${dataAndList.scoreData[i].uuid}',1);">标记</button>
+                    </td>
+                </tr>`;
+                    tradeDetailHtml += tr;
+                }
+            var tabelHtml = `<table id="scoreDetailTable">
+                   <caption style="font-size:larger;font-weight:bolder;">
+                    ${dataAndList.tabelName}
+                </caption>
+                <tr>
+                    <th>地址</th>
+                    <td style="text-align:center;border: dashed 1px #ffffff;" colspan="4">${dataAndList.bindWordAddr}</td>
+                </tr>
+                <tr>
+                    <th>绑定词</th>
+                    <td style="text-align: center; border: dashed 1px #ffffff;" colspan="4">${dataAndList.bindWordMsg}</td>
+                </tr>
+                <tr><th>日期</th><th>账户</th><th>金额</th><th>状态</th><th>操作</th></tr>
+                ${tradeDetailHtml}
+            </table>`;
+            var that = GuidObj.scoreTransferLookingfor;
+            if (document.getElementById(that.id) == null) {
+            }
+            else {
+                if (document.getElementById("scoreDetailTable") == null) {
+
+                }
+                else {
+                    document.getElementById("scoreDetailTable").remove();
+                }
+                var frag = document.createRange().createContextualFragment(tabelHtml);
+                frag.id = "scoreDetailTable";
+                document.getElementById(that.id).appendChild(frag);
+            }
+        },
+        addTabelOutput: function (dataAndList) {
+            var tradeDetailHtml = '';
+            if (dataAndList.scoreData.length == 0) {
+                var tr = `<tr>
+                    <td colspan="5" style="text-align: center; border: dashed 1px #ffffff; ">无充值记录</td> 
+                </tr>`;
+                tradeDetailHtml += tr;
+            }
+            else
+                for (var i = 0; i < dataAndList.scoreData.length; i++) {
+                    var tr = `<tr>
+                    <td style="text-align: center; border: dashed 1px #ffffff; ">${dataAndList.scoreData[i].date}</td>
+                    <td style="text-align: center; border: dashed 1px #ffffff; ">${(dataAndList.scoreData[i].amount / 100).toFixed(2)}</td>
+                    <td style="text-align: center; border: dashed 1px #ffffff;word-break:break-all;word-wrap:anywhere; ">${dataAndList.scoreData[i].addrTo}</td>
+                    <td style="text-align: center; border: dashed 1px #ffffff; ">${(dataAndList.scoreData[i].isVerified ? '已标记' : '未标记')}</td>
+                    <td style="text-align: center; border: dashed 1px #ffffff; ">
+                        <button onclick="GuidObj.scoreTransferLookingfor.setRecordMark('${dataAndList.scoreData[i].uuid}',0);">标记</button>
+                    </td>
+                </tr>`;
+                    tradeDetailHtml += tr;
+                }
+            var tabelHtml = `<table id="scoreDetailTable">
+                   <caption style="font-size:larger;font-weight:bolder;">
+                    ${dataAndList.tabelName}
+                </caption>
+                <tr>
+                    <th>地址</th>
+                    <td style="text-align:center;border: dashed 1px #ffffff;" colspan="4">${dataAndList.bindWordAddr}</td>
+                </tr>
+                <tr>
+                    <th>绑定词</th>
+                    <td style="text-align: center; border: dashed 1px #ffffff;" colspan="4">${dataAndList.bindWordMsg}</td>
+                </tr>
+                <tr><th>日期</th><th>账户</th><th>金额</th><th>状态</th><th>操作</th></tr>
+                ${tradeDetailHtml}
+            </table>`;
+            var that = GuidObj.scoreTransferLookingfor;
+            if (document.getElementById(that.id) == null) {
+            }
+            else {
+                if (document.getElementById("scoreDetailTable") == null) {
+
+                }
+                else {
+                    document.getElementById("scoreDetailTable").remove();
+                }
+                var frag = document.createRange().createContextualFragment(tabelHtml);
+                frag.id = "scoreDetailTable";
+                document.getElementById(that.id).appendChild(frag);
+            }
+        },
+        SetImage: function (base64) {
+            if (document.getElementById('verifyCodeImg') == null) {
+
+            }
+            else {
+                document.getElementById('verifyCodeImg').src = 'data:image/gif;base64,' + base64;
+            }
+        },
+        showNotifyMsg(msg) {
+            if (document.getElementById('bindVerifyCodeNotifyMsg') == null) {
+
+            }
+            else {
+                document.getElementById('bindVerifyCodeNotifyMsg').innerText = msg;
+            }
+        },
+        setRecordMark: function (uuid, transferType) {
+            var bindWordMsg = document.getElementById('bindWordMsg').value;
+            var verifyCodeValue = document.getElementById('verifyCodeValue').value;
+            var Sinature = document.getElementById('bindWordSign').value;
+            var obj = {
+                c: 'ScoreTransferRecordMark',
+                bindWordMsg: bindWordMsg,
+                verifyCodeValue: verifyCodeValue,
+                transferType: transferType,
+                uuid: uuid,
+                Sinature: Sinature
+            };
+            objMain.ws.send(JSON.stringify(obj));
+        }
+    }
 };

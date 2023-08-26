@@ -563,6 +563,7 @@ namespace HouseManager5_0.RoomMainF
             }
         }
 
+        // public void Thread
         ///// <summary>
         ///// 当没有抢到宝石-或者收集、保护费，在路上待命。
         ///// </summary>

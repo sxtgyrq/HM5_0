@@ -262,5 +262,48 @@ namespace WsOfWebClient
                 ConnectInfo.TeammateIconObj = obj;
             }
         }
+
+        public class nitrogenEffectIcon : interfaceTag.modelForCopy
+        {
+            public string Tag { get { return ConnectInfo.NitrogenIconBase64; } }
+
+            public string imgPath { get { return "model/nitrogen/f.jpg"; } }
+
+            public string mtlPath { get { return "model/nitrogen/f.mtl"; } }
+
+            public string objPath { get { return "model/nitrogen/f.obj"; } }
+
+            public string Command { get { return "SetNitrogenEffectIcon"; } }
+
+            public string GetImg()
+            {
+                return ConnectInfo.NitrogenIconBase64;
+            }
+
+            public string GetMtl()
+            {
+                return ConnectInfo.NitrogenIconMtl;
+            }
+
+            public string GetObj()
+            {
+                return ConnectInfo.NitrogenIconObj;
+            }
+
+            public void SetImgBase64(string base64)
+            {
+                ConnectInfo.NitrogenIconBase64 = base64;
+            }
+
+            public void SetMtl(string mtl)
+            {
+                ConnectInfo.NitrogenIconMtl = mtl;
+            }
+
+            public void setObj(string obj)
+            {
+                ConnectInfo.NitrogenIconObj = obj;
+            }
+        }
     }
 }

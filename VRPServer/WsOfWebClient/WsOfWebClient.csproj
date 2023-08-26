@@ -493,6 +493,15 @@
     <None Update="model\losticon\untitled.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="model\nitrogen\f.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="model\nitrogen\f.mtl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="model\nitrogen\f.obj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="model\opponent\fight.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

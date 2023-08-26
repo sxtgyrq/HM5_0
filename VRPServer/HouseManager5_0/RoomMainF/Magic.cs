@@ -36,30 +36,53 @@ namespace HouseManager5_0.RoomMainF
                 }
             }
         }
+        internal void nitrogenValueChanged(Player role, ref List<string> notifyMsgs)
+        {
+            // throw new Exception("");
+            //var group = role.Group;
+            //foreach (var item in group._PlayerInGroup)
+            {
+                // if (item.Value.playerType == Player.PlayerType.player)
+                {
+                    var player = role;
+                    var url = player.FromUrl;
+                    //   role.getCar().
+                    NitrogenValueNotify nvn = new NitrogenValueNotify()
+                    {
+                        c = "NitrogenValueNotify",
+                        WebSocketID = player.WebSocketID,
+                        Key = role.Key,
+                        NitrogenValue = role.improvementRecord.HasValueToImproveSpeed ? 10 : role.improvementRecord.SpeedValue
+                    };
+                    var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(nvn);
+                    notifyMsgs.Add(url);
+                    notifyMsgs.Add(sendMsg);
+                }
+            }
+        }
 
         internal void attackMagicChanged(Player role, ref List<string> notifyMsgs)
         {
-            throw new Exception("");
-
-            //foreach (var item in this._Players)
-            //{
-            //    if (item.Value.playerType == Player.PlayerType.player)
-            //    {
-            //        var player = (Player)item.Value;
-            //        var url = player.FromUrl;
-            //        AttackNotify an = new AttackNotify()
-            //        {
-            //            c = "AttackNotify",
-            //            WebSocketID = player.WebSocketID,
-            //            Key = role.Key,
-            //            On = role.improvementRecord.attackValue > 0
-            //        };
-
-            //        var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(an);
-            //        notifyMsgs.Add(url);
-            //        notifyMsgs.Add(sendMsg);
-            //    }
-            //}
+            //  throw new Exception("");
+            var group = role.Group;
+            foreach (var item in group._PlayerInGroup)
+            {
+                if (item.Value.playerType == Player.PlayerType.player)
+                {
+                    var player = (Player)item.Value;
+                    var url = player.FromUrl;
+                    AttackNotify an = new AttackNotify()
+                    {
+                        c = "AttackNotify",
+                        WebSocketID = player.WebSocketID,
+                        Key = role.Key,
+                        On = role.improvementRecord.CollectIsDouble
+                    };
+                    var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(an);
+                    notifyMsgs.Add(url);
+                    notifyMsgs.Add(sendMsg);
+                }
+            }
         }
 
         internal void defenceMagicChanged(Player role, ref List<string> notifyMsgs)
@@ -206,6 +229,7 @@ namespace HouseManager5_0.RoomMainF
             role.confuseRecord = new Manager_Driver.ConfuseManger();
             role.improvementRecord = new Manager_Driver.ImproveManager();
             role.speedMagicChanged = this.speedMagicChanged;
+            role.nitrogenValueChanged = this.nitrogenValueChanged;
             role.attackMagicChanged = this.attackMagicChanged;
             role.defenceMagicChanged = this.defenceMagicChanged;
             role.confusePrepareMagicChanged = this.confusePrepareMagicChanged;
@@ -223,24 +247,24 @@ namespace HouseManager5_0.RoomMainF
 
         private void electricMagicChanged(Player actionRole, Player targetRole, ref List<string> notifyMsgs)
         {
-            //foreach (var item in this._Players)
-            //{
-            //    if (item.Value.playerType == Player.PlayerType.player)
-            //    {
-            //        var player = (Player)item.Value;
-            //        var url = player.FromUrl;
-            //        ElectricNotify ln = new ElectricNotify()
-            //        {
-            //            c = "ElectricNotify",
-            //            WebSocketID = player.WebSocketID,
-            //            actionRoleID = actionRole.Key,
-            //            targetRoleID = targetRole.Key,
-            //        };
-            //        var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(ln);
-            //        notifyMsgs.Add(url);
-            //        notifyMsgs.Add(sendMsg);
-            //    }
-            //}
+            foreach (var item in actionRole.Group._PlayerInGroup)
+            {
+                if (item.Value.playerType == Player.PlayerType.player)
+                {
+                    var player = (Player)item.Value;
+                    var url = player.FromUrl;
+                    ElectricNotify ln = new ElectricNotify()
+                    {
+                        c = "ElectricNotify",
+                        WebSocketID = player.WebSocketID,
+                        actionRoleID = actionRole.Key,
+                        targetRoleID = targetRole.Key,
+                    };
+                    var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(ln);
+                    notifyMsgs.Add(url);
+                    notifyMsgs.Add(sendMsg);
+                }
+            }
         }
 
         private void waterMagicChanged(Player actionRole, Player targetRole, ref List<string> notifyMsgs)
@@ -267,23 +291,27 @@ namespace HouseManager5_0.RoomMainF
 
         private void fireMagicChanged(Player actionRole, Player targetRole, ref List<string> notifyMsgs)
         {
+            foreach (var item in actionRole.Group._PlayerInGroup)
+            {
+                if (item.Value.playerType == Player.PlayerType.player)
+                {
+                    var player = (Player)item.Value;
+                    var url = player.FromUrl;
+                    FireNotify ln = new FireNotify()
+                    {
+                        c = "FireNotify",
+                        WebSocketID = player.WebSocketID,
+                        actionRoleID = actionRole.Key,
+                        targetRoleID = targetRole.Key,
+                    };
+                    var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(ln);
+                    notifyMsgs.Add(url);
+                    notifyMsgs.Add(sendMsg);
+                }
+            }
             //foreach (var item in this._Players)
             //{
-            //    if (item.Value.playerType == Player.PlayerType.player)
-            //    {
-            //        var player = (Player)item.Value;
-            //        var url = player.FromUrl;
-            //        FireNotify ln = new FireNotify()
-            //        {
-            //            c = "FireNotify",
-            //            WebSocketID = player.WebSocketID,
-            //            actionRoleID = actionRole.Key,
-            //            targetRoleID = targetRole.Key,
-            //        };
-            //        var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(ln);
-            //        notifyMsgs.Add(url);
-            //        notifyMsgs.Add(sendMsg);
-            //    }
+
             //}
         }
 

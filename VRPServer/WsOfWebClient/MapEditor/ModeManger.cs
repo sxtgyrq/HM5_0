@@ -25,6 +25,7 @@ namespace WsOfWebClient.MapEditor
                 this.indexOfSelect = 0;
                 this.material = new List<aModel>();
                 this.addModel = false;
+                this.detailModels = new Dictionary<string, bool>();
             }
 
             public string ID { get; set; }
@@ -317,6 +318,8 @@ namespace WsOfWebClient.MapEditor
                 return this.material[this.indexOfSelect];
             }
 
+            Dictionary<string, bool> detailModels;
+            //List<CommonClass.databaseModel.detailmodel> detailModels;
             public void ShowObj(ShowOBJFile sf, ConnectInfo.ConnectInfoDetail connectInfoDetail, Random rm)
             {
                 var index = rm.Next(0, roomUrls.Count);
@@ -331,7 +334,29 @@ namespace WsOfWebClient.MapEditor
                 //    c = "ObjResult",
                 //    detail = list
                 //};
+                var result = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.MapEditor.ObjResult>(json);
+                // result.detail.RemoveAll(item => this.detailModels.con item.modelID)
+                //获取的结果为前10个id
 
+                var objNewResult = new CommonClass.MapEditor.ObjResult()
+                {
+                    c = result.c,
+                    detail = new List<CommonClass.databaseModel.detailmodel>()
+                };
+                for (int i = 0; i < result.detail.Count; i++)
+                {
+                    if (this.detailModels.ContainsKey(result.detail[i].modelID))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        this.detailModels.Add(result.detail[i].modelID, true);
+                        objNewResult.detail.Add(result.detail[i]);
+                        break;
+                    }
+                }
+                json = Newtonsoft.Json.JsonConvert.SerializeObject(objNewResult);
                 CommonF.SendData(json, connectInfoDetail, 0);
                 //for (int i = 0; i < obj.detail.Count; i++)
                 //{

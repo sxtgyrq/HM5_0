@@ -393,7 +393,7 @@ namespace HouseManager5_0
         {
             get
             {
-                var selfValue = this.Data["mile"].Count * 40 + 200;
+                var selfValue = this.role.Group.groupAbility["mile"] * 8 + this.Data["mile"].Count * 40 + 200;
                 return selfValue;
             }
         }
@@ -430,11 +430,11 @@ namespace HouseManager5_0
             switch (groupNumber)
             {
                 case 1: return 70 * 100 * 1;
-                case 2: return 80 * 100 * 2;
-                case 3: return 90 * 100 * 3;
-                case 4: return 100 * 100 * 4;
-                case 5: return 110 * 100 * 5;
-                default: return 110 * 100 * 100;
+                case 2: return 70 * 100 * 1;
+                //case 3: return 70 * 100 * 1;
+                //case 4: return 70 * 100 * 2;
+                //case 5: return 70 * 100 * 3;
+                default: return 70 * 100 * 1;
             }
         }
         /// <summary>
@@ -454,7 +454,7 @@ namespace HouseManager5_0
         {
             get
             {
-                var selfValue = this.Data["volume"].Count * 2 * 100 + 10 * 100;
+                var selfValue = this.role.Group.groupAbility["volume"] * 60 + this.Data["volume"].Count * 3 * 100 + 10 * 100;
                 return selfValue;
             }
         }
@@ -468,18 +468,18 @@ namespace HouseManager5_0
             else
             {
                 long reduceValue = 0;
-                var reduceBusiness = this.costBusiness / 5;
-                var reduceVolume = this.costVolume / 5;
+                // var reduceBusiness = this.costBusiness / 5;
+                var reduceVolume = this.costVolume;// 1;
 
-                if (this.costBusiness > 0)
-                {
-                    reduceBusiness = Math.Max(1, reduceBusiness);
-                }
+                //if (this.costBusiness > 0)
+                //{
+                //    reduceBusiness = Math.Max(1, reduceBusiness);
+                //}
                 if (this.costVolume > 0)
                 {
                     reduceVolume = Math.Max(1, reduceVolume);
                 }
-                reduceValue += reduceBusiness;
+                // reduceValue += reduceBusiness;
                 reduceValue += reduceVolume;
                 //this.setCostMiles(this.costMiles + this.mile / 20, player, car, ref notifyMsg);
                 //  this.setCostBusiness(this.costBusiness - reduceBusiness, player, car, ref notifyMsg);
@@ -501,6 +501,15 @@ namespace HouseManager5_0
             // throw new NotImplementedException();
         }
 
+        internal int DiamondCount(string v)
+        {
+            if (this.Data.ContainsKey(v))
+            {
+                return this.Data[v].Count;
+            }
+            else return 0;
+        }
+
         /// <summary>
         /// 小车能跑的最快速度！
         /// </summary>
@@ -508,7 +517,7 @@ namespace HouseManager5_0
         {
             get
             {
-                var selfValue = this.Data["speed"].Count * 10 + 50;
+                var selfValue = this.role.Group.groupAbility["speed"] * 3 + this.Data["speed"].Count * 15 + 75;
                 return selfValue;
 
             }

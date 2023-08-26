@@ -171,7 +171,7 @@ WHERE modelID=@modelID and locked=0;";
                     try
                     {
                         {
-                            string sQL = @"SELECT modelID,x,y,z,amodel,rotatey FROM detailmodel WHERE (x-@x)*(x-@x)+(z-@z)*(z-@z)<100*100;";
+                            string sQL = @"SELECT modelID,x,y,z,amodel,rotatey FROM detailmodel ORDER BY (x-@x)*(x-@x)+(z-@z)*(z-@z) ASC LIMIT 0,10;";
                             // long moneycount;
                             using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                             {

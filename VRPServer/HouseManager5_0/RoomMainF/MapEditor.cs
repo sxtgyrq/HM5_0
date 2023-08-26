@@ -4,6 +4,7 @@ using CommonClass.databaseModel;
 using Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -763,22 +764,52 @@ namespace HouseManager5_0.RoomMainF
         {
             if (ca.FromDB)
             {
-                var amInfomationData = DalOfAddress.AbtractModels.GetAbtractModelItem(ca.AmID);
-                if (amInfomationData == null)
+                const string pathBase = "abtrctID";
+                if (!Directory.Exists($"{pathBase}"))
                 {
-                    return "";
+                    Directory.CreateDirectory($"{pathBase}");
+                }
+
+                if (Directory.Exists($"{pathBase}/{ca.AmID}"))
+                {
+                    var objText = File.ReadAllText($"{pathBase}/{ca.AmID}/objText");
+                    var mtlText = File.ReadAllText($"{pathBase}/{ca.AmID}/mtlText");
+                    var imageBase64 = File.ReadAllText($"{pathBase}/{ca.AmID}/imageBase64");
+                    var modelType = File.ReadAllText($"{pathBase}/{ca.AmID}/modelType");
+                    var returnObj = new
+                    {
+                        objText = objText,
+                        mtlText = mtlText,
+                        imgBase64 = imageBase64,
+                        AmID = ca.AmID,
+                        modelType = modelType
+                    };
+                    return Newtonsoft.Json.JsonConvert.SerializeObject(returnObj);
                 }
                 else
                 {
-                    var returnObj = new
+                    var amInfomationData = DalOfAddress.AbtractModels.GetAbtractModelItem(ca.AmID);
+                    if (amInfomationData == null)
                     {
-                        objText = amInfomationData.objText,
-                        mtlText = amInfomationData.mtlText,
-                        imgBase64 = amInfomationData.imageBase64,
-                        AmID = ca.AmID,
-                        modelType = amInfomationData.modelType
-                    };
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(returnObj);
+                        return "";
+                    }
+                    else
+                    {
+                        Directory.CreateDirectory($"{pathBase}/{ca.AmID}");
+                        File.WriteAllText($"{pathBase}/{ca.AmID}/objText", amInfomationData.objText);
+                        File.WriteAllText($"{pathBase}/{ca.AmID}/mtlText", amInfomationData.mtlText);
+                        File.WriteAllText($"{pathBase}/{ca.AmID}/imageBase64", amInfomationData.imageBase64);
+                        File.WriteAllText($"{pathBase}/{ca.AmID}/modelType", amInfomationData.modelType);
+                        var returnObj = new
+                        {
+                            objText = amInfomationData.objText,
+                            mtlText = amInfomationData.mtlText,
+                            imgBase64 = amInfomationData.imageBase64,
+                            AmID = ca.AmID,
+                            modelType = amInfomationData.modelType
+                        };
+                        return Newtonsoft.Json.JsonConvert.SerializeObject(returnObj);
+                    }
                 }
             }
             else
@@ -872,7 +903,7 @@ namespace HouseManager5_0.RoomMainF
             {
                 return "success";
             }
-            else 
+            else
             {
                 return "failure";
             }
@@ -1120,10 +1151,13 @@ namespace HouseManager5_0.RoomMainF
             Regex reg = new System.Text.RegularExpressions.Regex("^[\u4e00-\u9fa5]{2,10}$");
             if (reg.IsMatch(lfbi.infomation))
             {
+                string btcAddr;
+                var msg = DalOfAddress.BindWordInfo.LookForByWord(lfbi.infomation, out btcAddr);
                 var obj = new ModelTranstraction.LookForBindInfo.Result()
                 {
                     success = true,
-                    msg = DalOfAddress.BindWordInfo.LookForByWord(lfbi.infomation)
+                    msg = msg,
+                    btcAddr = btcAddr
                 };
                 return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             }
@@ -1132,7 +1166,8 @@ namespace HouseManager5_0.RoomMainF
                 var obj = new ModelTranstraction.LookForBindInfo.Result()
                 {
                     success = true,
-                    msg = DalOfAddress.BindWordInfo.LookForByAddr(lfbi.infomation)
+                    msg = DalOfAddress.BindWordInfo.LookForByAddr(lfbi.infomation),
+                    btcAddr = lfbi.infomation
                 };
                 return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             }
@@ -1141,7 +1176,8 @@ namespace HouseManager5_0.RoomMainF
                 var obj = new ModelTranstraction.LookForBindInfo.Result()
                 {
                     success = false,
-                    msg = ""
+                    msg = "",
+                    btcAddr = ""
                 };
                 return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             }
@@ -1552,6 +1588,38 @@ namespace HouseManager5_0.RoomMainF
             //{
             //    return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             //}
+        }
+
+        public string LookForChargingDetailF(ModelTranstraction.LookForChargingDetail sfcd)
+        {
+            var list = DalOfAddress.Charging.GetList(sfcd.btcAddr);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(list);
+        }
+
+        public string LookForScoreOutPutF(ModelTranstraction.LookForScoreOutPut condition)
+        {
+            var list = DalOfAddress.AddressMoneyGiveRecord.GetOutList(condition.btcAddr);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(list);
+            // throw new NotImplementedException();
+        }
+        public string LookForScoreInPutF(ModelTranstraction.LookForScoreInPut condition)
+        {
+            var list = DalOfAddress.AddressMoneyGiveRecord.GetInputList(condition.btcAddr);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(list);
+            // throw new NotImplementedException();
+        }
+
+        public string UpdateScoreItemF(ModelTranstraction.UpdateScoreItem ucs)
+        {
+            string pattern = @"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
+            if (Regex.IsMatch(ucs.indexGuid, pattern))
+            {
+                var count = DalOfAddress.AddressMoneyGiveRecord.UpdateScoreItem(ucs.btcAddr, ucs.indexGuid);
+                if (count == 1) return "ok";
+                else return "fail";
+            }
+            else
+                return "fail";
         }
     }
 }

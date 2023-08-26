@@ -163,10 +163,12 @@ namespace HouseManager5_0.GroupClassF
             this.GiftByViewer = new Dictionary<string, gift>();
             this.GiftByViewer_Temporary = new List<gift>();
             this.GuanzhuUsed = new Dictionary<string, bool>();
+            this.selectChanceUse = new Dictionary<string, bool>();
             this._roleAction = new Dictionary<Positon_FroMarket, Action_FroMarket>();
             this._roleStance = new Dictionary<string, Stance>();
             // this.roleAttackLength = new Dictionary<string, int>();
             this.Score = new Dictionary<string, int[]>();
+            this.ClickGoodTime = new Dictionary<string, DateTime>();
             // this.DouyinLogContentFLock = new object();
 
             {
@@ -261,18 +263,37 @@ namespace HouseManager5_0.GroupClassF
 
         private void DealWithClickGood(Player player, DouyinLogContent douyinLog, GetRandomPos gp)
         {
-            var rankList = this.GetRankedWithScoreList();
-            var rankNumber = rankList.FindIndex(item => item.key == douyinLog.Log.Uid);
-            if (rankNumber >= 0)
+            bool show;//= false;
+            if (this.ClickGoodTime.ContainsKey(douyinLog.Log.Uid))
             {
-                this.that.WebNotify(player, $"【{douyinLog.Log.Nickname}】现在排名第{rankNumber + 1}名，有{rankList[rankNumber].score}点积分，攻击距离为{GetAttcackLengthTextDisplay(rankList[rankNumber].key)}。");
+                var lastClickTime = this.ClickGoodTime[douyinLog.Log.Uid];
+                if ((DateTime.Now - lastClickTime).TotalSeconds > 40)
+                {
+                    this.ClickGoodTime[douyinLog.Log.Uid] = DateTime.Now;
+                    show = true;
+                }
+                else
+                    show = false;
             }
             else
             {
-                rankNumber = rankList.Count + 10;
-                this.that.WebNotify(player, $"【{douyinLog.Log.Nickname}】现在排名第{rankNumber}名，有{rankList[rankNumber].score}点积分，攻击距离为{GetAttcackLengthTextDisplay(rankList[rankNumber].key)}。");
+                show = true;
+                this.ClickGoodTime.Add(douyinLog.Log.Uid, DateTime.Now);
             }
-
+            if (show)
+            {
+                var rankList = this.GetRankedWithScoreList();
+                var rankNumber = rankList.FindIndex(item => item.key == douyinLog.Log.Uid);
+                if (rankNumber >= 0)
+                {
+                    this.that.WebNotify(player, $"【{douyinLog.Log.Nickname}】现在排名第{rankNumber + 1}名，有{rankList[rankNumber].score}点积分，影响距离为{GetAttcackLengthTextDisplay(rankList[rankNumber].key)}。");
+                }
+                else
+                {
+                    rankNumber = rankList.Count + 10;
+                    this.that.WebNotify(player, $"【{douyinLog.Log.Nickname}】现在排名第{rankNumber}名，有{rankList[rankNumber].score}点积分，影响距离为{GetAttcackLengthTextDisplay(rankList[rankNumber].key)}。");
+                }
+            }
         }
 
         private int GetAttcackLength(string key)
@@ -316,10 +337,19 @@ namespace HouseManager5_0.GroupClassF
                 {
                     CollectFunctionWhenAuto(player, gp);
                 }
-                var addSuccess = this.roleStanceSet(douyinLog.Log.Uid, new Stance(StanceEmum.sOne));
-                if (addSuccess)
+                if (selectChanceUse.ContainsKey(douyinLog.Log.Uid))
                 {
                     this.that.WebNotify(player, $"【{douyinLog.Log.Nickname}】选择了支持{Stance.StanceSShow(this.GetRoleStance(douyinLog.Log.Uid).EnumShow)}");
+                }
+                else
+                {
+                    var addSuccess = this.roleStanceSet(douyinLog.Log.Uid, new Stance(StanceEmum.sOne), this.roleStanceContainsKey(douyinLog.Log.Uid));
+                    if (addSuccess)
+                    {
+                        selectChanceUse.Add(douyinLog.Log.Uid, true);
+                        this.that.WebNotify(player, $"【{douyinLog.Log.Nickname}】选择了支持{Stance.StanceSShow(this.GetRoleStance(douyinLog.Log.Uid).EnumShow)}");
+                    }
+
                 }
             }
             else if (douyinLog.Log.Action.Trim().ToUpper() == "发言:2" || douyinLog.Log.Action.Trim().ToUpper() == "发言:2")
@@ -328,10 +358,18 @@ namespace HouseManager5_0.GroupClassF
                 {
                     CollectFunctionWhenAuto(player, gp);
                 }
-                var addSuccess = this.roleStanceSet(douyinLog.Log.Uid, new Stance(StanceEmum.sTwo));
-                if (addSuccess)
+                if (selectChanceUse.ContainsKey(douyinLog.Log.Uid))
                 {
                     this.that.WebNotify(player, $"【{douyinLog.Log.Nickname}】选择了支持{Stance.StanceSShow(this.GetRoleStance(douyinLog.Log.Uid).EnumShow)}");
+                }
+                else
+                {
+                    var addSuccess = this.roleStanceSet(douyinLog.Log.Uid, new Stance(StanceEmum.sTwo), this.roleStanceContainsKey(douyinLog.Log.Uid));
+                    if (addSuccess)
+                    {
+                        selectChanceUse.Add(douyinLog.Log.Uid, true);
+                        this.that.WebNotify(player, $"【{douyinLog.Log.Nickname}】选择了支持{Stance.StanceSShow(this.GetRoleStance(douyinLog.Log.Uid).EnumShow)}");
+                    }
                 }
             }
 
@@ -343,17 +381,29 @@ namespace HouseManager5_0.GroupClassF
         /// </summary>
         /// <param name="uid"></param>
         /// <param name="stance"></param>
-        private bool roleStanceSet(string uid, Stance stance)
+        private bool roleStanceSet(string uid, Stance stance, bool changeValue = false)
         {
-
-            if (this._roleStance.ContainsKey(uid))
+            if (changeValue)
             {
-                return false;
+                if (this._roleStance.ContainsKey(uid))
+                {
+                    this._roleStance[uid] = stance; return true;
+                }
+                else
+                    return false;
             }
             else
             {
-                this._roleStance.Add(uid, stance);
-                return true;
+
+                if (this._roleStance.ContainsKey(uid))
+                {
+                    return false;
+                }
+                else
+                {
+                    this._roleStance.Add(uid, stance);
+                    return true;
+                }
             }
         }
 
@@ -531,11 +581,30 @@ namespace HouseManager5_0.GroupClassF
         //    else
         //        this.roleAttackLength.Add(douyinLog_Input.Log.Uid, attackLength);
         //}
-
+        int enterIndex = 0;
         private void DealWithEnter(Player player, DouyinLogContent douyinLog, GetRandomPos gp)
         {
 
-            that.WebNotify(player, $"欢迎【{douyinLog.Log.Nickname}】进入了直播间！", 15);
+
+            if (this.roleStanceContainsKey(douyinLog.Log.Uid))
+            { }
+            else
+            {
+                this.enterIndex++;
+                if (this.enterIndex % 2 == 0)
+                {
+                    //  this.that.WebNotify(player, $"【{douyinLog.Log.Nickname}】选择了支持");
+                    var addSuccess = this.roleStanceSet(douyinLog.Log.Uid, new Stance(StanceEmum.sOne));
+                    if (addSuccess)
+                        that.WebNotify(player, $"欢迎【{douyinLog.Log.Nickname}】进入了直播间！其落入了{Stance.StanceSShow(this.GetRoleStance(douyinLog.Log.Uid).EnumShow)}阵营。", 15);
+                }
+                else
+                {
+                    var addSuccess = this.roleStanceSet(douyinLog.Log.Uid, new Stance(StanceEmum.sTwo));
+                    if (addSuccess)
+                        that.WebNotify(player, $"欢迎【{douyinLog.Log.Nickname}】进入了直播间！其落入了{Stance.StanceSShow(this.GetRoleStance(douyinLog.Log.Uid).EnumShow)}阵营。", 15);
+                }
+            }
         }
 
 
@@ -561,7 +630,11 @@ namespace HouseManager5_0.GroupClassF
         List<gift> GiftByViewer_Temporary = null;
         public Dictionary<string, bool> GuanzhuUsed = null;
 
+        public Dictionary<string, bool> selectChanceUse = null;
+
         public Dictionary<string, int[]> Score = null;
+
+        public Dictionary<string, DateTime> ClickGoodTime = null;
 
         enum giftType { Deault }
 
@@ -1065,19 +1138,6 @@ namespace HouseManager5_0.GroupClassF
                 Uid = uid,
                 Stance = stance
             });
-            //this.roleAction.Add(
-            //    Position,
-            //  );
-            //var nickName = this.GetNickName(uid);
-            //var x = CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPositionLon(position.X + 0.5);
-            //var y = CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPositionLatWithAccuracy(position.Y + 0.5, 1e-7);
-
-            //{
-
-            //    //   AddFlag(player, position.X, position.Y, CurentZ, stance, nickName, ref notifyMsgs);
-            //    // Thread.Sleep(10);
-            //}
-            // this.UpdateWeb(ref notifyMsgs, player);
         }
 
         int statisticRoleActionSumValuel = 0;
@@ -1168,7 +1228,7 @@ namespace HouseManager5_0.GroupClassF
         {
             public string Uid { get; internal set; }
             public Stance Stance { get; internal set; }
-            string roleName { get; set; }
+            //string roleName { get; set; }
 
         }
 
@@ -1299,7 +1359,7 @@ namespace HouseManager5_0.GroupClassF
             Positon_FroMarket positonM = null;
             if (positonM == null)
             {
-                // var AttackL = newItem[i].number;//攻击距离
+                // var AttackL = newItem[i].number;//影响距离
                 for (int k = 0; k < attackL; k++)
                 {
                     if (positonM == null)

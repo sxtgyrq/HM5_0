@@ -45,7 +45,7 @@ namespace WsOfWebClient.MapEditor
                 //Consol.WriteLine($"receive from web:{returnResult.result}");
 
                 bool signIsRight = false;
-
+                List<string> dModelID = new List<string>();
                 if (CommonClass.Format.IsBase64(returnResult.result))
                 {
                     signIsRight = BitCoin.Sign.checkSign(returnResult.result, hash, address);
@@ -324,12 +324,12 @@ namespace WsOfWebClient.MapEditor
                                                 case "LookForHeight":
                                                     {
                                                         LookForHeight lfh = Newtonsoft.Json.JsonConvert.DeserializeObject<LookForHeight>(returnResult.result);
-                                                          mm.GetHeight(connectInfoDetail, lfh, rm);
+                                                        mm.GetHeight(connectInfoDetail, lfh, rm);
                                                     }; break;
                                                 case "ModelUpdate":
                                                     {
                                                         ModelUpdate mu = Newtonsoft.Json.JsonConvert.DeserializeObject<ModelUpdate>(returnResult.result);
-                                                          mm.ModelUpdateF(connectInfoDetail, mu, rm);
+                                                        mm.ModelUpdateF(connectInfoDetail, mu, rm);
                                                     }; break;
 
 

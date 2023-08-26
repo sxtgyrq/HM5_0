@@ -151,139 +151,139 @@ namespace HouseManager5_0
 
         }
 
-        private commandWithTime.ReturningOjb promotePassBossAddress(Player player, Player boss, Car car, SetPromote sp, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason mrr)
-        {
-            switch (sp.pType)
-            {
-                case "mile":
-                case "volume":
-                case "speed":
-                    {
-                        switch (car.state)
-                        {
-                            case CarState.waitAtBaseStation:
-                                {
-                                    // if(player.Money<)
-                                    //int collectIndex;
-                                    OssModel.FastonPosition fpResult;
-                                    var distanceIsEnoughToStart = that.theNearestToDiamondIsCarNotMoney(player, car, sp.pType, Program.dt, out fpResult);
-                                    if (distanceIsEnoughToStart)
-                                    {
-                                        var from = this.getFromWhenAction(player, car);
-                                        var to = that.GetPromotePositionTo(sp.pType, player.Group);//  this.promoteMilePosition;
+        //private commandWithTime.ReturningOjb promotePassBossAddress(Player player, Player boss, Car car, SetPromote sp, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason mrr)
+        //{
+        //    switch (sp.pType)
+        //    {
+        //        case "mile":
+        //        case "volume":
+        //        case "speed":
+        //            {
+        //                switch (car.state)
+        //                {
+        //                    case CarState.waitAtBaseStation:
+        //                        {
+        //                            // if(player.Money<)
+        //                            //int collectIndex;
+        //                            OssModel.FastonPosition fpResult;
+        //                            var distanceIsEnoughToStart = that.theNearestToDiamondIsCarNotMoney(player, car, sp.pType, Program.dt, out fpResult);
+        //                            if (distanceIsEnoughToStart)
+        //                            {
+        //                                var from = this.getFromWhenAction(player, car);
+        //                                var to = that.GetPromotePositionTo(sp.pType, player.Group);//  this.promoteMilePosition;
 
-                                        var fp1 = Program.dt.GetFpByIndex(from);
-                                        var fp2 = Program.dt.GetFpByIndex(to);
-                                        var baseFp = Program.dt.GetFpByIndex(player.StartFPIndex);
-                                        var goPath = that.GetAFromB_v2(from, to, player, grp, ref notifyMsg);
-                                        // var returnPath = Program.dt.GetAFromB(to, player.StartFPIndex);
-                                        var returnToBossPath = that.GetAFromB_v2(to, boss.StartFPIndex, player, grp, ref notifyMsg);
-                                        var returnToSelfPath = that.GetAFromB_v2(boss.StartFPIndex, player.StartFPIndex, player, grp, ref notifyMsg);
+        //                                var fp1 = Program.dt.GetFpByIndex(from);
+        //                                var fp2 = Program.dt.GetFpByIndex(to);
+        //                                var baseFp = Program.dt.GetFpByIndex(player.StartFPIndex);
+        //                                var goPath = that.GetAFromB_v2(from, to, player, grp, ref notifyMsg);
+        //                                // var returnPath = Program.dt.GetAFromB(to, player.StartFPIndex);
+        //                                var returnToBossPath = that.GetAFromB_v2(to, boss.StartFPIndex, player, grp, ref notifyMsg);
+        //                                var returnToSelfPath = that.GetAFromB_v2(boss.StartFPIndex, player.StartFPIndex, player, grp, ref notifyMsg);
 
-                                        var goMile = that.GetMile(goPath);
-                                        var returnToBossMile = that.GetMile(returnToBossPath);
-                                        var returnToSelfMile = that.GetMile(returnToSelfPath);
+        //                                var goMile = that.GetMile(goPath);
+        //                                var returnToBossMile = that.GetMile(returnToBossPath);
+        //                                var returnToSelfMile = that.GetMile(returnToSelfPath);
 
-                                        //第一步，计算去程和回程。
-                                        if (car.ability.leftMile >= goMile + returnToBossMile + returnToSelfMile)
-                                        {
-                                            int startT;
-                                            this.EditCarStateWhenActionStartOK(player, ref car, to, fp1, goPath, grp, ref notifyMsg, out startT);
-                                            RoomMainF.RoomMain.commandWithTime.ReturningOjb ro = commandWithTime.ReturningOjb.ojbWithBoss(returnToBossPath, returnToSelfPath, boss);
-                                            that.diamondOwnerE.StartDiamondOwnerThread(startT, 0, player, car, sp, ro, goMile, goPath, grp);
-                                            //  getAllCarInfomations(sp.Key, ref notifyMsg);
-                                            mrr = MileResultReason.Abundant;
-                                            return ro;
-                                        }
+        //                                //第一步，计算去程和回程。
+        //                                if (car.ability.leftMile >= goMile + returnToBossMile + returnToSelfMile)
+        //                                {
+        //                                    int startT;
+        //                                    this.EditCarStateWhenActionStartOK(player, ref car, to, fp1, goPath, grp, ref notifyMsg, out startT);
+        //                                    RoomMainF.RoomMain.commandWithTime.ReturningOjb ro = commandWithTime.ReturningOjb.ojbWithBoss(returnToBossPath, returnToSelfPath, boss);
+        //                                    that.diamondOwnerE.StartDiamondOwnerThread(startT, 0, player, car, sp, ro, goMile, goPath, grp);
+        //                                    //  getAllCarInfomations(sp.Key, ref notifyMsg);
+        //                                    mrr = MileResultReason.Abundant;
+        //                                    return ro;
+        //                                }
 
-                                        else if (car.ability.leftMile >= goMile)
-                                        {
-                                            WebNotify(player, $"去程{goMile}km，回程{returnToBossMile + returnToSelfMile}km,去了回不来");
-                                            mrr = MileResultReason.CanNotReturn;
-                                            return player.returningOjb;
-                                        }
-                                        else
-                                        {
-                                            WebNotify(player, $"去程{goMile}km，回程{returnToBossMile + returnToSelfMile}km,去不了");
-                                            // printState(player, car, $"去程{goMile}，回程{returnMile},去不了");
-                                            mrr = MileResultReason.CanNotReach;
-                                            return player.returningOjb;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        mrr = MileResultReason.NearestIsMoneyWhenPromote;
-                                        this.WebNotify(player, $"离宝石最近的是[{fpResult.FastenPositionName}]处的钱，不是你的车。请离宝石再近点儿！");
-                                        return player.returningOjb;
-                                        //printState(player, car, "钱不够了,由于本身待在基地，不用返回。");
-                                    }
-                                };
-                            case CarState.waitOnRoad:
-                                {
-                                    OssModel.FastonPosition fpResult;
-                                    var distanceIsEnoughToStart = that.theNearestToDiamondIsCarNotMoney(player, car, sp.pType, Program.dt, out fpResult);
-                                    if (distanceIsEnoughToStart)
-                                    {
-                                        var from = this.getFromWhenAction(player, car);
-                                        var to = that.GetPromotePositionTo(sp.pType, player.Group);//  this.promoteMilePosition;
+        //                                else if (car.ability.leftMile >= goMile)
+        //                                {
+        //                                    WebNotify(player, $"去程{goMile}km，回程{returnToBossMile + returnToSelfMile}km,去了回不来");
+        //                                    mrr = MileResultReason.CanNotReturn;
+        //                                    return player.returningOjb;
+        //                                }
+        //                                else
+        //                                {
+        //                                    WebNotify(player, $"去程{goMile}km，回程{returnToBossMile + returnToSelfMile}km,去不了");
+        //                                    // printState(player, car, $"去程{goMile}，回程{returnMile},去不了");
+        //                                    mrr = MileResultReason.CanNotReach;
+        //                                    return player.returningOjb;
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                mrr = MileResultReason.NearestIsMoneyWhenPromote;
+        //                                this.WebNotify(player, $"离宝石最近的是[{fpResult.FastenPositionName}]处的钱，不是你的车。请离宝石再近点儿！");
+        //                                return player.returningOjb;
+        //                                //printState(player, car, "钱不够了,由于本身待在基地，不用返回。");
+        //                            }
+        //                        };
+        //                    case CarState.waitOnRoad:
+        //                        {
+        //                            OssModel.FastonPosition fpResult;
+        //                            var distanceIsEnoughToStart = that.theNearestToDiamondIsCarNotMoney(player, car, sp.pType, Program.dt, out fpResult);
+        //                            if (distanceIsEnoughToStart)
+        //                            {
+        //                                var from = this.getFromWhenAction(player, car);
+        //                                var to = that.GetPromotePositionTo(sp.pType, player.Group);//  this.promoteMilePosition;
 
-                                        var fp1 = Program.dt.GetFpByIndex(from);
-                                        var fp2 = Program.dt.GetFpByIndex(to);
-                                        var baseFp = Program.dt.GetFpByIndex(player.StartFPIndex);
-                                        var goPath = that.GetAFromB_v2(from, to, player, grp, ref notifyMsg);
+        //                                var fp1 = Program.dt.GetFpByIndex(from);
+        //                                var fp2 = Program.dt.GetFpByIndex(to);
+        //                                var baseFp = Program.dt.GetFpByIndex(player.StartFPIndex);
+        //                                var goPath = that.GetAFromB_v2(from, to, player, grp, ref notifyMsg);
 
-                                        var returnToBossPath = that.GetAFromB_v2(to, boss.StartFPIndex, player, grp, ref notifyMsg);
-                                        var returnToSelfPath = that.GetAFromB_v2(boss.StartFPIndex, player.StartFPIndex, player, grp, ref notifyMsg);
+        //                                var returnToBossPath = that.GetAFromB_v2(to, boss.StartFPIndex, player, grp, ref notifyMsg);
+        //                                var returnToSelfPath = that.GetAFromB_v2(boss.StartFPIndex, player.StartFPIndex, player, grp, ref notifyMsg);
 
-                                        var goMile = that.GetMile(goPath);
-                                        var returnToBossMile = that.GetMile(returnToBossPath);
-                                        var returnToSelfMile = that.GetMile(returnToSelfPath);
+        //                                var goMile = that.GetMile(goPath);
+        //                                var returnToBossMile = that.GetMile(returnToBossPath);
+        //                                var returnToSelfMile = that.GetMile(returnToSelfPath);
 
 
-                                        //第一步，计算去程和回程。
-                                        if (car.ability.leftMile >= goMile + returnToBossMile + returnToSelfMile)
-                                        {
-                                            int startT;
-                                            this.EditCarStateWhenActionStartOK(player, ref car, to, fp1, goPath, grp, ref notifyMsg, out startT);
+        //                                //第一步，计算去程和回程。
+        //                                if (car.ability.leftMile >= goMile + returnToBossMile + returnToSelfMile)
+        //                                {
+        //                                    int startT;
+        //                                    this.EditCarStateWhenActionStartOK(player, ref car, to, fp1, goPath, grp, ref notifyMsg, out startT);
 
-                                            RoomMainF.RoomMain.commandWithTime.ReturningOjb ro = commandWithTime.ReturningOjb.ojbWithBoss(returnToBossPath, returnToSelfPath, boss);
-                                            that.diamondOwnerE.StartDiamondOwnerThread(startT, 0, player, car, sp, ro, goMile, goPath, grp);
-                                            mrr = MileResultReason.Abundant;
-                                            return ro;
-                                        }
+        //                                    RoomMainF.RoomMain.commandWithTime.ReturningOjb ro = commandWithTime.ReturningOjb.ojbWithBoss(returnToBossPath, returnToSelfPath, boss);
+        //                                    that.diamondOwnerE.StartDiamondOwnerThread(startT, 0, player, car, sp, ro, goMile, goPath, grp);
+        //                                    mrr = MileResultReason.Abundant;
+        //                                    return ro;
+        //                                }
 
-                                        else if (car.ability.leftMile >= goMile)
-                                        {
-                                            WebNotify(player, $"去程{goMile}km，回程{returnToBossMile + returnToSelfMile}km,去了回不来");
-                                            mrr = MileResultReason.CanNotReturn;
-                                            return player.returningOjb;
-                                        }
-                                        else
-                                        {
-                                            WebNotify(player, $"去程{goMile}km，回程{returnToBossMile + returnToSelfMile}km,去不了");
-                                            mrr = MileResultReason.CanNotReach;
-                                            return player.returningOjb;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        mrr = MileResultReason.NearestIsMoneyWhenPromote;
-                                        this.WebNotify(player, $"离宝石最近的是[{fpResult.FastenPositionName}]处的钱，不是你的车。请离宝石再近点儿！");
-                                        return player.returningOjb;
-                                    }
-                                };
-                            default:
-                                {
-                                    throw new Exception($"{Enum.GetName(typeof(CarState), car.state)}不是注册的类型！");
-                                }
-                        }
-                    };
-                default:
-                    {
-                        throw new Exception($"{sp.pType}-不是规定的输入！");
-                    };
-            }
-        }
+        //                                else if (car.ability.leftMile >= goMile)
+        //                                {
+        //                                    WebNotify(player, $"去程{goMile}km，回程{returnToBossMile + returnToSelfMile}km,去了回不来");
+        //                                    mrr = MileResultReason.CanNotReturn;
+        //                                    return player.returningOjb;
+        //                                }
+        //                                else
+        //                                {
+        //                                    WebNotify(player, $"去程{goMile}km，回程{returnToBossMile + returnToSelfMile}km,去不了");
+        //                                    mrr = MileResultReason.CanNotReach;
+        //                                    return player.returningOjb;
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                mrr = MileResultReason.NearestIsMoneyWhenPromote;
+        //                                this.WebNotify(player, $"离宝石最近的是[{fpResult.FastenPositionName}]处的钱，不是你的车。请离宝石再近点儿！");
+        //                                return player.returningOjb;
+        //                            }
+        //                        };
+        //                    default:
+        //                        {
+        //                            throw new Exception($"{Enum.GetName(typeof(CarState), car.state)}不是注册的类型！");
+        //                        }
+        //                }
+        //            };
+        //        default:
+        //            {
+        //                throw new Exception($"{sp.pType}-不是规定的输入！");
+        //            };
+        //    }
+        //}
 
         //        public string updatePromote(SetPromote sp)
         //        {

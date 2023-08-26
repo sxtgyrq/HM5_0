@@ -1,4 +1,5 @@
 ﻿using CommonClass;
+using DalOfAddress;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -73,6 +74,7 @@ namespace HouseManager5_0.RoomMainF
             {
                 long money = 0;
                 List<string> notifyMsg = new List<string>();
+                string BTCAddress = "";
                 // lock (group.PlayerLock)
                 {
                     if (group._PlayerInGroup.ContainsKey(saveMoney.Key))
@@ -81,6 +83,7 @@ namespace HouseManager5_0.RoomMainF
                         else
                         {
                             var role = group._PlayerInGroup[saveMoney.Key];
+                            BTCAddress = role.BTCAddress;
                             switch (saveMoney.dType)
                             {
                                 case "half":
@@ -101,6 +104,11 @@ namespace HouseManager5_0.RoomMainF
                                             role.MoneySet(role.Money - money, ref notifyMsg);
                                             if (role.playerType == Player.PlayerType.player)
                                                 taskM.MoneySet((Player)role);
+
+                                            if (!string.IsNullOrEmpty(role.BTCAddress))
+                                            {
+                                                //    if()
+                                            }
                                         }
                                     }; break;
                             }
@@ -109,7 +117,7 @@ namespace HouseManager5_0.RoomMainF
                                 var player = (Player)role;
                                 if (player.RefererCount > 0)
                                 {
-                                    if (BitCoin.CheckAddress.CheckAddressIsUseful(player.RefererAddr))
+                                    if (BitCoin.CheckAddress.CheckAddressIsUseful(player.RefererAddr) && player.RefererAddr.Trim() != player.BTCAddress.Trim())
                                     {
                                         DalOfAddress.MoneyRefererAdd.AddMoney(player.RefererAddr, player.RefererCount * 100);
                                         var tasks = DalOfAddress.TaskCopy.GetALLItem(player.RefererAddr);
@@ -127,7 +135,50 @@ namespace HouseManager5_0.RoomMainF
 
                 if (money > 0)
                 {
-                    DalOfAddress.MoneyAdd.AddMoney(saveMoney.address, money);
+                    if (BTCAddress == saveMoney.address)
+                    {
+                        DalOfAddress.MoneyAdd.AddMoney(saveMoney.address, money);
+                    }
+                    else
+                    {
+                        if (money < 50000)
+                        {
+                            var saveMoneyCount = money * 99 / 100;
+                            if (saveMoneyCount > 0)
+                            {
+
+                                DalOfAddress.MoneyAdd.AddMoney(saveMoney.address, saveMoneyCount);
+
+                                var tax = money - saveMoneyCount;
+                                if (tax > 0)
+                                {
+                                    this.WebNotify(group._PlayerInGroup[saveMoney.Key], $"转账，扣除{tax / 100}.{(tax % 100) / 10}{(tax % 100) % 10}手续费");
+                                    AddressMoneyGiveRecord.AddMoney(BTCAddress, saveMoney.address, saveMoneyCount);
+                                }
+
+
+                            }
+                        }
+                        else
+                        {
+                            var saveMoneyCount = money - 500;
+                            if (saveMoneyCount > 0)
+                            {
+
+                                DalOfAddress.MoneyAdd.AddMoney(saveMoney.address, saveMoneyCount);
+
+                                var tax = money - saveMoneyCount;
+                                if (tax > 0)
+                                {
+                                    this.WebNotify(group._PlayerInGroup[saveMoney.Key], $"转账，扣除{tax / 100}.{(tax % 100) / 10}{(tax % 100) % 10}手续费");
+                                    AddressMoneyGiveRecord.AddMoney(BTCAddress, saveMoney.address, saveMoneyCount);
+                                }
+
+
+                            }
+                        }
+                    }
+                    //if(saveMoney.address)
                 }
 
             }
@@ -142,7 +193,7 @@ namespace HouseManager5_0.RoomMainF
             if (BitCoin.Sign.checkSign(ots.signature, ots.Key, ots.address))
             {
                 GroupClassF.GroupClass group = null;
-               // lock (this.PlayerLock)
+                // lock (this.PlayerLock)
                 {
 
                     if (string.IsNullOrEmpty(ots.GroupKey)) { }
@@ -153,7 +204,7 @@ namespace HouseManager5_0.RoomMainF
                 }
                 if (group != null)
                 {
-                   // lock (group.PlayerLock)
+                    // lock (group.PlayerLock)
                     {
                         if (group._PlayerInGroup.ContainsKey(ots.Key))
                         {

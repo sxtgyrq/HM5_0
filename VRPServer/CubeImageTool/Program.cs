@@ -101,7 +101,7 @@ B:Cube To Panorama");
                     pos = $"{j}_{i}";
                     z = "5";
                     var urlStr = $"https://mapsv0.bdimg.com/?qt={qt}&sid={sid}&pos={pos}&z={z}&udt={udt}&from={from}&auth={auth}&seckey={seckey}";
-                    //Consol.WriteLine(urlStr);
+                    Console.WriteLine(urlStr);
                     var s = await getStream(urlStr);
                     System.Drawing.Image img = System.Drawing.Image.FromStream(s);
                     //bm.

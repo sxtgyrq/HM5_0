@@ -219,6 +219,133 @@ namespace BitCoin
             }
 
 
+            public async Task<Dictionary<string, long>> GetTradeInfomationFromChain_BitcoinOutPut()
+            {
+                //var socketsHttpHandler = new SocketsHttpHandler()
+                //{
+                //    //建立TCP连接时的超时时间,默认不限制
+                //    ConnectTimeout = Timeout.InfiniteTimeSpan,
+                //    //等待服务返回statusCode=100的超时时间,默认1秒
+                //    Expect100ContinueTimeout = TimeSpan.FromSeconds(120),
+                //};
+                //https://blockchain.info/q/getblockcount
+                int current_block_count;
+                {
+                    var url = "https://blockchain.info/q/getblockcount";
+                    using (WebCS web1 = new WebCS())
+                    {
+                        current_block_count = Convert.ToInt32(Encoding.UTF8.GetString(await web1.DownloadDataTaskAsync(url)));
+                    }
+                }
+                StringBuilder detailOfTrade = new StringBuilder();
+                Dictionary<string, bool> record = new Dictionary<string, bool>();
+                Dictionary<string, long> moneyPayed = new Dictionary<string, long>();
+                int limit = 45; //max 50
+                int offset = 0;
+                while (true)
+                {
+                    // try
+                    {
+                        string url = $"https://blockchain.info/address/{this.adress}?format=json&yrq={DateTime.Now.GetHashCode()}&limit={limit}&offset={offset}";
+                        //$"https://blockchain.info/address/3KsFxviCy89RkpyYqxwgEd8AuuqeCM5z7h?format=json&yrq=aaa&limit=45&offset=0";
+                        string data = "";
+                        for (int i = 0; i < 10; i++)
+                        {
+                            try
+                            {
+                                using (WebCS web1 = new WebCS())
+                                {
+                                    data = Encoding.UTF8.GetString(await web1.DownloadDataTaskAsync(url));
+                                } 
+                                break;
+                            }
+                            catch (Exception e)
+                            {
+                                if (i < 9) { } 
+                                else
+                                {
+                                    throw e;
+                                }
+                                data = "";
+                            }
+                        }
+                        Transaction t = Newtonsoft.Json.JsonConvert.DeserializeObject<Transaction>(data);
+                        if (t.txs.Count == 0)
+                        {
+                            break;
+                        }
+                        for (var i = 0; i < t.txs.Count; i++)
+                        {
+
+                            var item = t.txs[i];
+                            if (record.ContainsKey(item.hash))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                record.Add(item.hash, true);
+                                if (item.block_height.HasValue)
+                                {
+                                    int transaction_block_height = item.block_height.Value;
+                                    if (current_block_count - transaction_block_height + 1 > 3)
+                                    {
+                                        long inputSum = 0;
+                                        for (int j = 0; j < item.inputs.Count; j++)
+                                        {
+                                            if (item.inputs[j].prev_out.addr == this.adress)
+                                                inputSum += item.inputs[j].prev_out.value;
+                                        }
+                                        if (inputSum <= 0)
+                                        {
+                                            continue;
+                                        } 
+                                        for (int j = 0; j < item.@out.Count; j++)
+                                        {
+                                            if (string.IsNullOrEmpty(item.@out[j].addr))
+                                            {
+                                                continue;
+                                            }
+                                            else
+                                            {
+                                                if (moneyPayed.ContainsKey(item.@out[j].addr))
+                                                {
+                                                    moneyPayed[item.@out[j].addr] += item.@out[j].value;
+                                                }
+                                                else
+                                                {
+                                                    moneyPayed.Add(item.@out[j].addr, item.@out[j].value);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
+                                else
+                                {
+                                    continue;
+                                }
+                            }
+
+
+                        }
+                        offset += 40;
+                        //Consol.WriteLine($"offset:{offset}");
+                        if (offset == 225)
+                        {
+                            // Console.ReadLine();
+                        }
+                    } 
+
+                } 
+
+                return moneyPayed; 
+            }
+
+
             public class ReturnResult
             {
                 public NBitcoin.uint256 hash { get; internal set; }

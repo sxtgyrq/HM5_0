@@ -358,7 +358,7 @@ namespace HouseManager5_0
                         var road = roadItem.Value;
                         foreach (var cross in road.Cross1)
                         {
-                            if (cross.CrossState > 0)
+                            if (cross.CrossState > 0 && cross.CrossState < 4)
                             {
                                 /*
                                  * CrossState与entranceORExit有对应关系
@@ -413,7 +413,7 @@ namespace HouseManager5_0
                         }
                         foreach (var cross in road.Cross2)
                         {
-                            if (cross.CrossState > 0)
+                            if (cross.CrossState > 0 && cross.CrossState < 4)
                             {
                                 int entranceORExit;
                                 switch (cross.CrossState)

@@ -102,12 +102,12 @@
         {
             var id = carIndexStr + '_' + 'business' + '_' + 'display';
             if (document.getElementById(id) != null)
-                document.getElementById(id).innerText = '' + this.data[carIndexStr].business.costValue + '/' + this.data[carIndexStr].business.sumValue;;
+                document.getElementById(id).innerText = '' + (this.data[carIndexStr].business.costValue / 100).toFixed(2) + '/' + (this.data[carIndexStr].business.sumValue / 100).toFixed(2);;
         }
         {
             var id = carIndexStr + '_' + 'volume' + '_' + 'display';
             if (document.getElementById(id) != null)
-                document.getElementById(id).innerText = '' + this.data[carIndexStr].volume.costValue + '/' + this.data[carIndexStr].volume.sumValue;;
+                document.getElementById(id).innerText = '' + (this.data[carIndexStr].volume.costValue / 100).toFixed(2) + '/' + (this.data[carIndexStr].volume.sumValue / 100).toFixed(2);;
         }
         {
             var id = carIndexStr + '_' + 'spanOfSpeedValue';

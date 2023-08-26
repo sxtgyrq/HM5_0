@@ -16,7 +16,7 @@
         margin-top: 0.25em;border:1px solid gray;">
 
             <label   onclick="subsidizeSys.readStr('bitcoinAddressInput');">
-                --↓↓↓输入1或3打头的比特币地址↓↓↓--
+                --↓↓↓输入1或3打头的B地址↓↓↓--
             </label>
             <input id="bitcoinAddressInput" type="text" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(127, 255, 127, 1);" />
         </div> 
@@ -25,7 +25,7 @@
         margin-top: 0.25em;padding:0.5em 0 0.5em 0;"  onclick="moneyOperator.donate('half');">
             存储一半
         </div>
-        <div style="background: yellowgreen;
+        <div id="btnSaveAllMoney" style="background: yellowgreen;
         margin-bottom: 0.25em;
         margin-top: 0.25em;padding:0.5em 0 0.5em 0;"  onclick="moneyOperator.donate('all');">
             全部存储
@@ -46,11 +46,11 @@
             document.body.appendChild(frag);
             moneyOperator.updateMoneyForSave();
             moneyOperator.updateBitcoinAddressInput();
-
         }
         else {
             document.getElementById(that.operateID).remove();
         }
+        moneyOperator.updateSaveMoneyNotify();
     },
     updateBitcoinAddressInput: function () {
         if (moneyOperator.operateAddress != '') {
@@ -59,9 +59,11 @@
         else if (subsidizeSys.operateAddress != '') {
             document.getElementById('bitcoinAddressInput').value = subsidizeSys.operateAddress;
         }
-        else if (localStorage['msg_AfterSuccess'] != undefined && localStorage['msg_AfterSuccess'] == JSON.parse(sessionStorage['session']).Key) {
-            document.getElementById('bitcoinAddressInput').value = localStorage['addrAfterSuccess'];
+        else if (sessionStorage['msg_AfterSuccess'] != undefined && sessionStorage['msg_AfterSuccess'] == JSON.parse(sessionStorage['session']).Key) {
+            document.getElementById('bitcoinAddressInput').value = sessionStorage['addrAfterSuccess'];
         }
+
+
     },
     updateMoneyForSave: function () {
         var that = moneyOperator;
@@ -79,16 +81,24 @@
                 var address = bitcoinAddressInput.value;
                 objMain.ws.send(JSON.stringify({ c: 'Donate', dType: type, address: address }));
                 moneyOperator.operateAddress = address;
+                if (type == "all") {
+                    {
+                        var el = document.getElementById('btnSaveAllMoney');
+                        if (el)
+                            el.classList.remove('needToClick');
+                    }
+                }
+
                 return;
 
             }
             else {
-                alert('请输入正确的比特币地址');
+                alert('请输入正确的B账号');
                 //   bitcoinAddressInput.style.background = 'background:rgba(127, 255, 127, 1);';
             }
         }
         else {
-            alert('您没有捐献的钱！');
+            alert('您没有捐献的积分！');
         }
         // bitcoinAddressInput.style.background = 'rgba(255, 127, 127, 0.5)';
         // console.log('s', yrqCheckBitcoinF(bitcoinAddressInput.value));
@@ -109,5 +119,35 @@
         bitcoinAddressInput.style.background = 'rgba(255, 127, 127, 0.5)';
         // console.log('s', yrqCheckBitcoinF(bitcoinAddressInput.value));
     },
-    operateAddress: ''
+    operateAddress: '',
+    updateSaveMoneyNotify: function () {
+
+        var that = moneyOperator;
+        if (that.MoneyForSave > 0) {
+            if (whetherGo.obj != null) {
+                if (whetherGo.obj.isFineshed) {
+                    if (document.getElementById(that.operateID) == null) {
+                        var el = document.getElementById('moneyServe');
+                        if (el)
+                            el.classList.add('msg');
+                    }
+                    else {
+                        {
+                            var el = document.getElementById('moneyServe');
+                            if (el)
+                                el.classList.remove('msg');
+                        }
+                        {
+                            var el = document.getElementById('btnSaveAllMoney');
+                            if (el)
+                                el.classList.add('needToClick');
+                        }
+                    }
+                }
+            }
+        }
+        else { }
+
+
+    }
 };

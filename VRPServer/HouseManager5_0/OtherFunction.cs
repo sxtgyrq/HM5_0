@@ -17,8 +17,8 @@ namespace HouseManager5_0
             var lat = double.Parse(content.Split(',')[1]);
             double x, y, z;
             CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(lon, lat, 0, out x, out y, out z);
-            //Consol.WriteLine($"x:{x},y:{y}");
-            //Consol.WriteLine($"E退出，任意键继续");
+            Console.WriteLine($"x:{x},y:{y}");
+            Console.WriteLine($"E退出，任意键继续");
             if (Console.ReadLine().ToUpper() == "E")
             {
 
@@ -54,32 +54,41 @@ namespace HouseManager5_0
         }
         internal static void sign()
         {
-            Console.WriteLine("输入密钥");
-            var privateKey = Console.ReadLine();
+            while (true)
+            {
 
-            Console.WriteLine("拖入要加密内容路径");
-            var path = Console.ReadLine();
-            var content = File.ReadAllText(path);
-            var oI = Newtonsoft.Json.JsonConvert.DeserializeObject<ObjInput>(content);
-            ObjOutput oo = new ObjOutput()
-            {
-                c = "AwardsGiving",
-                time = oI.time,
-                list = new List<string>()
-            };
-            for (int i = 0; i < oI.list.Count; i++)
-            {
-                var msg = oI.list[i];
-                char[] splitOp = { '@', '-', '>', ':' };
-                StringSplitOptions options = StringSplitOptions.RemoveEmptyEntries;
-                var addr = msg.Split(splitOp, options)[1];
-                var sign = BitCoin.Sign.SignMessage(privateKey, msg, addr);
-                oo.list.Add(sign);
+                Console.WriteLine("输入密钥或exit");
+                var privateKey = Console.ReadLine();
+                if (privateKey == "exit") 
+                {
+                    break;
+                }
+
+
+                Console.WriteLine("拖入要加密内容路径");
+                var path = Console.ReadLine();
+                var content = File.ReadAllText(path);
+                var oI = Newtonsoft.Json.JsonConvert.DeserializeObject<ObjInput>(content);
+                ObjOutput oo = new ObjOutput()
+                {
+                    c = "AwardsGiving",
+                    time = oI.time,
+                    list = new List<string>()
+                };
+                for (int i = 0; i < oI.list.Count; i++)
+                {
+                    var msg = oI.list[i];
+                    char[] splitOp = { '@', '-', '>', ':' };
+                    StringSplitOptions options = StringSplitOptions.RemoveEmptyEntries;
+                    var addr = msg.Split(splitOp, options)[1];
+                    var sign = BitCoin.Sign.SignMessage(privateKey, msg, addr);
+                    oo.list.Add(sign);
+                }
+                Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(oo));
+                //BitCoin.Sign.SignMessage()
+                // var jsonObj = "";
+                //  throw new NotImplementedException();
             }
-            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(oo));
-            //BitCoin.Sign.SignMessage()
-            // var jsonObj = "";
-            //  throw new NotImplementedException();
         }
 
         internal static void writeToAliyun()

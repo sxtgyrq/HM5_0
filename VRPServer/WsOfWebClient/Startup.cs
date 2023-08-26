@@ -92,7 +92,7 @@ namespace WsOfWebClient
             app.Map("/websocket", WebSocketF);
             // app.UseCors("AllowAny");
             app.Map("/bgimg", BackGroundImg);
-            app.Map("/objdata", ObjData);
+              app.Map("/objdata", ObjData);
             app.Map("/douyindata", douyindata);
             //app.Map("/websocket", WebSocketF);
             // app.Map("/notify", notify);
@@ -192,7 +192,19 @@ namespace WsOfWebClient
                                             //    }; break;
                                             default:
                                                 {
-                                                    CommonF.SendData(notifyJson, connectInfoDetail, timeOut);
+                                                    if (c.AsynSend)
+                                                    {
+                                                        Thread th = new Thread(() =>
+                                                        {
+                                                            CommonF.SendData(notifyJson, connectInfoDetail, timeOut);
+                                                            Thread.Sleep(5 * 1000);
+                                                        });
+                                                        th.Start();
+                                                    }
+                                                    else
+                                                    {
+                                                        CommonF.SendData(notifyJson, connectInfoDetail, 2000);
+                                                    }
                                                     //await ws.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
                                                 }; break;
                                         }
@@ -346,7 +358,7 @@ namespace WsOfWebClient
                     {
                         var logObj = logObjs[i];
                         Room.SendZhiBoContent(logObj);
-                    } 
+                    }
                     var bytes = Encoding.UTF8.GetBytes("ok");
                     await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
 
@@ -846,14 +858,14 @@ namespace WsOfWebClient
                                             }
                                         }
                                     }; break;
-                                case "Ability":
-                                    {
-                                        if (s.Ls == LoginState.OnLine)
-                                        {
-                                            Ability a = Newtonsoft.Json.JsonConvert.DeserializeObject<Ability>(returnResult.result);
-                                            Room.setCarAbility(s, a);
-                                        }
-                                    }; break;
+                                //case "Ability":
+                                //    {
+                                //        if (s.Ls == LoginState.OnLine)
+                                //        {
+                                //            Ability a = Newtonsoft.Json.JsonConvert.DeserializeObject<Ability>(returnResult.result);
+                                //            Room.setCarAbility(s, a);
+                                //        }
+                                //    }; break;
                                 case "SetCarReturn":
                                     {
                                         if (s.Ls == LoginState.OnLine)
@@ -914,8 +926,8 @@ namespace WsOfWebClient
                                     {
                                         if (s.Ls == LoginState.OnLine)
                                         {
-                                            DriverSelect ds = Newtonsoft.Json.JsonConvert.DeserializeObject<DriverSelect>(returnResult.result);
-                                            Room.selectDriver(s, ds);
+                                            //DriverSelect ds = Newtonsoft.Json.JsonConvert.DeserializeObject<DriverSelect>(returnResult.result);
+                                            //Room.selectDriver(s, ds);
                                         }
                                     }; break;
                                 case "Skill1":
@@ -1045,6 +1057,30 @@ namespace WsOfWebClient
                                         {
                                             CommonClass.ModelTranstraction.BindWordInfo bwi = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.BindWordInfo>(returnResult.result);
                                             Room.BindWordInfoF(iState, connectInfoDetail, bwi);
+                                        }
+                                    }; break;
+                                case "ChargingLookFor":
+                                    {
+                                        if (s.Ls == LoginState.Guid)
+                                        {
+                                            CommonClass.ModelTranstraction.ChargingLookFor clf = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.ChargingLookFor>(returnResult.result);
+                                            Room.ChargingLookForF(iState, connectInfoDetail, clf);
+                                        }
+                                    }; break;
+                                case "ScoreTransferLookFor":
+                                    {
+                                        if (s.Ls == LoginState.Guid)
+                                        {
+                                            CommonClass.ModelTranstraction.ScoreTransferLookFor stl = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.ScoreTransferLookFor>(returnResult.result);
+                                            Room.ScoreTransferLookForF(iState, connectInfoDetail, stl);
+                                        }
+                                    }; break;
+                                case "ScoreTransferRecordMark":
+                                    {
+                                        if (s.Ls == LoginState.Guid)
+                                        {
+                                            CommonClass.ModelTranstraction.ScoreTransferRecordMark stl = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.ScoreTransferRecordMark>(returnResult.result);
+                                            Room.ScoreTransferRecordMarkF(iState, connectInfoDetail, stl);
                                         }
                                     }; break;
                                 case "LookForBindInfo":

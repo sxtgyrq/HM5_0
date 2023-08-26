@@ -550,14 +550,15 @@ namespace HouseManager5_0
                 {
                     return this.Money;
                 }
-                else if (this.Money - 50000 < 0)
+                else if (this.Money - Group.GameStartBaseMoney < 0)
                 {
                     return 0;
                 }
                 else
                 {
-                    return this.Money - 50000;
+                    return this.Money - Group.GameStartBaseMoney;
                 }
+
             }
         }
 
@@ -748,6 +749,8 @@ namespace HouseManager5_0
         ///// </summary>
         //public Manager_Driver.ConfuseManger confuseUsing = null;
         public Engine_MagicEngine.SpeedMagicChanged speedMagicChanged;
+        public Engine_MagicEngine.SpeedMagicChanged nitrogenValueChanged;
+
         public Engine_MagicEngine.AttackMagicChanged attackMagicChanged;
         public Engine_MagicEngine.DefenceMagicChanged defenceMagicChanged;
 
@@ -770,6 +773,21 @@ namespace HouseManager5_0
         /// 玩家是否可以祈福！
         /// </summary>
         public bool canGetReward { get; internal set; }
+
+        /// <summary>
+        /// 收集到的钱。
+        /// </summary>
+        public long CollectMoney { get; internal set; }
+
+        /// <summary>
+        /// 进行选择的次数
+        /// </summary>
+        public int SelectCount { get; internal set; }
+
+        /// <summary>
+        /// 选择错误的次数
+        /// </summary>
+        public int SelectWrongCount { get; internal set; }
     }
     public partial class Player : interfaceTag.HasContactInfo
     {

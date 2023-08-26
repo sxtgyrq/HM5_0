@@ -13,7 +13,7 @@ namespace HouseManager5_0.GroupClassF
         public string UpdatePlayer(PlayerCheck checkItem)
         {
             {
-                bool success; 
+                bool success;
                 {
                     if (this._PlayerInGroup.ContainsKey(checkItem.Key))
                     {
@@ -186,11 +186,14 @@ namespace HouseManager5_0.GroupClassF
                 this._PlayerInGroup[addItem.Key].SetMoneyCanSave = that.SetMoneyCanSave;// RoomMain.SetMoneyCanSave;
                 this._PlayerInGroup[addItem.Key].MoneyChanged = that.MoneyChanged;//  RoomMain.MoneyChanged;
                 var notifyMsgs = new List<string>();
-                this._PlayerInGroup[addItem.Key].MoneySet(500 * 100, ref notifyMsgs);
+
+                this._PlayerInGroup[addItem.Key].MoneySet(this.GameStartBaseMoney, ref notifyMsgs);
+
+                // this._PlayerInGroup[addItem.Key].MoneySet(500 * 100, ref notifyMsgs);
 
                 // this._Players[addItem.Key].SupportChangedF = RoomMain.SupportChanged;
 
-                //  this._Players[addItem.Key].TheLargestHolderKeyChanged = this.TheLargestHolderKeyChanged;
+                // this._Players[addItem.Key].TheLargestHolderKeyChanged = this.TheLargestHolderKeyChanged;
                 this._PlayerInGroup[addItem.Key].InitializeTheLargestHolder();
 
                 // this._Players[addItem.Key].Money
@@ -234,7 +237,9 @@ namespace HouseManager5_0.GroupClassF
                 ((Player)this._PlayerInGroup[addItem.Key]).playerSelectDirectionTh = null;
                 ((Player)this._PlayerInGroup[addItem.Key]).nntl = that.NoNeedToLogin;
                 ((Player)this._PlayerInGroup[addItem.Key]).hntts = that.HasNewTaskToShow;
-
+                ((Player)this._PlayerInGroup[addItem.Key]).CollectMoney = 0;
+                ((Player)this._PlayerInGroup[addItem.Key]).SelectCount = 0;
+                ((Player)this._PlayerInGroup[addItem.Key]).SelectWrongCount = 0;
             }
         }
     }

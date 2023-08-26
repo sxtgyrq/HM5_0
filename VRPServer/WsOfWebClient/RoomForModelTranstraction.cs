@@ -11,6 +11,8 @@ using System.Text.RegularExpressions;
 using System.Runtime.Intrinsics.X86;
 using System.Net.Http.Headers;
 using CommonClass;
+using System.Runtime.CompilerServices;
+using System.Reflection;
 
 namespace WsOfWebClient
 {
@@ -1020,7 +1022,12 @@ namespace WsOfWebClient
                 if (cn.c == "BradCastAllDouyinPlayerIsWaiting")
                 {
                     CommonF.SendData(respon, connectInfoDetail, 0);
-                    return "";
+                    return "";//这里返回空字符串，主要是不调用方法外的 setmaterial
+                }
+                else if (cn.c == "ResistanceDisplay_V3")
+                {
+                    CommonF.SendData(respon, connectInfoDetail, 0);
+                    return "";//这里返回空字符串，主要是不调用方法外的 setmaterial
                 }
                 //if(cn.)
             }
@@ -1142,108 +1149,108 @@ namespace WsOfWebClient
                 }
             }
         }
-        static RewardInfoHasResultObj getResultObj_V2(tradereward objGet, DateTime date)
-        {
-            throw new Exception();
-            //int indexNumber = 0;
-            //indexNumber = GetIndexOfTrade(objGet.bussinessAddr, objGet.tradeAddress);
-            //List<CommonClass.databaseModel.traderewardapply> list;
-            //{
-            //    var grn = new CommonClass.ModelTranstraction.RewardInfomation()
-            //    {
-            //        c = "RewardApplyInfomation_V2",
-            //        startDate = int.Parse(date.ToString("yyyyMMdd"))
-            //    };
-            //    var index = rm.Next(0, roomUrls.Count);
-            //    var msg = Newtonsoft.Json.JsonConvert.SerializeObject(grn);
-            //    //   Console.WriteLine(msg);
-            //    var respon = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
-            //    // Console.WriteLine(respon);
-            //    list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CommonClass.databaseModel.traderewardapply>>(respon);
-            //}
-            //int sumStock = 0;
-            //{
-            //    for (int i = 0; i < list.Count; i++)
-            //    {
-            //        sumStock += list[i].applyLevel;
-            //    }
+        //static RewardInfoHasResultObj getResultObj_V2(tradereward objGet, DateTime date)
+        //{
+        //    throw new Exception();
+        //    //int indexNumber = 0;
+        //    //indexNumber = GetIndexOfTrade(objGet.bussinessAddr, objGet.tradeAddress);
+        //    //List<CommonClass.databaseModel.traderewardapply> list;
+        //    //{
+        //    //    var grn = new CommonClass.ModelTranstraction.RewardInfomation()
+        //    //    {
+        //    //        c = "RewardApplyInfomation_V2",
+        //    //        startDate = int.Parse(date.ToString("yyyyMMdd"))
+        //    //    };
+        //    //    var index = rm.Next(0, roomUrls.Count);
+        //    //    var msg = Newtonsoft.Json.JsonConvert.SerializeObject(grn);
+        //    //    //   Console.WriteLine(msg);
+        //    //    var respon = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+        //    //    // Console.WriteLine(respon);
+        //    //    list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CommonClass.databaseModel.traderewardapply>>(respon);
+        //    //}
+        //    //int sumStock = 0;
+        //    //{
+        //    //    for (int i = 0; i < list.Count; i++)
+        //    //    {
+        //    //        sumStock += list[i].applyLevel;
+        //    //    }
 
-            //}
-            //if (sumStock == 0)
-            //{
-            //    List<List<traderewardtimerecordShow>> raArray = new List<List<traderewardtimerecordShow>>();
-            //    for (int i = 0; i < list.Count; i++)
-            //    {
-            //        raArray.Add(new List<traderewardtimerecordShow>());
-            //    }
-            //    var passObj = new RewardInfoHasResultObj()
-            //    {
-            //        c = "GetRewardInfomationHasResult",
-            //        title = $"{date.ToString("yyyyMMdd")}期",
-            //        data = objGet,
-            //        indexNumber = indexNumber,
-            //        array = raArray.ToArray(),
-            //    };
-            //    return passObj;
-            //}
-            //else if (sumStock <= objGet.passCoin)
-            //{
-            //    var satoshiPerStock = objGet.passCoin / sumStock;
-            //    var remainder = objGet.passCoin % sumStock;
-            //    var orderR = (from item in list
-            //                  orderby item.applyLevel descending
-            //                  select item).ToList();
-            //    list = orderR;
-            //    List<RewardApplyInDB> raList = new List<RewardApplyInDB>();
-            //    for (int i = 0; i < list.Count; i++)
-            //    {
-            //        int satoshiShouldGet = list[i].applyLevel * satoshiPerStock;
-            //        if (remainder > list[i].applyLevel)
-            //        {
-            //            satoshiShouldGet += list[i].applyLevel;
-            //            remainder -= list[i].applyLevel;
-            //        }
-            //        else if (remainder > 0)
-            //        {
-            //            satoshiShouldGet += remainder;
-            //            remainder = 0;
-            //        }
-            //        int percent = (satoshiShouldGet * 10000 / objGet.passCoin);
-            //        var percentStr = $"{percent / 100}.{(percent % 100).ToString("D2")}%";
-            //        raList.Add(new RewardApplyInDB()
-            //        {
-            //            applyAddr = list[i].applyAddr,
-            //            applyLevel = list[i].applyLevel,
-            //            applySign = list[i].applySign,
-            //            rankIndex = list[i].rankIndex,
-            //            startDate = list[i].startDate,
-            //            satoshiShouldGet = satoshiShouldGet,
-            //            percentStr = percentStr,
-            //        });
-            //    }
-            //    List<List<traderewardtimerecordShow>> raArray = new List<List<traderewardtimerecordShow>>();
-            //    for (int i = 0; i < list.Count; i++)
-            //    {
-            //        raArray.Add(list[i]);
-            //    }
-            //    var passObj = new RewardInfoHasResultObj()
-            //    {
-            //        c = "GetRewardInfomationHasResult",
-            //        title = $"{date.ToString("yyyyMMdd")}期",
-            //        data = objGet,
-            //        list = raList,
-            //        indexNumber = indexNumber
-            //    };
-            //    return passObj;
-            //    //var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
-            //    //var sendData = Encoding.UTF8.GetBytes(sendMsg);
-            //    //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
-            //}
-            //else
-            //{
-            //    return null;
-            //}
-        }
+        //    //}
+        //    //if (sumStock == 0)
+        //    //{
+        //    //    List<List<traderewardtimerecordShow>> raArray = new List<List<traderewardtimerecordShow>>();
+        //    //    for (int i = 0; i < list.Count; i++)
+        //    //    {
+        //    //        raArray.Add(new List<traderewardtimerecordShow>());
+        //    //    }
+        //    //    var passObj = new RewardInfoHasResultObj()
+        //    //    {
+        //    //        c = "GetRewardInfomationHasResult",
+        //    //        title = $"{date.ToString("yyyyMMdd")}期",
+        //    //        data = objGet,
+        //    //        indexNumber = indexNumber,
+        //    //        array = raArray.ToArray(),
+        //    //    };
+        //    //    return passObj;
+        //    //}
+        //    //else if (sumStock <= objGet.passCoin)
+        //    //{
+        //    //    var satoshiPerStock = objGet.passCoin / sumStock;
+        //    //    var remainder = objGet.passCoin % sumStock;
+        //    //    var orderR = (from item in list
+        //    //                  orderby item.applyLevel descending
+        //    //                  select item).ToList();
+        //    //    list = orderR;
+        //    //    List<RewardApplyInDB> raList = new List<RewardApplyInDB>();
+        //    //    for (int i = 0; i < list.Count; i++)
+        //    //    {
+        //    //        int satoshiShouldGet = list[i].applyLevel * satoshiPerStock;
+        //    //        if (remainder > list[i].applyLevel)
+        //    //        {
+        //    //            satoshiShouldGet += list[i].applyLevel;
+        //    //            remainder -= list[i].applyLevel;
+        //    //        }
+        //    //        else if (remainder > 0)
+        //    //        {
+        //    //            satoshiShouldGet += remainder;
+        //    //            remainder = 0;
+        //    //        }
+        //    //        int percent = (satoshiShouldGet * 10000 / objGet.passCoin);
+        //    //        var percentStr = $"{percent / 100}.{(percent % 100).ToString("D2")}%";
+        //    //        raList.Add(new RewardApplyInDB()
+        //    //        {
+        //    //            applyAddr = list[i].applyAddr,
+        //    //            applyLevel = list[i].applyLevel,
+        //    //            applySign = list[i].applySign,
+        //    //            rankIndex = list[i].rankIndex,
+        //    //            startDate = list[i].startDate,
+        //    //            satoshiShouldGet = satoshiShouldGet,
+        //    //            percentStr = percentStr,
+        //    //        });
+        //    //    }
+        //    //    List<List<traderewardtimerecordShow>> raArray = new List<List<traderewardtimerecordShow>>();
+        //    //    for (int i = 0; i < list.Count; i++)
+        //    //    {
+        //    //        raArray.Add(list[i]);
+        //    //    }
+        //    //    var passObj = new RewardInfoHasResultObj()
+        //    //    {
+        //    //        c = "GetRewardInfomationHasResult",
+        //    //        title = $"{date.ToString("yyyyMMdd")}期",
+        //    //        data = objGet,
+        //    //        list = raList,
+        //    //        indexNumber = indexNumber
+        //    //    };
+        //    //    return passObj;
+        //    //    //var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(passObj);
+        //    //    //var sendData = Encoding.UTF8.GetBytes(sendMsg);
+        //    //    //await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
+        //    //}
+        //    //else
+        //    //{
+        //    //    return null;
+        //    //}
+        //}
 
         static RewardInfoHasResultObj getResultObj(tradereward objGet, DateTime date)
         {
@@ -1603,7 +1610,397 @@ namespace WsOfWebClient
             }
         }
 
+        internal static void ChargingLookForF(IntroState iState, ConnectInfo.ConnectInfoDetail connectInfoDetail, ModelTranstraction.ChargingLookFor clf)
+        {
+            // internal static bool BindWordInfoF(IntroState iState, ConnectInfo.ConnectInfoDetail connectInfoDetail, CommonClass.ModelTranstraction.BindWordInfo bwi)
+            {
+                if (clf.verifyCodeValue != null && iState.randomValue.Trim().ToLower() == clf.verifyCodeValue.Trim().ToLower())
+                {
+                    clf.bindWordMsg = clf.bindWordMsg.Trim();
+                    System.Text.RegularExpressions.Regex reg = new System.Text.RegularExpressions.Regex("^[\u4e00-\u9fa5]{2,10}$");
+                    if (reg.IsMatch(clf.bindWordMsg))
+                    {
+                        var index = rm.Next(0, roomUrls.Count);
+                        //lbi.infomation = lbi.infomation.Trim();
+                        var msg = Newtonsoft.Json.JsonConvert.SerializeObject(new LookForBindInfo()
+                        {
+                            c = "LookForBindInfo",
+                            infomation = clf.bindWordMsg,
+                            verifyCodeValue = clf.verifyCodeValue
+                        });
+                        var msgRequested = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+                        var requestObj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.BindWordInfo.Result>(msgRequested);
+                        if (requestObj.success)
+                        {
+                            if (string.IsNullOrEmpty(requestObj.btcAddr))
+                            {
+                                ModelTranstraction.ChargingLookFor.Result r = new ChargingLookFor.Result()
+                                {
+                                    c = "ChargingLookFor.Result",
+                                    bindWordAddr = "没有对应的绑定地址",
+                                    bindWordMsg = clf.bindWordMsg,
+                                    chargingData = new List<ChargingLookFor.Result.DataItem>()
+                                };
+                                var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                            }
+                            else
+                            {
+                                ModelTranstraction.ChargingLookFor.Result r = new ChargingLookFor.Result()
+                                {
+                                    c = "ChargingLookFor.Result",
+                                    bindWordAddr = requestObj.btcAddr,
+                                    bindWordMsg = clf.bindWordMsg,
+                                    chargingData = new List<ChargingLookFor.Result.DataItem>()
+                                };
 
+                                //msg = Newtonsoft.Json.JsonConvert.SerializeObject(clf);
+                                msg = Newtonsoft.Json.JsonConvert.SerializeObject(new LookForChargingDetail()
+                                {
+                                    c = "LookForChargingDetail",
+                                    btcAddr = requestObj.btcAddr,
+                                });
+                                msgRequested = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+                                r.chargingData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ChargingLookFor.Result.DataItem>>(msgRequested);
+
+                                var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                            }
+                        }
+                        else
+                        {
+                            ModelTranstraction.ChargingLookFor.Result r = new ChargingLookFor.Result()
+                            {
+                                c = "ChargingLookFor.Result",
+                                bindWordAddr = "没有查询当绑定地址",
+                                bindWordMsg = clf.bindWordMsg,
+                                chargingData = new List<ChargingLookFor.Result.DataItem>()
+                            };
+                            var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                            CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                        }
+                        iState.randomCharacterCount = 4;
+                        iState.randomValue = Room.GetRandom(iState.randomCharacterCount);
+                        Room.setRandomPic(iState, connectInfoDetail);
+                    }
+                    else
+                    {
+                        iState.randomCharacterCount++;
+                        iState.randomValue = Room.GetRandom(iState.randomCharacterCount);
+                        Room.setRandomPic(iState, connectInfoDetail);
+                        NotifyMsg(connectInfoDetail, "绑定词格式错误！");
+                    }
+
+                }
+                else
+                {
+                    iState.randomCharacterCount++;
+                    iState.randomValue = Room.GetRandom(iState.randomCharacterCount);
+                    Room.setRandomPic(iState, connectInfoDetail);
+                    NotifyMsg(connectInfoDetail, "验证码错误！");
+                }
+            }
+
+        }
+
+        internal static void ScoreTransferLookForF(IntroState iState, ConnectInfo.ConnectInfoDetail connectInfoDetail, ModelTranstraction.ScoreTransferLookFor clf)
+        {
+            // internal static bool BindWordInfoF(IntroState iState, ConnectInfo.ConnectInfoDetail connectInfoDetail, CommonClass.ModelTranstraction.BindWordInfo bwi)
+            {
+                if (clf.verifyCodeValue != null && iState.randomValue.Trim().ToLower() == clf.verifyCodeValue.Trim().ToLower())
+                {
+                    clf.bindWordMsg = clf.bindWordMsg.Trim();
+                    System.Text.RegularExpressions.Regex reg = new System.Text.RegularExpressions.Regex("^[\u4e00-\u9fa5]{2,10}$");
+                    if (reg.IsMatch(clf.bindWordMsg))
+                    {
+                        var index = rm.Next(0, roomUrls.Count);
+                        //lbi.infomation = lbi.infomation.Trim();
+                        var msg = Newtonsoft.Json.JsonConvert.SerializeObject(new LookForBindInfo()
+                        {
+                            c = "LookForBindInfo",
+                            infomation = clf.bindWordMsg,
+                            verifyCodeValue = clf.verifyCodeValue
+                        });
+                        var msgRequested = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+                        var requestObj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.BindWordInfo.Result>(msgRequested);
+                        if (requestObj.success)
+                        {
+                            if (string.IsNullOrEmpty(requestObj.btcAddr))
+                            {
+                                switch (clf.transferType)
+                                {
+                                    case 0:
+                                        {
+                                            ModelTranstraction.ScoreTransferLookFor.OutputScoreResult r = new ScoreTransferLookFor.OutputScoreResult()
+                                            {
+                                                c = "ScoreTransferLookFor.OutputScoreResult",
+                                                bindWordAddr = "没有对应的绑定地址",
+                                                bindWordMsg = clf.bindWordMsg,
+                                                scoreData = new List<ScoreTransferLookFor.OutputScoreResult.DataItem>(),
+                                                tabelName = "积分转出记录"
+                                            };
+                                            var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                            CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                                            ;
+                                        }; break;
+                                    case 1:
+                                        {
+                                            ModelTranstraction.ScoreTransferLookFor.InputScoreResult r = new ScoreTransferLookFor.InputScoreResult()
+                                            {
+                                                c = "ScoreTransferLookFor.InputScoreResult",
+                                                bindWordAddr = "没有对应的绑定地址",
+                                                bindWordMsg = clf.bindWordMsg,
+                                                scoreData = new List<ScoreTransferLookFor.InputScoreResult.DataItem>(),
+                                                tabelName = "积分转入记录"
+                                            };
+                                            var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                            CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                                        }; break;
+                                    default: { }; break;
+                                }
+
+                            }
+                            else
+                            {
+                                switch (clf.transferType)
+                                {
+                                    case 0:
+                                        {
+                                            ModelTranstraction.ScoreTransferLookFor.OutputScoreResult r = new ScoreTransferLookFor.OutputScoreResult()
+                                            {
+                                                c = "ScoreTransferLookFor.OutputScoreResult",
+                                                bindWordAddr = requestObj.btcAddr,
+                                                bindWordMsg = clf.bindWordMsg,
+                                                scoreData = new List<ScoreTransferLookFor.OutputScoreResult.DataItem>(),
+                                                tabelName = "积分转出记录"
+                                            };
+                                            var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                            CommonF.SendData(sendMsg, connectInfoDetail, 0);
+
+                                            msg = Newtonsoft.Json.JsonConvert.SerializeObject(new LookForScoreOutPut()
+                                            {
+                                                c = "LookForScoreOutPut",
+                                                btcAddr = requestObj.btcAddr,
+                                            });
+                                            msgRequested = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+                                            r.scoreData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ScoreTransferLookFor.OutputScoreResult.DataItem>>(msgRequested);
+                                            sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                            CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                                        }; break;
+                                    case 1:
+                                        {
+                                            ModelTranstraction.ScoreTransferLookFor.InputScoreResult r = new ScoreTransferLookFor.InputScoreResult()
+                                            {
+                                                c = "ScoreTransferLookFor.InputScoreResult",
+                                                bindWordAddr = requestObj.btcAddr,
+                                                bindWordMsg = clf.bindWordMsg,
+                                                scoreData = new List<ScoreTransferLookFor.InputScoreResult.DataItem>(),
+                                                tabelName = "积分转入记录"
+                                            };
+                                            var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                            CommonF.SendData(sendMsg, connectInfoDetail, 0);
+
+                                            msg = Newtonsoft.Json.JsonConvert.SerializeObject(new LookForScoreInPut()
+                                            {
+                                                c = "LookForScoreInPut",
+                                                btcAddr = requestObj.btcAddr,
+                                            });
+                                            msgRequested = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+                                            r.scoreData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ScoreTransferLookFor.InputScoreResult.DataItem>>(msgRequested);
+                                            sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                            CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                                        }; break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            switch (clf.transferType)
+                            {
+                                case 0:
+                                    {
+                                        ModelTranstraction.ScoreTransferLookFor.OutputScoreResult r = new ScoreTransferLookFor.OutputScoreResult()
+                                        {
+                                            c = "ScoreTransferLookFor.OutputScoreResult",
+                                            bindWordAddr = "没有查询当绑定地址",
+                                            bindWordMsg = clf.bindWordMsg,
+                                            scoreData = new List<ScoreTransferLookFor.OutputScoreResult.DataItem>(),
+                                            tabelName = "积分转出记录"
+                                        };
+                                        var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                        CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                                    }; break;
+                                case 1:
+                                    {
+                                        ModelTranstraction.ScoreTransferLookFor.InputScoreResult r = new ScoreTransferLookFor.InputScoreResult()
+                                        {
+                                            c = "ScoreTransferLookFor.InputScoreResult",
+                                            bindWordAddr = "没有对应的绑定地址",
+                                            bindWordMsg = clf.bindWordMsg,
+                                            scoreData = new List<ScoreTransferLookFor.InputScoreResult.DataItem>(),
+                                            tabelName = "积分转入记录"
+                                        };
+                                        var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                        CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                                    }; break;
+                            }
+                        }
+                        iState.randomCharacterCount = 4;
+                        iState.randomValue = Room.GetRandom(iState.randomCharacterCount);
+                        Room.setRandomPic(iState, connectInfoDetail);
+                    }
+                    else
+                    {
+                        iState.randomCharacterCount++;
+                        iState.randomValue = Room.GetRandom(iState.randomCharacterCount);
+                        Room.setRandomPic(iState, connectInfoDetail);
+                        NotifyMsg(connectInfoDetail, "绑定词格式错误！");
+                    }
+                }
+                else
+                {
+                    iState.randomCharacterCount++;
+                    iState.randomValue = Room.GetRandom(iState.randomCharacterCount);
+                    Room.setRandomPic(iState, connectInfoDetail);
+                    NotifyMsg(connectInfoDetail, "验证码错误！");
+                }
+            }
+
+        }
+
+        internal static void ScoreTransferRecordMarkF(IntroState iState, ConnectInfo.ConnectInfoDetail connectInfoDetail, ModelTranstraction.ScoreTransferRecordMark clf)
+        {
+            // internal static bool BindWordInfoF(IntroState iState, ConnectInfo.ConnectInfoDetail connectInfoDetail, CommonClass.ModelTranstraction.BindWordInfo bwi)
+            {
+                if (clf.verifyCodeValue != null && iState.randomValue.Trim().ToLower() == clf.verifyCodeValue.Trim().ToLower())
+                {
+                    clf.bindWordMsg = clf.bindWordMsg.Trim();
+                    System.Text.RegularExpressions.Regex reg = new System.Text.RegularExpressions.Regex("^[\u4e00-\u9fa5]{2,10}$");
+                    if (reg.IsMatch(clf.bindWordMsg))
+                    {
+                        var index = rm.Next(0, roomUrls.Count);
+                        //lbi.infomation = lbi.infomation.Trim();
+                        var msg = Newtonsoft.Json.JsonConvert.SerializeObject(new LookForBindInfo()
+                        {
+                            c = "LookForBindInfo",
+                            infomation = clf.bindWordMsg,
+                            verifyCodeValue = clf.verifyCodeValue
+                        });
+                        var msgRequested = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+                        var requestObj = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.BindWordInfo.Result>(msgRequested);
+                        if (requestObj.success)
+                        {
+                            if (string.IsNullOrEmpty(requestObj.btcAddr))
+                            {
+                            }
+                            else
+                            {
+                                if (BitCoin.Sign.checkSign(clf.Sinature, DateTime.Today.ToString("yyyyMMdd"), requestObj.btcAddr))
+                                {
+                                    switch (clf.transferType)
+                                    {
+                                        case 0:
+                                            {
+                                                if (UpdateAddressmoneygiverecord(index, clf.uuid, requestObj.btcAddr))
+                                                {
+                                                    ModelTranstraction.ScoreTransferLookFor.OutputScoreResult r = new ScoreTransferLookFor.OutputScoreResult()
+                                                    {
+                                                        c = "ScoreTransferLookFor.OutputScoreResult",
+                                                        bindWordAddr = requestObj.btcAddr,
+                                                        bindWordMsg = clf.bindWordMsg,
+                                                        scoreData = new List<ScoreTransferLookFor.OutputScoreResult.DataItem>(),
+                                                        tabelName = "积分转出记录"
+                                                    };
+                                                    var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                                    CommonF.SendData(sendMsg, connectInfoDetail, 0);
+
+                                                    msg = Newtonsoft.Json.JsonConvert.SerializeObject(new LookForScoreOutPut()
+                                                    {
+                                                        c = "LookForScoreOutPut",
+                                                        btcAddr = requestObj.btcAddr,
+                                                    });
+                                                    msgRequested = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+                                                    r.scoreData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ScoreTransferLookFor.OutputScoreResult.DataItem>>(msgRequested);
+                                                    sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                                    CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                                                }
+                                            }; break;
+                                        case 1:
+                                            {
+                                                if (UpdateAddressmoneygiverecord(index, clf.uuid, requestObj.btcAddr))
+                                                {
+                                                    ModelTranstraction.ScoreTransferLookFor.InputScoreResult r = new ScoreTransferLookFor.InputScoreResult()
+                                                    {
+                                                        c = "ScoreTransferLookFor.InputScoreResult",
+                                                        bindWordAddr = requestObj.btcAddr,
+                                                        bindWordMsg = clf.bindWordMsg,
+                                                        scoreData = new List<ScoreTransferLookFor.InputScoreResult.DataItem>(),
+                                                        tabelName = "积分转入记录"
+                                                    };
+                                                    var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                                    CommonF.SendData(sendMsg, connectInfoDetail, 0);
+
+                                                    msg = Newtonsoft.Json.JsonConvert.SerializeObject(new LookForScoreInPut()
+                                                    {
+                                                        c = "LookForScoreInPut",
+                                                        btcAddr = requestObj.btcAddr,
+                                                    });
+                                                    msgRequested = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+                                                    r.scoreData = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ScoreTransferLookFor.InputScoreResult.DataItem>>(msgRequested);
+                                                    sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                                    CommonF.SendData(sendMsg, connectInfoDetail, 0);
+                                                }
+                                            }; break;
+                                    }
+                                }
+                                else 
+                                {
+                                    NotifyMsg(connectInfoDetail, "签名错误！");
+                                }
+                            }
+                        }
+                        else
+                        {
+
+                        }
+                        iState.randomCharacterCount = 4;
+                        iState.randomValue = Room.GetRandom(iState.randomCharacterCount);
+                        Room.setRandomPic(iState, connectInfoDetail);
+                    }
+                    else
+                    {
+                        iState.randomCharacterCount++;
+                        iState.randomValue = Room.GetRandom(iState.randomCharacterCount);
+                        Room.setRandomPic(iState, connectInfoDetail);
+                        NotifyMsg(connectInfoDetail, "绑定词格式错误！");
+                    }
+                }
+                else
+                {
+                    iState.randomCharacterCount++;
+                    iState.randomValue = Room.GetRandom(iState.randomCharacterCount);
+                    Room.setRandomPic(iState, connectInfoDetail);
+                    NotifyMsg(connectInfoDetail, "验证码错误！");
+                }
+            }
+
+        }
+
+        private static bool UpdateAddressmoneygiverecord(int index, string uuid, string btcAddr)
+        {
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(new UpdateScoreItem()
+            {
+                c = "UpdateScoreItem",
+                btcAddr = btcAddr,
+                indexGuid = uuid
+            });
+            var msgRequested = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+            return msgRequested.Trim() == "ok";
+        }
+
+        //internal static void ScoreTransferLookFor()
+
+        //ScoreTransferLookFor
         internal static bool LookForBindInfoF(IntroState iState, ConnectInfo.ConnectInfoDetail connectInfoDetail, CommonClass.ModelTranstraction.LookForBindInfo lbi)
         {
             if (lbi.verifyCodeValue != null && iState.randomValue.Trim().ToLower() == lbi.verifyCodeValue.Trim().ToLower())

@@ -63,6 +63,7 @@ namespace HouseManager5_0.GroupClassF
                         player.MoneySet(player.Money + car.ability.costVolume, ref notifyMsg);
                     }
                     this.MoneySet(this.Money + car.ability.costVolume, ref notifyMsg);
+                    player.CollectMoney += car.ability.costVolume;
                     if (this.Money >= player.getCar().ability.Business)
                     {
                         if (!this.taskFineshedTime.ContainsKey(player.Key))
@@ -245,6 +246,8 @@ namespace HouseManager5_0.GroupClassF
                         else if (dor.target == this.getPromoteState(dor.diamondType))
                         {
                             that.setPromtePosition(dor.diamondType, this, grp);
+
+
                             //this.promoteMilePosition = GetRandomPosition();
                             needUpdatePromoteState = true;
                             car.ability.setDiamondInCar(dor.diamondType, player, car, ref notifyMsg);
@@ -263,9 +266,14 @@ namespace HouseManager5_0.GroupClassF
                                 returningOjb = dor.returningOjb,
                                 target = dor.target
                             }, grp);
+
                             this._PlayerInGroup[dor.key].returningOjb = dor.returningOjb;
                             if (player.playerType == Player.PlayerType.player)
                                 ((Player)player).RefererCount++;
+
+                            //    string msgShow = $"【{player.PlayerName}】在{grp.GetFpByIndex(dor.target)}收集到了";
+                            UpdateAbility(player, dor, grp, ref notifyMsg);
+
                         }
                         else
                         {
@@ -290,6 +298,8 @@ namespace HouseManager5_0.GroupClassF
                 that.CheckAllPlayersPromoteState(dor.diamondType, group);
             }
         }
+
+
 
         internal bool MoneyIsEnoughForSelect(string key)
         {

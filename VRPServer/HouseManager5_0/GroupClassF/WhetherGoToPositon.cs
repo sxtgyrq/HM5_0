@@ -313,7 +313,7 @@ namespace HouseManager5_0.GroupClassF
                                 GroupKey = nwtgntb.GroupKey,
                                 Key = nwtgntb.Key,
                             }, gp);
-                           
+
                         }; break;
                     case TargetForSelect.TargetForSelectType.mile:
                         {
@@ -327,7 +327,7 @@ namespace HouseManager5_0.GroupClassF
                                     Key = nwtgntb.Key,
                                     Uid = ""
                                 }, gp);
-                                Thread.Sleep(10 * 1000);//这里让线程坚持10秒，确保动画数据再线程被取消前，传值前台！
+                                //Thread.Sleep(10 * 1000);//这里让线程坚持10秒，确保动画数据再线程被取消前，传值前台！
                             }
                             else
                             {

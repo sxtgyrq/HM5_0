@@ -72,7 +72,7 @@ namespace HouseManager5_0.RoomMainF
 
             List<string> carsState = new List<string>();
 
-          //  lock (this.PlayerLock)
+            //  lock (this.PlayerLock)
             {
                 addItem.Key = addItem.Key.Trim();
                 addItem.GroupKey = addItem.GroupKey.Trim();
@@ -97,10 +97,11 @@ namespace HouseManager5_0.RoomMainF
                 {
                     GroupClassF.GroupClass group;
                     group = new GroupClassF.GroupClass(addItem.GroupKey, this);
-                  //  lock (group.PlayerLock_)
+                    //  lock (group.PlayerLock_)
                     {
                         group.LookFor(gp);
-                        group.groupNumber = addItem.groupMemberCount;
+                        group.SetGroupNumber(addItem.groupMemberCount);
+                        //group.groupNumber = addItem.groupMemberCount;
                         group.AddPlayer(addItem, cf, gp);
                         this._Groups.Add(addItem.GroupKey, group);
                     }
@@ -262,7 +263,7 @@ namespace HouseManager5_0.RoomMainF
                 if (this._Groups.ContainsKey(checkItem.GroupKey))
                 {
                     var group = this._Groups[checkItem.GroupKey];
-                  //  lock (group.PlayerLock_)
+                    //  lock (group.PlayerLock_)
                     {
                         return group.UpdatePlayer(checkItem);
                     }

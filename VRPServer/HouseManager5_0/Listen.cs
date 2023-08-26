@@ -38,6 +38,10 @@ namespace HouseManager5_0
 
         static string DealWithInterfaceAndObj(interfaceOfHM.ListenInterface objI, CommonClass.Command c, string notifyJson)
         {
+
+            /*
+             * 这些方法，中间禁止线程暂停，即Thread.sleep()
+             */
             string outPut = "haveNothingToReturn";
             {
                 // CommonClass.Command c = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.Command>(notifyJson);
@@ -126,7 +130,7 @@ namespace HouseManager5_0
                         {
                             CommonClass.OrderToReturn otr = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.OrderToReturn>(notifyJson);
                             objI.OrderToReturn(otr, Program.dt);
-                           
+
                             outPut = "ok";
                         }; break;
                     case "SaveMoney":
@@ -365,6 +369,7 @@ namespace HouseManager5_0
                     case "GetResistanceObj":
                         {
                             //获取属性
+                            //对应web前台左下角第四按钮
                             CommonClass.GetResistanceObj r = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.GetResistanceObj>(notifyJson);
                             outPut = objI.GetResistance(r);
                         }; break;
@@ -456,6 +461,7 @@ namespace HouseManager5_0
                             CommonClass.Finance.ChargingLookFor condition = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.Finance.ChargingLookFor>(notifyJson);
                             outPut = objI.ChargingLookForF(condition);
                         }; break;
+
                     case "ChargingMax":
                         {
                             outPut = objI.ChargingMax();
@@ -531,22 +537,43 @@ namespace HouseManager5_0
                              * 
                              */
                         }; break;
-                    case "DouyinLogContent": 
+                    case "DouyinLogContent":
                         {
                             DouyinLogContent douyinLog = Newtonsoft.Json.JsonConvert.DeserializeObject<DouyinLogContent>(notifyJson);
                             outPut = objI.DouyinLogContentF(douyinLog);
-                        };break;
+                        }; break;
 
-                    case "SetGroupLive": 
+                    case "SetGroupLive":
                         {
-                            SetGroupLive sgl= Newtonsoft.Json.JsonConvert.DeserializeObject<SetGroupLive>(notifyJson);
+                            SetGroupLive sgl = Newtonsoft.Json.JsonConvert.DeserializeObject<SetGroupLive>(notifyJson);
                             outPut = objI.SetGroupIsLive(sgl);
+                        }; break;
+
+                    //case "CopyTaskDisplay": 
+                    //    {
+
+                    //    };break;
+                    case "LookForChargingDetail":
+                        {
+                            LookForChargingDetail sfcd = Newtonsoft.Json.JsonConvert.DeserializeObject<LookForChargingDetail>(notifyJson);
+                            outPut = objI.LookForChargingDetailF(sfcd);
+                        }; break;
+                    case "LookForScoreOutPut":
+                        {
+                            LookForScoreOutPut condition = Newtonsoft.Json.JsonConvert.DeserializeObject<LookForScoreOutPut>(notifyJson);
+                            outPut = objI.LookForScoreOutPutF(condition);
+                        }; break;
+                    case "LookForScoreInPut":
+                        {
+                            LookForScoreInPut condition = Newtonsoft.Json.JsonConvert.DeserializeObject<LookForScoreInPut>(notifyJson);
+                            outPut = objI.LookForScoreInPutF(condition);
+                        }; break;
+                    case "UpdateScoreItem": 
+                        {
+                            UpdateScoreItem ucs = Newtonsoft.Json.JsonConvert.DeserializeObject<UpdateScoreItem>(notifyJson);
+                            outPut = objI.UpdateScoreItemF(ucs);
                         };break;
 
-                        //case "CopyTaskDisplay": 
-                        //    {
-
-                        //    };break;
                 }
             }
             {

@@ -123,7 +123,7 @@ WHERE bindWordMsg=@bindWordMsg;";
 
 
 
-        public static string LookForByWord(string bindWordMsg)
+        public static string LookForByWord(string bindWordMsg, out string btcAddr)
         {
             string sQL = $@"SELECT bindWordAddr,bindWordMsg,bindWordSign,endTime from bindwordinfo 
  WHERE bindWordMsg='{bindWordMsg}';";
@@ -135,9 +135,11 @@ WHERE bindWordMsg=@bindWordMsg;";
                     var bindWordAddr = Convert.ToString(ds.Tables[0].Rows[0]["bindWordAddr"]).Trim();
                     var bindWordSign = Convert.ToString(ds.Tables[0].Rows[0]["bindWordSign"]).Trim();
                     var endTime = Convert.ToDateTime(ds.Tables[0].Rows[0]["endTime"]);
+                    btcAddr = bindWordAddr;
                     return $"【{bindWordAddr}】与“{bindWordMsg}”绑定，有效期至{endTime.ToString("yyyy年MM月dd日")}";
                 }
             }
+            btcAddr = "";
             return $"没有查询到【{bindWordMsg}】的绑定关系";
         }
 

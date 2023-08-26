@@ -114,6 +114,7 @@ namespace HouseManager5_0.RoomMainF
 
                                         }; break;
                                 }
+                                //group.TellAll();
                             }
                         }
                         else

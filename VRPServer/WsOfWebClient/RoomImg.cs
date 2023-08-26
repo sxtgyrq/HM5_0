@@ -199,8 +199,10 @@ namespace WsOfWebClient
             return base64;
         }
 
+        [Obsolete]
         internal static string GetObjFileJson(string amid)
         {
+          //  throw new Exception("此处功能已不再需要！");
             int roomindex = rm.Next(0, Room.roomUrls.Count);
             if (roomindex >= 0 && roomindex < Room.roomUrls.Count)
             {
@@ -260,6 +262,7 @@ namespace WsOfWebClient
             var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gfma);
             var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
         }
+
     }
 
 

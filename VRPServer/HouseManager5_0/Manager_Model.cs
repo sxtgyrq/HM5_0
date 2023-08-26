@@ -138,6 +138,7 @@ namespace HouseManager5_0
                                                             }
                                                         }
                                                         player.improvementRecord.addSpeed(player, defendLevel, ref notifyMsg);
+
                                                         // rewardLittleReason = $"！;
                                                         if (!player.Group.Live)
                                                             this.WebNotify(player, $"{rewardLittleReason}液氮+{defendLevel},现有{player.improvementRecord.SpeedValue}。");
