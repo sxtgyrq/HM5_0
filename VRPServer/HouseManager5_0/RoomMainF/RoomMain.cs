@@ -49,6 +49,7 @@ namespace HouseManager5_0.RoomMainF
             this.modelC = new Manager_Connection(this);
             this.modelL = new Manager_Level(this);
             this.taskM = new Manager_TaskCopy(this);
+            this.fileSM = new Manager_FileSave(this);
 
             // lock (PlayerLock)
             {
@@ -265,6 +266,42 @@ namespace HouseManager5_0.RoomMainF
             //   throw new NotImplementedException();
         }
 
+        public string ask(Ask v)
+        {
+            {
+                if (this._Groups.ContainsKey(v.GroupKey))
+                {
+                    var group = this._Groups[v.GroupKey];
+                    if (group._PlayerInGroup.ContainsKey(v.Key))
+                    {
+                        var player = group._PlayerInGroup[v.Key];
+                        if (player.playerType == Player.PlayerType.player)
+                        {
+                            //((Player)player).direcitonAndID.direciton = getComplex(v, ((Player)player).direcitonAndID.direciton);
+                            //((Player)player).direcitonAndID.PostionCrossKey = v.postionCrossKey;
+                            //((Player)player).direcitonAndID.DYUid = v.Uid;
+
+                            if (((Player)player).getCar().state == CarState.selecting)
+                            {
+                                ((Player)player).direcitonAndID.AskWitchToSelect = true;
+                                if (((Player)player).playerSelectDirectionTh != null)
+                                {
+                                    if (!((Player)player).playerSelectDirectionTh.IsAlive)
+                                    {
+                                        if (((Player)player).playerSelectDirectionTh.ThreadState == System.Threading.ThreadState.Unstarted)
+                                        {
+                                            ((Player)player).playerSelectDirectionTh.Start();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return "";
+        }
+
         public string ExitF(ExitObj obj)
         {
             //  lock (this.PlayerLock)
@@ -409,6 +446,21 @@ namespace HouseManager5_0.RoomMainF
                 group.ConfirmPanelSelectResultF(cpsr, this.GetRandomPosObj);
             }
             return "";
+        }
+
+        public void SaveInFileF(SaveInFile sif)
+        {
+            if (this._Groups.ContainsKey(sif.GroupKey))
+            {
+                var group = this._Groups[sif.GroupKey];
+                if (group._PlayerInGroup.ContainsKey(sif.Key))
+                {
+                    var player = group._PlayerInGroup[sif.Key];
+                    this.fileSM.SaveInFileF(sif, group, player);
+                }
+
+            }
+            // throw new NotImplementedException();
         }
 
         public class commandWithTime

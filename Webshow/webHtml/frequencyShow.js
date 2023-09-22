@@ -1,34 +1,28 @@
-﻿var frequencyShow =
+﻿var currentSelectionPreparationShow =
 {
-    operateID: 'frequencyShow',
-    html: `<div id="frequencyShow" style="position:absolute;right:5px;top:4px;z-index:7;color:rgba(255, 216, 0,1);text-shadow:2px 2px 2px gray">
+    operateID: 'currentSelectionPreparation',
+    html: `<div id="currentSelectionPreparation" style="position:absolute;right:5px;top:4px;z-index:7;color:rgba(255, 216, 0,1);text-shadow:2px 2px 2px gray">
         3.2
     </div>`,
     show: function () {
-        var that = frequencyShow;
+        var that = currentSelectionPreparationShow;
         if (document.getElementById(that.operateID) == null) {
             // var obj = new DOMParser().parseFromString(that.html, 'text/html');
             var frag = document.createRange().createContextualFragment(that.html);
             frag.id = that.operateID;
 
             document.body.appendChild(frag);
-            that.updateFrequency();
+            that.updateFrequency('');
 
         }
         else {
-            that.updateFrequency();
         }
     },
-    updateFrequency: function () {
-        var that = frequencyShow;
-        document.getElementById(that.operateID).innerText = (objMain.FrequencyOfCollectReward / 100).toFixed(2);
-    },
-    clear: function () {
-        var that = frequencyShow;
-        if (document.getElementById(that.operateID) != null) {
-            document.getElementById(that.operateID).remove();
-        }
-    },
+    updateFrequency: function (msg) {
+        var that = currentSelectionPreparationShow;
+        if (document.getElementById(that.operateID))
+            document.getElementById(that.operateID).innerText = msg;
+    }
 };
 
 var moneyShow =
@@ -78,25 +72,17 @@ var operateStateShow =
             frag.id = that.operateID;
 
             document.body.appendChild(frag);
-            that.update();
+            that.update('');
 
         }
         else {
-            that.update();
+            that.update('');
         }
     },
-    update: function () {
+    update: function (msg) {
         var that = operateStateShow;
-        switch (objMain.panOrRotate) {
-            case 'rotate':
-                {
-                    document.getElementById(that.operateID).innerText = '旋转';
-                }; break;
-            case 'pan':
-                {
-                    document.getElementById(that.operateID).innerText = '移动';
-                }; break;
-        } 
+        if (document.getElementById(that.operateID))
+            document.getElementById(that.operateID).innerText = msg;
     },
     clear: function () {
         var that = operateStateShow;

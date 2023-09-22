@@ -295,6 +295,12 @@
             animation: mymove 1.9s infinite;
             -webkit-animation: mymove 1.9s infinite;
         }
+
+        sup {
+            position: relative;
+            bottom: 1ex;
+            font-size: 50%;
+        }
     </style>
     <link href="css/selectSingleTeamJoinHtml.css" rel="stylesheet" />
     <!--<script src="ThreeJs/three.js"></script>-->
@@ -302,9 +308,8 @@
     <script src="fire.js"></script><!--24kb-->
     <script src="ThreeJs/CSS2DRenderer.js"></script><!--4kb-->
     <script src="Geometry/GetMapDetail.js"></script><!--5kb-->
-    
-    <script src="ThreeJs/OrbitControls.js"></script><!--33kb-->
 
+    <script src="ThreeJs/OrbitControls.js"></script><!--33kb-->
     <!--<script src="ThreeJs/OrbitControls.min.js"></script>-->
     <script src="ThreeJs/WebGL.js"></script><!--2kb-->
     <!--<script src="ThreeJs/GLTFBase64Loader.js"></script>-->
@@ -333,7 +338,7 @@
     <!--<script src="Scripts/qrcode.js"></script>--><!--33kb-->
     <script src="Scripts/qrcode.min.js"></script><!--24kb-->
     <link href="css/clicktrail.css" rel="stylesheet" />
-   
+
 </head>
 <body style="width: 100%; height: 100%;overflow:hidden;position:absolute;">
     <div class="touched" id="touched"></div>
@@ -342,21 +347,21 @@
     <script src="douyin.js"></script>
     <script>
 
-                        //var touched = document.getElementById('touched');
-                        //document.body.addEventListener('mousedown', function (e) {
-                        //    showTouched(e.clientX, e.clientY);
-                        //});
-                        //document.body.addEventListener('touchstart', function (e) {
-                        //    showTouched(e.touches[0].clientX, e.touches[0].clientY);
-                        //});
-                        //function showTouched(x, y) {
-                        //    touched.style.left = (x - 10) + 'px';
-                        //    touched.style.top = (y - 10) + 'px';
-                        //    touched.style.display = 'block';
-                        //    setTimeout(function () {
-                        //        touched.style.display = 'none';
-                        //    }, 100);
-                        //}
+                            //var touched = document.getElementById('touched');
+                            //document.body.addEventListener('mousedown', function (e) {
+                            //    showTouched(e.clientX, e.clientY);
+                            //});
+                            //document.body.addEventListener('touchstart', function (e) {
+                            //    showTouched(e.touches[0].clientX, e.touches[0].clientY);
+                            //});
+                            //function showTouched(x, y) {
+                            //    touched.style.left = (x - 10) + 'px';
+                            //    touched.style.top = (y - 10) + 'px';
+                            //    touched.style.display = 'block';
+                            //    setTimeout(function () {
+                            //        touched.style.display = 'none';
+                            //    }, 100);
+                            //}
     </script>
     <div style="text-shadow:0 0.1em 0.1em white;color:wheat;"></div>
     <audio id="backGroudMusick">
@@ -395,7 +400,7 @@
     <script src="reward.js"></script>
     <script src="guid.js"></script>
     <script src="privateSignF.js"></script>
-    <script src="nyrqUrl.js"></script>
+    <!--<script src="nyrqUrl.js"></script>-->
     <script src="AMsg.js"></script>
     <script src="createTeamObj.js"></script>
     <script src="whetherGo.js"></script>

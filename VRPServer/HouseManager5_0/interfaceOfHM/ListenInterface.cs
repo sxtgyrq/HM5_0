@@ -109,8 +109,9 @@ namespace HouseManager5_0.interfaceOfHM
         /// <param name="dm"></param>
         void SendMsg(DialogMsg dm);
         void SelectDriver(SetSelectDriver dm);
-        string updateMagic(MagicSkill ms, GetRandomPos grp);
+        //string updateMagic(MagicSkill ms, GetRandomPos grp);
         string updateView(View v);
+        string ask(Ask v);
         string CheckCarStateF(CheckCarState ccs);
         void SystemBradcast(SystemBradcast sb);
         string Statictis(ServerStatictis ss);
@@ -122,7 +123,7 @@ namespace HouseManager5_0.interfaceOfHM
         string SmallMapClickF(SmallMapClick smc);
         // string NotWantToGoNeedToBackF(NotWantToGoNeedToBack nwtgntb);
         string ConfirmPanelSelectResultF(ConfirmPanelSelectResult nwtgntb);
-        
+        void SaveInFileF(SaveInFile sif);
     }
 
     interface MapEditor

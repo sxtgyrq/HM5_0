@@ -1884,5 +1884,37 @@ namespace HouseManager5_0.RoomMainF
             notifyMsg.Add(url);
             notifyMsg.Add(sendMsg);
         }
+        internal void showTheCrossOnTwoRoad(Player player, List<Node.direction> selections, ref List<string> notifyMsg)
+        {
+            Dictionary<string, bool> roads = new Dictionary<string, bool>();
+            List<double> crossDirects = new List<double>();
+            for (int i = 0; i < selections.Count; i++)
+            {
+                var roadCode = selections[i].start.roadCode;
+                if (roads.ContainsKey(roadCode))
+                {
+                    continue;
+                }
+                else
+                {
+                    roads.Add(roadCode, true);
+                    var directs = Program.dt.GetRoadCrossAndCrossLine(roadCode);
+                    for (int j = 0; j < directs.Length; j++)
+                    {
+                        crossDirects.Add(directs[j]);
+                    }
+                }
+            }
+            var obj = new ShowRoadCrossSelectionsOperator
+            {
+                c = "ShowRoadCrossSelectionsOperator",
+                WebSocketID = player.WebSocketID,
+                crossDirects = crossDirects.ToArray()
+            };
+            var url = player.FromUrl;
+            var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            notifyMsg.Add(url);
+            notifyMsg.Add(sendMsg);
+        }
     }
 }

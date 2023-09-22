@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -55,10 +56,24 @@ namespace BitCoin
                 int current_block_count;
                 {
                     var url = $"https://blockchain.info/q/getblockcount?timsSaaadd={DateTime.Now.ToString("yyyyMMddHHmmssff")}";
-                    using (WebClient web1 = new WebClient())
+
+                    using (HttpClient client = new HttpClient())
                     {
-                        current_block_count = Convert.ToInt32(Encoding.UTF8.GetString(await web1.DownloadDataTaskAsync(url)));
+                        HttpResponseMessage response = await client.GetAsync(url);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string txt = await response.Content.ReadAsStringAsync();
+                            current_block_count = Convert.ToInt32(txt);
+                        }
+                        else
+                        {
+                            throw new Exception("");
+                        }
                     }
+                    //using (WebClient web1 = new WebClient())
+                    //{
+                    //    current_block_count = Convert.ToInt32(Encoding.UTF8.GetString(await web1.DownloadDataTaskAsync(url)));
+                    //}
                     //Consol.WriteLine($"current_block_count:{current_block_count}");
                 }
 

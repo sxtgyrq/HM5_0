@@ -46,10 +46,13 @@ namespace HouseManager5_0
             /// 地址只能使用一次
             /// </summary>
             /// <param name="btcAddr"></param>
-            internal void SetAddr(string btcAddr)
+            internal void SetAddr(string btcAddr, string signature)
             {
                 if (this.BtcAddr == "")
+                {
                     this.BtcAddr = btcAddr;
+                    this.Signature = signature;
+                }
             }
 
             internal void SetTimeStamp(string timeStr)
@@ -306,39 +309,39 @@ namespace HouseManager5_0
             this._theLargestHolderKey = this.Key;
         }
 
-        internal void SetTheLargestHolder(Player boss, ref List<string> notifyMsg)
-        {
-            var child = new List<Player>();
-            SetTheLargestHolder(boss, ref notifyMsg, out child);
-        }
+        //internal void SetTheLargestHolder(Player boss, ref List<string> notifyMsg)
+        //{
+        //    var child = new List<Player>();
+        //    SetTheLargestHolder(boss, ref notifyMsg, out child);
+        //}
 
-        /// <summary>
-        /// 设置老大。
-        /// </summary>
-        /// <param name="boss"></param>
-        internal void SetTheLargestHolder(Player boss, ref List<string> notifyMsg, out List<Player> child)
-        {
-            throw new Exception();
+        ///// <summary>
+        ///// 设置老大。
+        ///// </summary>
+        ///// <param name="boss"></param>
+        //internal void SetTheLargestHolder(Player boss, ref List<string> notifyMsg, out List<Player> child)
+        //{
+        //    throw new Exception();
 
-            //child = new List<Player>();
-            //foreach (var item in Program.rm._Players)
-            //{
-            //    if (item.Value.Key != this.Key && item.Value.TheLargestHolderKey == this.Key && item.Value.playerType == PlayerType.player)
-            //    {
-            //        child.Add((Player)item.Value);
-            //    }
-            //}
-            //this._theLargestHolderKey = boss.Key;
-            //if (this.playerType == PlayerType.player)
-            //{
-            //    ((Player)this).ValueChanged(ref notifyMsg);
-            //    for (int i = 0; i < child.Count; i++)
-            //    {
-            //        child[i].InitializeTheLargestHolder(ref notifyMsg);
-            //    }
-            //}
+        //    //child = new List<Player>();
+        //    //foreach (var item in Program.rm._Players)
+        //    //{
+        //    //    if (item.Value.Key != this.Key && item.Value.TheLargestHolderKey == this.Key && item.Value.playerType == PlayerType.player)
+        //    //    {
+        //    //        child.Add((Player)item.Value);
+        //    //    }
+        //    //}
+        //    //this._theLargestHolderKey = boss.Key;
+        //    //if (this.playerType == PlayerType.player)
+        //    //{
+        //    //    ((Player)this).ValueChanged(ref notifyMsg);
+        //    //    for (int i = 0; i < child.Count; i++)
+        //    //    {
+        //    //        child[i].InitializeTheLargestHolder(ref notifyMsg);
+        //    //    }
+        //    //}
 
-        }
+        //}
 
         public bool HasTheBoss(Dictionary<string, Player> _Players, out Player boss)
         {
@@ -550,15 +553,31 @@ namespace HouseManager5_0
                 {
                     return this.Money;
                 }
-                else if (this.Money - Group.GameStartBaseMoney < 0)
-                {
-                    return 0;
-                }
                 else
                 {
-                    return this.Money - Group.GameStartBaseMoney;
+                    switch (this.Group.groupNumber)
+                    {
+                        case 1:
+                        case 2:
+                            {
+                                if (this.getCar().ability.costBusiness <= this.getCar().ability.Business)
+                                {
+                                    var basePart = (this.getCar().ability.Business * this.getCar().ability.Business - this.getCar().ability.costBusiness * this.getCar().ability.costBusiness) * Group.GameStartBaseMoney / (this.getCar().ability.Business * this.getCar().ability.Business);
+                                    //if (percent >)
+                                    if (this.Money - basePart < 0)
+                                    {
+                                        return 0;
+                                    }
+                                    else return this.Money - basePart;
+                                }
+                                else
+                                {
+                                    return this.Money;
+                                }
+                            };
+                        default: return 0;
+                    }
                 }
-
             }
         }
 
@@ -736,6 +755,12 @@ namespace HouseManager5_0
             return this.StartFPIndex;
             // throw new NotImplementedException();
         }
+        public string roadCurrentOn = "";
+        //    BradcastRoadName bradcastRoadName;
+        //internal void TellName(Player player, string roadCode)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         /// <summary>
         /// 混乱记录器，主要用于被混乱释放的对象
@@ -916,12 +941,30 @@ namespace HouseManager5_0
             public System.Numerics.Complex direciton { get; set; }
             public string PostionCrossKey { get; set; }
             public string DYUid { get; set; }
+
+            bool _askWitchToSelect;
+            public bool AskWitchToSelect
+            {
+                get
+                {
+                    var lastValue = this._askWitchToSelect;
+                    this._askWitchToSelect = false;
+                    return lastValue;
+                }
+                set { this._askWitchToSelect = value; }
+            }
+
+            public int AskCount = 0;
+            public const long AskMoney = 5000;// { get { return 5000; } }
         }
         public DirecitonAndSelectID direcitonAndID = new DirecitonAndSelectID()
         {
             direciton = 0,
             PostionCrossKey = "",
-            DYUid = ""
+            DYUid = "",
+            AskWitchToSelect = false,
+            //  AskMoney = 10000,
+            AskCount = 0
         };
 
 
@@ -949,6 +992,7 @@ namespace HouseManager5_0
                         this.bTCAddressValue = value;
                         this.nntl(this);
                         this.Group.recordRaceTime(this.Key);
+                        this.rm.fileSM.LoadFile(this);
                     }
                 }
             }
@@ -1241,11 +1285,11 @@ namespace HouseManager5_0
         /// <param name="contentKey"></param>
         /// <param name="value"></param>
         /// <param name="notifyMsg"></param>
-    //    public delegate void BrokenParameterT1RecordChanged(string msgToPlayerKey, string contentKey, long value, ref List<string> notifyMsg);
+        //    public delegate void BrokenParameterT1RecordChanged(string msgToPlayerKey, string contentKey, long value, ref List<string> notifyMsg);
         /// <summary>
         /// 此方法的目的是告诉自己，别人的社会责任发生变化了
         /// </summary>
-      //  public BrokenParameterT1RecordChanged brokenParameterT1RecordChangedF;
+        //  public BrokenParameterT1RecordChanged brokenParameterT1RecordChangedF;
 
         internal Car.ChangeStateC getCarState()
         {

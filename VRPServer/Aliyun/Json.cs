@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Aliyun
 {
@@ -18,6 +19,27 @@ namespace Aliyun
                 AliyunOSSHelper.LoadKey();
 
             AliyunOSSHelper.PutString("yrqmodeldata", path, json);
+        }
+
+        public static bool Delete(string path)
+        {
+            if (!AliyunOSSHelper.loadSuccess)
+                AliyunOSSHelper.LoadKey();
+            return AliyunOSSHelper.DeleteObject("yrqmodeldata", path);
+        }
+
+        public static bool Existed(string path)
+        {
+            if (!AliyunOSSHelper.loadSuccess)
+                AliyunOSSHelper.LoadKey();
+            return AliyunOSSHelper.ExistsObject("yrqmodeldata", path);
+        }
+
+        public static string Read(string path)
+        {
+            if (!AliyunOSSHelper.loadSuccess)
+                AliyunOSSHelper.LoadKey();
+            return AliyunOSSHelper.GetString("yrqmodeldata", path);
         }
     }
     public class ByteData

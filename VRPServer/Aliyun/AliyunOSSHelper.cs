@@ -98,6 +98,39 @@ namespace Aliyun
             return true;
         }
 
+        /// <summary>
+        /// 存储一个字符串
+        /// </summary>
+        /// <param name="bucketName">存储空间名称</param>
+        /// <param name="key">Key</param> 
+        /// <returns></returns>
+        public static string GetString(string bucketName, string key)
+        {
+            try
+            {
+                string text;
+                var ossObj = client.GetObject(bucketName, key);
+                using (var stream = ossObj.ResponseStream)
+                {
+                    //stream.Position = 0;
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        text = reader.ReadToEnd();
+                    }
+                }
+
+                Console.WriteLine($"读取成功:{key}，{text}");
+                return text;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"读取成功有误, {key},{ex.Message}");
+                // Console.ReadLine();
+                return "";
+            }
+            //   return true;
+        }
+
         public static bool PutByte(string bucketName, string key, byte[] Data)
         {
             try
@@ -158,19 +191,20 @@ namespace Aliyun
         {
             try
             {
-                // 判断文件是否存在。
                 var exist = client.DoesObjectExist(bucketName, key);
-                Console.WriteLine("Object exist ? " + exist);
-                return true;
+                return exist;
             }
             catch (OssException ex)
             {
                 Console.WriteLine("Failed with error code: {0}; Error info: {1}. \nRequestID:{2}\tHostID:{3}",
-                    ex.ErrorCode, ex.Message, ex.RequestId, ex.HostId);
+                ex.ErrorCode, ex.Message, ex.RequestId, ex.HostId);
+                return false;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Failed with error info: {0}", ex.Message);
+                return false;
+
             }
             return false;
         }

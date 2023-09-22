@@ -511,6 +511,11 @@ namespace CommonClass
         public double positionY { get; set; }
         public double positionZ { get; set; }
     }
+    public class ShowRoadCrossSelectionsOperator : CommandNotify
+    {
+        public string postionCrossKey;
+        public double[] crossDirects { get; set; }
+    }
     public class BradCastBackground : CommandNotify
     {
         public string path { get; set; }
@@ -613,6 +618,17 @@ namespace CommonClass
         public string postionCrossKey { get; set; }
         public string Uid { get; set; }
     }
+    public class Ask : Command
+    {
+        public string Key { get; set; } 
+        public string GroupKey { get; set; }  
+    }
+    public class SaveInFile : Command
+    {
+        public string Key { get; set; }
+        public string GroupKey { get; set; }
+    }
+
     public class TakeApart : Command
     {
         public string Key { get; set; }

@@ -8,7 +8,7 @@
                 <th>可存储</th>
             </tr>
             <tr>
-                <td  id="MoneyForSave" >999999</td> 
+                <td id="MoneyForSave">999999</td> 
             </tr>
         </table>
         <div style="
@@ -30,11 +30,17 @@
         margin-top: 0.25em;padding:0.5em 0 0.5em 0;"  onclick="moneyOperator.donate('all');">
             全部存储
         </div> 
+        <div id="btnSaveAllMoney" style="background: yellowgreen;
+        margin-bottom: 0.25em;
+        margin-top: 0.25em;padding:0.5em 0 0.5em 0;"  onclick="moneyOperator.saveFile();">
+            存档
+        </div>
         <div style="background: orange;
         margin-bottom: 0.25em;
         margin-top: 0.25em;padding:0.5em 0 0.5em 0;" onclick="moneyOperator.add();">
             取消
         </div>
+        <div>计算方法:<span id="MoneyForSavePanel_AllMoney">600</span>-<span id="MoneyForSavePanel_BaseMoney">300.00</span>×(1-<span id="MoneyForSavePanel_Business">30</span>/70.00)<sup>2</sup></div>
     </div>`,
     add: function () {
         var that = moneyOperator;
@@ -70,6 +76,24 @@
         if (document.getElementById('MoneyForSave') != null) {
             document.getElementById('MoneyForSave').innerText = '' + (that.MoneyForSave / 100).toFixed(2);
         }
+        if (document.getElementById('MoneyForSavePanel_AllMoney') != null) {
+            document.getElementById('MoneyForSavePanel_AllMoney').innerText = (objMain.Money / 100).toFixed(2);
+        }
+
+        var costValue = carAbility.data.car.business.costValue;
+        if (costValue > 7000) {
+            costValue = 7000;
+        }
+        if (document.getElementById('MoneyForSavePanel_Business') != null) {
+            document.getElementById('MoneyForSavePanel_Business').innerText = (costValue / 100).toFixed(2);
+        }
+        if (document.getElementById('MoneyForSavePanel_BaseMoney') != null) {
+            if (objMain.carGroup.children.length == 2)
+                document.getElementById('MoneyForSavePanel_BaseMoney').innerText = '500.00';
+            else if (objMain.carGroup.children.length == 4)
+                document.getElementById('MoneyForSavePanel_BaseMoney').innerText = '300.00';
+        }
+
     },
     MoneyForSave: 0,
     donate: function (type) {
@@ -144,10 +168,23 @@
                         }
                     }
                 }
+                else {
+                    if (document.getElementById(that.operateID) == null) {
+                        var el = document.getElementById('moneyServe');
+                        if (el)
+                            el.classList.add('msg');
+                    }
+                    else {
+                    }
+                }
             }
         }
         else { }
 
 
+    },
+    saveFile: function () {
+        var obj = { "c": "RequstToSaveInFile" };
+        objMain.ws.send(JSON.stringify(obj))
     }
 };

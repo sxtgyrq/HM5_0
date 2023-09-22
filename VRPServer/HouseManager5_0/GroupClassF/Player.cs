@@ -94,6 +94,11 @@ namespace HouseManager5_0.GroupClassF
                 }
                 if (success)
                 {
+                    var levelObj = this._PlayerInGroup[checkItem.Key].levelObj;
+                    if (!string.IsNullOrEmpty(levelObj.BtcAddr))
+                    {
+
+                    }
                     return "ok";
                 }
                 else
@@ -219,7 +224,10 @@ namespace HouseManager5_0.GroupClassF
                     {
                         direciton = that.getComplex(gp.GetFpByIndex(this.StartFPIndex)),
                         PostionCrossKey = "",
-                        DYUid = ""
+                        DYUid = "",
+                        AskCount = 0,
+                        // AskMoney = 10000,
+                        AskWitchToSelect = false
                     };
                 //  newPlayer.
                 ((Player)this._PlayerInGroup[addItem.Key]).modelHasShowed = new Dictionary<string, bool>();

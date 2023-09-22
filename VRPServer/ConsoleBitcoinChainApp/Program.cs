@@ -42,8 +42,9 @@ B   获取该付比特币
         {
             while (true)
             {
+                bool needToReRun = false;
                 var operateDate = DateTime.Now.ToString("yyyyMMdd");
-                var fileName = $"addrNeedToAdd{operateDate}.txt";
+                var fileName = $"needPay/addrNeedToAdd{operateDate}.txt";
                 var hasValueRecode = false;
                 var list = DalOfAddress.detailmodel.GetAllAddr();
                 for (int indexOfBitcoinAddrList = 0; indexOfBitcoinAddrList < list.Count; indexOfBitcoinAddrList++)
@@ -63,30 +64,40 @@ B   获取该付比特币
                             }
                             paymentDic[allNeedPay[i].addrFrom] += allNeedPay[i].satoshi;
                         }
-                        BitCoin.Transtraction.TradeInfo t = new BitCoin.Transtraction.TradeInfo(addrOfBitcoin);
-                        //tradeDetail = Task.Run(() => t.GetTradeInfomationFromChain_v2()).Result;
-                        var t1 = t.GetTradeInfomationFromChain_BitcoinOutPut();
-                        var tradeDetail = t1.GetAwaiter().GetResult();
-
-
-
-                        foreach (var trade in tradeDetail)
+                        try
                         {
-                            if (paymentDic.ContainsKey(trade.Key))
+                            BitCoin.Transtraction.TradeInfo t = new BitCoin.Transtraction.TradeInfo(addrOfBitcoin);
+                            //tradeDetail = Task.Run(() => t.GetTradeInfomationFromChain_v2()).Result;
+                            var t1 = t.GetTradeInfomationFromChain_BitcoinOutPut();
+                            var tradeDetail = t1.GetAwaiter().GetResult();
+
+
+
+                            foreach (var trade in tradeDetail)
                             {
-                                paymentDic[trade.Key] -= trade.Value;
+                                if (paymentDic.ContainsKey(trade.Key))
+                                {
+                                    paymentDic[trade.Key] -= trade.Value;
+                                }
+                            }
+
+                            foreach (var item in paymentDic)
+                            {
+                                if (item.Value > 0)
+                                {
+                                    var strMsg = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}需要用{addrOfBitcoin}转{item.Key},{item.Value}satoshi{Environment.NewLine}";
+                                    Console.WriteLine(strMsg);
+                                    File.AppendAllText(fileName, strMsg);
+                                    hasValueRecode = true;
+                                }
                             }
                         }
-
-                        foreach (var item in paymentDic)
+                        catch
                         {
-                            if (item.Value > 0)
-                            {
-                                var strMsg = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}需要用{addrOfBitcoin}转{item.Key},{item.Value}satoshi{Environment.NewLine}";
-                                Console.WriteLine(strMsg);
-                                File.AppendAllText(fileName, strMsg);
-                                hasValueRecode = true;
-                            }
+                            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} 运行失败，开始删除相关文件重新运行！");
+                            Thread.Sleep(1000 * 60 * 30);
+                            needToReRun = true;
+                            break;
                         }
                         //f
                     }
@@ -96,9 +107,18 @@ B   获取该付比特币
 
                     //  Console.ReadLine();
                 }
+
+                if (needToReRun)
+                {
+                    if (File.Exists(fileName))
+                    {
+                        File.Delete(fileName);
+                    }
+                    continue;
+                }
                 if (hasValueRecode)
                 { }
-                else 
+                else
                 {
                     var strMsg = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}无需转BTC";
                     Console.WriteLine(strMsg);
@@ -134,9 +154,10 @@ B   获取该付比特币
                 var list = DalOfAddress.detailmodel.GetAllAddr();
                 for (int i = 0; i < list.Count; i++)
                 {
+                    var addr = list[i];
                     try
                     {
-                        var addr = list[i];
+
                         BitCoin.Transtraction.TradeInfo t = new BitCoin.Transtraction.TradeInfo(addr);
                         //tradeDetail = Task.Run(() => t.GetTradeInfomationFromChain_v2()).Result;
                         var t1 = t.GetTradeInfomationFromChain_v2();
@@ -147,7 +168,7 @@ B   获取该付比特币
                     }
                     catch
                     {
-                        Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}-读取错误");
+                        Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}-{addr}交易数据，读取错误");
                     }
                 }
                 Thread.Sleep(1000 * 60 * 13);

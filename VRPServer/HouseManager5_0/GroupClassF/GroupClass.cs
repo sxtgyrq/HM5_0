@@ -17,6 +17,18 @@ namespace HouseManager5_0.GroupClassF
         /// </summary>
         public long Money { get; private set; }
         public DateTime startTime { get; private set; }
+        public int countOfAskRoad
+        {
+            get
+            {
+                int result = 0;
+                foreach (var item in this._PlayerInGroup)
+                {
+                    result += item.Value.direcitonAndID.AskCount;
+                }
+                return result;
+            }
+        }
         public Dictionary<string, DateTime> taskFineshedTime { get; private set; }
         public GroupClass(string gkey, RoomMainF.RoomMain roomMain)
         {
@@ -31,6 +43,7 @@ namespace HouseManager5_0.GroupClassF
             this._PlayerInGroup = new Dictionary<string, Player>();
             this.Money = 0;
             this.startTime = DateTime.Now;
+            //this.countOfAskRoad = 0;
             this.taskFineshedTime = new Dictionary<string, DateTime>();
             this.recordErrorMsgs = new Dictionary<string, string>();
             this.records = new Dictionary<string, bool>();
@@ -47,6 +60,7 @@ namespace HouseManager5_0.GroupClassF
                     "speed",0
                 }
             };
+            this.DataFileSaved = false;
         }
 
         public Dictionary<int, int> _collectPosition = new Dictionary<int, int>();
@@ -78,7 +92,11 @@ namespace HouseManager5_0.GroupClassF
             {
                 switch (groupNumber)
                 {
-                    case 1: { return 50000; }
+                    case 1:
+                        {
+
+                            return 50000;
+                        }
                     case 2: { return 60000 / groupNumber; }
                     case 3: { return 60000 / groupNumber; }
                     case 4: { return 60000 / groupNumber; }

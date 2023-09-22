@@ -964,7 +964,8 @@ THREE.OrbitControls = function (object, domElement) {
                 break;
 
             case 2: // two-fingered touch: dolly-pan
-
+                objMain.selection.initialize('Ëõ·Å');
+                objMain.selection.isZooming = true;
                 if (scope.enableZoom === false && scope.enablePan === false) return;
                 if (state !== STATE.TOUCH_DOLLY_PAN) return; // is this needed?
 
@@ -1073,7 +1074,7 @@ THREE.OrbitControls = function (object, domElement) {
     scope.domElement.addEventListener('touchmove', onTouchMove, false);
 
     window.addEventListener("gamepadconnected", gamepadconnected);
-    // scope.domElement.addEventListener('click', function (event) { alert('µã»÷'); }, false);
+    // scope.domElement.addEventListener('click', function (event) { alert('   '); }, false);
 
     window.addEventListener('keydown', onKeyDown, false);
 

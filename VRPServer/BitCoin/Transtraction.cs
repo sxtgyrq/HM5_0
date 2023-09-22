@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using System.Net;
+using System.Net.Http;
 //using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -32,17 +33,17 @@ namespace BitCoin
             //    //Consol.WriteLine(data);
             //    return data;
             //}
-            public class WebCS : WebClient
-            {
-                //重写超时时间
-                protected override WebRequest GetWebRequest(Uri address)
-                {
-                    HttpWebRequest request = (HttpWebRequest)base.GetWebRequest(address);
-                    request.Timeout = 1000 * 120;//单位为毫秒
-                    request.ReadWriteTimeout = 1000 * 120;//
-                    return request;
-                }
-            }
+            //public class WebCS : WebClient
+            //{
+            //    //重写超时时间
+            //    protected override WebRequest GetWebRequest(Uri address)
+            //    {
+            //        HttpWebRequest request = (HttpWebRequest)base.GetWebRequest(address);
+            //        request.Timeout = 1000 * 120;//单位为毫秒
+            //        request.ReadWriteTimeout = 1000 * 120;//
+            //        return request;
+            //    }
+            //}
             //public async Task<Dictionary<string, long>> GetTradeInfomationFromChainFromServer()
             //{
 
@@ -60,10 +61,39 @@ namespace BitCoin
                 int current_block_count;
                 {
                     var url = "https://blockchain.info/q/getblockcount";
-                    using (WebCS web1 = new WebCS())
+
+                    using (HttpClient client = new HttpClient())
                     {
-                        current_block_count = Convert.ToInt32(Encoding.UTF8.GetString(await web1.DownloadDataTaskAsync(url)));
+                        try
+                        {
+                            // Send an HTTP GET request to the URL
+                            HttpResponseMessage response = await client.GetAsync(url);
+
+                            // Check if the response status code is successful (200 OK)
+                            if (response.IsSuccessStatusCode)
+                            {
+                                // Read the JSON content as a string
+                                string txt = await response.Content.ReadAsStringAsync();
+                                current_block_count = Convert.ToInt32(txt);
+                                // Now you can work with the JSON data
+                                // Console.WriteLine(json);
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Error: {response.StatusCode}");
+                                throw new Exception(response.StatusCode.ToString());
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Exception: {ex.Message}");
+                            throw ex;
+                        }
                     }
+                    //using (WebCS web1 = new WebCS())
+                    //{
+                    //    current_block_count = Convert.ToInt32(Encoding.UTF8.GetString(await web1.DownloadDataTaskAsync(url)));
+                    //}
                 }
                 StringBuilder detailOfTrade = new StringBuilder();
                 Dictionary<string, bool> record = new Dictionary<string, bool>();
@@ -81,10 +111,38 @@ namespace BitCoin
                         {
                             try
                             {
-                                using (WebCS web1 = new WebCS())
+                                using (HttpClient client = new HttpClient())
                                 {
-                                    data = Encoding.UTF8.GetString(await web1.DownloadDataTaskAsync(url));
+                                    try
+                                    {
+                                        // Send an HTTP GET request to the URL
+                                        HttpResponseMessage response = await client.GetAsync(url);
+
+                                        // Check if the response status code is successful (200 OK)
+                                        if (response.IsSuccessStatusCode)
+                                        {
+                                            // Read the JSON content as a string
+                                            data = await response.Content.ReadAsStringAsync();
+
+                                            // Now you can work with the JSON data
+                                            // Console.WriteLine(json);
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine($"Error: {response.StatusCode}");
+                                            throw new Exception(response.StatusCode.ToString());
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine($"Exception: {ex.Message}");
+                                    }
                                 }
+
+                                //using (WebCS web1 = new WebCS())
+                                //{
+                                //    data = Encoding.UTF8.GetString(await web1.DownloadDataTaskAsync(url));
+                                //}
                                 //using (var client = new HttpClient(socketsHttpHandler))
                                 //{
                                 //    data = await client.GetStringAsync(url);
@@ -232,9 +290,32 @@ namespace BitCoin
                 int current_block_count;
                 {
                     var url = "https://blockchain.info/q/getblockcount";
-                    using (WebCS web1 = new WebCS())
+
+                    using (HttpClient client = new HttpClient())
                     {
-                        current_block_count = Convert.ToInt32(Encoding.UTF8.GetString(await web1.DownloadDataTaskAsync(url)));
+                        try
+                        {
+                            // Send an HTTP GET request to the URL
+                            HttpResponseMessage response = await client.GetAsync(url);
+
+                            // Check if the response status code is successful (200 OK)
+                            if (response.IsSuccessStatusCode)
+                            {
+                                // Read the JSON content as a string
+                                string txt = await response.Content.ReadAsStringAsync();
+                                current_block_count = Convert.ToInt32(txt);
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Error: {response.StatusCode}");
+                                throw new Exception($"Error: {response.StatusCode}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Exception: {ex.Message}");
+                            throw ex;
+                        }
                     }
                 }
                 StringBuilder detailOfTrade = new StringBuilder();
@@ -253,15 +334,27 @@ namespace BitCoin
                         {
                             try
                             {
-                                using (WebCS web1 = new WebCS())
+                                using (HttpClient client = new HttpClient())
                                 {
-                                    data = Encoding.UTF8.GetString(await web1.DownloadDataTaskAsync(url));
-                                } 
+                                    HttpResponseMessage response = await client.GetAsync(url);
+                                    if (response.IsSuccessStatusCode)
+                                    {
+                                        data = await response.Content.ReadAsStringAsync();
+                                    }
+                                    else
+                                    {
+                                        throw new Exception($"Error: {response.StatusCode}");
+                                    } 
+                                }
+                                //using (WebCS web1 = new WebCS())
+                                //{
+                                //    data = Encoding.UTF8.GetString(await web1.DownloadDataTaskAsync(url));
+                                //}
                                 break;
                             }
                             catch (Exception e)
                             {
-                                if (i < 9) { } 
+                                if (i < 9) { }
                                 else
                                 {
                                     throw e;
@@ -299,7 +392,7 @@ namespace BitCoin
                                         if (inputSum <= 0)
                                         {
                                             continue;
-                                        } 
+                                        }
                                         for (int j = 0; j < item.@out.Count; j++)
                                         {
                                             if (string.IsNullOrEmpty(item.@out[j].addr))
@@ -338,11 +431,11 @@ namespace BitCoin
                         {
                             // Console.ReadLine();
                         }
-                    } 
+                    }
 
-                } 
+                }
 
-                return moneyPayed; 
+                return moneyPayed;
             }
 
 

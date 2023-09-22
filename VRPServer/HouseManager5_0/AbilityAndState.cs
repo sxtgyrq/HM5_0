@@ -325,6 +325,7 @@ namespace HouseManager5_0
             if (player.playerType == Player.PlayerType.player)
             {
                 BusinessChanged((Player)player, car, ref notifyMsg, "business");
+                player.SetMoneyCanSave((Player)player, ref notifyMsg);
             }
         }
 
@@ -501,6 +502,11 @@ namespace HouseManager5_0
             // throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 获取宝石数量
+        /// </summary>
+        /// <param name="v">mile volume speed</param>
+        /// <returns></returns>
         internal int DiamondCount(string v)
         {
             if (this.Data.ContainsKey(v))
@@ -510,6 +516,14 @@ namespace HouseManager5_0
             else return 0;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>返回DiamondCount("mile")+DiamondCount("volume")+DiamondCount("speed") </returns>
+        internal int DiamondCount()
+        {
+            return DiamondCount("mile") + DiamondCount("volume") + DiamondCount("speed");
+        }
         /// <summary>
         /// 小车能跑的最快速度！
         /// </summary>

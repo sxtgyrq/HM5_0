@@ -168,6 +168,9 @@ namespace HouseManager5_0
                         }; break;
                     case "OrderToSubsidize":
                         {
+                            /*
+                             * 这里意味着登录与获取积分！
+                             */
                             CommonClass.OrderToSubsidize ots = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.OrderToSubsidize>(notifyJson);
                             objI.OrderToSubsidize(ots);
                             outPut = "ok";
@@ -190,12 +193,12 @@ namespace HouseManager5_0
                             objI.SelectDriver(dm);
                             outPut = "ok";
                         }; break;
-                    case "MagicSkill":
-                        {
-                            CommonClass.MagicSkill ms = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.MagicSkill>(notifyJson);
-                            var result = objI.updateMagic(ms, Program.dt);
-                            outPut = "ok";
-                        }; break;
+                    //case "MagicSkill":
+                    //    {
+                    //        //CommonClass.MagicSkill ms = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.MagicSkill>(notifyJson);
+                    //        // var result = objI.updateMagic(ms, Program.dt);
+                    //        outPut = "ok";
+                    //    }; break;
                     case "View":
                         {
                             CommonClass.View v = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.View>(notifyJson);
@@ -568,12 +571,21 @@ namespace HouseManager5_0
                             LookForScoreInPut condition = Newtonsoft.Json.JsonConvert.DeserializeObject<LookForScoreInPut>(notifyJson);
                             outPut = objI.LookForScoreInPutF(condition);
                         }; break;
-                    case "UpdateScoreItem": 
+                    case "UpdateScoreItem":
                         {
                             UpdateScoreItem ucs = Newtonsoft.Json.JsonConvert.DeserializeObject<UpdateScoreItem>(notifyJson);
                             outPut = objI.UpdateScoreItemF(ucs);
+                        }; break;
+                    case "Ask":
+                        {
+                            Ask askObj = Newtonsoft.Json.JsonConvert.DeserializeObject<Ask>(notifyJson);
+                            objI.ask(askObj);
+                        }; break;
+                    case "SaveInFile": 
+                        {
+                            SaveInFile sif= Newtonsoft.Json.JsonConvert.DeserializeObject<SaveInFile>(notifyJson);
+                            objI.SaveInFileF(sif);
                         };break;
-
                 }
             }
             {

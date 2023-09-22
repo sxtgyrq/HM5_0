@@ -412,6 +412,15 @@
     <None Update="model\attackicon\fistresult3.obj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="model\coin\c.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="model\coin\c.mtl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="model\coin\c.obj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="model\confuseicon\img.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

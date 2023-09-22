@@ -1,4 +1,5 @@
 ﻿using CommonClass;
+using HouseManager5_0.interfaceOfHM;
 using Microsoft.AspNetCore.Mvc.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
@@ -313,7 +314,7 @@ namespace HouseManager5_0
                                     player.addUsedRoad(selections[i].start.roadCode, ref notifyMsg);
                                 }
                                 that.showDirecitonAndSelection(player, selections, selectionCenter, ref notifyMsg);
-
+                                that.showTheCrossOnTwoRoad(player, selections, ref notifyMsg);
                                 //selectionCenter.
                                 if (string.IsNullOrEmpty(selectionCenter.crossKey))
                                 {
@@ -373,50 +374,137 @@ namespace HouseManager5_0
 
         protected void StartSelectThreadB(List<Node.direction> selections, Node.pathItem.Postion selectionCenter, Player player, CarState oldState, Action p)
         {
-            if (selectionCenter.postionCrossKey == player.direcitonAndID.PostionCrossKey)
+            if (player.direcitonAndID.AskWitchToSelect)
             {
-                int rightItemIndex;
-                player.SelectCount++;
-                if (isRight(selections, player.direcitonAndID, false, out rightItemIndex) || player.Bust)
+                List<string> notifyMsg = new List<string>();
+
+                if (player.Money > HouseManager5_0.Player.DirecitonAndSelectID.AskMoney)
                 {
-                    List<string> notifyMsg = new List<string>();
-                    if (player.getCar().state == CarState.selecting)
+
+                    player.MoneySet(player.Money - Player.DirecitonAndSelectID.AskMoney, ref notifyMsg);
+
+                    if (player.Group._PlayerInGroup.Count == 1)
                     {
-                        // List<string> notifyMsg = new List<string>();
-                        player.getCar().setState(player, ref notifyMsg, oldState);
-                        player.SendBG(player, ref notifyMsg);
-
-                        var randomV = this.that.rm.Next(0, 100);
-                        if (randomV < 9 && !player.improvementRecord.CollectIsDouble)
-                            player.improvementRecord.addAttack(player, ref notifyMsg);
-                        //player.getCar().
-
+                        this.WebNotify(player, $"第{(player.Group.countOfAskRoad + 1)}次问道，花费{Player.DirecitonAndSelectID.AskMoney / 100}.{Player.DirecitonAndSelectID.AskMoney / 10 % 10}{Player.DirecitonAndSelectID.AskMoney % 10}积分。");
                     }
-                    //if (player.Group.Live)
-                    //{
-                    //    if (!string.IsNullOrEmpty(player.direcitonAndID.DYUid))
-                    //    {
-                    //        player.Group.AdviseIsRight(player, ref notifyMsg);
-                    //        player.direcitonAndID.DYUid = "";
-                    //    }
-                    //}
-                    this.sendSeveralMsgs(notifyMsg);
-                    p();
+                    else if (player.Group._PlayerInGroup.Count == 2)
+                    {
+                        this.WebNotify(player, $"你与你的队友第{(player.Group.countOfAskRoad + 1)}次问道，这次你花费{Player.DirecitonAndSelectID.AskMoney / 100}.{Player.DirecitonAndSelectID.AskMoney / 10 % 10}{Player.DirecitonAndSelectID.AskMoney % 10}积分。");
+                    }
                 }
                 else
                 {
-                    List<string> notifyMsg = new List<string>();
-                    var reduceValue = player.getCar().ability.ReduceBusinessAndVolume(player, player.getCar(), ref notifyMsg);
-                    reduceValue = Math.Max(0, reduceValue);
-                    SelectionIsWrong(player, selectionCenter, reduceValue, notifyMsg);
-                    player.SelectWrongCount++;
-
-                    if (player.improvementRecord.CollectIsDouble)
+                    if (player.Money > 1)
+                        player.MoneySet(1, ref notifyMsg);
+                    if (player.Group._PlayerInGroup.Count == 1)
                     {
-                        player.improvementRecord.reduceAttack(player, ref notifyMsg);
+                        this.WebNotify(player, $"第{(player.Group.countOfAskRoad + 1)}次问道。");
                     }
-                    this.sendSeveralMsgs(notifyMsg);
-                    player.playerSelectDirectionTh = new Thread(() => StartSelectThreadB(selections, selectionCenter, player, oldState, p));
+                    else if (player.Group._PlayerInGroup.Count == 2)
+                    {
+                        this.WebNotify(player, $"你与你的队友第{(player.Group.countOfAskRoad + 1)}次问道。");
+                    }
+                }
+
+
+                //player.direcitonAndID.AskMoney = player.direcitonAndID.AskMoney * 2;
+                player.direcitonAndID.AskCount++;
+                //  List<string> notifyMsg = new List<string>();
+                if (player.getCar().state == CarState.selecting)
+                {
+                    // List<string> notifyMsg = new List<string>();
+                    player.getCar().setState(player, ref notifyMsg, oldState);
+                    player.SendBG(player, ref notifyMsg);
+
+                    var randomV = this.that.rm.Next(0, 100);
+                    if (randomV < 9 && !player.improvementRecord.CollectIsDouble)
+                        player.improvementRecord.addAttack(player, ref notifyMsg);
+                }
+                this.sendSeveralMsgs(notifyMsg);
+                p();
+
+                player.direcitonAndID.AskWitchToSelect = false;
+            }
+            else if (selectionCenter.postionCrossKey == player.direcitonAndID.PostionCrossKey)
+            {
+
+                {
+
+                    int rightItemIndex;
+                    player.SelectCount++;
+                    if (isRight(selections, player.direcitonAndID, false, out rightItemIndex) || player.Bust)
+                    {
+                        List<string> notifyMsg = new List<string>();
+                        if (player.getCar().state == CarState.selecting)
+                        {
+                            // List<string> notifyMsg = new List<string>();
+                            player.getCar().setState(player, ref notifyMsg, oldState);
+                            player.SendBG(player, ref notifyMsg);
+
+                            var randomV = this.that.rm.Next(0, 100);
+                            if (randomV < 9 && !player.improvementRecord.CollectIsDouble)
+                                player.improvementRecord.addAttack(player, ref notifyMsg);
+                            //player.getCar().
+                            if (rightItemIndex > 0)
+                            {
+                                var newRoad = Program.dt.GetRoadName(selections.Find(item => item.right).end.roadCode);
+                                if (string.IsNullOrEmpty(newRoad))
+                                { }
+                                else if (CityRunFunction.FormatLike.LikeFsPresentCode(newRoad))
+                                {
+
+                                }
+                                else
+                                {
+                                    if (player.roadCurrentOn != newRoad)
+                                        this.WebNotify(player, $"您到达了{newRoad}");
+                                };
+                                player.roadCurrentOn = newRoad;
+                            }
+                        }
+                        //if (player.Group.Live)
+                        //{
+                        //    if (!string.IsNullOrEmpty(player.direcitonAndID.DYUid))
+                        //    {
+                        //        player.Group.AdviseIsRight(player, ref notifyMsg);
+                        //        player.direcitonAndID.DYUid = "";
+                        //    }
+                        //}
+                        this.sendSeveralMsgs(notifyMsg);
+                        p();
+                    }
+                    else
+                    {
+                        List<string> notifyMsg = new List<string>();
+                        var reduceValue = player.getCar().ability.ReduceBusinessAndVolume(player, player.getCar(), ref notifyMsg);
+                        reduceValue = Math.Max(0, reduceValue);
+                        SelectionIsWrong(player, selectionCenter, reduceValue, notifyMsg);
+                        player.SelectWrongCount++;
+
+                        if (player.improvementRecord.CollectIsDouble)
+                        {
+                            player.improvementRecord.reduceAttack(player, ref notifyMsg);
+                        }
+                        this.sendSeveralMsgs(notifyMsg);
+                        this.WebNotify(player, "在不确定方向时，可以进行问道，避免损失！");
+                        player.playerSelectDirectionTh = new Thread(() => StartSelectThreadB(selections, selectionCenter, player, oldState, p));
+
+                        if (Program.dt.CrossesPlayerSelectWrong.ContainsKey(selectionCenter.postionCrossKey))
+                        {
+                            Program.dt.CrossesPlayerSelectWrong[selectionCenter.postionCrossKey] += 1;
+                        }
+                        else
+                        {
+                            Program.dt.CrossesPlayerSelectWrong.Add(selectionCenter.postionCrossKey, 1);
+                        }
+                        if (Program.dt.CrossesPlayerSelectWrong[selectionCenter.postionCrossKey] % 1 == 0)
+                        {
+                            /*
+                             * 后期这个值要随着生产环境调整
+                             */
+                            DalOfAddress.selectederrorcross.Insert(selectionCenter.postionCrossKey, string.IsNullOrEmpty(selectionCenter.crossKey) ? "" : selectionCenter.crossKey);
+                        }
+                    }
                 }
             }
             else

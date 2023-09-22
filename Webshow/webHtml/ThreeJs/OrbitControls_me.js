@@ -1006,553 +1006,556 @@ THREE.OrbitControls = function (object, domElement) {
                     //document.body.innerHTML = ""; // reset page
                     //  if (myGamepad)
                     // console.log('axes', myGamepad.axes);
-                    {
-                        var x1 = myGamepad.axes[0];
-                        var y1 = myGamepad.axes[1];
-                        var l1 = Math.sqrt(x1 * x1 + y1 * y1);
-                        if (l1 > 0.05) {
-                            var c1 = new Complex(x1 / l1, -y1 / l1);
-                            var camara = scope.object;
-                            var target = scope.target;
-                            var x2 = target.x - camara.position.x;// - target.x;
-                            var y2 = target.z - camara.position.z;// - target.z;
+                    if (myGamepad == null) { }
+                    else {
+                        {
+                            var x1 = myGamepad.axes[0];
+                            var y1 = myGamepad.axes[1];
+                            var l1 = Math.sqrt(x1 * x1 + y1 * y1);
+                            if (l1 > 0.05) {
+                                var c1 = new Complex(x1 / l1, -y1 / l1);
+                                var camara = scope.object;
+                                var target = scope.target;
+                                var x2 = target.x - camara.position.x;// - target.x;
+                                var y2 = target.z - camara.position.z;// - target.z;
+                                var l2 = Math.sqrt(x2 * x2 + y2 * y2);
+                                if (l2 > 0.001) {
+                                    var c2 = new Complex(x2 / l2, -y2 / l2);
+                                    var c3 = c2.divide(c1);
+
+                                    if (Math.abs(c3.r) < 1) {
+                                        var delta = Math.acos(c3.r);
+                                        if (delta != NaN)
+                                            if (c3.i > 0)
+                                                rotateLeft(delta);
+                                            else
+                                                rotateLeft(-delta);
+                                        //if (delta > 0.01)
+                                    }
+                                    //else
+                                    //    rotateLeft(delta / 50);
+                                    scope.update();
+                                }
+                            }
+                        }
+                        {
+                            var x2 = myGamepad.axes[2];
+                            var y2 = myGamepad.axes[3];
                             var l2 = Math.sqrt(x2 * x2 + y2 * y2);
-                            if (l2 > 0.001) {
-                                var c2 = new Complex(x2 / l2, -y2 / l2);
-                                var c3 = c2.divide(c1);
-
-                                if (Math.abs(c3.r) < 1) {
-                                    var delta = Math.acos(c3.r);
-                                    if (delta != NaN)
-                                        if (c3.i > 0)
-                                            rotateLeft(delta);
-                                        else
-                                            rotateLeft(-delta);
-                                    //if (delta > 0.01)
-                                }
-                                //else
-                                //    rotateLeft(delta / 50);
-                                scope.update();
-                            }
-                        }
-                    }
-                    {
-                        var x2 = myGamepad.axes[2];
-                        var y2 = myGamepad.axes[3];
-                        var l2 = Math.sqrt(x2 * x2 + y2 * y2);
-                        if (l2 > 0.05) {
-                            //var c2 = new Complex(x2 / l2, -y2 / l2);
-                            var angle = 0;
-                            if (-y2 / l2 > 0) {
-                                angle = Math.acos(x2 / l2);
-                            }
-                            else {
-                                angle = Math.PI * 2 - Math.acos(x2 / l2);
-                            }
-                            switch (objMain.gamePadState) {
-                                case 'shop':
-                                    {
-                                        if (objMain.buildingGroup.children.length > 0) {
-                                            objMain.buildingGroup.children[0].rotation.set(0, angle, 0, 'XYZ')
-                                        }
-                                        // keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'AddModel' })) }, buttonIndex);
-                                    }; break;
-                            }
-                            //var camara = scope.object;
-                            //var target = scope.target;
-                            //var x2 = target.x - camara.position.x;// - target.x;
-                            //var y2 = target.z - camara.position.z;// - target.z;
-                            //var l2 = Math.sqrt(x2 * x2 + y2 * y2);
-                            //if (l2 > 0.001) {
-                            //    var c2 = new Complex(x2 / l2, -y2 / l2);
-                            //    var c3 = c2.divide(c1);
-
-                            //    if (Math.abs(c3.r) < 1) {
-                            //        var delta = Math.acos(c3.r);
-                            //        if (delta != NaN)
-                            //            if (c3.i > 0)
-                            //                rotateLeft(delta);
-                            //            else
-                            //                rotateLeft(-delta);
-                            //        //if (delta > 0.01)
-                            //    }
-                            //    //else
-                            //    //    rotateLeft(delta / 50);
-                            //    scope.update();
-                            //}
-                        }
-                    }
-                    myGamepad.buttons.map(e => e.pressed).forEach((isPressed, buttonIndex) => {
-                        if (isPressed) {
-                            var keyFunction = function (f1, bi) {
-                                if (objMain.gamePadKeyState[bi] == undefined) {
-                                    f1();
-                                    // objMain.ws.send(JSON.stringify({ c: 'changeRoad' }));
-                                    objMain.gamePadKeyState[bi] = Date.now();
-                                }
-                                else if (Date.now() - objMain.gamePadKeyState[bi] > 800) {
-                                    f1();
-                                    //objMain.ws.send(JSON.stringify({ c: 'changeRoad' }));
-                                    objMain.gamePadKeyState[bi] = Date.now();
-                                }
-                            }
-                            if (buttonIndex == 0) {
-                                //key A
-                                if (document.getElementById('confirmAlert').style.zIndex == '10') {
-                                    //objMain.mainF.removeF.clearNearObj(objMain.controls.target.x, objMain.controls.target.z, objMain.buildingShowGroup);
-                                    document.getElementById('confirmAlert').confirmF();
-                                    document.getElementById('confirmAlert').style.zIndex = '-10';
-
+                            if (l2 > 0.05) {
+                                //var c2 = new Complex(x2 / l2, -y2 / l2);
+                                var angle = 0;
+                                if (-y2 / l2 > 0) {
+                                    angle = Math.acos(x2 / l2);
                                 }
                                 else {
+                                    angle = Math.PI * 2 - Math.acos(x2 / l2);
+                                }
+                                switch (objMain.gamePadState) {
+                                    case 'shop':
+                                        {
+                                            if (objMain.buildingGroup.children.length > 0) {
+                                                objMain.buildingGroup.children[0].rotation.set(0, angle, 0, 'XYZ')
+                                            }
+                                            // keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'AddModel' })) }, buttonIndex);
+                                        }; break;
+                                }
+                                //var camara = scope.object;
+                                //var target = scope.target;
+                                //var x2 = target.x - camara.position.x;// - target.x;
+                                //var y2 = target.z - camara.position.z;// - target.z;
+                                //var l2 = Math.sqrt(x2 * x2 + y2 * y2);
+                                //if (l2 > 0.001) {
+                                //    var c2 = new Complex(x2 / l2, -y2 / l2);
+                                //    var c3 = c2.divide(c1);
+
+                                //    if (Math.abs(c3.r) < 1) {
+                                //        var delta = Math.acos(c3.r);
+                                //        if (delta != NaN)
+                                //            if (c3.i > 0)
+                                //                rotateLeft(delta);
+                                //            else
+                                //                rotateLeft(-delta);
+                                //        //if (delta > 0.01)
+                                //    }
+                                //    //else
+                                //    //    rotateLeft(delta / 50);
+                                //    scope.update();
+                                //}
+                            }
+                        }
+                        myGamepad.buttons.map(e => e.pressed).forEach((isPressed, buttonIndex) => {
+                            if (isPressed) {
+                                var keyFunction = function (f1, bi) {
+                                    if (objMain.gamePadKeyState[bi] == undefined) {
+                                        f1();
+                                        // objMain.ws.send(JSON.stringify({ c: 'changeRoad' }));
+                                        objMain.gamePadKeyState[bi] = Date.now();
+                                    }
+                                    else if (Date.now() - objMain.gamePadKeyState[bi] > 800) {
+                                        f1();
+                                        //objMain.ws.send(JSON.stringify({ c: 'changeRoad' }));
+                                        objMain.gamePadKeyState[bi] = Date.now();
+                                    }
+                                }
+                                if (buttonIndex == 0) {
+                                    //key A
+                                    if (document.getElementById('confirmAlert').style.zIndex == '10') {
+                                        //objMain.mainF.removeF.clearNearObj(objMain.controls.target.x, objMain.controls.target.z, objMain.buildingShowGroup);
+                                        document.getElementById('confirmAlert').confirmF();
+                                        document.getElementById('confirmAlert').style.zIndex = '-10';
+
+                                    }
+                                    else {
+                                        switch (objMain.gamePadState) {
+                                            case 'shop':
+                                                {
+                                                    if (myGamepad.buttons[6].pressed && !myGamepad.buttons[7].pressed) {
+                                                        if (objMain.closestObjName != '') {
+                                                            objMain.buildingShowGroup.getObjectByName(objMain.closestObjName).scale.set(1, 1, 1);
+                                                            keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'EditModel', name: objMain.closestObjName })) }, buttonIndex);
+                                                        }
+                                                    }
+                                                    else if (myGamepad.buttons[7].pressed && !myGamepad.buttons[6].pressed) {
+                                                        keyFunction(function () {
+                                                            objMain.useAddNew = true;
+                                                            drawObjInFrontPage();
+                                                        }, buttonIndex);
+                                                    }
+                                                    else if (myGamepad.buttons[7].pressed && myGamepad.buttons[6].pressed) {
+                                                        if (objMain.closestObjName != '') {
+                                                            keyFunction(function () {
+                                                                var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
+                                                                objMain.ws.send(JSON.stringify({ c: 'UseModelObj', name: objMain.closestObjName, used: true }));
+                                                            }, buttonIndex);
+                                                            objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
+                                                            $.notify('use obj');
+                                                        }
+                                                    }
+                                                    else {
+                                                        keyFunction(function () {
+                                                            if (objMain.useAddNew) {
+                                                                sendNewModelToServer();
+                                                            }
+                                                            else {
+                                                                //= false;
+                                                                objMain.ws.send(JSON.stringify({ c: 'AddModel' }));
+                                                            }
+                                                        }, buttonIndex);
+                                                        //objMain.editingState = 'add';
+                                                    }
+                                                }; break;
+                                            case 'road':
+                                                {
+                                                    /*道路*/
+                                                    keyFunction(function () { setScense(); }, buttonIndex);
+
+                                                }; break;
+                                        }
+                                    }
+                                }
+                                if (buttonIndex == 1) {
+                                    //key B
+                                    if (document.getElementById('confirmAlert').style.zIndex == '10') {
+                                        document.getElementById('confirmAlert').style.zIndex = '-10';
+                                    }
+                                    else {
+                                        switch (objMain.gamePadState) {
+                                            case 'road':
+                                                {
+                                                    keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'changeRoad' })) }, buttonIndex);
+                                                }; break;
+                                            case 'shop':
+                                                {
+                                                    if ((!myGamepad.buttons[6].pressed) && myGamepad.buttons[7].pressed) {
+                                                        if (objMain.closestObjName != '') {
+                                                            document.getElementById('confirmAlert').style.zIndex = '10';
+                                                            document.getElementById('confirmAlert').confirmF = function () {
+                                                                keyFunction(function () {
+                                                                    var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
+                                                                    objMain.ws.send(JSON.stringify({ c: 'DeleteModel', name: objMain.closestObjName, x: objOperate.position.x, z: objOperate.position.z }));
+                                                                    objMain.buildingGroup.remove(objOperate);
+                                                                    objMain.buildingShowGroup.remove(objOperate);
+                                                                    //    objMain.buildingGroup.getObjectByName('ss')
+                                                                }, buttonIndex);
+                                                                objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
+                                                                $.notify('do del');
+                                                                //  $.noti
+                                                            }
+                                                        }
+                                                    }
+                                                    else if (myGamepad.buttons[6].pressed && (!myGamepad.buttons[7].pressed)) {
+                                                        //clearObj
+                                                        keyFunction(function () {
+                                                            var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
+                                                            objMain.ws.send(JSON.stringify({ c: 'ClearModelObj' }));
+                                                        }, buttonIndex);
+                                                        $.notify('清除多余的Model');
+                                                    }
+                                                    else if (myGamepad.buttons[6].pressed && myGamepad.buttons[7].pressed) {
+                                                        if (objMain.closestObjName != '') {
+                                                            keyFunction(function () {
+                                                                var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
+                                                                objMain.ws.send(JSON.stringify({ c: 'UseModelObj', name: objMain.closestObjName, used: false }));
+                                                            }, buttonIndex);
+                                                            objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
+                                                            $.notify('not use obj');
+                                                        }
+                                                    }
+                                                    else {
+                                                        objMain.useAddNew = false;
+                                                        objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
+                                                        objMain.mainF.removeF.clearGroup(objMain.groupOfOperatePanle);
+                                                        keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'ShowOBJFile', x: objMain.controls.target.x, z: objMain.controls.target.z })) }, buttonIndex);
+                                                    }
+                                                }; break;
+                                        }
+                                    }
+                                }
+                                if (buttonIndex == 2) {
+                                    //Key X 
+                                    if (document.getElementById('confirmAlert').style.zIndex == '10') {
+                                        document.getElementById('confirmAlert').style.zIndex = '-10';
+                                    }
+                                    switch (objMain.gamePadState) {
+                                        case 'shop':
+                                            {
+                                                if (myGamepad.buttons[7].pressed && !myGamepad.buttons[6].pressed) {
+                                                    if (objMain.closestObjName != '') {
+                                                        keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'GetModelDetail', name: objMain.closestObjName })) }, buttonIndex);
+                                                    }
+                                                }
+                                                else if (myGamepad.buttons[6].pressed && !myGamepad.buttons[7].pressed) {
+                                                    //downloadModel
+                                                    if (objMain.closestObjName != '') {
+                                                        keyFunction(function () {
+                                                            var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
+                                                            objMain.ws.send(JSON.stringify({ c: 'DownloadModel', name: objMain.closestObjName }));
+                                                        }, buttonIndex);
+                                                    }
+                                                }
+                                                else if (myGamepad.buttons[6].pressed && myGamepad.buttons[7].pressed) {
+                                                    keyFunction(function () {
+                                                        var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
+                                                        objMain.ws.send(JSON.stringify({ c: 'LockModelObj', name: objMain.closestObjName, used: true }));
+                                                    }, buttonIndex);
+                                                    objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
+                                                    $.notify('lock obj');
+                                                }
+                                                else if (objMain.buildingGroup.children.length > 0) {
+                                                    if (objMain.useAddNew == true) {
+                                                        var x = objMain.buildingGroup.children[0].position.x;
+                                                        var y = objMain.buildingGroup.children[0].position.y / objMain.heightAmplify;
+                                                        var z = objMain.buildingGroup.children[0].position.z;
+                                                        var rotationY = objMain.buildingGroup.children[0].rotation.y;
+                                                        keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'CreateNewObj', x: x, y: y, z: z, rotationY: rotationY, objNew: uploadObj.objNew() })) }, buttonIndex);
+                                                        objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
+                                                    }
+                                                    else {
+                                                        var x = objMain.buildingGroup.children[0].position.x;
+                                                        var y = objMain.buildingGroup.children[0].position.y / objMain.heightAmplify;
+                                                        var z = objMain.buildingGroup.children[0].position.z;
+                                                        var rotationY = objMain.buildingGroup.children[0].rotation.y;
+                                                        keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'SaveObj', x: x, y: y, z: z, rotationY: rotationY })) }, buttonIndex);
+                                                        objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
+                                                    }
+                                                }
+
+                                            }; break;
+                                        case 'road':
+                                            {
+                                                /*道路*/
+                                                keyFunction(function () { uploadBackground(); }, buttonIndex);
+                                                // uploadBackground();
+                                            }; break;
+                                    }
+                                }
+                                if (buttonIndex == 3) {
+                                    //key Y  
                                     switch (objMain.gamePadState) {
                                         case 'shop':
                                             {
                                                 if (myGamepad.buttons[6].pressed && !myGamepad.buttons[7].pressed) {
-                                                    if (objMain.closestObjName != '') {
-                                                        objMain.buildingShowGroup.getObjectByName(objMain.closestObjName).scale.set(1, 1, 1);
-                                                        keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'EditModel', name: objMain.closestObjName })) }, buttonIndex);
-                                                    }
+                                                    keyFunction(function () {
+                                                        var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
+                                                        objMain.ws.send(JSON.stringify({ c: 'PreviousUnLockedModel' }));
+                                                    }, buttonIndex);
+                                                    $.notify('PreviousUnLockedModel');
                                                 }
                                                 else if (myGamepad.buttons[7].pressed && !myGamepad.buttons[6].pressed) {
                                                     keyFunction(function () {
-                                                        objMain.useAddNew = true;
-                                                        drawObjInFrontPage();
+                                                        var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
+                                                        objMain.ws.send(JSON.stringify({ c: 'NextUnLockedModel' }));
                                                     }, buttonIndex);
+                                                    $.notify('NextUnLockedModel');
                                                 }
                                                 else if (myGamepad.buttons[7].pressed && myGamepad.buttons[6].pressed) {
-                                                    if (objMain.closestObjName != '') {
-                                                        keyFunction(function () {
-                                                            var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
-                                                            objMain.ws.send(JSON.stringify({ c: 'UseModelObj', name: objMain.closestObjName, used: true }));
-                                                        }, buttonIndex);
-                                                        objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
-                                                        $.notify('use obj');
+                                                    keyFunction(function () {
+                                                        var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
+                                                        objMain.ws.send(JSON.stringify({ c: 'LockModelObj', name: objMain.closestObjName, used: false }));
+                                                    }, buttonIndex);
+                                                    objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
+                                                    $.notify('unlock obj');
+                                                }
+                                                else {
+                                                    if (document.getElementById('confirmAlert').style.zIndex == '10') {
+                                                        document.getElementById('confirmAlert').style.zIndex = '-10';
+                                                    }
+                                                    objMain.mainF.removeF.clearNearObj(objMain.controls.target.x, objMain.controls.target.z, objMain.buildingShowGroup);
+                                                    keyFunction(function () {
+                                                        objMain.ws.send(JSON.stringify({ c: 'ShowOBJFile', x: objMain.controls.target.x, z: objMain.controls.target.z }));
+                                                    }, buttonIndex);
+                                                }
+                                            }; break;
+                                        case 'road':
+                                            {
+                                                if (myGamepad.buttons[6].pressed && !myGamepad.buttons[7].pressed) {
+                                                    keyFunction(function () { showFPBackground(); }, buttonIndex);
+                                                    // showFPBackground();
+                                                }
+                                                else if (myGamepad.buttons[7].pressed && !myGamepad.buttons[6].pressed) {
+                                                    keyFunction(function () { showFPBackgroundWithCode(); }, buttonIndex);
+                                                }
+                                                else if (myGamepad.buttons[7].pressed && myGamepad.buttons[6].pressed) {
+
+                                                }
+                                                else {
+                                                    keyFunction(function () { showBackground(); }, buttonIndex);
+                                                }
+
+                                            }; break;
+                                    }
+
+                                }
+                                if (buttonIndex == 4) {
+                                    //key LB
+                                    if (document.getElementById('confirmAlert').style.zIndex == '10') {
+                                        document.getElementById('confirmAlert').style.zIndex = '-10';
+                                    }
+                                    if (myGamepad.buttons[6].pressed) {
+                                        //key LB+LT
+                                        dollyOut(getZoomScale());
+                                        scope.update();
+                                    }
+                                    else if (myGamepad.buttons[7].pressed) {
+                                        //RT+LB
+                                        rotateUp(0.03);
+                                        scope.update();
+                                        // objMain.controls.getPolarAngle();
+                                        // myGamepad.buttons[6].pressed
+                                    }
+                                    else {
+                                        switch (objMain.gamePadState) {
+                                            case 'road':
+                                                {
+                                                    keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'previousCross' })) }, buttonIndex);
+                                                }; break;
+                                            //case 'road':
+                                            //    {
+                                            //        /*道路*/
+                                            //        keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'useBackground' })) }, buttonIndex);
+                                            //    }; break;
+                                        }
+                                    }
+                                }
+
+                                if (buttonIndex == 5) {
+                                    //key RB
+                                    if (document.getElementById('confirmAlert').style.zIndex == '10') {
+                                        document.getElementById('confirmAlert').style.zIndex = '-10';
+                                    }
+                                    if (myGamepad.buttons[6].pressed) {
+                                        dollyIn(getZoomScale());
+                                        scope.update();
+                                    }
+                                    else if (myGamepad.buttons[7].pressed) {
+                                        rotateUp(-0.03);
+                                        scope.update();
+                                        // objMain.controls.getPolarAngle();
+                                        // myGamepad.buttons[6].pressed
+                                    }
+                                    else {
+                                        switch (objMain.gamePadState) {
+                                            case 'road':
+                                                {
+                                                    keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'nextCross' })) }, buttonIndex);
+                                                }; break;
+                                            //case 'road':
+                                            //    {
+                                            //        /*道路*/
+                                            //        keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'unuseBackground' })) }, buttonIndex);
+                                            //    }; break;
+                                        }
+                                    }
+                                }
+                                if (buttonIndex == 8) {
+                                    //BACK key
+                                    if (document.getElementById('confirmAlert').style.zIndex == '10') {
+                                        document.getElementById('confirmAlert').style.zIndex = '-10';
+                                    }
+                                    if (document.getElementById('instruction').style.zIndex == '10') {
+                                        document.getElementById('instruction').style.zIndex = '-10';
+                                    }
+                                    else {
+                                        document.getElementById('instruction').style.zIndex = '10';
+                                    }
+                                }
+                                else if (buttonIndex == 9) {
+                                    // START key
+                                    if (document.getElementById('confirmAlert').style.zIndex == '10') {
+                                        document.getElementById('confirmAlert').style.zIndex = '-10';
+                                    }
+                                    keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'change' })) }, buttonIndex);
+                                    //  objMain.ws.send('')
+                                }
+
+                                if (buttonIndex == 12) {
+                                    //key ↑
+                                    if (document.getElementById('confirmAlert').style.zIndex == '10') {
+                                        document.getElementById('confirmAlert').style.zIndex = '-10';
+                                    }
+                                    switch (objMain.gamePadState) {
+                                        case 'shop':
+                                            {
+                                                if (myGamepad.buttons[6].pressed && !myGamepad.buttons[7].pressed) {
+                                                    var lengthOfCC = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target) / 50;
+                                                    if (objMain.buildingGroup.children.length > 0) {
+                                                        objMain.buildingGroup.children[0].position.y += lengthOfCC;
+                                                    }
+                                                }
+                                                else if (myGamepad.buttons[7].pressed && !myGamepad.buttons[6].pressed) {
+                                                    if (objMain.buildingGroup.children.length > 0) {
+                                                        var xValue = objMain.buildingGroup.children[0].position.x;
+                                                        var yValue = -objMain.buildingGroup.children[0].position.z;
+                                                        keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'LookForHeight', MercatorX: xValue, MercatorY: yValue })) }, buttonIndex);
                                                     }
                                                 }
                                                 else {
-                                                    keyFunction(function () {
-                                                        if (objMain.useAddNew) {
-                                                            sendNewModelToServer();
-                                                        }
-                                                        else {
-                                                            //= false;
-                                                            objMain.ws.send(JSON.stringify({ c: 'AddModel' }));
-                                                        }
-                                                    }, buttonIndex);
-                                                    //objMain.editingState = 'add';
+                                                    var lengthOfCC = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target) / 50;
+                                                    if (objMain.buildingGroup.children.length > 0) {
+                                                        objMain.buildingGroup.children[0].position.z -= lengthOfCC;
+                                                    }
+                                                    objMain.controls.target.z -= lengthOfCC;
+                                                    objMain.camera.position.z -= lengthOfCC;
+                                                    objMain.scene.getObjectByName('axesHelper').position.z -= lengthOfCC;
                                                 }
                                             }; break;
                                         case 'road':
                                             {
                                                 /*道路*/
-                                                keyFunction(function () { setScense(); }, buttonIndex);
-
+                                                keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'useBackground' })) }, buttonIndex);
                                             }; break;
                                     }
                                 }
-                            }
-                            if (buttonIndex == 1) {
-                                //key B
-                                if (document.getElementById('confirmAlert').style.zIndex == '10') {
-                                    document.getElementById('confirmAlert').style.zIndex = '-10';
-                                }
-                                else {
+                                if (buttonIndex == 13) {
+                                    //↓
+                                    if (document.getElementById('confirmAlert').style.zIndex == '10') {
+                                        document.getElementById('confirmAlert').style.zIndex = '-10';
+                                    }
                                     switch (objMain.gamePadState) {
-                                        case 'road':
-                                            {
-                                                keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'changeRoad' })) }, buttonIndex);
-                                            }; break;
                                         case 'shop':
                                             {
-                                                if ((!myGamepad.buttons[6].pressed) && myGamepad.buttons[7].pressed) {
-                                                    if (objMain.closestObjName != '') {
-                                                        document.getElementById('confirmAlert').style.zIndex = '10';
-                                                        document.getElementById('confirmAlert').confirmF = function () {
-                                                            keyFunction(function () {
-                                                                var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
-                                                                objMain.ws.send(JSON.stringify({ c: 'DeleteModel', name: objMain.closestObjName, x: objOperate.position.x, z: objOperate.position.z }));
-                                                                objMain.buildingGroup.remove(objOperate);
-                                                                objMain.buildingShowGroup.remove(objOperate);
-                                                                //    objMain.buildingGroup.getObjectByName('ss')
-                                                            }, buttonIndex);
-                                                            objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
-                                                            $.notify('do del');
-                                                            //  $.noti
-                                                        }
-                                                    }
-                                                }
-                                                else if (myGamepad.buttons[6].pressed && (!myGamepad.buttons[7].pressed)) {
-                                                    //clearObj
-                                                    keyFunction(function () {
-                                                        var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
-                                                        objMain.ws.send(JSON.stringify({ c: 'ClearModelObj' }));
-                                                    }, buttonIndex);
-                                                    $.notify('清除多余的Model');
-                                                }
-                                                else if (myGamepad.buttons[6].pressed && myGamepad.buttons[7].pressed) {
-                                                    if (objMain.closestObjName != '') {
-                                                        keyFunction(function () {
-                                                            var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
-                                                            objMain.ws.send(JSON.stringify({ c: 'UseModelObj', name: objMain.closestObjName, used: false }));
-                                                        }, buttonIndex);
-                                                        objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
-                                                        $.notify('not use obj');
+                                                if (myGamepad.buttons[6].pressed) {
+                                                    var lengthOfCC = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target) / 50;
+                                                    if (objMain.buildingGroup.children.length > 0) {
+                                                        objMain.buildingGroup.children[0].position.y -= lengthOfCC;
                                                     }
                                                 }
                                                 else {
-                                                    objMain.useAddNew = false;
-                                                    objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
-                                                    objMain.mainF.removeF.clearGroup(objMain.groupOfOperatePanle);
-                                                    keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'ShowOBJFile', x: objMain.controls.target.x, z: objMain.controls.target.z })) }, buttonIndex);
+                                                    var lengthOfCC = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target) / 50;
+                                                    if (objMain.buildingGroup.children.length > 0) {
+                                                        objMain.buildingGroup.children[0].position.z += lengthOfCC;
+                                                    }
+                                                    objMain.controls.target.z += lengthOfCC;
+                                                    objMain.camera.position.z += lengthOfCC;
+                                                    objMain.scene.getObjectByName('axesHelper').position.z += lengthOfCC;
                                                 }
                                             }; break;
-                                    }
-                                }
-                            }
-                            if (buttonIndex == 2) {
-                                //Key X 
-                                if (document.getElementById('confirmAlert').style.zIndex == '10') {
-                                    document.getElementById('confirmAlert').style.zIndex = '-10';
-                                }
-                                switch (objMain.gamePadState) {
-                                    case 'shop':
-                                        {
-                                            if (myGamepad.buttons[7].pressed && !myGamepad.buttons[6].pressed) {
-                                                if (objMain.closestObjName != '') {
-                                                    keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'GetModelDetail', name: objMain.closestObjName })) }, buttonIndex);
-                                                }
-                                            }
-                                            else if (myGamepad.buttons[6].pressed && !myGamepad.buttons[7].pressed) {
-                                                //downloadModel
-                                                if (objMain.closestObjName != '') {
-                                                    keyFunction(function () {
-                                                        var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
-                                                        objMain.ws.send(JSON.stringify({ c: 'DownloadModel', name: objMain.closestObjName }));
-                                                    }, buttonIndex);
-                                                }
-                                            }
-                                            else if (myGamepad.buttons[6].pressed && myGamepad.buttons[7].pressed) {
-                                                keyFunction(function () {
-                                                    var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
-                                                    objMain.ws.send(JSON.stringify({ c: 'LockModelObj', name: objMain.closestObjName, used: true }));
-                                                }, buttonIndex);
-                                                objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
-                                                $.notify('lock obj');
-                                            }
-                                            else if (objMain.buildingGroup.children.length > 0) {
-                                                if (objMain.useAddNew == true) {
-                                                    var x = objMain.buildingGroup.children[0].position.x;
-                                                    var y = objMain.buildingGroup.children[0].position.y / objMain.heightAmplify;
-                                                    var z = objMain.buildingGroup.children[0].position.z;
-                                                    var rotationY = objMain.buildingGroup.children[0].rotation.y;
-                                                    keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'CreateNewObj', x: x, y: y, z: z, rotationY: rotationY, objNew: uploadObj.objNew() })) }, buttonIndex);
-                                                    objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
-                                                }
-                                                else {
-                                                    var x = objMain.buildingGroup.children[0].position.x;
-                                                    var y = objMain.buildingGroup.children[0].position.y / objMain.heightAmplify;
-                                                    var z = objMain.buildingGroup.children[0].position.z;
-                                                    var rotationY = objMain.buildingGroup.children[0].rotation.y;
-                                                    keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'SaveObj', x: x, y: y, z: z, rotationY: rotationY })) }, buttonIndex);
-                                                    objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
-                                                }
-                                            }
-
-                                        }; break;
-                                    case 'road':
-                                        {
-                                            /*道路*/
-                                            keyFunction(function () { uploadBackground(); }, buttonIndex);
-                                            // uploadBackground();
-                                        }; break;
-                                }
-                            }
-                            if (buttonIndex == 3) {
-                                //key Y  
-                                switch (objMain.gamePadState) {
-                                    case 'shop':
-                                        {
-                                            if (myGamepad.buttons[6].pressed && !myGamepad.buttons[7].pressed) {
-                                                keyFunction(function () {
-                                                    var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
-                                                    objMain.ws.send(JSON.stringify({ c: 'PreviousUnLockedModel' }));
-                                                }, buttonIndex);
-                                                $.notify('PreviousUnLockedModel');
-                                            }
-                                            else if (myGamepad.buttons[7].pressed && !myGamepad.buttons[6].pressed) {
-                                                keyFunction(function () {
-                                                    var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
-                                                    objMain.ws.send(JSON.stringify({ c: 'NextUnLockedModel' }));
-                                                }, buttonIndex);
-                                                $.notify('NextUnLockedModel');
-                                            }
-                                            else if (myGamepad.buttons[7].pressed && myGamepad.buttons[6].pressed) {
-                                                keyFunction(function () {
-                                                    var objOperate = objMain.buildingShowGroup.getObjectByName(objMain.closestObjName);
-                                                    objMain.ws.send(JSON.stringify({ c: 'LockModelObj', name: objMain.closestObjName, used: false }));
-                                                }, buttonIndex);
-                                                objMain.mainF.removeF.clearGroup(objMain.buildingGroup);
-                                                $.notify('unlock obj');
-                                            }
-                                            else {
-                                                if (document.getElementById('confirmAlert').style.zIndex == '10') {
-                                                    document.getElementById('confirmAlert').style.zIndex = '-10';
-                                                }
-                                                objMain.mainF.removeF.clearNearObj(objMain.controls.target.x, objMain.controls.target.z, objMain.buildingShowGroup);
-                                                keyFunction(function () {
-                                                    objMain.ws.send(JSON.stringify({ c: 'ShowOBJFile', x: objMain.controls.target.x, z: objMain.controls.target.z }));
-                                                }, buttonIndex);
-                                            }
-                                        }; break;
-                                    case 'road':
-                                        {
-                                            if (myGamepad.buttons[6].pressed && !myGamepad.buttons[7].pressed) {
-                                                keyFunction(function () { showFPBackground(); }, buttonIndex);
-                                                // showFPBackground();
-                                            }
-                                            else if (myGamepad.buttons[7].pressed && !myGamepad.buttons[6].pressed) {
-                                                keyFunction(function () { showFPBackgroundWithCode(); }, buttonIndex);
-                                            }
-                                            else if (myGamepad.buttons[7].pressed && myGamepad.buttons[6].pressed) {
-
-                                            }
-                                            else {
-                                                keyFunction(function () { showBackground(); }, buttonIndex);
-                                            }
-
-                                        }; break;
-                                }
-
-                            }
-                            if (buttonIndex == 4) {
-                                //key LB
-                                if (document.getElementById('confirmAlert').style.zIndex == '10') {
-                                    document.getElementById('confirmAlert').style.zIndex = '-10';
-                                }
-                                if (myGamepad.buttons[6].pressed) {
-                                    //key LB+LT
-                                    dollyOut(getZoomScale());
-                                    scope.update();
-                                }
-                                else if (myGamepad.buttons[7].pressed) {
-                                    //RT+LB
-                                    rotateUp(0.03);
-                                    scope.update();
-                                    // objMain.controls.getPolarAngle();
-                                    // myGamepad.buttons[6].pressed
-                                }
-                                else {
-                                    switch (objMain.gamePadState) {
                                         case 'road':
                                             {
-                                                keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'previousCross' })) }, buttonIndex);
+                                                /*道路*/
+                                                keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'unuseBackground' })) }, buttonIndex);
                                             }; break;
-                                        //case 'road':
-                                        //    {
-                                        //        /*道路*/
-                                        //        keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'useBackground' })) }, buttonIndex);
-                                        //    }; break;
-                                    }
-                                }
-                            }
 
-                            if (buttonIndex == 5) {
-                                //key RB
-                                if (document.getElementById('confirmAlert').style.zIndex == '10') {
-                                    document.getElementById('confirmAlert').style.zIndex = '-10';
-                                }
-                                if (myGamepad.buttons[6].pressed) {
-                                    dollyIn(getZoomScale());
-                                    scope.update();
-                                }
-                                else if (myGamepad.buttons[7].pressed) {
-                                    rotateUp(-0.03);
-                                    scope.update();
-                                    // objMain.controls.getPolarAngle();
-                                    // myGamepad.buttons[6].pressed
-                                }
-                                else {
-                                    switch (objMain.gamePadState) {
-                                        case 'road':
-                                            {
-                                                keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'nextCross' })) }, buttonIndex);
-                                            }; break;
-                                        //case 'road':
-                                        //    {
-                                        //        /*道路*/
-                                        //        keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'unuseBackground' })) }, buttonIndex);
-                                        //    }; break;
                                     }
                                 }
-                            }
-                            if (buttonIndex == 8) {
-                                //BACK key
-                                if (document.getElementById('confirmAlert').style.zIndex == '10') {
-                                    document.getElementById('confirmAlert').style.zIndex = '-10';
-                                }
-                                if (document.getElementById('instruction').style.zIndex == '10') {
-                                    document.getElementById('instruction').style.zIndex = '-10';
-                                }
-                                else {
-                                    document.getElementById('instruction').style.zIndex = '10';
-                                }
-                            }
-                            else if (buttonIndex == 9) {
-                                // START key
-                                if (document.getElementById('confirmAlert').style.zIndex == '10') {
-                                    document.getElementById('confirmAlert').style.zIndex = '-10';
-                                }
-                                keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'change' })) }, buttonIndex);
-                                //  objMain.ws.send('')
-                            }
+                                if (buttonIndex == 14) {
+                                    //key ←
+                                    if (document.getElementById('confirmAlert').style.zIndex == '10') {
+                                        document.getElementById('confirmAlert').style.zIndex = '-10';
+                                    }
+                                    if (myGamepad.buttons[6].pressed) {
+                                        if (objMain.buildingGroup.children.length > 0) {
+                                            keyFunction(function () {
+                                                objMain.useAddNew = false;
+                                                objMain.ws.send(JSON.stringify({ c: 'PreviousModel' }))
+                                            }, buttonIndex);
+                                        }
+                                    }
+                                    else if (myGamepad.buttons[7].pressed) {
+                                        if (objMain.buildingGroup.children.length > 0) {
+                                            keyFunction(function () {
+                                                objMain.useAddNew = false;
+                                                objMain.ws.send(JSON.stringify({ c: 'PreviousUser' }))
+                                            }, buttonIndex);
+                                        }
+                                    }
+                                    else {
+                                        switch (objMain.gamePadState) {
+                                            case 'shop':
+                                                {
+                                                    var lengthOfCC = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target) / 50;
+                                                    if (objMain.buildingGroup.children.length > 0) {
+                                                        objMain.buildingGroup.children[0].position.x -= lengthOfCC;
+                                                    }
+                                                    objMain.controls.target.x -= lengthOfCC;
+                                                    objMain.camera.position.x -= lengthOfCC;
+                                                    objMain.scene.getObjectByName('axesHelper').position.x -= lengthOfCC;
 
-                            if (buttonIndex == 12) {
-                                //key ↑
-                                if (document.getElementById('confirmAlert').style.zIndex == '10') {
-                                    document.getElementById('confirmAlert').style.zIndex = '-10';
+                                                }; break;
+                                        }
+                                    }
                                 }
-                                switch (objMain.gamePadState) {
-                                    case 'shop':
-                                        {
-                                            if (myGamepad.buttons[6].pressed && !myGamepad.buttons[7].pressed) {
-                                                var lengthOfCC = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target) / 50;
-                                                if (objMain.buildingGroup.children.length > 0) {
-                                                    objMain.buildingGroup.children[0].position.y += lengthOfCC;
-                                                }
-                                            }
-                                            else if (myGamepad.buttons[7].pressed && !myGamepad.buttons[6].pressed) {
-                                                if (objMain.buildingGroup.children.length > 0) {
-                                                    var xValue = objMain.buildingGroup.children[0].position.x;
-                                                    var yValue = -objMain.buildingGroup.children[0].position.z;
-                                                    keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'LookForHeight', MercatorX: xValue, MercatorY: yValue })) }, buttonIndex);
-                                                }
-                                            }
-                                            else {
-                                                var lengthOfCC = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target) / 50;
-                                                if (objMain.buildingGroup.children.length > 0) {
-                                                    objMain.buildingGroup.children[0].position.z -= lengthOfCC;
-                                                }
-                                                objMain.controls.target.z -= lengthOfCC;
-                                                objMain.camera.position.z -= lengthOfCC;
-                                                objMain.scene.getObjectByName('axesHelper').position.z -= lengthOfCC;
-                                            }
-                                        }; break;
-                                    case 'road':
-                                        {
-                                            /*道路*/
-                                            keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'useBackground' })) }, buttonIndex);
-                                        }; break;
-                                }
-                            }
-                            if (buttonIndex == 13) {
-                                //↓
-                                if (document.getElementById('confirmAlert').style.zIndex == '10') {
-                                    document.getElementById('confirmAlert').style.zIndex = '-10';
-                                }
-                                switch (objMain.gamePadState) {
-                                    case 'shop':
-                                        {
-                                            if (myGamepad.buttons[6].pressed) {
-                                                var lengthOfCC = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target) / 50;
-                                                if (objMain.buildingGroup.children.length > 0) {
-                                                    objMain.buildingGroup.children[0].position.y -= lengthOfCC;
-                                                }
-                                            }
-                                            else {
-                                                var lengthOfCC = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target) / 50;
-                                                if (objMain.buildingGroup.children.length > 0) {
-                                                    objMain.buildingGroup.children[0].position.z += lengthOfCC;
-                                                }
-                                                objMain.controls.target.z += lengthOfCC;
-                                                objMain.camera.position.z += lengthOfCC;
-                                                objMain.scene.getObjectByName('axesHelper').position.z += lengthOfCC;
-                                            }
-                                        }; break;
-                                    case 'road':
-                                        {
-                                            /*道路*/
-                                            keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'unuseBackground' })) }, buttonIndex);
-                                        }; break;
+                                if (buttonIndex == 15) {
+                                    //key →
+                                    if (document.getElementById('confirmAlert').style.zIndex == '10') {
+                                        document.getElementById('confirmAlert').style.zIndex = '-10';
+                                    }
+                                    if (myGamepad.buttons[6].pressed) {
+                                        if (objMain.buildingGroup.children.length > 0) {
+                                            keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'NextModel' })) }, buttonIndex);
+                                        }
+                                    }
+                                    else if (myGamepad.buttons[7].pressed) {
+                                        if (objMain.buildingGroup.children.length > 0) {
+                                            keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'NextUser' })) }, buttonIndex);
+                                        }
+                                    }
+                                    else {
+                                        switch (objMain.gamePadState) {
+                                            case 'shop':
+                                                {
+                                                    var lengthOfCC = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target) / 50;
+                                                    if (objMain.buildingGroup.children.length > 0) {
+                                                        objMain.buildingGroup.children[0].position.x += lengthOfCC;
+                                                    }
+                                                    objMain.controls.target.x += lengthOfCC;
+                                                    objMain.scene.getObjectByName('axesHelper').position.x += lengthOfCC;
+                                                    objMain.camera.position.x += lengthOfCC;
+                                                    //objMain.buildingGroup.children[0].rotation.set(0, angle, 0, 'XYZ')
 
+                                                    // keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'AddModel' })) }, buttonIndex);
+                                                }; break;
+                                        }
+                                    }
                                 }
+                                //console.log('0', myGamepad.buttons[buttonIndex]);
+                                //console.log('1', myGamepad);
+                                // button is pressed; indicate this on the page
+                                // document.body.innerHTML += `<h1>Button ${buttonIndex} is pressed</h1>`;
                             }
-                            if (buttonIndex == 14) {
-                                //key ←
-                                if (document.getElementById('confirmAlert').style.zIndex == '10') {
-                                    document.getElementById('confirmAlert').style.zIndex = '-10';
-                                }
-                                if (myGamepad.buttons[6].pressed) {
-                                    if (objMain.buildingGroup.children.length > 0) {
-                                        keyFunction(function () {
-                                            objMain.useAddNew = false;
-                                            objMain.ws.send(JSON.stringify({ c: 'PreviousModel' }))
-                                        }, buttonIndex);
-                                    }
-                                }
-                                else if (myGamepad.buttons[7].pressed) {
-                                    if (objMain.buildingGroup.children.length > 0) {
-                                        keyFunction(function () {
-                                            objMain.useAddNew = false;
-                                            objMain.ws.send(JSON.stringify({ c: 'PreviousUser' }))
-                                        }, buttonIndex);
-                                    }
-                                }
-                                else {
-                                    switch (objMain.gamePadState) {
-                                        case 'shop':
-                                            {
-                                                var lengthOfCC = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target) / 50;
-                                                if (objMain.buildingGroup.children.length > 0) {
-                                                    objMain.buildingGroup.children[0].position.x -= lengthOfCC;
-                                                }
-                                                objMain.controls.target.x -= lengthOfCC;
-                                                objMain.camera.position.x -= lengthOfCC;
-                                                objMain.scene.getObjectByName('axesHelper').position.x -= lengthOfCC;
-
-                                            }; break;
-                                    }
-                                }
-                            }
-                            if (buttonIndex == 15) {
-                                //key →
-                                if (document.getElementById('confirmAlert').style.zIndex == '10') {
-                                    document.getElementById('confirmAlert').style.zIndex = '-10';
-                                }
-                                if (myGamepad.buttons[6].pressed) {
-                                    if (objMain.buildingGroup.children.length > 0) {
-                                        keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'NextModel' })) }, buttonIndex);
-                                    }
-                                }
-                                else if (myGamepad.buttons[7].pressed) {
-                                    if (objMain.buildingGroup.children.length > 0) {
-                                        keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'NextUser' })) }, buttonIndex);
-                                    }
-                                }
-                                else {
-                                    switch (objMain.gamePadState) {
-                                        case 'shop':
-                                            {
-                                                var lengthOfCC = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target) / 50;
-                                                if (objMain.buildingGroup.children.length > 0) {
-                                                    objMain.buildingGroup.children[0].position.x += lengthOfCC;
-                                                }
-                                                objMain.controls.target.x += lengthOfCC;
-                                                objMain.scene.getObjectByName('axesHelper').position.x += lengthOfCC;
-                                                objMain.camera.position.x += lengthOfCC;
-                                                //objMain.buildingGroup.children[0].rotation.set(0, angle, 0, 'XYZ')
-
-                                                // keyFunction(function () { objMain.ws.send(JSON.stringify({ c: 'AddModel' })) }, buttonIndex);
-                                            }; break;
-                                    }
-                                }
-                            }
-                            //console.log('0', myGamepad.buttons[buttonIndex]);
-                            //console.log('1', myGamepad);
-                            // button is pressed; indicate this on the page
-                            // document.body.innerHTML += `<h1>Button ${buttonIndex} is pressed</h1>`;
-                        }
-                    })
+                        })
+                    }
                 }
             }, 100)
             //  scope.gamePad = event.gamepad;

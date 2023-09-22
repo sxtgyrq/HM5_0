@@ -965,11 +965,11 @@ namespace HouseManager5_0
         {
             harmValue += victim.confuseRecord.AmbushSelf(victim, that, at, gp);
         }
-        internal string updateMagic(MagicSkill ms, GetRandomPos grp)
-        {
-            throw new Exception("");
-            //   return this.updateAction(this, ms, grp, ms.Key);
-        }
+        //internal string updateMagic(MagicSkill ms, GetRandomPos grp)
+        //{
+        //    throw new Exception("");
+        //    //   return this.updateAction(this, ms, grp, ms.Key);
+        //}
         public delegate void SpeedMagicChanged(Player role, ref List<string> notifyMsgs);
         public delegate void AttackMagicChanged(Player role, ref List<string> notifyMsgs);
         public delegate void DefenceMagicChanged(Player role, ref List<string> notifyMsgs);

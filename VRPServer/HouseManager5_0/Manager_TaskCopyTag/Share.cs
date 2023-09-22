@@ -1,5 +1,7 @@
-﻿using CommonClass.databaseModel;
+﻿using CommonClass;
+using CommonClass.databaseModel;
 using DalOfAddress;
+using HouseManager5_0.GroupClassF;
 using HouseManager5_0.RoomMainF;
 using Microsoft.VisualBasic;
 using System;
@@ -35,6 +37,9 @@ namespace HouseManager5_0
             }
             catch { }
         }
+
+        
+
         protected partial class Share : TaskChain
         {
             public const string TaskCode = "URLSHARE";

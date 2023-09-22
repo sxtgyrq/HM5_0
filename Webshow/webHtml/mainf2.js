@@ -1,4 +1,21 @@
-﻿function TaskClass(s, c) {
+﻿var nyrqUrl =
+{
+    set: function (addr) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('addr', addr);
+        window.history.replaceState(null, null, url);
+    },
+    get: function () {
+        const url = new URL(window.location.href);
+        var parameter = url.searchParams.get('addr');
+        if (parameter == null || parameter == undefined) {
+            return '';
+        }
+        else return parameter;
+    }
+}
+
+function TaskClass(s, c) {
     this._state = s;
     this._carSelect = c;
     this._oldState = s;
@@ -80,7 +97,8 @@ var objMain =
         directionArrowC: null,
         Opponent: null,
         Teammate: null,
-        NitrogenEffect: null
+        NitrogenEffect: null,
+        CollectCoinIcon: null
     },
     shieldGroup: null,
     confusePrepareGroup: null,
@@ -94,6 +112,7 @@ var objMain =
     lightningMarkGroup: null,
     absorbGroup: null,
     directionGroup: null,
+    crossSelectionsOperator: null,
     targetGroup: null,
     marketGroup: null,
     clock: null,
@@ -700,7 +719,7 @@ var objMain =
 
             objMain.GetPositionNotify.data = null;
             SysOperatePanel.draw();
-            frequencyShow.show();
+            currentSelectionPreparationShow.show();
             operateStateShow.show();
 
 
@@ -963,7 +982,8 @@ var objMain =
             //            }; break;
             //    }
             //}
-        }
+        },
+        isSetByWeb: false
     },
     background:
     {
@@ -1705,6 +1725,28 @@ var objMain =
                     });
                     objMain.ws.send('SetNitrogenEffectIcon');
                 }; break;
+            case 'SetCoinIcon':
+                {
+                    ModelOperateF.f(received_obj, {
+                        bind: function (objectInput) {
+                            //objMain.ModelInput.ambushPrepare = objectInput;
+                            //objMain.ModelInput.directionArrow = objectInput;
+                            //var oldM = objectInput.children[0].material;
+                            //var newM = objectInput.children[0].material.clone();
+                            //newM.transparent = false;
+                            //newM.color = new THREE.Color(1.2, 1.2, 1.2);
+                            objectInput.name = 'collectCoinIcon'
+                            objMain.ModelInput.CollectCoinIcon =
+                            {
+                                'obj': objectInput
+                            };//objectInput;
+                        },
+                        transparent: { opacity: 0.8 },
+                        scale: { x: 1, y: 1, z: 1 },
+                        rotateX: Math.PI
+                    });
+                    objMain.ws.send('SetCoinIcon');
+                }; break;
             case 'BradCastAnimateOfOthersCar3':
                 {
                     var passObj = JSON.parse(evt.data);
@@ -1758,6 +1800,7 @@ var objMain =
             case 'BradCastMoneyForSave':
                 {
                     objMain.MoneyForSave = received_obj.Money;
+                  //  moneyOperator.updateSaveMoneyNotify();
                 }; break;
             case 'BradCastPromoteDiamondCount':
                 {
@@ -2054,7 +2097,9 @@ var objMain =
                 }; break;
             case 'BradCastMusicTheme':
                 {
-                    objMain.music.theme = received_obj.theme;
+                    if (objMain.music.isSetByWeb) { }
+                    else
+                        objMain.music.theme = received_obj.theme;
                 }; break;
             case 'BradCastBackground':
                 {
@@ -2508,6 +2553,10 @@ var objMain =
                 {
                     stateSet.nitrogeneffect.showVisible(received_obj.NitrogenValue);
                 }; break;
+            case 'ShowRoadCrossSelectionsOperator':
+                {
+                    ShowRoadCrossSelectionsOperator.show(received_obj);
+                }; break;
             default:
                 {
                     console.log('命令未注册', received_obj.c + "__没有注册。");
@@ -2549,6 +2598,17 @@ var objMain =
     buildingData: {
         aModel: {},
         dModel: {}
+    },
+    selection: {
+        first: -1, isZooming: false, initialize: function (msg2) {
+            objMain.selection.first = -1;
+            objMain.selection.isZooming = false;
+            currentSelectionPreparationShow.updateFrequency('');
+            if (msg2 == undefined)
+                operateStateShow.update('');
+            else
+                operateStateShow.update(msg2);
+        }
     }
 };
 var startA = function () {
@@ -3126,7 +3186,7 @@ function animate() {
                                         selectObj.scale.set(scale, scale * 1.1, scale);
 
                                         var fp = selectObj.userData.Fp;//
-                                        var baseY = MercatorGetZbyHeight(fp.Height);
+                                        var baseY = MercatorGetZbyHeight(fp.Height) * objMain.heightAmplify;
                                         selectObj.position.y = baseY + Math.sin(Date.now() % 3000 / 3000 * Math.PI) * scale / 4;
                                         selectObj.rotation.y = (Date.now() % 8000 / 8000) * Math.PI * 2;
                                         //objMain.ws.send(JSON.stringify({ 'c': 'Promote', 'pType': objMain.Task.state }));
@@ -3194,7 +3254,19 @@ function animate() {
 
                     }
 
-
+                    if (objMain.carState.car == 'selecting') {
+                        if (objMain.directionGroup.children.length > 0) {
+                            var newDirectionModle = objMain.directionGroup.children[0];
+                            var roleKey = 'car_' + objMain.indexKey;
+                            var car_self = objMain.carGroup.getObjectByName(roleKey);
+                            if (car_self) {
+                                var x = newDirectionModle.position.x;
+                                var y = newDirectionModle.position.y + 0.1;
+                                var z = newDirectionModle.position.z;
+                                car_self.position.set(x, y, z);
+                            }
+                        }
+                    }
                     var selfsCarIsMoving = false;
                     {
                         var keys = Object.keys(objMain.carsAnimateData);//获取素有的Key
@@ -3280,6 +3352,9 @@ function animate() {
                         }
                         else if (selectIndex == 3) {
                             objMain.directionGroup.children[selectIndex].children[0].material = objMain.ModelInput.directionArrowC.newM;
+                        }
+                        else {
+                            objMain.selection.initialize();
                         }
                     }
 
@@ -3965,6 +4040,7 @@ var set3DHtml = function () {
         objMain.fightSituationGroup = registGroup(objMain.fightSituationGroup);
         objMain.groupOfTaskCopy = registGroup(objMain.groupOfTaskCopy);
         objMain.marketGroup = registGroup(objMain.marketGroup);
+        objMain.crossSelectionsOperator = registGroup(objMain.crossSelectionsOperator);
     }
     if (false) {
 
@@ -4014,19 +4090,44 @@ var set3DHtml = function () {
                     continue;
                 }
             }
-            if (selectIndex > 0) {
-
-                var rotationY = objMain.directionGroup.children[selectIndex].rotation.y;
-
-                if (objMain.directionGroup.children[selectIndex].userData.objState > 0) {
+            if (objMain.selection.isZooming) {
+                objMain.selection.isZooming = false;
+            }
+            else if (selectIndex > 0) {
+                if (objMain.selection.first == selectIndex) {
+                    var rotationY = objMain.directionGroup.children[selectIndex].rotation.y;
+                    if (objMain.directionGroup.children[selectIndex].userData.objState > 0) {
+                    }
+                    else {
+                        var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': objMain.directionGroup.children[selectIndex].userData.postionCrossKey, 'uid': '' });
+                        objMain.ws.send(json);
+                        //userData.objState
+                        objMain.directionGroup.children[selectIndex].userData.objState = 1;
+                        objMain.selection.initialize();
+                    }
                 }
                 else {
-                    var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': objMain.directionGroup.children[selectIndex].userData.postionCrossKey, 'uid': '' });
-                    objMain.ws.send(json);
-                    //userData.objState
-                    objMain.directionGroup.children[selectIndex].userData.objState = 1;
+                    objMain.selection.first = selectIndex;
+                    switch (selectIndex) {
+                        case 1: {
+                            //$.notify('再次点击选择A', 'msg');
+                            currentSelectionPreparationShow.updateFrequency('确认选A');
+                            operateStateShow.update('请再点击');
+                        }; break;
+                        case 2: {
+                            //$.notify('再次点击选择B', 'msg');
+                            currentSelectionPreparationShow.updateFrequency('确认选B');
+                            operateStateShow.update('请再点击');
+                        }; break;
+                        case 3: {
+                            //$.notify('再次点击选择C', 'msg');
+                            currentSelectionPreparationShow.updateFrequency('确认选C');
+                            operateStateShow.update('请再点击');
+                        }; break;
+                    }
 
                 }
+
                 operatePanel.refresh();
             }
         }
@@ -5124,11 +5225,18 @@ var operatePanel =
             divTaskOperatingPanel.style.top = 'calc(50% - 6em - 4px)';
             divTaskOperatingPanel.style.right = 'calc(50% - 6em - 10px)';
 
-            if (objMain.directionGroup.children.length > 2)
+            if (objMain.directionGroup.children.length > 2) {
                 divTaskOperatingPanel.style.height = 'calc(9.27em + 4.59px)';
-            if (objMain.directionGroup.children.length > 3)
+                divTaskOperatingPanel.style.top = 'calc(50% - 6em - 4px)';
+            }
+            if (objMain.directionGroup.children.length > 3) {
                 divTaskOperatingPanel.style.height = 'calc(12.36em + 6.12px)';
-
+                divTaskOperatingPanel.style.top = 'calc(50% - 9em - 10px)';
+            }
+            if (objMain.directionGroup.children.length > 4) {
+                divTaskOperatingPanel.style.height = 'calc(15.45em + 7.65px)';
+                divTaskOperatingPanel.style.top = 'calc(50% - 12em - 16px)';
+            }
             addItemToTaskOperatingPanle2('Pic/crossimg/cross.png', 'selectDirectionBtn', function () {
                 if (objMain.carState["car"] == 'selecting') {
 
@@ -5201,6 +5309,17 @@ var operatePanel =
                         }
                     }
                 }, objMain.directionGroup.children[3].userData.objState);
+
+            if (true)
+                addItemToTaskOperatingPanle2('Pic/crossimg/getrightAnswer.png', 'selectDirectionBtn_GetAnswer', function () {
+                    if (objMain.carState["car"] == 'selecting') {
+
+                        if (objMain.directionGroup.children.length > 0) {
+                            var json = JSON.stringify({ c: 'AskWhichToSelect' });
+                            objMain.ws.send(json);
+                        }
+                    }
+                }, 0);
         };
         switch (carState) {
             case 'waitAtBaseStation':
@@ -6216,8 +6335,12 @@ var stateSet =
                     diamondOnCar.scale.set(10, 11, 10);
                     var car = objMain.carGroup.getObjectByName('car_' + roleID);
                     if (car)
-                        if (!car.getObjectByName(diamondOnCar.name))
+                        if (!car.getObjectByName(diamondOnCar.name)) {
                             car.add(diamondOnCar);
+                            if (roleID == objMain.indexKey) {
+                                stateSet.diamond.updateHeight(roleID);
+                            }
+                        }
                 }
             }
         },
@@ -6231,6 +6354,19 @@ var stateSet =
                 }
             }
         },
+        updateHeight: function (roleID) {
+            var diamondNames = ['mile', 'business', 'volume', 'speed'];
+            for (var i = 0; i < diamondNames.length; i++) {
+                var diamondName = diamondNames[i];
+                var diamondOnCarName = 'car_' + diamondName + '_' + roleID;
+                var car = objMain.carGroup.getObjectByName('car_' + roleID);
+                if (car)
+                    if (car.getObjectByName(diamondOnCarName)) {
+                        var singleDiamond = car.getObjectByName(diamondOnCarName);
+                        singleDiamond.position.y = 35 + stateSet.coinIcon.iconCount * 4;
+                    }
+            }
+        }
     },
     clicktrail: null,
     nitrogeneffect:
@@ -6264,7 +6400,39 @@ var stateSet =
                 }
             }
         }
-    }
+    },
+    coinIcon:
+    {
+        iconCount: 0,
+        add: function (iconCount) {
+            var car = objMain.carGroup.getObjectByName('car_' + objMain.indexKey);
+            if (car) {
+                stateSet.coinIcon.iconCount = iconCount;
+                var positionX = 13;
+                var positionY = 32;
+                var positionZ = 0;
+                for (var i = 0; i < 10000; i++) {
+                    var oIcon = car.getObjectByName('collectCoinIcon_' + i.toString());
+                    if (oIcon) {
+                        car.remove(oIcon);
+                    }
+                    else {
+                        break;
+                    }
+                }
+                for (var i = 0; i < iconCount; i++) {
+                    var objAdd = objMain.ModelInput.CollectCoinIcon.obj.clone();
+                    objAdd.name = 'collectCoinIcon_' + i.toString();
+                    objAdd.scale.set(3, 3, 3);
+                    objAdd.rotateX(Math.PI / 2);
+                    objAdd.position.set(positionX, positionY + i * 4, positionZ);
+                    car.add(objAdd);
+
+                }
+                stateSet.diamond.updateHeight(objMain.indexKey);
+            }
+        }
+    },
 }
 var DirectionOperator =
 {
@@ -6305,6 +6473,7 @@ var DirectionOperator =
             }
         }
         operatePanel.refresh();
+        objMain.selection.initialize();
     },
     showWhenIsWrong: function (postionCrossKey) {
         for (var i = 1; i < objMain.directionGroup.children.length; i++) {
@@ -6347,6 +6516,62 @@ var DirectionOperator =
         }
     }
 };
+
+var ShowRoadCrossSelectionsOperator =
+{
+    data: null,
+    show: function (received_obj) {
+        ShowRoadCrossSelectionsOperator.data = received_obj;
+        objMain.mainF.removeF.clearGroup(objMain.crossSelectionsOperator);
+
+        for (var i = 0; i < received_obj.crossDirects.length; i += 6) {
+
+            var c = new Complex(
+                received_obj.crossDirects[i + 4] - received_obj.crossDirects[i + 1],
+                -(received_obj.crossDirects[i + 3] - received_obj.crossDirects[i + 0]));
+            c.toOne();
+
+
+            // var geometryData = [-0.309, 0.0955, -0.0955, 0.0955, -0.0955, 0.7135];
+            //var geometryData = [new Complex(-0.309, 0.0955), new Complex(-0.0955, 0.0955), new Complex(-0.0955, 0.7135)];
+            const zoom = 0.35;
+            {
+                var geometryData = [new Complex(-0.309, 0.0955), new Complex(-0.0955, 0.0955), new Complex(-0.0955, 0.7135)];
+                const points = [];
+
+                for (var j = 0; j < geometryData.length; j++) {
+                    var c1 = geometryData[j].multiply(c);//multiply
+                    points.push(new THREE.Vector3(
+                        received_obj.crossDirects[i + 0] + c1.r * zoom,
+                        received_obj.crossDirects[i + 2] * objMain.heightAmplify,
+                        -received_obj.crossDirects[i + 1] - c1.i * zoom)); // 起点坐标
+                }
+                const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+                const line = new THREE.Line(lineGeometry, ShowRoadCrossSelectionsOperator.lineMaterial);
+                objMain.crossSelectionsOperator.add(line);
+                //points.push(new THREE.Vector3(received_obj.crossDirects[i + 0], -received_obj.crossDirects[i + 2] * objMain.heightAmplify, -received_obj.crossDirects[i + 1])); // 起点坐标
+                //points.push(new THREE.Vector3(received_obj.crossDirects[i + 3], -received_obj.crossDirects[i + 5] * objMain.heightAmplify, -received_obj.crossDirects[i + 4])); // 起点坐标
+            }
+            {
+                var geometryData = [new Complex(0.309, 0.0955), new Complex(0.0955, 0.0955), new Complex(0.0955, 0.7135)];
+                const points = [];
+                for (var j = 0; j < geometryData.length; j++) {
+                    var c1 = geometryData[j].multiply(c);//multiply
+                    points.push(new THREE.Vector3(
+                        received_obj.crossDirects[i + 0] + c1.r * zoom,
+                        received_obj.crossDirects[i + 2] * objMain.heightAmplify,
+                        -received_obj.crossDirects[i + 1] - c1.i * zoom)); // 起点坐标
+                }
+                const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+                const line = new THREE.Line(lineGeometry, ShowRoadCrossSelectionsOperator.lineMaterial);
+                objMain.crossSelectionsOperator.add(line);
+                //points.push(new THREE.Vector3(received_obj.crossDirects[i + 0], -received_obj.crossDirects[i + 2] * objMain.heightAmplify, -received_obj.crossDirects[i + 1])); // 起点坐标
+                //points.push(new THREE.Vector3(received_obj.crossDirects[i + 3], -received_obj.crossDirects[i + 5] * objMain.heightAmplify, -received_obj.crossDirects[i + 4])); // 起点坐标
+            }
+        }
+    },
+    lineMaterial: new THREE.LineBasicMaterial({ color: 0x00ff00 })
+}
 
 var BuildingModelObj =
 {
@@ -6439,7 +6664,7 @@ var BuildingModelObj =
                             //  url = "https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/objmodel/" + amodelID + ".json";
                             //var ima
                             if (objMain.buildingGroup.getObjectByName(amID) == undefined) {
-                                var imgUrl = "https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/objmodel/" + amodelID + ".jpg";
+                                var imgUrl = "https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/objmodel/" + amID + ".jpg";
                                 var manager = new THREE.LoadingManager();
                                 mtlManaget = new THREE.MTLLoader(manager).loadTextWithImageUrl(mtlText, imgUrl, mtlOnload);
                             }

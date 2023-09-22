@@ -404,33 +404,33 @@
                 </tr>
                 <tr>
                     <td  style="border:1px solid #ccc;">￥5.00~￥9.99</td>
-                    <td style="border:1px solid #ccc;">200.00积分~396积分</td>
-                    <td style="border:1px solid #ccc;">40.00积分/￥</td>
+                    <td style="border:1px solid #ccc;">50.00积分~99.90积分</td>
+                    <td style="border:1px solid #ccc;">10.00积分/￥</td>
                 </tr>
                 <tr>
                     <td style="border:1px solid #ccc;">￥10.00~￥19.99</td>
-                    <td style="border:1px solid #ccc;">420.00积分~839.58积分</td>
-                    <td style="border:1px solid #ccc;">42.00积分/￥</td>
+                    <td style="border:1px solid #ccc;">105.00积分~209.89积分</td>
+                    <td style="border:1px solid #ccc;">10.50积分/￥</td>
                 </tr>
                 <tr>
                     <td style="border:1px solid #ccc;">￥20.00~￥49.99</td>
-                    <td style="border:1px solid #ccc;">880.00积分~2199.56积分</td>
-                    <td style="border:1px solid #ccc;">44.00积分/￥</td>
+                    <td style="border:1px solid #ccc;">220.00积分~549.89积分</td>
+                    <td style="border:1px solid #ccc;">11.00积分/￥</td>
                 </tr>
                 <tr>
                     <td style="border:1px solid #ccc;">￥50.00~￥99.99</td>
-                    <td style="border:1px solid #ccc;">2300.00积分~4599.54积分</td>
-                    <td style="border:1px solid #ccc;">46.00积分/￥</td>
+                    <td style="border:1px solid #ccc;">575.00积分~1149.88积分</td>
+                    <td style="border:1px solid #ccc;">11.50积分/￥</td>
                 </tr>
                 <tr>
                     <td style="border:1px solid #ccc;">￥100.00~￥199.99</td>
-                    <td style="border:1px solid #ccc;">4800.00积分~9599.52积分</td>
-                    <td style="border:1px solid #ccc;">48.00积分/￥</td>
+                    <td style="border:1px solid #ccc;">1200.00积分~2399.88积分</td>
+                    <td style="border:1px solid #ccc;">12.00积分/￥</td>
                 </tr>
                 <tr>
                     <td style="border:1px solid #ccc;">￥200.00及以上</td>
-                    <td style="border:1px solid #ccc;">10000积分~∞</td>
-                    <td style="border:1px solid #ccc;">50.00积分/￥</td>
+                    <td style="border:1px solid #ccc;">2500积分~∞</td>
+                    <td style="border:1px solid #ccc;">12.5积分/￥</td>
                 </tr>
             </table>
         </div>

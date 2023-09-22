@@ -487,6 +487,13 @@ namespace WsOfWebClient
                     return null;
                 }
 
+                coinIcon ci = new coinIcon();
+                if (SetModelCopy(ci, connectInfoDetail)) { }
+                else
+                {
+                    return null;
+                }
+
                 result = setState(s, connectInfoDetail, LoginState.OnLine);
 
                 {
@@ -845,6 +852,49 @@ namespace WsOfWebClient
             public void setObj(string obj)
             {
                 ConnectInfo.DirectionObj = obj;
+            }
+        }
+
+        class coinIcon : interfaceTag.modelForCopy
+        {
+            public string Tag { get { return ConnectInfo.CoinIconBase64; } }
+
+            public string imgPath { get { return "model/coin/c.jpg"; } }
+
+            public string mtlPath { get { return "model/coin/c.mtl"; } }
+
+            public string objPath { get { return "model/coin/c.obj"; } }
+
+            public string Command { get { return "SetCoinIcon"; } }
+
+            public string GetImg()
+            {
+                return ConnectInfo.CoinIconBase64;
+            }
+
+            public string GetMtl()
+            {
+                return ConnectInfo.CoinIconMtl;
+            }
+
+            public string GetObj()
+            {
+                return ConnectInfo.CoinIconObj;
+            }
+
+            public void SetImgBase64(string base64)
+            {
+                ConnectInfo.CoinIconBase64 = base64;
+            }
+
+            public void SetMtl(string mtl)
+            {
+                ConnectInfo.CoinIconMtl = mtl;
+            }
+
+            public void setObj(string obj)
+            {
+                ConnectInfo.CoinIconObj = obj;
             }
         }
 
@@ -1228,6 +1278,36 @@ namespace WsOfWebClient
             return "";
             // throw new NotImplementedException();
         }
+        internal static string ask(State s)
+        {
+            var ms = new Ask()
+            {
+                c = "Ask",
+                Key = s.Key,
+                GroupKey = s.GroupKey
+            };
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ms);
+            Thread th = new Thread(() => Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg));
+            th.Start();
+            return "";
+            // throw new NotImplementedException();
+        }
+        //SaveInFile
+
+        internal static string saveInFile(State s)
+        {
+            var ms = new SaveInFile()
+            {
+                c = "SaveInFile",
+                Key = s.Key,
+                GroupKey = s.GroupKey
+            };
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ms);
+            Thread th = new Thread(() => Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg));
+            th.Start();
+            return "";
+            // throw new NotImplementedException();
+        }
 
         internal static string TakeApart(State s)
         {
@@ -1282,31 +1362,31 @@ namespace WsOfWebClient
             return "";
         }
 
-        internal static async Task<string> buyDiamond(State s, BuyDiamond bd)
-        {
-            {
-                switch (bd.pType)
-                {
-                    case "mile":
-                    case "business":
-                    case "volume":
-                    case "speed":
-                        {
-                            SetBuyDiamond sbd = new SetBuyDiamond()
-                            {
-                                c = "SetBuyDiamond",
-                                Key = s.Key,
-                                pType = bd.pType,
-                                count = Math.Min(bd.count, 50)
-                            };
-                            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(sbd);
-                            Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
-                        }; break;
-                    default: { }; break;
-                }
-            }
-            return "";
-        }
+        //internal static async Task<string> buyDiamond(State s, BuyDiamond bd)
+        //{
+        //    {
+        //        switch (bd.pType)
+        //        {
+        //            case "mile":
+        //            case "business":
+        //            case "volume":
+        //            case "speed":
+        //                {
+        //                    SetBuyDiamond sbd = new SetBuyDiamond()
+        //                    {
+        //                        c = "SetBuyDiamond",
+        //                        Key = s.Key,
+        //                        pType = bd.pType,
+        //                        count = Math.Min(bd.count, 50)
+        //                    };
+        //                    var msg = Newtonsoft.Json.JsonConvert.SerializeObject(sbd);
+        //                    Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+        //                }; break;
+        //            default: { }; break;
+        //        }
+        //    }
+        //    return "";
+        //}
 
         //internal static async Task<string> sellDiamond(State s, BuyDiamond bd)
         //{

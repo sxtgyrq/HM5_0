@@ -31,7 +31,7 @@ namespace HouseManager5_0
                             var player = (Player)role;
                             if (string.IsNullOrEmpty(player.levelObj.BtcAddr))
                             {
-                                player.levelObj.SetAddr(addr);
+                                player.levelObj.SetAddr(addr, signature);
                             }
                             else if (player.levelObj.BtcAddr == addr)
                             {

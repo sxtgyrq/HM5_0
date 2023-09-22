@@ -8,11 +8,12 @@ namespace HouseManager5_0.RoomMainF
 {
     public partial class RoomMain
     {
-        public string updateMagic(MagicSkill ms, GetRandomPos grp)
-        {
-            return this.magicE.updateMagic(ms, grp);
-            //throw new NotImplementedException();
-        }
+        //public string updateMagic(MagicSkill ms, GetRandomPos grp)
+        //{
+        //   // return this.magicE.updateMagic(ms, grp);
+        //    //throw new NotImplementedException();
+        //    return "";
+        //}
         internal void speedMagicChanged(Player role, ref List<string> notifyMsgs)
         {
             // throw new Exception("");

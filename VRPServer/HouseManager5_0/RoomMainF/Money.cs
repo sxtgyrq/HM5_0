@@ -1,5 +1,6 @@
 ﻿using CommonClass;
 using DalOfAddress;
+using HouseManager5_0.interfaceOfHM;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -213,6 +214,7 @@ namespace HouseManager5_0.RoomMainF
                                 var success = this.modelL.OrderToUpdateLevel(ots.Key, ots.GroupKey, ots.address, ots.signature);
                                 if (success)
                                 {
+                                    var player = group._PlayerInGroup[ots.Key];
                                     var Referer = DalOfAddress.MoneyRefererAdd.GetMoney(ots.address);
                                     if (Referer > 0)
                                     {
@@ -221,13 +223,18 @@ namespace HouseManager5_0.RoomMainF
                                     {
                                         long subsidizeGet, subsidizeLeft;
                                         DalOfAddress.MoneyGet.GetSubsidizeAndLeft(ots.address, ots.value, out subsidizeGet, out subsidizeLeft);
-                                        var player = group._PlayerInGroup[ots.Key];
+                                        // var player = group._PlayerInGroup[ots.Key];
                                         ((Player)player).BTCAddress = ots.address;
                                         player.MoneySet(player.Money + subsidizeGet + Referer, ref notifyMsg);
                                         if (Referer > 0)
                                         {
                                             this.WebNotify(player, $"热心的分享使您获得了额外的{Referer / 100}.{(Referer % 100) / 10}{(Referer % 100) % 10}积分。");
-                                        };
+                                        }
+                                        else
+                                        {
+                                            this.WebNotify(player, $"系统当前没有检测到您对本网站的分享成果，分享可以获得积分，助您游戏！如何分享，请查看攻略与帮助！");
+                                        }
+                                        ;
                                         if (player.playerType == Player.PlayerType.player)
                                             this.SendLeftMoney((Player)player, subsidizeLeft, ots.address, ref notifyMsg);
                                     }

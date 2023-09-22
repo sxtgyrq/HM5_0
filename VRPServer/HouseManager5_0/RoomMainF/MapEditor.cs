@@ -1503,15 +1503,15 @@ namespace HouseManager5_0.RoomMainF
             }
             else
             {
-                var chargingValue = Convert.ToInt32(chargingObj.ChargingNum * 40m) * 100;
+                var chargingValue = Convert.ToInt32(chargingObj.ChargingNum * 10m) * 100;
 
                 /*
-                 *  0<v<10,price:40/Y
-                 *  10≤v<20,5%,price:42/Y 
-                 *  20≤v<50,10%,price:44/Y
-                 *  50≤v<100,15%,price:46/Y
-                 *  100≤v<200,20%,price:48/Y
-                 *  200≤v,25%,price:50/Y
+                 *  0<v<10,price:10.00/Y
+                 *  10≤v<20,5%,price:10.50/Y 
+                 *  20≤v<50,10%,price:11.00/Y
+                 *  50≤v<100,15%,price:11.50/Y
+                 *  100≤v<200,20%,price:12.00/Y
+                 *  200≤v,25%,price:12.50/Y
                  */
                 if (chargingObj.ChargingNum < 10)
                     chargingValue = chargingValue * 100 / 100;

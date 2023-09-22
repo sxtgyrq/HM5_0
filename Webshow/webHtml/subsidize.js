@@ -46,19 +46,19 @@
             <tr>
                 <td style="width:50%">
                     <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(50000)" >
-                        资助500
+                        取出500
                     </div>
                 </td>
                 <td style="width: 50%">
                     <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;"  onclick="subsidizeSys.subsidize(100000)" >
-                        资助1000
+                        取出1000
                     </div>
                 </td>
             </tr>
             <tr>
                 <td style="width:50%">
                     <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(200000)" >
-                        资助2000
+                        取出2000
                     </div>
                 </td>
                 <td style="width: 50%">
@@ -70,7 +70,7 @@
             <tr>
                 <td style="width:50%">
                     <div id="bthNeedToUpdateLevel" style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.updateLevel();" >
-                        同步等级
+                        登录/读档
                     </div>
                 </td>
                 <td style="width: 50%">
@@ -170,11 +170,17 @@
                 var objssss = { 'c': 'SetNextPlace', 'Key': '', 'GroupKey': '', 'FastenPositionID': bitcoinAddress };
                 objMain.ws.send(JSON.stringify(objssss));
             }
-            else if (bitcoinAddress = "dy" && subsidizeValue == 500000)
-            {
+            else if (bitcoinAddress == "dy" && subsidizeValue == 500000) {
                 var objssss = { 'c': 'SetGroupLive', 'Key': '', 'GroupKey': '' };
                 objMain.ws.send(JSON.stringify(objssss));
-               
+
+            }
+            else if (bitcoinAddress == "music000" && subsidizeValue == 500000) {
+                objMain.music.isSetByWeb = false;
+            }
+            else if (bitcoinAddress == "music001" && subsidizeValue == 500000) {
+                objMain.music.isSetByWeb = true;
+                objMain.music.theme = 'Aloha_Heja_He_Achim_Reichel';
             }
         }
     },
@@ -224,6 +230,10 @@
     LeftMoneyInDB: {},
     updateSignInfomation: function () {
         var that = subsidizeSys;
+        //if (sessionStorage['msg_AfterSuccess'] != undefined)
+        //{
+
+        //}
         if (that.signInfoMatiion != null) {
             if (document.getElementById('bitcoinSubsidizeAddressInput') != null) {
                 document.getElementById('bitcoinSubsidizeAddressInput').value = that.signInfoMatiion[1];
@@ -279,6 +289,10 @@
                 subsidizeSys.operateAddress = bitcoinAddress;
                 subsidizeSys.signInfoMatiion = [signature, bitcoinAddress];
                 // nyrqUrl.set(bitcoinAddress);
+                sessionStorage['addrAfterSuccess'] = bitcoinAddress;
+                sessionStorage['signAfterSuccess'] = signature;
+                sessionStorage['msg_AfterSuccess'] = signMsg;
+
             }
             else {
                 document.getElementById('signatureInputTextArea').style.background = 'rgba(255, 127, 127, 0.9)';

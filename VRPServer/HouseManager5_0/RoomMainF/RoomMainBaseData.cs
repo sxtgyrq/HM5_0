@@ -220,5 +220,6 @@ namespace HouseManager5_0.RoomMainF
         public Manager_Connection modelC;
         public Manager_Level modelL;
         public Manager_TaskCopy taskM;
+        public Manager_FileSave fileSM;
     }
 }

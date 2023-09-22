@@ -145,5 +145,10 @@ namespace WsOfWebClient
         public static string NitrogenIconBase64 = "";
         public static string NitrogenIconObj = "";
         public static string NitrogenIconMtl = "";
+
+        public static string CoinIconBase64 = "";
+        public static string CoinIconObj = "";
+        public static string CoinIconMtl = "";
+
     }
 }

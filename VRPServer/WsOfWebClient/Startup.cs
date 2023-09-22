@@ -92,7 +92,7 @@ namespace WsOfWebClient
             app.Map("/websocket", WebSocketF);
             // app.UseCors("AllowAny");
             app.Map("/bgimg", BackGroundImg);
-              app.Map("/objdata", ObjData);
+            app.Map("/objdata", ObjData);
             app.Map("/douyindata", douyindata);
             //app.Map("/websocket", WebSocketF);
             // app.Map("/notify", notify);
@@ -1203,6 +1203,22 @@ namespace WsOfWebClient
                                         {
                                             SetGroupLive snp = Newtonsoft.Json.JsonConvert.DeserializeObject<SetGroupLive>(returnResult.result);
                                             Room.SetGroupLive(s, snp);
+                                        }
+                                    }; break;
+                                case "AskWhichToSelect":
+                                    {
+                                        if (s.Ls == LoginState.OnLine)
+                                        {
+                                            AskWhichToSelect aws = Newtonsoft.Json.JsonConvert.DeserializeObject<AskWhichToSelect>(returnResult.result);
+                                            Room.ask(s);
+                                        }
+                                    }; break;
+                                case "RequstToSaveInFile":
+                                    {
+                                        if (s.Ls == LoginState.OnLine)
+                                        {
+                                            RequstToSaveInFile aws = Newtonsoft.Json.JsonConvert.DeserializeObject<RequstToSaveInFile>(returnResult.result);
+                                            Room.saveInFile(s);
                                         }
                                     }; break;
                                 default:

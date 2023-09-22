@@ -99,6 +99,12 @@ namespace WsOfWebClient
         public string postionCrossKey { get; set; }
         public string uid { get; set; }
     }
+    public class AskWhichToSelect : CommonClass.Command
+    {
+
+    }
+    public class RequstToSaveInFile : CommonClass.Command { }
+
     public class Bust : Attack
     {
         public int Target { get; set; }

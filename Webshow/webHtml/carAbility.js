@@ -106,8 +106,10 @@
         }
         {
             var id = carIndexStr + '_' + 'volume' + '_' + 'display';
-            if (document.getElementById(id) != null)
+            if (document.getElementById(id) != null) {
                 document.getElementById(id).innerText = '' + (this.data[carIndexStr].volume.costValue / 100).toFixed(2) + '/' + (this.data[carIndexStr].volume.sumValue / 100).toFixed(2);;
+                stateSet.coinIcon.add(this.data[carIndexStr].volume.costValue / 100);
+            }
         }
         {
             var id = carIndexStr + '_' + 'spanOfSpeedValue';

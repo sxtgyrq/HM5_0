@@ -40,6 +40,7 @@ namespace HouseManager5_0
 
     public partial class Data : GetRandomPos
     {
+
         public int GetFpCount()
         {
             return this._allFp.Count;
@@ -224,6 +225,94 @@ namespace HouseManager5_0
                     return null;
                 }
             // throw new NotImplementedException();
+        }
+
+        internal double[] GetRoadCrossAndCrossLine(string roadCode)
+        {
+            List<double> result = new List<double>();
+            var roadInfoMation = this._road[roadCode];
+            foreach (var item in roadInfoMation)
+            {
+                {
+                    var c = item.Value.Cross1;
+                    for (int i = 0; i < c.Length; i++)
+                    {
+                        var roadcode2 = c[i].RoadCode2;
+                        var roadorder2 = c[i].RoadOrder2;
+                        {
+                            double x, y, z;
+                            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(c[i].BDLongitude, c[i].BDLatitude, _road[roadcode2][roadorder2].endHeight, out x, out y, out z);
+                            result.Add(x);
+                            result.Add(y);
+                            result.Add(z);
+                        }
+                        {
+                            double x, y, z;
+                            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(_road[roadcode2][roadorder2].endLongitude, _road[roadcode2][roadorder2].endLatitude, _road[roadcode2][roadorder2].endHeight, out x, out y, out z);
+                            result.Add(x);
+                            result.Add(y);
+                            result.Add(z);
+                        }
+                        if (this._road[roadcode2][roadorder2].CarInOpposeDirection == 1)
+                        {
+                            {
+                                double x, y, z;
+                                CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(c[i].BDLongitude, c[i].BDLatitude, _road[roadcode2][roadorder2].startHeight, out x, out y, out z);
+                                result.Add(x);
+                                result.Add(y);
+                                result.Add(z);
+                            }
+                            {
+                                double x, y, z;
+                                CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(_road[roadcode2][roadorder2].startLongitude, _road[roadcode2][roadorder2].startLatitude, _road[roadcode2][roadorder2].startHeight, out x, out y, out z);
+                                result.Add(x);
+                                result.Add(y);
+                                result.Add(z);
+                            }
+                        }
+                    }
+                }
+                {
+                    var c = item.Value.Cross2;
+                    for (int i = 0; i < c.Length; i++)
+                    {
+                        var roadcode1 = c[i].RoadCode1;
+                        var roadorder1 = c[i].RoadOrder1;
+                        {
+                            double x, y, z;
+                            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(c[i].BDLongitude, c[i].BDLatitude, _road[roadcode1][roadorder1].endHeight, out x, out y, out z);
+                            result.Add(x);
+                            result.Add(y);
+                            result.Add(z);
+                        }
+                        {
+                            double x, y, z;
+                            CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(_road[roadcode1][roadorder1].endLongitude, _road[roadcode1][roadorder1].endLatitude, _road[roadcode1][roadorder1].endHeight, out x, out y, out z);
+                            result.Add(x);
+                            result.Add(y);
+                            result.Add(z);
+                        }
+                        if (this._road[roadcode1][roadorder1].CarInOpposeDirection == 1)
+                        {
+                            {
+                                double x, y, z;
+                                CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(c[i].BDLongitude, c[i].BDLatitude, _road[roadcode1][roadorder1].startHeight, out x, out y, out z);
+                                result.Add(x);
+                                result.Add(y);
+                                result.Add(z);
+                            }
+                            {
+                                double x, y, z;
+                                CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(_road[roadcode1][roadorder1].startLongitude, _road[roadcode1][roadorder1].startLatitude, _road[roadcode1][roadorder1].startHeight, out x, out y, out z);
+                                result.Add(x);
+                                result.Add(y);
+                                result.Add(z);
+                            }
+                        }
+                    }
+                }
+            }
+            return result.ToArray();
         }
 
 
@@ -657,6 +746,7 @@ namespace HouseManager5_0
         public Dictionary<string, string> AllCrossesBGData { get; private set; }
         public Dictionary<string, string> AllCrossesBGData_ { get; private set; }
         public Dictionary<string, int> CrossesNotHaveBGData { get; private set; }
+        public Dictionary<string, int> CrossesPlayerSelectWrong { get; private set; }
         internal void LoadCrossBackground()
         {
             {
@@ -668,6 +758,7 @@ namespace HouseManager5_0
                 }
 
                 this.CrossesNotHaveBGData = new Dictionary<string, int>();
+                this.CrossesPlayerSelectWrong = new Dictionary<string, int>();
             }
             {
                 //   foreach(CallConvThiscall.)
@@ -695,6 +786,21 @@ namespace HouseManager5_0
         /// </summary>
         Dictionary<string, Dictionary<int, OssModel.SaveRoad.RoadInfo>> _road;
 
+
+        Dictionary<string, string> _roadName;
+
+        internal string GetRoadName(string roadCode)
+        {
+            if (this._roadName.ContainsKey(roadCode))
+            {
+                return this._roadName[roadCode];
+            }
+            else
+            {
+                return "";
+            }
+        }
+
         /// <summary>
         /// all shop infomation
         /// </summary>
@@ -716,29 +822,44 @@ namespace HouseManager5_0
         {
             this.LoadRoad(Program.boundary, false);
         }
+        public string RoadDataSha256 { get; private set; }
         public void LoadRoad(Geometry.GetBoundryF f, bool unitTest)
         {
             var rootPath = System.IO.Directory.GetCurrentDirectory();
             //Consol.WriteLine($"path:{rootPath}");
-            var roadPath = $"{rootPath}\\DBPublish\\allroaddata.txt";
+
 
             // "fpDictionary": "F:\\MyProject\\VRPWithZhangkun\\MainApp\\DBPublish\\",
-            var fpDictionary = $"{rootPath}\\DBPublish\\";
 
-            string json;
-            using (StreamReader sr = new StreamReader(roadPath))
             {
-                json = sr.ReadToEnd();
+                var roadPath = $"{rootPath}\\DBPublish\\allroaddata.txt";
+                string json;
+                using (StreamReader sr = new StreamReader(roadPath))
+                {
+                    json = sr.ReadToEnd();
+                }
+                this.RoadDataSha256 = CommonClass.Random.GetSha256FromStr(json);
+                this._road = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, Dictionary<int, OssModel.SaveRoad.RoadInfo>>>(json);
+            }
+            {
+                var roadNamePath = $"{rootPath}\\DBPublish\\RoadsName.txt";
+                string json;
+                using (StreamReader sr = new StreamReader(roadNamePath))
+                {
+                    json = sr.ReadToEnd();
+                }
+                this._roadName = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            }
+            {
+                var fpDictionary = $"{rootPath}\\DBPublish\\";
+                this._allFp = GetAllFp(fpDictionary, f);
+
+                //Consol.WriteLine($"{this._road.Count}_{this._allFp.Count}");
+
+                this.pathCal = new PathCal(this, fpDictionary);
+                this.pathCal.cal(unitTest);
             }
 
-            this._road = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, Dictionary<int, OssModel.SaveRoad.RoadInfo>>>(json);
-
-            this._allFp = GetAllFp(fpDictionary, f);
-
-            //Consol.WriteLine($"{this._road.Count}_{this._allFp.Count}");
-
-            this.pathCal = new PathCal(this, fpDictionary);
-            this.pathCal.cal(unitTest);
         }
 
 
