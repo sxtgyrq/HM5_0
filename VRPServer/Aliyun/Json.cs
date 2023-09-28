@@ -49,7 +49,11 @@ namespace Aliyun
             if (!AliyunOSSHelper.loadSuccess)
                 AliyunOSSHelper.LoadKey();
 
-            AliyunOSSHelper.PutByte("yrqmodeldata", path, data);
+            var success = AliyunOSSHelper.PutByte("yrqmodeldata", path, data);
+            if(success) 
+            {
+                Console.WriteLine($"{path}存储成功！");
+            }
         }
     }
 }

@@ -291,7 +291,7 @@ namespace DalOfAddress
                             }
                         }
                         {
-                            const long costMoney = 10000 * 100;
+                            const long costMoney = 20000 * 100;
                             var moneyNow = DalOfAddress.MoneyAdd.GetMoney(con, tran, addrFrom);
                             if (moneyNow > costMoney)
                             {

@@ -299,6 +299,11 @@
             for (var indexOfArray = 0; indexOfArray < array.length; indexOfArray++) {
                 var list = array[indexOfArray];
                 var tableCenter = '';
+                var roleCountInTask = '';
+                switch (indexOfArray) {
+                    case 0: { roleCountInTask = '单人'; }; break;
+                    case 1: { roleCountInTask = '双人'; }; break;
+                }
                 for (var i = 0; i < list.length; i++) {
                     var bgColor = '#ff000020';
                     if (i % 2 == 0) {
@@ -329,7 +334,7 @@
                         <th colspan="5">申请地址↓</th>
                     </tr>
                     <tr style="background:${bgColor}">
-                        <td style="text-align:center;vertical-align:middle;">${list[i].TaskValue}</td>
+                        <td style="text-align:center;vertical-align:middle;">${roleCountInTask}${list[i].TaskValue}</td>
                         <td style="word-break:break-all;word-wrap:anywhere;" colspan="5">${list[i].applyAddr}</td>
                     </tr>
                     <tr style="background:${bgColor}">

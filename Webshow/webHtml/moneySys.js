@@ -179,9 +179,11 @@
                 }
             }
         }
-        else { }
-
-
+        else {
+            var el = document.getElementById('moneyServe');
+            if (el)
+                el.classList.remove('msg');
+        }
     },
     saveFile: function () {
         var obj = { "c": "RequstToSaveInFile" };

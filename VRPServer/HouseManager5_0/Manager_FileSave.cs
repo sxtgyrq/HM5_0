@@ -96,18 +96,17 @@ namespace HouseManager5_0
 
                         var endDate = DateTime.Today;
                         if (DateTime.Now.Hour >= 9)
-                            do
-                            {
-                                endDate = endDate.AddDays(1);
-                            }
-                            while (endDate.DayOfWeek != DayOfWeek.Wednesday);
+                            endDate = endDate.AddDays(1);
+                        while (endDate.DayOfWeek != DayOfWeek.Wednesday)
+                        {
+                            endDate = endDate.AddDays(1);
 
-                        //while (endDate.Hour < 8)
-                        //{
-                        //    endDate.AddMinutes(30);
-                        //}
+                        }
                         endDate = endDate.AddHours(8);
-                        this.WebNotify(player, $"已存档。请在{endDate.ToString("yyyy-MM-dd HH:mm:ss")}之前完成读档，继续游戏，过期作废！");
+                        that.WebNotify(player, $"已存档。请在{endDate.ToString("yyyy-MM-dd HH:mm:ss")}之前完成读档，继续游戏，过期作废！", 60); 
+                        that.WebNotify(player, "存档后，只能读一次档，读档后，直接删档，避免重复读档！", 60);
+                        that.WebNotify(player, "重新进入游戏后，不进行任何目标选取操作，直接登录，可完成读档。", 60);
+                        that.WebNotify(player, "读档完毕后，还可以继续存档。", 60);
                     }
 
                 }
@@ -270,6 +269,8 @@ namespace HouseManager5_0
 
                                                 group.askWhetherGoToPositon2(player.Key, Program.dt);
                                                 this.WebNotify(player, "成功读档");
+                                                this.WebNotify(player, "原档已删除。但可以继续存档，新建存档。");
+                                                Startup.sendSeveralMsgs(notifyMsgs);
                                             }
                                         }
                                 }
@@ -277,7 +278,7 @@ namespace HouseManager5_0
                         }
                     }
                 }
-                Startup.sendSeveralMsgs(notifyMsgs);
+
             }
             catch
             {

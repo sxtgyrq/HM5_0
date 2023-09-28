@@ -81,7 +81,7 @@ namespace HouseManager5_0.RoomMainF
             int OpenMore = -1;//第一次打开？
             var notifyMsgs = new List<string>();
             GroupClassF.GroupClass gc = null;
-         //   lock (this.PlayerLock)
+            //   lock (this.PlayerLock)
             {
                 if (string.IsNullOrEmpty(getPosition.GroupKey))
                 {
@@ -94,7 +94,7 @@ namespace HouseManager5_0.RoomMainF
             }
             if (gc != null)
             {
-               // lock (gc.PlayerLock)
+                // lock (gc.PlayerLock)
                 {
                     if (gc._PlayerInGroup.ContainsKey(getPosition.Key))
                     {
@@ -185,6 +185,31 @@ namespace HouseManager5_0.RoomMainF
                                 gc._PlayerInGroup[getPosition.Key].getCar().UpdateSelection();//保证前台的3D建立
                                 gc._PlayerInGroup[getPosition.Key].nntlF();
                                 askWhetherGoToPositon(getPosition.Key, getPosition.GroupKey, this.GetRandomPosObj);
+
+
+                                List<string> notifyMsgs2 = new List<string>();
+
+                                {
+                                    var usedRoadsList = player.usedRoadsList;
+                                    for (int i = 0; i < usedRoadsList.Count; i++)
+                                    {
+                                        var roadCode = usedRoadsList[i];
+                                        player.DrawSingleRoadF(player, roadCode, ref notifyMsgs2);
+
+                                    }
+                                    var models = Program.dt.models;
+                                    var modelHasShowed_old = player.modelHasShowed;
+                                    player.modelHasShowed = new Dictionary<string, bool>();
+                                    for (int i = 0; i < models.Count; i++)
+                                    {
+                                        Data.detailmodel modelNeedToShow = models[i];
+                                        if (modelHasShowed_old.ContainsKey(modelNeedToShow.modelID))
+                                        {
+                                            player.rm.modelM.setModel(player, modelNeedToShow, ref notifyMsgs2);
+                                        }
+                                    }
+                                }
+                                Startup.sendSeveralMsgs(notifyMsgs2);
                             }
                         }
                         else

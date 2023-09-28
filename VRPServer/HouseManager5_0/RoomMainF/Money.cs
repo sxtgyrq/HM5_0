@@ -190,67 +190,103 @@ namespace HouseManager5_0.RoomMainF
         {
             // throw new Exception();
 
-            List<string> notifyMsg = new List<string>();
-            if (BitCoin.Sign.checkSign(ots.signature, ots.Key, ots.address))
+            if (ots.value > 0)
             {
-                GroupClassF.GroupClass group = null;
-                // lock (this.PlayerLock)
+                List<string> notifyMsg = new List<string>();
+                if (BitCoin.Sign.checkSign(ots.signature, ots.Key, ots.address))
                 {
-
-                    if (string.IsNullOrEmpty(ots.GroupKey)) { }
-                    else if (this._Groups.ContainsKey(ots.GroupKey))
+                    GroupClassF.GroupClass group = null;
+                    // lock (this.PlayerLock)
                     {
-                        group = this._Groups[ots.GroupKey];
+
+                        if (string.IsNullOrEmpty(ots.GroupKey)) { }
+                        else if (this._Groups.ContainsKey(ots.GroupKey))
+                        {
+                            group = this._Groups[ots.GroupKey];
+                        }
                     }
-                }
-                if (group != null)
-                {
-                    // lock (group.PlayerLock)
+                    if (group != null)
                     {
                         if (group._PlayerInGroup.ContainsKey(ots.Key))
                         {
-                            if (!group._PlayerInGroup[ots.Key].Bust)
+                            var player = group._PlayerInGroup[ots.Key];
+                            if (string.IsNullOrEmpty(player.BTCAddress))
                             {
-                                var success = this.modelL.OrderToUpdateLevel(ots.Key, ots.GroupKey, ots.address, ots.signature);
-                                if (success)
+                                this.WebNotify(player, "取出金额以前请先登录！");
+                                return;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            {
+                List<string> notifyMsg = new List<string>();
+                if (BitCoin.Sign.checkSign(ots.signature, ots.Key, ots.address))
+                {
+                    GroupClassF.GroupClass group = null;
+                    // lock (this.PlayerLock)
+                    {
+
+                        if (string.IsNullOrEmpty(ots.GroupKey)) { }
+                        else if (this._Groups.ContainsKey(ots.GroupKey))
+                        {
+                            group = this._Groups[ots.GroupKey];
+                        }
+                    }
+                    if (group != null)
+                    {
+                        // lock (group.PlayerLock)
+                        {
+                            if (group._PlayerInGroup.ContainsKey(ots.Key))
+                            {
+                                if (!group._PlayerInGroup[ots.Key].Bust)
                                 {
-                                    var player = group._PlayerInGroup[ots.Key];
-                                    var Referer = DalOfAddress.MoneyRefererAdd.GetMoney(ots.address);
-                                    if (Referer > 0)
+                                    var success = this.modelL.OrderToUpdateLevel(ots.Key, ots.GroupKey, ots.address, ots.signature);
+                                    if (success)
                                     {
-                                        DalOfAddress.MoneyRefererGet.GetSubsidizeAndLeft(ots.address, Referer);
-                                    }
-                                    {
-                                        long subsidizeGet, subsidizeLeft;
-                                        DalOfAddress.MoneyGet.GetSubsidizeAndLeft(ots.address, ots.value, out subsidizeGet, out subsidizeLeft);
-                                        // var player = group._PlayerInGroup[ots.Key];
-                                        ((Player)player).BTCAddress = ots.address;
-                                        player.MoneySet(player.Money + subsidizeGet + Referer, ref notifyMsg);
+                                        var player = group._PlayerInGroup[ots.Key];
+                                        var Referer = DalOfAddress.MoneyRefererAdd.GetMoney(ots.address);
                                         if (Referer > 0)
                                         {
-                                            this.WebNotify(player, $"热心的分享使您获得了额外的{Referer / 100}.{(Referer % 100) / 10}{(Referer % 100) % 10}积分。");
+                                            DalOfAddress.MoneyRefererGet.GetSubsidizeAndLeft(ots.address, Referer);
                                         }
-                                        else
                                         {
-                                            this.WebNotify(player, $"系统当前没有检测到您对本网站的分享成果，分享可以获得积分，助您游戏！如何分享，请查看攻略与帮助！");
+                                            long subsidizeGet, subsidizeLeft;
+                                            DalOfAddress.MoneyGet.GetSubsidizeAndLeft(ots.address, ots.value, out subsidizeGet, out subsidizeLeft);
+                                            // var player = group._PlayerInGroup[ots.Key];
+                                            ((Player)player).BTCAddress = ots.address;
+                                            player.MoneySet(player.Money + subsidizeGet + Referer, ref notifyMsg);
+                                            if (Referer > 0)
+                                            {
+                                                this.WebNotify(player, $"热心的分享使您获得了额外的{Referer / 100}.{(Referer % 100) / 10}{(Referer % 100) % 10}积分。");
+                                            }
+                                            else
+                                            {
+                                                this.WebNotify(player, $"系统当前没有检测到您对本网站的分享成果，分享可以获得积分，助您游戏！如何分享，请查看攻略与帮助！");
+                                            }
+                                            ;
+                                            if (player.playerType == Player.PlayerType.player)
+                                                this.SendLeftMoney((Player)player, subsidizeLeft, ots.address, ref notifyMsg);
                                         }
-                                        ;
-                                        if (player.playerType == Player.PlayerType.player)
-                                            this.SendLeftMoney((Player)player, subsidizeLeft, ots.address, ref notifyMsg);
                                     }
                                 }
                             }
                         }
                     }
+
+                }
+                else
+                {
+                    //这里在web前台进行校验。
                 }
 
+                Startup.sendSeveralMsgs(notifyMsg);
             }
-            else
-            {
-                //这里在web前台进行校验。
-            }
-
-            Startup.sendSeveralMsgs(notifyMsg);
         }
 
         private void SendLeftMoney(Player player, long subsidizeLeft, string address, ref List<string> notifyMsg)

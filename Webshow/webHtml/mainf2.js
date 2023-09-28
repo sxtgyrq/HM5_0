@@ -2462,8 +2462,7 @@ var objMain =
                             whetherGo.show2();
                             smallMapClass.draw2(whetherGo.obj);
 
-                        }
-                        moneyOperator.updateSaveMoneyNotify();
+                        } 
                     }
                     else {
                         smallMapClass.draw(received_obj);
@@ -2562,7 +2561,7 @@ var objMain =
                     console.log('命令未注册', received_obj.c + "__没有注册。");
                 }; break;
         }
-
+        moneyOperator.updateSaveMoneyNotify();
     },
     diamondPrice:
     {
