@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static HouseManager5_0.Engine;
 using static HouseManager5_0.RoomMainF.RoomMain;
 
 namespace HouseManager5_0.GroupClassF
@@ -75,11 +76,24 @@ namespace HouseManager5_0.GroupClassF
                             { 37,-1}
                         };
                             ((Player)this._PlayerInGroup[checkItem.Key]).OpenMore++;
-                            this._PlayerInGroup[checkItem.Key].clearUsedRoad();
+
+                           
                             this._PlayerInGroup[checkItem.Key] = player;
-                            this._PlayerInGroup[checkItem.Key].modelHasShowed.Clear();
-                            //  ((Player)this._Players[checkItem.Key]).aModelHasShowed.Clear();
-                            this._PlayerInGroup[checkItem.Key].backgroundData.Clear();
+                            if (false)
+                            {
+                                // this._PlayerInGroup[checkItem.Key].modelHasShowed.Clear();
+                            }
+                            else
+                            {
+                                
+                            }
+                           
+                            if (false)
+                            {
+                                this._PlayerInGroup[checkItem.Key].backgroundData.Clear();
+                            }
+                            else
+                            { }
                             this._PlayerInGroup[checkItem.Key].getCar().WebSelf.Clear();
                         }
                         else

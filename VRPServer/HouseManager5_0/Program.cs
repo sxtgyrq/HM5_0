@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace HouseManager5_0
@@ -148,9 +149,32 @@ namespace HouseManager5_0
             {
                 if (Console.ReadLine().ToLower() == "exit")
                 {
-                    break;
+                    int countOfPlayersOnline = 0;
+                    if (Program.rm._Groups != null)
+                    {
+                        foreach (var groupItem in Program.rm._Groups)
+                        {
+                            foreach (var playerItem in groupItem.Value._PlayerInGroup)
+                            {
+                                if (playerItem.Value.IsOnline())
+                                {
+                                    countOfPlayersOnline++;
+                                }
+                            }
+                        }
+                    }
+                    if (countOfPlayersOnline > 0)
+                    {
+                        Console.WriteLine($"当前有{countOfPlayersOnline}人在线，未能退出！");
+                        continue;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
+            Environment.Exit(0);
         }
 
         private static void PlayersSysOperate(GetRandomPos grp)

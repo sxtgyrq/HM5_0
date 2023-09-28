@@ -60,7 +60,7 @@ namespace Aliyun
             {
                 // 创建存储空间。
                 var bucket = client.CreateBucket(bucketName);
-                Console.WriteLine($"创建存储空间《{bucketName}》成功");
+                // Console.WriteLine($"创建存储空间《{bucketName}》成功");
             }
             catch (Exception ex)
             {
@@ -87,7 +87,7 @@ namespace Aliyun
                     // 上传文件。
                     client.PutObject(bucketName, key, requestContent);
                 }
-                Console.WriteLine($"存储成功:{key}");
+                //Console.WriteLine($"存储成功:{key}");
             }
             catch (Exception ex)
             {
@@ -119,7 +119,7 @@ namespace Aliyun
                     }
                 }
 
-                Console.WriteLine($"读取成功:{key}，{text}");
+                // Console.WriteLine($"读取成功:{key}，{text}");
                 return text;
             }
             catch (Exception ex)
@@ -141,7 +141,7 @@ namespace Aliyun
                     // 上传文件。
                     client.PutObject(bucketName, key, requestContent);
                 }
-                Console.WriteLine($"存储成功:{key}");
+                //  Console.WriteLine($"存储成功:{key}");
             }
             catch (Exception ex)
             {
@@ -171,7 +171,7 @@ namespace Aliyun
             {
                 // 上传文件。
                 var result = client.PutObject(bucketName, key, fileToUpload);
-                Console.WriteLine($"上传文件《{key}》成功");
+                //Console.WriteLine($"上传文件《{key}》成功");
             }
             catch (Exception ex)
             {
@@ -222,7 +222,7 @@ namespace Aliyun
             {
                 // 删除文件。
                 client.DeleteObject(bucketName, key);
-                Console.WriteLine($"删除文件《{key}》成功");
+                //   Console.WriteLine($"删除文件《{key}》成功");
             }
             catch (Exception ex)
             {

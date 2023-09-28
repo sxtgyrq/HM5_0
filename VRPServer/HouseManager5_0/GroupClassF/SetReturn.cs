@@ -1,4 +1,5 @@
 ﻿using CommonClass;
+using HouseManager5_0.interfaceOfEngine;
 using HouseManager5_0.interfaceOfHM;
 using System;
 using System.Collections.Generic;
@@ -70,11 +71,12 @@ namespace HouseManager5_0.GroupClassF
                         {
                             that.GetMusic((Player)role, ref notifyMsg);
                             that.GetBackground((Player)role, ref notifyMsg);
-                          //  ((Player)role).RefererCount++;
+                            //  ((Player)role).RefererCount++;
                             ((Player)role).ActiveTime = DateTime.Now;
                         }
                     }
                 }
+                that.WebNotify(player, $"当前状态已存档，请用{player.BTCAddress}重新登录游戏读档！");
                 Startup.sendSeveralMsgs(notifyMsg);
             }
             else
