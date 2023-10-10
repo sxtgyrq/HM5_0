@@ -1,4 +1,5 @@
 ﻿using CommonClass;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,28 @@ namespace MateWsAndHouse
 {
     public class Listen
     {
+        static int _teamMaxMemberExceptCaptain = 1;
+        public static int TeamMaxMemberExceptCaptain
+        {
+            get { return _teamMaxMemberExceptCaptain; }
+            set
+            {
+
+                if (_teamMaxMemberExceptCaptain < 1)
+                {
+                    _teamMaxMemberExceptCaptain = 1;
+                }
+                else if (_teamMaxMemberExceptCaptain > 4)
+                {
+                    _teamMaxMemberExceptCaptain = 4;
+                }
+                else
+                {
+                    _teamMaxMemberExceptCaptain = value;
+                }
+            }
+        }
+
         static int NumOfIndex = 0;
         internal static void IpAndPort(string hostIP, int tcpPort)
         {
@@ -199,8 +222,8 @@ namespace MateWsAndHouse
                                     {
                                         if (Program.allTeams.ContainsKey(teamIndex))
                                         {
-                                            const int teamMaxMemberExceptCaptain = 1;
-                                            if (Program.allTeams[teamIndex].member.Count >= teamMaxMemberExceptCaptain)
+                                            // const int teamMaxMemberExceptCaptain = 1;
+                                            if (Program.allTeams[teamIndex].member.Count >= Listen.TeamMaxMemberExceptCaptain)
                                             {
                                                 memberIsFull = true;
                                             }

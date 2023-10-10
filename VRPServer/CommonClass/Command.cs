@@ -56,6 +56,7 @@ namespace CommonClass
         public string key { get; set; }
         public string PlayerName { get; set; }
         public int positionInStation { get; set; }
+        public int groupNumber { get; set; }
     }
     public class GetOthersPositionNotify : CommandNotify
     {
@@ -177,6 +178,12 @@ namespace CommonClass
         public string Key { get; set; }
         public bool On { get; set; }
     }
+    public class CollectCountNotify : CommandNotify
+    {
+        public string Key { get; set; }
+        public long Count { get; set; }
+    }
+
     public class DefenceNotify : CommandNotify
     {
         public string Key { get; set; }
@@ -264,6 +271,12 @@ namespace CommonClass
         //  public List<double[]> meshPoints { get; set; }
         public List<int> meshPoints { get; set; }
         public List<int> basePoint { get; set; }
+    }
+    public class SingleRoadPathData_V2 : CommandNotify
+    {
+        //  public List<double[]> meshPoints { get; set; }
+        public string DataHash { get; set; }
+        public string RoadCode { get; set; }
     }
 
     public class ModelDataShow : CommandNotify
@@ -620,10 +633,15 @@ namespace CommonClass
     }
     public class Ask : Command
     {
-        public string Key { get; set; } 
-        public string GroupKey { get; set; }  
+        public string Key { get; set; }
+        public string GroupKey { get; set; }
     }
     public class SaveInFile : Command
+    {
+        public string Key { get; set; }
+        public string GroupKey { get; set; }
+    }
+    public class TurnOnBeginnerMode : Command
     {
         public string Key { get; set; }
         public string GroupKey { get; set; }
@@ -1300,5 +1318,10 @@ namespace CommonClass
                 public string uid { get; set; }
             }
         }
+    }
+
+    public class GetRoadMesh : Command
+    {
+        public string RoadCode { get; set; }
     }
 }

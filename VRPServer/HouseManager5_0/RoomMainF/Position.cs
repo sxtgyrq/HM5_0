@@ -120,10 +120,10 @@ namespace HouseManager5_0.RoomMainF
 
                             //    MoneyCanSaveChanged(player, m2, ref notifyMsgs);
 
-                            SendPromoteCountOfPlayer("mile", player, ref notifyMsgs);
+                            SendPromoteCountOfPlayer("mile", player, ref notifyMsgs, false);
                             //  SendPromoteCountOfPlayer("business", player, ref notifyMsgs);
-                            SendPromoteCountOfPlayer("volume", player, ref notifyMsgs);
-                            SendPromoteCountOfPlayer("speed", player, ref notifyMsgs);
+                            SendPromoteCountOfPlayer("volume", player, ref notifyMsgs, false);
+                            SendPromoteCountOfPlayer("speed", player, ref notifyMsgs, false);
 
                             //   BroadCoastFrequency(player, ref notifyMsgs);
                             player.SetMoneyCanSave(player, ref notifyMsgs);
@@ -163,7 +163,8 @@ namespace HouseManager5_0.RoomMainF
                                 WebSocketID = webSocketID,
                                 PlayerName = playerName,
                                 positionInStation = gc._PlayerInGroup[getPosition.Key].positionInStation,
-                                fPIndex = gc._PlayerInGroup[getPosition.Key].StartFPIndex
+                                fPIndex = gc._PlayerInGroup[getPosition.Key].StartFPIndex,
+                                groupNumber = gc.groupNumber
                             };
 
                             if (OpenMore == 0)
@@ -209,7 +210,12 @@ namespace HouseManager5_0.RoomMainF
                                         }
                                     }
                                 }
-                                Startup.sendSeveralMsgs(notifyMsgs2);
+
+                                for (int i = 0; i < notifyMsgs2.Count; i++)
+                                {
+                                    result.NotifyMsgs.Add(notifyMsgs2[i]);
+                                }
+                                //Startup.sendSeveralMsgs(notifyMsgs2);
                             }
                         }
                         else
@@ -279,6 +285,7 @@ namespace HouseManager5_0.RoomMainF
             public List<string> NotifyMsgs { get; set; }
             public string PlayerName { get; set; }
             public int positionInStation { get; set; }
+            public int groupNumber { get; set; }
         }
     }
 }

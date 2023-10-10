@@ -435,14 +435,14 @@ namespace HouseManager5_0.GroupClassF
 
                                         else if (car.ability.leftMile >= goMile)
                                         {
-                                            that.WebNotify(player, $"去程{goMile}km，回程{returnMile}km,去了回不来");
+                                            that.WebNotify(player, $"去程{goMile}km，回程{returnMile}km,去了目的地回不基地。");
                                             mrr = MileResultReason.CanNotReturn;
                                             this.askWhetherGoToPositon(player.Key, grp);
                                             return player.returningOjb;
                                         }
                                         else
                                         {
-                                            that.WebNotify(player, $"去程{goMile}km，回程{returnMile}km,去不了");
+                                            that.WebNotify(player, $"去程{goMile}km，回程{returnMile}km,去不了目的地。");
                                             // printState(player, car, $"去程{goMile}，回程{returnMile},去不了");
                                             mrr = MileResultReason.CanNotReach;
                                             this.askWhetherGoToPositon(player.Key, grp);

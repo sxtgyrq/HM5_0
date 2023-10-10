@@ -87,13 +87,20 @@
         if (document.getElementById('MoneyForSavePanel_Business') != null) {
             document.getElementById('MoneyForSavePanel_Business').innerText = (costValue / 100).toFixed(2);
         }
-        if (document.getElementById('MoneyForSavePanel_BaseMoney') != null) {
-            if (objMain.carGroup.children.length == 2)
-                document.getElementById('MoneyForSavePanel_BaseMoney').innerText = '500.00';
-            else if (objMain.carGroup.children.length == 4)
-                document.getElementById('MoneyForSavePanel_BaseMoney').innerText = '300.00';
-        }
-
+        //if (document.getElementById('MoneyForSavePanel_BaseMoney') != null) {
+        //    if (objMain.carGroup.children.length == 2)
+        //        document.getElementById('MoneyForSavePanel_BaseMoney').innerText = '500.00';
+        //    else if (objMain.carGroup.children.length == 4)
+        //        document.getElementById('MoneyForSavePanel_BaseMoney').innerText = '300.00';
+        //}
+        if (document.getElementById('MoneyForSavePanel_BaseMoney') != null)
+            switch (objMain.groupNumber) {
+                case 1: { document.getElementById('MoneyForSavePanel_BaseMoney').innerText = '500.00'; }; break;
+                case 2: { document.getElementById('MoneyForSavePanel_BaseMoney').innerText = '300.00'; }; break;
+                case 3: { document.getElementById('MoneyForSavePanel_BaseMoney').innerText = '200.00'; }; break;
+                case 4: { document.getElementById('MoneyForSavePanel_BaseMoney').innerText = '150.00'; }; break;
+                case 5: { document.getElementById('MoneyForSavePanel_BaseMoney').innerText = '120.00'; }; break;
+            }
     },
     MoneyForSave: 0,
     donate: function (type) {

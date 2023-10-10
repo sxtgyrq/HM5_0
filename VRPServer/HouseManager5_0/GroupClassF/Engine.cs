@@ -61,16 +61,25 @@ namespace HouseManager5_0.GroupClassF
                                                 case MileResultReason.CanNotReach:
                                                     {
                                                         actionDo.failedThenDo(car, player, c, grp, ref notifyMsg);
-                                                        that.WebNotify(player, "小车不能到达目的地，被安排返回！");
+                                                        that.WebNotify(player, "汽车不能到达目的地，被安排返回！");
                                                     }
                                                     break;
                                                 case MileResultReason.CanNotReturn:
                                                     {
                                                         actionDo.failedThenDo(car, player, c, grp, ref notifyMsg);
-                                                        that.WebNotify(player, "小车到达目的地后不能返回，在当前地点安排返回！");
+                                                        switch (car.state)
+                                                        {
+                                                            case CarState.waitAtBaseStation:
+                                                                {
+                                                                    that.WebNotify(player, "汽车到达目的地后不能返回，所以汽车没有出发！");
+                                                                }; break;
+                                                            case CarState.waitOnRoad: { that.WebNotify(player, "汽车到达目的地后不能返回，在当前地点安排返回！"); }; break;
+                                                        }
+                                                        // that.WebNotify(player, "小车到达目的地后不能返回，在当前地点安排返回！");
                                                     }; break;
                                                 case MileResultReason.MoneyIsNotEnougt:
                                                     {
+                                                        that.WebNotify(player, "身上积分不支持你到达目的地！");
                                                         actionDo.failedThenDo(car, player, c, grp, ref notifyMsg);
                                                     }; break;
                                                 case MileResultReason.NearestIsMoneyWhenPromote: { }; break;

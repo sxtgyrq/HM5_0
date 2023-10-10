@@ -115,6 +115,21 @@ namespace HouseManager5_0.GroupClassF
                                         this.taskFineshedTime[player.Key] = DateTime.Now.AddMinutes(this.countOfAskRoad / 2.0);
                                         that.WebNotify(player, $"您与队友在完成任务中，额外进行了{this.countOfAskRoad}次问道，成绩多记{(this.countOfAskRoad / 2.0).ToString("f2")}分钟。");
                                     }
+                                    else if (this._groupNumber == 3)
+                                    {
+                                        this.taskFineshedTime[player.Key] = DateTime.Now.AddMinutes(this.countOfAskRoad / 3.0);
+                                        that.WebNotify(player, $"您与队友在完成任务中，额外进行了{this.countOfAskRoad}次问道，成绩多记{(this.countOfAskRoad / 3.0).ToString("f2")}分钟。");
+                                    }
+                                    else if (this._groupNumber == 4)
+                                    {
+                                        this.taskFineshedTime[player.Key] = DateTime.Now.AddMinutes(this.countOfAskRoad / 4.0);
+                                        that.WebNotify(player, $"您与队友在完成任务中，额外进行了{this.countOfAskRoad}次问道，成绩多记{(this.countOfAskRoad / 4.0).ToString("f2")}分钟。");
+                                    }
+                                    else if (this._groupNumber == 5)
+                                    {
+                                        this.taskFineshedTime[player.Key] = DateTime.Now.AddMinutes(this.countOfAskRoad / 5.0);
+                                        that.WebNotify(player, $"您与队友在完成任务中，额外进行了{this.countOfAskRoad}次问道，成绩多记{(this.countOfAskRoad / 5.0).ToString("f2")}分钟。");
+                                    }
                                 }
                                 this.recordRaceTime(player.Key);
                                 if (this.countOfAskRoad <= 10)
@@ -138,10 +153,23 @@ namespace HouseManager5_0.GroupClassF
                                     var diamondCollectCount = player.getCar().ability.DiamondCount();
                                     if (diamondCollectCount > 0)
                                     {
-                                        int rewardOfDiamondCollect = diamondCollectCount * 200;
-                                        addMoney += rewardOfDiamondCollect;
-                                        that.WebNotify(player, $"您收集了{diamondCollectCount}颗宝石，获得了额外{rewardOfDiamondCollect / 100}.{(rewardOfDiamondCollect / 10) % 10}{(rewardOfDiamondCollect / 1) % 10}的积分奖励");
-                                        addMoney += rewardOfDiamondCollect;
+                                        if (diamondCollectCount > 10)
+                                        {
+                                            /*
+                                             * 这里的目的，是为了防止人们恶意刷宝石！
+                                             */
+                                            int rewardOfDiamondCollect = 10 * 200;
+                                            addMoney += rewardOfDiamondCollect;
+                                            that.WebNotify(player, $"您收集了{diamondCollectCount}颗宝石，获得了额外{rewardOfDiamondCollect / 100}.{(rewardOfDiamondCollect / 10) % 10}{(rewardOfDiamondCollect / 1) % 10}的积分奖励");
+                                            addMoney += rewardOfDiamondCollect;
+                                        }
+                                        else
+                                        {
+                                            int rewardOfDiamondCollect = diamondCollectCount * 200;
+                                            addMoney += rewardOfDiamondCollect;
+                                            that.WebNotify(player, $"您收集了{diamondCollectCount}颗宝石，获得了额外{rewardOfDiamondCollect / 100}.{(rewardOfDiamondCollect / 10) % 10}{(rewardOfDiamondCollect / 1) % 10}的积分奖励");
+                                            addMoney += rewardOfDiamondCollect;
+                                        }
                                     }
                                     if (addMoney > 0)
                                         player.MoneySet(player.Money + addMoney, ref notifyMsg);

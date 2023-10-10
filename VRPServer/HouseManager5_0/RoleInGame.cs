@@ -559,6 +559,9 @@ namespace HouseManager5_0
                     {
                         case 1:
                         case 2:
+                        case 3:
+                        case 4:
+                        case 5:
                             {
                                 if (this.getCar().ability.costBusiness <= this.getCar().ability.Business)
                                 {
@@ -777,6 +780,7 @@ namespace HouseManager5_0
         public Engine_MagicEngine.SpeedMagicChanged nitrogenValueChanged;
 
         public Engine_MagicEngine.AttackMagicChanged attackMagicChanged;
+        public Engine_MagicEngine.CollectCountChanged collectMagicChanged;
         public Engine_MagicEngine.DefenceMagicChanged defenceMagicChanged;
 
         public Engine_MagicEngine.ConfusePrepareMagicChanged confusePrepareMagicChanged;
@@ -956,6 +960,7 @@ namespace HouseManager5_0
 
             public int AskCount = 0;
             public const long AskMoney = 5000;// { get { return 5000; } }
+            public const long AskMoney_WhenBeginnerModeIsOn = 20;// { get { return 5000; } }
         }
         public DirecitonAndSelectID direcitonAndID = new DirecitonAndSelectID()
         {

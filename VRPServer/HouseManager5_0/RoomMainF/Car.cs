@@ -75,7 +75,7 @@ namespace HouseManager5_0.RoomMainF
         public void SetAnimateChanged(Player player, Car car, ref List<string> notifyMsg)
         {
             var group = player.Group;
-           // lock (group.PlayerLock_)
+            // lock (group.PlayerLock_)
             {
                 group.SetAnimateChanged(player, car, ref notifyMsg);
             }
@@ -182,6 +182,7 @@ namespace HouseManager5_0.RoomMainF
                         WebSocketID = self.WebSocketID,
                         carID = getCarName() + "_" + other.Key,
                         parentID = other.Key,
+                        AsynSend = false
                     };
                     var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
                     msgsWithUrl.Add(self.FromUrl);

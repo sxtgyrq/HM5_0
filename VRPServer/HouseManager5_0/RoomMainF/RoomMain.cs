@@ -50,6 +50,7 @@ namespace HouseManager5_0.RoomMainF
             this.modelL = new Manager_Level(this);
             this.taskM = new Manager_TaskCopy(this);
             this.fileSM = new Manager_FileSave(this);
+            this.modelBM = new Manager_BeginnerMode(this);
 
             // lock (PlayerLock)
             {
@@ -460,6 +461,37 @@ namespace HouseManager5_0.RoomMainF
                 }
 
             }
+            // throw new NotImplementedException();
+        }
+
+        public void TurnOnBeginnerModeF(TurnOnBeginnerMode tbm)
+        {
+            if (this._Groups.ContainsKey(tbm.GroupKey))
+            {
+                var group = this._Groups[tbm.GroupKey];
+                if (group._PlayerInGroup.ContainsKey(tbm.Key))
+                {
+                    var player = group._PlayerInGroup[tbm.Key];
+                    this.modelBM.TurnOnBeginnerModeF(tbm, group, player);
+                    //this.fileSM.TurnOnBeginnerModeF(sif, group, player);
+                }
+
+            }
+        }
+
+        public string GetRoadMeshF(GetRoadMesh tbm)
+        {
+            var roadCode = tbm.RoadCode;
+            var dt = Program.dt;
+            List<int> meshPoints, basePoint;
+            dt.getSingle(roadCode, out meshPoints, out basePoint);
+            var obj = new
+            {
+                meshPoints = meshPoints,
+                basePoint = basePoint,
+                roadCode = roadCode
+            };
+            return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             // throw new NotImplementedException();
         }
 

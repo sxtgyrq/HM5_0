@@ -862,7 +862,15 @@ namespace HouseManager5_0
 
         }
 
-
+        public List<string> GetAllRoadCodes() 
+        {
+            List<string> list = new List<string>();
+            foreach (var item in this._road) 
+            {
+                list.Add(item.Key);
+            }
+            return list;
+        }
 
 
         static List<OssModel.FastonPosition> GetAllFp(string fpDictionary, Geometry.GetBoundryF f)

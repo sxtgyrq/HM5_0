@@ -27,7 +27,35 @@ namespace MateWsAndHouse
             {
                 ip = input;
             }
-
+            Console.WriteLine($"输入队伍人数:" +
+                $"two：双人" +
+                $"three：三人" +
+                $"four：四人" +
+                $"five:五人");
+            var teamSelect = Console.ReadLine();
+            switch (teamSelect)
+            {
+                case "two":
+                    {
+                        Listen.TeamMaxMemberExceptCaptain = 1;
+                    }; break;
+                case "three":
+                    {
+                        Listen.TeamMaxMemberExceptCaptain = 2;
+                    }; break;
+                case "four":
+                    {
+                        Listen.TeamMaxMemberExceptCaptain = 3;
+                    }; break;
+                case "five":
+                    {
+                        Listen.TeamMaxMemberExceptCaptain = 4;
+                    }; break;
+                default:
+                    {
+                        Listen.TeamMaxMemberExceptCaptain = 1;
+                    }; break;
+            }
             Thread startTcpServer = new Thread(() => Listen.IpAndPort(ip.Split(':')[0], int.Parse(ip.Split(':')[1])));
             startTcpServer.Start();
 
@@ -41,15 +69,15 @@ namespace MateWsAndHouse
             //CreateWebHostBuilder(new string[] { ip }).Build().Run();
         }
 
-    //    public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-    //WebHost.CreateDefaultBuilder(args).Configure(item => item.UseForwardedHeaders(new ForwardedHeadersOptions
-    //{
-    //    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
-    //})).UseKestrel(options =>
-    //{
-    //    options.AllowSynchronousIO = true;
-    //})
-    //.UseUrls(args[0])
-    //    .UseStartup<Startup>();
+        //    public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        //WebHost.CreateDefaultBuilder(args).Configure(item => item.UseForwardedHeaders(new ForwardedHeadersOptions
+        //{
+        //    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+        //})).UseKestrel(options =>
+        //{
+        //    options.AllowSynchronousIO = true;
+        //})
+        //.UseUrls(args[0])
+        //    .UseStartup<Startup>();
     }
 }

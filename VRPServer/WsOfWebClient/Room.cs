@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using static BitCoin.Transtraction.TradeInfo;
 using static Model.SaveRoad;
 using static WsOfWebClient.ConnectInfo;
 
@@ -309,7 +310,7 @@ namespace WsOfWebClient
                         if (checkIsOk) { }
                         else
                         {
-                            return null;
+                            return s;
                         }
                         #endregion
                     }
@@ -319,7 +320,7 @@ namespace WsOfWebClient
                     if (checkIsOk) { }
                     else
                     {
-                        return null;
+                        return s;
                     }
                 }
                 {
@@ -327,7 +328,7 @@ namespace WsOfWebClient
                     if (checkIsOk) { }
                     else
                     {
-                        return null;
+                        return s;
                     }
                 }
                 {
@@ -335,7 +336,7 @@ namespace WsOfWebClient
                     if (checkIsOk) { }
                     else
                     {
-                        return null;
+                        return s;
                     }
                 }
 
@@ -368,7 +369,7 @@ namespace WsOfWebClient
                         if (checkIsOk) { }
                         else
                         {
-                            return null;
+                            return s;
                         }
                         #endregion
                     }
@@ -396,7 +397,7 @@ namespace WsOfWebClient
                         if (checkIsOk) { }
                         else
                         {
-                            return null;
+                            return s;
                         }
                         #endregion
                     }
@@ -405,43 +406,43 @@ namespace WsOfWebClient
                 if (SetModelCopy(new attackIcon(), connectInfoDetail)) { }
                 else
                 {
-                    return null;
+                    return s;
                 }
                 shieldIcon si = new shieldIcon();
                 if (SetModelCopy(si, connectInfoDetail)) { }
                 else
                 {
-                    return null;
+                    return s;
                 }
                 confusePrepareIcon cpi = new confusePrepareIcon();
                 if (SetModelCopy(cpi, connectInfoDetail)) { }
                 else
                 {
-                    return null;
+                    return s;
                 }
                 lostPrepareIcon lpi = new lostPrepareIcon();
                 if (SetModelCopy(lpi, connectInfoDetail)) { }
                 else
                 {
-                    return null;
+                    return s;
                 }
                 ambushPrepareIcon api = new ambushPrepareIcon();
                 if (SetModelCopy(api, connectInfoDetail)) { }
                 else
                 {
-                    return null;
+                    return s;
                 }
                 waterIcon wi = new waterIcon();
                 if (SetModelCopy(wi, connectInfoDetail)) { }
                 else
                 {
-                    return null;
+                    return s;
                 }
                 direction di = new direction();
                 if (SetModelCopy(di, connectInfoDetail)) { }
                 else
                 {
-                    return null;
+                    return s;
                 }
                 //ModelConfig.directionArrowIcon da = new ModelConfig.directionArrowIcon();
                 //if (SetModelCopy(da, webSocket)) { }
@@ -453,45 +454,45 @@ namespace WsOfWebClient
                 if (SetModelCopy(da, connectInfoDetail)) { }
                 else
                 {
-                    return null;
+                    return s;
                 }
                 ModelConfig.directionArrowIconB db = new ModelConfig.directionArrowIconB();
                 if (SetModelCopy(db, connectInfoDetail)) { }
                 else
                 {
-                    return null;
+                    return s;
                 }
                 ModelConfig.directionArrowIconC dc = new ModelConfig.directionArrowIconC();
                 if (SetModelCopy(dc, connectInfoDetail)) { }
                 else
                 {
-                    return null;
+                    return s;
                 }
                 ModelConfig.opponentIcon oi = new ModelConfig.opponentIcon();
                 if (SetModelCopy(oi, connectInfoDetail)) { }
                 else
                 {
-                    return null;
+                    return s;
                 }
                 ModelConfig.teammateIcon ti = new ModelConfig.teammateIcon();
                 if (SetModelCopy(ti, connectInfoDetail)) { }
                 else
                 {
-                    return null;
+                    return s;
                 }
 
                 ModelConfig.nitrogenEffectIcon ne = new ModelConfig.nitrogenEffectIcon();
                 if (SetModelCopy(ne, connectInfoDetail)) { }
                 else
                 {
-                    return null;
+                    return s;
                 }
 
                 coinIcon ci = new coinIcon();
                 if (SetModelCopy(ci, connectInfoDetail)) { }
                 else
                 {
-                    return null;
+                    return s;
                 }
 
                 result = setState(s, connectInfoDetail, LoginState.OnLine);
@@ -505,12 +506,13 @@ namespace WsOfWebClient
                     }
                     else
                     {
-                        return null;
+                        return s;
                     }
                     #endregion
                 }
                 initializeOperation(s);
             }
+            result.JoinGameSingle_Success = true;
             return result;
         }
 
@@ -980,7 +982,10 @@ namespace WsOfWebClient
             var resultAsync = Startup.ReceiveStringAsync(connectInfoDetail, timeOut);
 
             //  resultAsync 
-
+            if (resultAsync.wr == null)
+            {
+                return false;
+            }
             if (resultAsync.result == checkValue)
             {
                 return true;
@@ -1308,7 +1313,20 @@ namespace WsOfWebClient
             return "";
             // throw new NotImplementedException();
         }
-
+        //TurnOnBeginnerMode
+        internal static string turnOnBeginnerMode(State s)
+        {
+            var ms = new TurnOnBeginnerMode()
+            {
+                c = "TurnOnBeginnerMode",
+                Key = s.Key,
+                GroupKey = s.GroupKey
+            };
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ms);
+            Thread th = new Thread(() => Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg));
+            th.Start();
+            return "";
+        }
         internal static string TakeApart(State s)
         {
             var ms = new CommonClass.TakeApart()

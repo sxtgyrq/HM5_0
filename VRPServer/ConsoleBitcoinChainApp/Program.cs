@@ -165,6 +165,8 @@ B   获取该付比特币
                         var json = Newtonsoft.Json.JsonConvert.SerializeObject(tradeDetail);
                         lock (Program.locker)
                             File.WriteAllText($"data/{addr}", json, System.Text.Encoding.UTF8);
+
+                        Thread.Sleep(500);
                     }
                     catch
                     {

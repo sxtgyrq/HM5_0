@@ -203,14 +203,17 @@ namespace HouseManager5_0
                 }
 
                 else if (car.ability.leftMile >= goMile)
+
                 {
-                    //  printState(player, car, $"剩余里程为{car.ability.leftMile}去程{goMile}，回程{returnMile},你去了回不来。所以安排返回");
+                    var msg = $"剩余里程为{car.ability.leftMile}km。去往目的地{goMile}km，回基地{returnMile}km,你去了回不来。所以安排返回";
+                    WebNotify(player, msg);
                     Mrr = MileResultReason.CanNotReturn;
                     return player.returningOjb;
                 }
                 else
                 {
-                    // printState(player, car, $"剩余里程为{car.ability.leftMile}去程{goMile}，回程{returnMile},去不了。所以安排返回");
+                    var msg = $"剩余里程为{car.ability.leftMile}km。去往目的地{goMile}km，回基地{returnMile}km,你去了回不来。所以安排返回";
+                    WebNotify(player, msg);
                     Mrr = MileResultReason.CanNotReach;
                     return player.returningOjb;
                     //   return false;
@@ -354,14 +357,16 @@ namespace HouseManager5_0
 
                 int taxPostion = pa.target;
                 //拿到钱的单位是分！
-                long collectReWard = getCollectReWardByReward(pa.target);//依据target来判断应该收入多少！
+                long collectReWard = getCollectReWardByReward(pa.target, role.Group.beginnerModeOn);//依据target来判断应该收入多少！
                 if (role.playerType == Player.PlayerType.player)
                 {
                     //  that.NPCM.Moleste((Player)role, pa.target, ref notifyMsg);
                 }
-
-                long sumCollect = collectReWard; //DealWithTheFrequcy(this.CollectReWard);
+                long sumCollect = collectReWard;
+                //long sumCollect = collectReWard; //DealWithTheFrequcy(this.CollectReWard);
                 long selfGet;
+
+
 
                 if (role.improvementRecord.CollectIsDouble)
                 {
@@ -372,6 +377,11 @@ namespace HouseManager5_0
                 else
                 {
                     selfGet = sumCollect;
+                }
+
+                if (role.Group.beginnerModeOn)
+                {
+                    this.WebNotify(role, "您开启了新手保护，征收了收集量的30%作为您的新手保护费。在您选错路口时，只会扣除汽车上的4%积分！");
                 }
                 //  selfGet = sumCollect;
                 //  long sumDebet = 0;
@@ -390,7 +400,7 @@ namespace HouseManager5_0
 
                     if (role.Group.Live)
                     {
-                        role.Group.UpdateDouyinRole(gps.GetFpByIndex(taxPostion), ref notifyMsg, gps);
+                        //  role.Group.UpdateDouyinRole(gps.GetFpByIndex(taxPostion), ref notifyMsg, gps);
                         // if(role.Ts.)
                     }
                 }
@@ -468,27 +478,20 @@ namespace HouseManager5_0
 
         private void setCollectPosition(int target, GroupClassF.GroupClass group)
         {
-            // throw new Exception();
-
             group.setCollectPosition(target);
-            //int key = -1;
-            //foreach (var item in that._collectPosition)
-            //{
-            //    if (item.Value == target)
-            //    {
-            //        key = item.Key;
-            //        break; 
-            //    }
-            //}
-            //if (key != -1)
-            //{
-            //    that._collectPosition[key] = that.GetRandomPosition(true, Program.dt);
-            //}
-
         }
-        private long getCollectReWardByReward(int target)
+
+        public const int RewardPercentWhenBeginnerModeIsOn = 70;
+        private long getCollectReWardByReward(int target, bool beginnerModeOn)
         {
-            return 100;
+            if (beginnerModeOn)
+            {
+                return 100 * RewardPercentWhenBeginnerModeIsOn / 100;
+            }
+            else
+            {
+                return 100;
+            }
             //throw new Exception();
 
             //foreach (var item in that._collectPosition)

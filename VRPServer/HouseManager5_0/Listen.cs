@@ -69,11 +69,22 @@ namespace HouseManager5_0
                                     key = getPosition.Key,
                                     PlayerName = GPResult.PlayerName,
                                     positionInStation = GPResult.positionInStation,
-                                    fPIndex = GPResult.fPIndex
+                                    fPIndex = GPResult.fPIndex,
+                                    AsynSend = false, //这里之所以要同步发送，是因为刷新的时候不报错！,
+                                    groupNumber = GPResult.groupNumber,
+
                                 };
 
                                 Startup.sendSingleMsg(GPResult.FromUrl, Newtonsoft.Json.JsonConvert.SerializeObject(notify));
                                 var notifyMsgs = GPResult.NotifyMsgs;
+                                //for (int i = 1; i < notifyMsgs.Count; i += 2)
+                                //{
+                                //    var msg = notifyMsgs[i];
+                                //    //  var commandNotify = Newtonsoft.Json.JsonConvert.DeserializeObject<CommandNotify>(msg);
+                                //    //commandNotify.AsynSend = false;
+                                //    //这里之所以要同步发送，是因为刷新的时候不报错！
+                                //    notifyMsgs[i] = Newtonsoft.Json.JsonConvert.SerializeObject(commandNotify);
+                                //}
                                 Startup.sendSeveralMsgs(notifyMsgs);
                             }
                             outPut = "ok";
@@ -581,11 +592,22 @@ namespace HouseManager5_0
                             Ask askObj = Newtonsoft.Json.JsonConvert.DeserializeObject<Ask>(notifyJson);
                             objI.ask(askObj);
                         }; break;
-                    case "SaveInFile": 
+                    case "SaveInFile":
                         {
-                            SaveInFile sif= Newtonsoft.Json.JsonConvert.DeserializeObject<SaveInFile>(notifyJson);
+                            SaveInFile sif = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveInFile>(notifyJson);
                             objI.SaveInFileF(sif);
-                        };break;
+                        }; break;
+                    case "TurnOnBeginnerMode":
+                        {
+                            TurnOnBeginnerMode tbm = Newtonsoft.Json.JsonConvert.DeserializeObject<TurnOnBeginnerMode>(notifyJson);
+                            objI.TurnOnBeginnerModeF(tbm);
+                        }; break;
+                    case "GetRoadMesh":
+                        {
+                            GetRoadMesh tbm = Newtonsoft.Json.JsonConvert.DeserializeObject<GetRoadMesh>(notifyJson);
+
+                            outPut = objI.GetRoadMeshF(tbm);
+                        }; break;
                 }
             }
             {

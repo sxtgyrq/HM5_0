@@ -89,8 +89,8 @@ namespace HouseManager5_0.RoomMainF
                         positionInStation = other.positionInStation,
                         isNPC = other.playerType == Player.PlayerType.NPC,
                         isPlayer = other.playerType == Player.PlayerType.player,
-                        Level = other.Level
-
+                        Level = other.Level,
+                        AsynSend = false
                         // var xx=  getPosition.Key
                     };
                     msgsWithUrl.Add(((Player)self).FromUrl);

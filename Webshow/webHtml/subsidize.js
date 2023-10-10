@@ -46,24 +46,24 @@
             <tr>
                 <td style="width:50%">
                     <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(50000)" >
-                        取出500
+                        取出500.00
                     </div>
                 </td>
                 <td style="width: 50%">
                     <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;"  onclick="subsidizeSys.subsidize(100000)" >
-                        取出1000
+                        取出1000.00
                     </div>
                 </td>
             </tr>
             <tr>
                 <td style="width:50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(200000)" >
-                        取出2000
+                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(500000)" >
+                        取出5000.00
                     </div>
                 </td>
                 <td style="width: 50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(500000)">
-                        资助5000
+                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.beginnerMode()">
+                        开启新手模式
                     </div>
                 </td>
             </tr> 
@@ -98,6 +98,8 @@
             that.updateSignInfomation();
             that.updateMoneyOfSumSubsidized();
             that.updateMoneyOfSumSubsidizing();
+
+            that.updateBtnInnerHtml();
 
             var el = document.getElementById('moneySubsidize');
             el.classList.remove('msg');
@@ -182,7 +184,15 @@
                 objMain.music.isSetByWeb = true;
                 objMain.music.theme = 'Aloha_Heja_He_Achim_Reichel';
             }
+            else if (bitcoinAddress == "music002" && subsidizeValue == 500000) {
+                objMain.music.isSetByWeb = true;
+                objMain.music.theme = 'payphone';
+            }
         }
+    },
+    beginnerMode: function () {
+        var passObj = { "c": "TurnOnBeginnerMode" };
+        objMain.ws.send(JSON.stringify(passObj));
     },
     signOnline: function () {
         subsidizeSys.add();
@@ -377,6 +387,16 @@
     },
     clearInfo: function () {
         this.signInfoMatiion = null;
+    },
+    updateBtnInnerHtml: function ()
+    {
+        switch (objMain.groupNumber) {
+            case 1: { document.getElementById('bthNeedToUpdateLevel').innerText = '登录/读档'; }; break;
+            case 2: { document.getElementById('bthNeedToUpdateLevel').innerText = '登录'; }; break;
+            case 3: { document.getElementById('bthNeedToUpdateLevel').innerText = '登录'; }; break;
+            case 4: { document.getElementById('bthNeedToUpdateLevel').innerText = '登录'; }; break;
+            case 5: { document.getElementById('bthNeedToUpdateLevel').innerText = '登录'; }; break;
+        }
     }
 }
     ;

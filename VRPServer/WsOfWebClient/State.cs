@@ -27,6 +27,8 @@ namespace WsOfWebClient
         /// 队员离开队伍时，用于传递队伍ID参数。
         /// </summary>
         internal string teamID = "";
+
+        public bool JoinGameSingle_Success { get; set; }
     }
     public class IntroState
     {

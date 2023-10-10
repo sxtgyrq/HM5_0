@@ -36,6 +36,7 @@ namespace HouseManager5_0
             public long SpeedValue { get; set; }
             public bool CollectIsDouble { get; set; }
             public int countOfAskRoad { get; set; }
+            public bool beginnerModeOn { get; set; }
         }
         public Manager_FileSave(RoomMain roomMain)
         {
@@ -87,6 +88,7 @@ namespace HouseManager5_0
                             SpeedValue = player.improvementRecord.SpeedValue,
                             CollectIsDouble = player.improvementRecord.CollectIsDouble,
                             countOfAskRoad = group.countOfAskRoad,
+                            beginnerModeOn = group.beginnerModeOn
                         };
                         var stringContent = Newtonsoft.Json.JsonConvert.SerializeObject(saveObj);
                         //File.WriteAllText($"{player.BTCAddress}_file.txt", stringContent);
@@ -103,7 +105,7 @@ namespace HouseManager5_0
 
                         }
                         endDate = endDate.AddHours(8);
-                        that.WebNotify(player, $"已存档。请在{endDate.ToString("yyyy-MM-dd HH:mm:ss")}之前完成读档，继续游戏，过期作废！", 60); 
+                        that.WebNotify(player, $"已存档。请在{endDate.ToString("yyyy-MM-dd HH:mm:ss")}之前完成读档，继续游戏，过期作废！", 60);
                         that.WebNotify(player, "存档后，只能读一次档，读档后，直接删档，避免重复读档！", 60);
                         that.WebNotify(player, "重新进入游戏后，不进行任何目标选取操作，直接登录，可完成读档。", 60);
                         that.WebNotify(player, "读档完毕后，还可以继续存档。", 60);
@@ -264,7 +266,11 @@ namespace HouseManager5_0
                                                 {
                                                     player.improvementRecord.addAttack(player, ref notifyMsgs);
                                                 }
-
+                                                if (so.beginnerModeOn)
+                                                {
+                                                    group.beginnerModeOn = true;
+                                                    this.WebNotify(player, "原档开启了新手模式！");
+                                                }
                                                 player.direcitonAndID.AskCount = so.countOfAskRoad;
 
                                                 group.askWhetherGoToPositon2(player.Key, Program.dt);
@@ -286,6 +292,4 @@ namespace HouseManager5_0
             }
         }
     }
-
-
 }

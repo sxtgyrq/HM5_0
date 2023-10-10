@@ -303,6 +303,9 @@
                 switch (indexOfArray) {
                     case 0: { roleCountInTask = '单人'; }; break;
                     case 1: { roleCountInTask = '双人'; }; break;
+                    case 2: { roleCountInTask = '三人'; }; break;
+                    case 3: { roleCountInTask = '四人'; }; break;
+                    case 4: { roleCountInTask = '五人'; }; break;
                 }
                 for (var i = 0; i < list.length; i++) {
                     var bgColor = '#ff000020';

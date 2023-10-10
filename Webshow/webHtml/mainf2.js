@@ -696,11 +696,11 @@ var objMain =
             console.log(data);
             var objInput = JSON.parse(data);
             objMain.basePoint = objInput.fp;
-            objMain.carsNames = objInput.carsNames;
+            //objMain.carsNames = objInput.carsNames;
             objMain.indexKey = objInput.key;
             objMain.displayName = objInput.PlayerName;
             objMain.fpIndex = objInput.fPIndex;
-
+            objMain.groupNumber = objInput.groupNumber;
             objMain.positionInStation = objInput.positionInStation;
             //if (objMain.receivedState == 'WaitingToGetTeam') {
             //    objMain.ws.send(received_msg);
@@ -741,6 +741,7 @@ var objMain =
                 }
             };
             objMain.camaraAnimateData = animationData;
+
         }, otherData: []
     },
     Tax: {},
@@ -803,11 +804,11 @@ var objMain =
                                     bgm.children[i].remove();
                                 }
                                 var source1 = document.createElement('source');
-                                source1.src = 'bgm/changshoucunwai.ogg';
+                                source1.src = 'bgm/All_Hit_Singles_Immortals_Instrumental_Version.ogg';
                                 source1.type = 'audio/ogg';
 
                                 var source2 = document.createElement('source');
-                                source2.src = 'bgm/changshoucunwai.mp3';
+                                source2.src = 'bgm/All_Hit_Singles_Immortals_Instrumental_Version.mp3';
                                 source2.type = 'audio/mpeg';
 
                                 bgm.appendChild(source1);
@@ -853,135 +854,7 @@ var objMain =
             }
         },
         on: true,
-        MarketRepeat: function () {
-            //var changeMusic = function (musicFileName) {
-            //    var mainMusicSetOnOFFFunc = function (on) {
-            //        var AnotherBgm = document.getElementById('backGroudMusick');
-            //        if (on) {
-            //            if (objMain.music.on) {
-            //                AnotherBgm.volume = 0.4;
-            //                AnotherBgm.play();
-            //            }
-            //        }
-            //        else {
-            //            AnotherBgm.pause();
-            //        }
-            //    }
-            //    var bgm = document.getElementById('marketSoundMusick');
-            //    //  bgm.loop = false;
-            //    if (bgm.currentTime === 0 || bgm.ended) {
-
-            //        var itemCount = bgm.children.length - 1;
-            //        for (var i = itemCount; i >= 0; i--) {
-            //            bgm.children[i].remove();
-            //        }
-            //        var source1 = document.createElement('source');
-            //        source1.src = 'bgm/' + musicFileName + '.ogg';
-            //        source1.type = 'audio/ogg';
-
-            //        var source2 = document.createElement('source');
-            //        source2.src = 'bgm/' + musicFileName + '.mp3';
-            //        source2.type = 'audio/mpeg';
-
-            //        bgm.appendChild(source1);
-            //        bgm.appendChild(source2);
-            //        bgm.musicFileName = musicFileName;
-            //        bgm.oncanplaythrough = function () {
-            //            this.play();
-
-            //            //if (objMain.music.on)
-            //            //var AnotherBgm = document.getElementById('backGroudMusick');
-            //            //AnotherBgm.volume = 0.4;
-            //            //AnotherBgm.pause();
-            //        };
-
-            //        bgm.load();
-            //        bgm.addEventListener('ended', function () {
-            //            //   objMain.music.MarketRepeat(); 
-            //            var AnotherBgm = document.getElementById('backGroudMusick');
-            //            AnotherBgm.volume = 0.4;
-            //            switch (objMain.carState.car) {
-            //                case 'waitAtBaseStation':
-            //                    {
-            //                        if (this.musicFileName == 'notifySound_StartAndLookfor') {
-            //                            //this.currentTime = 0;
-            //                            //this.play();
-            //                            //var thatMusic = this;
-            //                            //setTimeout(function () {
-            //                            //    if (thatMusic.ended) {
-            //                            //        thatMusic.currentTime = 0;
-            //                            //        thatMusic.play();
-            //                            //    }
-            //                            //}, 10000);
-            //                            mainMusicSetOnOFFFunc(false);
-            //                        }
-            //                        else {
-            //                            mainMusicSetOnOFFFunc(true);
-            //                        }
-            //                    }; break;
-            //                case 'waitOnRoad':
-            //                    {
-            //                        if (this.musicFileName == 'notifySound_diamond' ||
-            //                            this.musicFileName == 'notifySound_GoOrReturn') {
-            //                            // var thatMusic = this;
-            //                            //setTimeout(function () {
-            //                            //    if (thatMusic.ended) {
-            //                            //        thatMusic.currentTime = 0;
-            //                            //        thatMusic.play();
-            //                            //    }
-            //                            //}, 10000);
-            //                            mainMusicSetOnOFFFunc(false);
-            //                        }
-            //                        else {
-            //                            mainMusicSetOnOFFFunc(true);
-            //                        }
-            //                    }; break;
-            //                case 'selecting': {
-            //                    if (this.musicFileName == 'notifySound_ABC') {
-            //                        var thatMusic = this;
-            //                        //setTimeout(function () {
-            //                        //    if (thatMusic.ended) {
-            //                        //        thatMusic.currentTime = 0;
-            //                        //        thatMusic.play();
-            //                        //    }
-            //                        //}, 10000);
-            //                        mainMusicSetOnOFFFunc(false);
-            //                    }
-            //                    else {
-            //                        mainMusicSetOnOFFFunc(true);
-            //                    }
-            //                }; break;
-            //                default:
-            //                    {
-            //                        mainMusicSetOnOFFFunc(true);
-            //                    }; break;
-            //            }
-
-            //        });
-            //    }
-            //}
-            //if (whetherGo.obj != null && whetherGo.obj.Live) {
-            //    //   console.log(objMain.carState.car + '-----------Live Music');
-            //    switch (objMain.carState.car) {
-            //        case 'waitAtBaseStation':
-            //            {
-            //                changeMusic('notifySound_StartAndLookfor');
-            //            }; break;
-            //        case 'waitOnRoad':
-            //            {
-            //                if (stateSet.speed.selfHasFire()) {
-            //                    changeMusic('notifySound_diamond');
-            //                }
-            //                else {
-            //                    changeMusic('notifySound_GoOrReturn');
-            //                }
-            //            }; break;
-            //        case 'selecting':
-            //            {
-            //                changeMusic('notifySound_ABC');
-            //            }; break;
-            //    }
-            //}
+        MarketRepeat: function () { 
         },
         isSetByWeb: false
     },
@@ -1800,7 +1673,7 @@ var objMain =
             case 'BradCastMoneyForSave':
                 {
                     objMain.MoneyForSave = received_obj.Money;
-                  //  moneyOperator.updateSaveMoneyNotify();
+                    //  moneyOperator.updateSaveMoneyNotify();
                 }; break;
             case 'BradCastPromoteDiamondCount':
                 {
@@ -1934,6 +1807,12 @@ var objMain =
                     };
                     drawRoadInfomation();
                 }; break;
+            case 'SingleRoadPathData_V2':
+                {
+                    var roadCode = received_obj.RoadCode;
+                    var dataHash = received_obj.DataHash;
+                    roadDisplayFunction.show(dataHash, roadCode);
+                }; break;
             case 'SetLeaveGameIcon':
                 {
                     objMain.ws.send('SetLeaveGameIcon');
@@ -2044,6 +1923,7 @@ var objMain =
                     if (document.getElementById('playerNameTextArea') != undefined) {
                         document.getElementById('playerNameTextArea').value = received_obj.name;
                     }
+                    localStorage.playerName = received_obj.name;
                 }; break;
             case 'GetCarsName':
                 {
@@ -2060,8 +1940,9 @@ var objMain =
                     if (received_obj.countStamp > objMain.carState.stamp) {
                         objMain.carState.stamp = received_obj.countStamp;
                         objMain.carState[received_obj.carID] = received_obj.State;
-                        var oldLength = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target);
-                        objMain.carStateTimestamp[received_obj.carID] = { 't': Date.now(), 'l': oldLength };
+                        //if()
+                        // var oldLength = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target);
+                        //objMain.carStateTimestamp[received_obj.carID] = { 't': Date.now(), 'l': oldLength };
                         objNotify.notifyCar(received_obj.carID, received_obj.State);
                         operatePanel.refresh();
                         //setInterval(function () {
@@ -2462,7 +2343,7 @@ var objMain =
                             whetherGo.show2();
                             smallMapClass.draw2(whetherGo.obj);
 
-                        } 
+                        }
                     }
                     else {
                         smallMapClass.draw(received_obj);
@@ -2556,6 +2437,14 @@ var objMain =
                 {
                     ShowRoadCrossSelectionsOperator.show(received_obj);
                 }; break;
+            case 'CollectCountNotify':
+                {
+                    stateSet.coinIcon.addWithKey(received_obj.Key, received_obj.Count);
+                }; break;
+            case 'SetPlayerNameSuccess':
+                {
+                    localStorage.playerName = received_obj.playerName;
+                }; break;
             default:
                 {
                     console.log('命令未注册', received_obj.c + "__没有注册。");
@@ -2608,7 +2497,12 @@ var objMain =
             else
                 operateStateShow.update(msg2);
         }
-    }
+    },
+    animateParameter:
+    {
+        loopCount: 0
+    },
+    groupNumber: -1
 };
 var startA = function () {
     var connected = false;
@@ -2667,8 +2561,9 @@ var startA = function () {
     };
     ws.onclose = function () {
         // 关闭 websocket
+        alert("连接已关闭...不要慌，千万不要退出。点击确认后，刷新网页，重新连接");
         connectionBroken();
-        alert("连接已关闭...不要慌，千万不要退出，刷新网页，重新连接");
+
     };
     objMain.ws = ws;
     $.notify.addStyle('happyblue', {
@@ -2718,6 +2613,7 @@ function animate() {
         switch (objMain.state) {
             case 'OnLine':
                 {
+                    objMain.animateParameter.loopCount++;
                     const lengthOfCC = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target);
                     var deltaYOfSelectObj = 0;
                     deltaYOfSelectObj = animateDetailF.moveCamara(lengthOfCC);
@@ -3367,6 +3263,10 @@ function animate() {
                     //    }
                     //}
                     douyinPanleShow.animate();
+
+                    if (objMain.animateParameter.loopCount % 5000 == 0) {
+                        onWindowResize();
+                    }
                 }; break;
             case 'LookForBuildings':
                 {
@@ -3446,10 +3346,29 @@ var animateDetailF =
     }
 };
 
+
+var setNameFuncton = function () {
+    if (localStorage.playerName != undefined) {
+        // localStorage.playerName==
+        {
+            var name = localStorage.playerName;
+            var reg = /^[\u4e00-\u9fa5]{1}[a-zA-Z0-9\u4e00-\u9fa5]{1,8}$/;
+            if (reg.test(name)) {
+                objMain.ws.send(JSON.stringify({ c: 'SetPlayerName', 'Name': name }));
+                objMain.ws.send(JSON.stringify({ c: 'GetName' }));
+                setNameFuncton = null;
+            }
+        }
+    }
+}
 var selectSingleTeamJoinHtml = function () {
 
     document.getElementById('rootContainer').innerHTML = selectSingleTeamJoinHtmlF.drawHtml();
     selectSingleTeamJoinHtmlF.canBtnClick = true;
+
+    if (setNameFuncton != null) {
+        setNameFuncton();
+    }
 }
 var buttonClick = function (v) {
     if (objMain.receivedState == 'selectSingleTeamJoin') {
@@ -6430,7 +6349,35 @@ var stateSet =
                 }
                 stateSet.diamond.updateHeight(objMain.indexKey);
             }
-        }
+        },
+        addWithKey: function (operateKey, iconCount) {
+            var car = objMain.carGroup.getObjectByName('car_' + operateKey);
+            if (car) {
+                stateSet.coinIcon.iconCount = iconCount;
+                var positionX = 13;
+                var positionY = 32;
+                var positionZ = 0;
+                for (var i = 0; i < 10000; i++) {
+                    var oIcon = car.getObjectByName('collectCoinIcon_' + operateKey + '_' + i.toString());
+                    if (oIcon) {
+                        car.remove(oIcon);
+                    }
+                    else {
+                        break;
+                    }
+                }
+                for (var i = 0; i < iconCount; i++) {
+                    var objAdd = objMain.ModelInput.CollectCoinIcon.obj.clone();
+                    objAdd.name = 'collectCoinIcon_' + operateKey + '_' + i.toString();
+                    objAdd.scale.set(3, 3, 3);
+                    objAdd.rotateX(Math.PI / 2);
+                    objAdd.position.set(positionX, positionY + i * 4, positionZ);
+                    car.add(objAdd);
+
+                }
+                stateSet.diamond.updateHeight(operateKey);
+            }
+        },
     },
 }
 var DirectionOperator =
@@ -6592,7 +6539,13 @@ var BuildingModelObj =
                 }
                 QueryReward.lookAt();
                 objMain.buildingModel[amodel] = null;
-                delete objMain.buildingModel[amodel];
+                //  s
+                var amodelIdWillDel = amodel + '';
+                setTimeout(function () {
+                    delete objMain.buildingModel[amodel];
+                    // 这里放置要延迟执行的代码
+                }, 30000);
+                // delete objMain.buildingModel[amodel];
             }
         }
     },
@@ -6608,14 +6561,94 @@ var BuildingModelObj =
     },
     Refresh: function () {
         for (var dModeItem in objMain.buildingData.dModel) {
+
+            var dItem = objMain.buildingData.dModel[dModeItem];
+
+            if (objMain.buildingGroup.getObjectByName(dModeItem)) { }
+            else {
+                var amodelID = dItem.amodel;
+                if (objMain.buildingModel[amodelID] == undefined) {
+                    if (this.RequestTime[dModeItem] == undefined) {
+                        this.RequestTime[dModeItem] = 0;
+                    }
+                    if (Date.now() - this.RequestTime[dModeItem] > 30000) {
+                        this.RequestTime[dModeItem] = Date.now();
+                        var url = "http://127.0.0.1:11001/objdata/" + amodelID;
+
+                        if (objMain.debug != 2) {
+                            url = "http://127.0.0.1:11001/objdata/" + amodelID;
+
+                        }
+                        else {
+                            //  url = "https://www.nyrq123.com/objtaiyuan/" + amodelID;
+                            //  url = "http://127.0.0.1:11001/objdata/"
+                            url = "https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/objmodel/" + amodelID + ".json";
+                        }
+                        $.getJSON(url, function (json) {
+                            var manager = new THREE.LoadingManager();
+                            var amID = json.AmID;
+                            var objText = json.objText;
+                            var mtlText = json.mtlText;
+                            var imgBase64 = json.imgBase64;
+                            var modelType = json.modelType;
+                            var mtlManaget = null;
+                            var mtlOnload = function (materials) {
+                                materials.preload();
+                                var objL = new THREE.OBJLoader(manager)
+                                    .setMaterials(materials)
+                                    .loadTextOnly(objText, function (object) {
+                                        object.userData.modelType = modelType;
+                                        objMain.buildingModel[amID] = object;
+                                        BuildingModelObj.Refresh();
+                                        objL = null;
+                                        manager = null;
+                                        mtlManaget = null;
+                                    }, function () { }, function () { });
+                            };
+                            //var imgUrl=
+                            if (objMain.debug != 2) {
+                                //   url = "http://127.0.0.1:11001/objdata/" + amodelID;
+                                if (objMain.buildingGroup.getObjectByName(amID) == undefined) {
+                                    //   var manager = new THREE.LoadingManager();
+                                    mtlManaget = new THREE.MTLLoader(manager)
+                                        .loadTextOnly(mtlText, 'data:image/jpeg;base64,' + imgBase64, mtlOnload);
+                                }
+                            }
+                            else {
+                                //  url = "https://www.nyrq123.com/objtaiyuan/" + amodelID;
+                                //  url = "http://127.0.0.1:11001/objdata/"
+                                //  url = "https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/objmodel/" + amodelID + ".json";
+                                //var ima
+                                if (objMain.buildingGroup.getObjectByName(amID) == undefined) {
+                                    var imgUrl = "https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/objmodel/" + amID + ".jpg";
+                                    var manager = new THREE.LoadingManager();
+                                    mtlManaget = new THREE.MTLLoader(manager).loadTextWithImageUrl(mtlText, imgUrl, mtlOnload);
+                                }
+                            }
+
+                        })
+                    }
+
+                }
+                else {
+                    BuildingModelObj.copy(amodelID, dItem);
+                }
+            }
+            //var amodelID = dItem.amodel;
+
+        }
+    },
+    Refresh_bak: function () {
+        for (var dModeItem in objMain.buildingData.dModel) {
+
             var dItem = objMain.buildingData.dModel[dModeItem];
             var amodelID = dItem.amodel;
             if (objMain.buildingModel[amodelID] == undefined) {
-                if (this.RequestTime[amodelID] == undefined) {
-                    this.RequestTime[amodelID] = 0;
+                if (this.RequestTime[dModeItem] == undefined) {
+                    this.RequestTime[dModeItem] = 0;
                 }
-                if (Date.now() - this.RequestTime[amodelID] > 30000) {
-                    this.RequestTime[amodelID] = Date.now();
+                if (Date.now() - this.RequestTime[dModeItem] > 30000) {
+                    this.RequestTime[dModeItem] = Date.now();
                     var url = "http://127.0.0.1:11001/objdata/" + amodelID;
 
                     if (objMain.debug != 2) {
@@ -6675,6 +6708,127 @@ var BuildingModelObj =
             }
             else {
                 BuildingModelObj.copy(amodelID, dItem);
+            }
+        }
+    },
+
+
+    RequestTime: {}
+};
+
+var roadDisplayFunction =
+{
+    roadData: {},
+    show: function (dataHash, roadCode) {
+        if (roadDisplayFunction.roadData[roadCode]) { return; }
+        else {
+            roadDisplayFunction.roadData[roadCode] = false;
+            roadDisplayFunction.Refresh(dataHash);
+        }
+    },
+    Refresh: function (dataHash) {
+        for (var roadCode in roadDisplayFunction.roadData) {
+            if (roadDisplayFunction.roadData[roadCode]) {
+            }
+            else {
+                if (this.RequestTime[roadCode] == undefined) {
+                    this.RequestTime[roadCode] = 0;
+                }
+                if (Date.now() - this.RequestTime[roadCode] > 30000) {
+                    this.RequestTime[roadCode] = Date.now();
+                    var url = "http://127.0.0.1:11001/roaddata/" + roadCode;
+
+                    if (objMain.debug != 2) {
+                        url = "http://127.0.0.1:11001/roaddata/" + roadCode;
+                    }
+                    else {
+                        url = "https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/roadData/" + dataHash + "/" + roadCode + ".json";
+                    }
+                    $.getJSON(url, function (received_obj) {
+                        //var meshPoints = json.meshPoints;
+                        var basePoint = received_obj.basePoint;
+                        var roadCodeOperating = received_obj.roadCode;
+                        if (roadDisplayFunction.roadData[roadCodeOperating]) { return; }
+                        else {
+                            roadDisplayFunction.roadData[roadCodeOperating] = true;
+                            for (var i = 0; i < received_obj.meshPoints.length; i += 12) {
+                                var itemData = [
+                                    (received_obj.meshPoints[i + 0] + basePoint[0]) / 1000000,
+                                    (received_obj.meshPoints[i + 1] + basePoint[1]) / 1000000,
+                                    (received_obj.meshPoints[i + 2] + basePoint[2]) / 1000000,
+                                    (received_obj.meshPoints[i + 3] + basePoint[0]) / 1000000,
+                                    (received_obj.meshPoints[i + 4] + basePoint[1]) / 1000000,
+                                    (received_obj.meshPoints[i + 5] + basePoint[2]) / 1000000,
+                                    (received_obj.meshPoints[i + 6] + basePoint[0]) / 1000000,
+                                    (received_obj.meshPoints[i + 7] + basePoint[1]) / 1000000,
+                                    (received_obj.meshPoints[i + 8] + basePoint[2]) / 1000000,
+                                    (received_obj.meshPoints[i + 9] + basePoint[0]) / 1000000,
+                                    (received_obj.meshPoints[i + 10] + basePoint[1]) / 1000000,
+                                    (received_obj.meshPoints[i + 11] + basePoint[2]) / 1000000
+                                ];
+                                MapData.meshPoints.push(itemData);
+                                // MapData.meshPoints.push(received_obj.meshPoints[i]);
+                            }
+
+                            var drawRoadInfomation = function () {
+
+                                {
+                                    var group = objMain.roadGroup;
+                                    var startIndex = group.children.length - 1;
+                                    for (var i = startIndex; i >= 0; i--) {
+                                        //if (group.children[i].type == "Mesh")
+                                        {
+                                            group.children[i].geometry.dispose();
+                                            group.children[i].material.dispose();
+                                        }
+                                    }
+                                }
+
+                                objMain.mainF.removeF.clearGroup(objMain.roadGroup);
+                                //  objMain.F.clearGroup(
+                                var obj = MapData.meshPoints;
+
+                                var positions = [];
+                                //   var colors = [];
+                                for (var i = 0; i < obj.length; i++) {
+                                    positions.push(
+                                        MercatorGetXbyLongitude(obj[i][0]), MercatorGetXbyLongitude(obj[i][2]) * objMain.heightAmplify, -MercatorGetYbyLatitude(obj[i][1]),
+                                        MercatorGetXbyLongitude(obj[i][3]), MercatorGetXbyLongitude(obj[i][5]) * objMain.heightAmplify, -MercatorGetYbyLatitude(obj[i][4]),
+                                        MercatorGetXbyLongitude(obj[i][6]), MercatorGetXbyLongitude(obj[i][8]) * objMain.heightAmplify, -MercatorGetYbyLatitude(obj[i][7]),
+                                        MercatorGetXbyLongitude(obj[i][6]), MercatorGetXbyLongitude(obj[i][8]) * objMain.heightAmplify, -MercatorGetYbyLatitude(obj[i][7]),
+                                        MercatorGetXbyLongitude(obj[i][9]), MercatorGetXbyLongitude(obj[i][11]) * objMain.heightAmplify, -MercatorGetYbyLatitude(obj[i][10]),
+                                        MercatorGetXbyLongitude(obj[i][0]), MercatorGetXbyLongitude(obj[i][2]) * objMain.heightAmplify, -MercatorGetYbyLatitude(obj[i][1]),
+
+                                    );
+                                }
+                                function disposeArray() {
+
+                                    this.array = null;
+
+                                }
+                                //  console.log('p', positions);
+                                //var vertices = new Float32Array(positions);
+                                var geometry = new THREE.BufferGeometry();
+                                geometry.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3).onUpload(disposeArray));
+                                //geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3).onUpload(disposeArray));
+                                geometry.computeBoundingSphere();
+                                //var material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
+                                var material = new THREE.MeshBasicMaterial({ color: 0xeedd78 });
+                                var mesh = new THREE.Mesh(geometry, material);
+
+                                objMain.roadGroup.add(mesh);
+
+
+                                var edges = new THREE.EdgesGeometry(geometry);
+                                var line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xeeddf0 }));
+                                objMain.roadGroup.add(line);
+
+                            };
+                            drawRoadInfomation();
+                            roadDisplayFunction.Refresh(dataHash);
+                        }
+                    })
+                }
             }
         }
     },

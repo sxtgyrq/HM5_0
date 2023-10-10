@@ -972,6 +972,7 @@ namespace HouseManager5_0
         //}
         public delegate void SpeedMagicChanged(Player role, ref List<string> notifyMsgs);
         public delegate void AttackMagicChanged(Player role, ref List<string> notifyMsgs);
+        public delegate void CollectCountChanged(Player role, ref List<string> notifyMsgs);
         public delegate void DefenceMagicChanged(Player role, ref List<string> notifyMsgs);
 
         public delegate void ConfusePrepareMagicChanged(Player role, ref List<string> notifyMsgs);
