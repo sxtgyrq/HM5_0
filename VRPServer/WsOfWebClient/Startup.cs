@@ -24,6 +24,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ubiety.Dns.Core;
 using static BitCoin.Transtraction.TradeInfo;
+using static NBitcoin.Scripting.OutputDescriptor;
 using static WsOfWebClient.ConnectInfo;
 
 namespace WsOfWebClient
@@ -94,6 +95,8 @@ namespace WsOfWebClient
             app.Map("/bgimg", BackGroundImg);
             app.Map("/objdata", ObjData);
             app.Map("/douyindata", douyindata);
+            app.Map("/roaddata", roaddata);//此接口只对调试时开放
+            //roaddata
             //app.Map("/websocket", WebSocketF);
             // app.Map("/notify", notify);
 
@@ -326,6 +329,67 @@ namespace WsOfWebClient
                             }
                         }
                     }
+                }
+                catch (Exception e)
+                {
+                    //throw e;
+                }
+            });
+        }
+
+        internal static void roaddata(IApplicationBuilder app)
+        {
+            app.UseCors("AllowAny");
+            app.Run(async context =>
+            {
+                try
+                {
+                    ////$.get("http://127.0.0.1:11001/objdata/04FF6C83E093F15D5E844ED94838D761/d/d")
+                    ////$.getJSON("http://127.0.0.1:11001/objdata/04FF6C83E093F15D5E844ED94838D761/3/2")
+                    //// throw new NotImplementedException();
+                    ////var pathValue = context.Request.Path.Value;
+                    //string requestBody;
+                    //using (StreamReader reader = new StreamReader(context.Request.Body))
+                    //{
+                    //    requestBody = await reader.ReadToEndAsync();
+                    //};
+                    //Console.WriteLine(requestBody);
+                    //List<CommonClass.douyin.log> logObjs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<CommonClass.douyin.log>>(requestBody);
+                    //// context.Request.BodyReader
+
+                    //for (int i = 0; i < logObjs.Count; i++)
+                    //{
+                    //    var logObj = logObjs[i];
+                    //    Room.SendZhiBoContent(logObj);
+                    //}
+                    //var bytes = Encoding.UTF8.GetBytes("ok");
+                    //await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
+                    var ip = "127.0.0.1"; //ip与端口如果有需要，修改成配置加载！
+                    int tcpPort = 11100;//ip与端口如果有需要，修改成配置加载！
+                                        // CommonF.SendData(msg, connectInfoDetail, 0);
+                    string pattern = @"/(?<amid>[A-Z]{10})$";
+                    var pathValue = context.Request.Path.Value;
+                    Match match = Regex.Match(pathValue, pattern);
+                    if (match.Success)
+                    {
+                        var msg = Newtonsoft.Json.JsonConvert.SerializeObject
+                                        (
+                                            new GetRoadMesh
+                                            {
+                                                c = "GetRoadMesh",
+                                                RoadCode = pathValue.Substring(1, 10),
+                                            }
+                                            );
+                        var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes($"{ip}:{tcpPort}", msg);
+                        var resultString = t.GetAwaiter().GetResult();
+
+                        context.Response.ContentType = "application/json";
+                        {
+                            var bytes = Encoding.UTF8.GetBytes(resultString);
+                            await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
+                        }
+                    }
+
                 }
                 catch (Exception e)
                 {
@@ -1219,6 +1283,14 @@ namespace WsOfWebClient
                                         {
                                             RequstToSaveInFile aws = Newtonsoft.Json.JsonConvert.DeserializeObject<RequstToSaveInFile>(returnResult.result);
                                             Room.saveInFile(s);
+                                        }
+                                    }; break;
+                                case "TurnOnBeginnerMode":
+                                    {
+                                        if (s.Ls == LoginState.OnLine)
+                                        {
+                                            // TurnOnBeginnerMode aws = Newtonsoft.Json.JsonConvert.DeserializeObject<RequstToSaveInFile>(returnResult.result);
+                                            Room.turnOnBeginnerMode(s);
                                         }
                                     }; break;
                                 default:

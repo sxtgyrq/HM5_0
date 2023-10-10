@@ -13,12 +13,12 @@ namespace Aliyun
 {
     public class Json
     {
-        public static void Add(string path, string json)
+        public static bool Add(string path, string json)
         {
             if (!AliyunOSSHelper.loadSuccess)
                 AliyunOSSHelper.LoadKey();
 
-            AliyunOSSHelper.PutString("yrqmodeldata", path, json);
+            return AliyunOSSHelper.PutString("yrqmodeldata", path, json);
         }
 
         public static bool Delete(string path)
@@ -50,7 +50,7 @@ namespace Aliyun
                 AliyunOSSHelper.LoadKey();
 
             var success = AliyunOSSHelper.PutByte("yrqmodeldata", path, data);
-            if(success) 
+            if (success)
             {
                 Console.WriteLine($"{path}存储成功！");
             }

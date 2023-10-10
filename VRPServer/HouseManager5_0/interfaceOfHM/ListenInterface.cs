@@ -124,6 +124,10 @@ namespace HouseManager5_0.interfaceOfHM
         // string NotWantToGoNeedToBackF(NotWantToGoNeedToBack nwtgntb);
         string ConfirmPanelSelectResultF(ConfirmPanelSelectResult nwtgntb);
         void SaveInFileF(SaveInFile sif);
+        void TurnOnBeginnerModeF(TurnOnBeginnerMode tbm);
+
+
+        string GetRoadMeshF(GetRoadMesh tbm);
     }
 
     interface MapEditor
@@ -158,6 +162,8 @@ namespace HouseManager5_0.interfaceOfHM
         string TaskCopyPassOrNGF(TaskCopyPassOrNG pOrNG);
         string GetAbtractmodelsF(GetAbtractmodels ca);
         string ModelReplaceF(CommonClass.MapEditor.ModelReplace mr);
+
+       
     }
 
     interface ModelTranstractionI

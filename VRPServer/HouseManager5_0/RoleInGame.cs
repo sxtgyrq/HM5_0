@@ -956,6 +956,7 @@ namespace HouseManager5_0
 
             public int AskCount = 0;
             public const long AskMoney = 5000;// { get { return 5000; } }
+            public const long AskMoney_WhenBeginnerModeIsOn = 20;// { get { return 5000; } }
         }
         public DirecitonAndSelectID direcitonAndID = new DirecitonAndSelectID()
         {

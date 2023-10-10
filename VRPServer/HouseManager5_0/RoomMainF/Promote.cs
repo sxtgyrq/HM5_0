@@ -471,9 +471,12 @@ namespace HouseManager5_0.RoomMainF
                 // MoneyCanSaveChanged(player, m2, ref notifyMsg);
             }
         }
-
-
         private void SendPromoteCountOfPlayer(string pType, Player player, ref List<string> notifyMsgs)
+        {
+            SendPromoteCountOfPlayer(pType, player, ref notifyMsgs, true);
+        }
+
+        private void SendPromoteCountOfPlayer(string pType, Player player, ref List<string> notifyMsgs, bool asynSend)
         {
             if (!(pType == "mile" || pType == "volume" || pType == "speed"))
             {
@@ -487,7 +490,8 @@ namespace HouseManager5_0.RoomMainF
                     c = "BradCastPromoteDiamondCount",
                     count = count,
                     WebSocketID = player.WebSocketID,
-                    pType = pType
+                    pType = pType,
+                    AsynSend = asynSend,
                 };
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
                 notifyMsgs.Add(player.FromUrl);

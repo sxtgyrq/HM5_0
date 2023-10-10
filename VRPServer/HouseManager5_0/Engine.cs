@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using static HouseManager5_0.Car;
@@ -84,6 +85,11 @@ namespace HouseManager5_0
                 }
                 else
                 {
+                    Console.WriteLine($"未知情况！Engine-87{car.state.ToString()}");
+                    Console.WriteLine($"未知情况！{Newtonsoft.Json.JsonConvert.SerializeObject(car)}");
+                    File.WriteAllText($"error{DateTime.Now.ToString("yyyyMMddHHmmss")}.txt", $"未知情况！Engine-87{car.state.ToString()}");
+                    File.WriteAllText($"error{DateTime.Now.ToString("yyyyMMddHHmmss")}.txt", $"未知情况！{Newtonsoft.Json.JsonConvert.SerializeObject(car)}");
+                    return;
                     throw new Exception($"未知情况！{Newtonsoft.Json.JsonConvert.SerializeObject(car)}");
                 }
                 car.setState(player, ref notifyMsg, CarState.working);
@@ -248,6 +254,10 @@ namespace HouseManager5_0
                     target = from
                 }, grp);
             }
+            else if (car.state == CarState.waitAtBaseStation)
+            {
+                player.Group.askWhetherGoToPositon(player.Key, grp);
+            }
         }
 
         public int getFromWhenAction(Player role, Car car)
@@ -376,54 +386,100 @@ namespace HouseManager5_0
         {
             if (player.direcitonAndID.AskWitchToSelect)
             {
-                List<string> notifyMsg = new List<string>();
-
-                if (player.Money > HouseManager5_0.Player.DirecitonAndSelectID.AskMoney)
+                if (player.Group.beginnerModeOn)
                 {
+                    List<string> notifyMsg = new List<string>();
 
-                    player.MoneySet(player.Money - Player.DirecitonAndSelectID.AskMoney, ref notifyMsg);
+                    if (player.Money > HouseManager5_0.Player.DirecitonAndSelectID.AskMoney_WhenBeginnerModeIsOn)
+                    {
 
-                    if (player.Group._PlayerInGroup.Count == 1)
-                    {
-                        this.WebNotify(player, $"第{(player.Group.countOfAskRoad + 1)}次问道，花费{Player.DirecitonAndSelectID.AskMoney / 100}.{Player.DirecitonAndSelectID.AskMoney / 10 % 10}{Player.DirecitonAndSelectID.AskMoney % 10}积分。");
+                        player.MoneySet(player.Money - Player.DirecitonAndSelectID.AskMoney_WhenBeginnerModeIsOn, ref notifyMsg);
+
+                        if (player.Group._PlayerInGroup.Count == 1)
+                        {
+                            this.WebNotify(player, $"第{(player.Group.countOfAskRoad + 1)}次问道，花费{Player.DirecitonAndSelectID.AskMoney_WhenBeginnerModeIsOn / 100}.{Player.DirecitonAndSelectID.AskMoney_WhenBeginnerModeIsOn / 10 % 10}{Player.DirecitonAndSelectID.AskMoney_WhenBeginnerModeIsOn % 10}积分。");
+                        }
                     }
-                    else if (player.Group._PlayerInGroup.Count == 2)
+                    else
                     {
-                        this.WebNotify(player, $"你与你的队友第{(player.Group.countOfAskRoad + 1)}次问道，这次你花费{Player.DirecitonAndSelectID.AskMoney / 100}.{Player.DirecitonAndSelectID.AskMoney / 10 % 10}{Player.DirecitonAndSelectID.AskMoney % 10}积分。");
+                        if (player.Money > 1)
+                            player.MoneySet(1, ref notifyMsg);
+                        if (player.Group._PlayerInGroup.Count == 1)
+                        {
+                            this.WebNotify(player, $"第{(player.Group.countOfAskRoad + 1)}次问道。");
+                        }
                     }
+
+
+                    //player.direcitonAndID.AskMoney = player.direcitonAndID.AskMoney * 2;
+                    player.direcitonAndID.AskCount++;
+                    //  List<string> notifyMsg = new List<string>();
+                    if (player.getCar().state == CarState.selecting)
+                    {
+                        // List<string> notifyMsg = new List<string>();
+                        player.getCar().setState(player, ref notifyMsg, oldState);
+                        player.SendBG(player, ref notifyMsg);
+
+                        var randomV = this.that.rm.Next(0, 100);
+                        if (randomV < 9 && !player.improvementRecord.CollectIsDouble)
+                            player.improvementRecord.addAttack(player, ref notifyMsg);
+                    }
+                    this.sendSeveralMsgs(notifyMsg);
+                    p();
+                    player.direcitonAndID.AskWitchToSelect = false;
                 }
                 else
                 {
-                    if (player.Money > 1)
-                        player.MoneySet(1, ref notifyMsg);
-                    if (player.Group._PlayerInGroup.Count == 1)
+                    List<string> notifyMsg = new List<string>();
+
+                    if (player.Money > HouseManager5_0.Player.DirecitonAndSelectID.AskMoney)
                     {
-                        this.WebNotify(player, $"第{(player.Group.countOfAskRoad + 1)}次问道。");
+
+                        player.MoneySet(player.Money - Player.DirecitonAndSelectID.AskMoney, ref notifyMsg);
+
+                        if (player.Group._PlayerInGroup.Count == 1)
+                        {
+                            this.WebNotify(player, $"第{(player.Group.countOfAskRoad + 1)}次问道，花费{Player.DirecitonAndSelectID.AskMoney / 100}.{Player.DirecitonAndSelectID.AskMoney / 10 % 10}{Player.DirecitonAndSelectID.AskMoney % 10}积分。");
+                        }
+                        else if (player.Group._PlayerInGroup.Count == 2)
+                        {
+                            this.WebNotify(player, $"你与你的队友第{(player.Group.countOfAskRoad + 1)}次问道，这次你花费{Player.DirecitonAndSelectID.AskMoney / 100}.{Player.DirecitonAndSelectID.AskMoney / 10 % 10}{Player.DirecitonAndSelectID.AskMoney % 10}积分。");
+                        }
                     }
-                    else if (player.Group._PlayerInGroup.Count == 2)
+                    else
                     {
-                        this.WebNotify(player, $"你与你的队友第{(player.Group.countOfAskRoad + 1)}次问道。");
+                        if (player.Money > 1)
+                            player.MoneySet(1, ref notifyMsg);
+                        if (player.Group._PlayerInGroup.Count == 1)
+                        {
+                            this.WebNotify(player, $"第{(player.Group.countOfAskRoad + 1)}次问道。");
+                        }
+                        else if (player.Group._PlayerInGroup.Count == 2)
+                        {
+                            this.WebNotify(player, $"你与你的队友第{(player.Group.countOfAskRoad + 1)}次问道。");
+                        }
                     }
+
+
+                    //player.direcitonAndID.AskMoney = player.direcitonAndID.AskMoney * 2;
+                    player.direcitonAndID.AskCount++;
+                    //  List<string> notifyMsg = new List<string>();
+                    if (player.getCar().state == CarState.selecting)
+                    {
+                        // List<string> notifyMsg = new List<string>();
+                        player.getCar().setState(player, ref notifyMsg, oldState);
+                        player.SendBG(player, ref notifyMsg);
+
+                        var randomV = this.that.rm.Next(0, 100);
+                        if (randomV < 9 && !player.improvementRecord.CollectIsDouble)
+                            player.improvementRecord.addAttack(player, ref notifyMsg);
+                    }
+                    this.sendSeveralMsgs(notifyMsg);
+                    p();
+
+                    player.direcitonAndID.AskWitchToSelect = false;
                 }
 
-
-                //player.direcitonAndID.AskMoney = player.direcitonAndID.AskMoney * 2;
-                player.direcitonAndID.AskCount++;
-                //  List<string> notifyMsg = new List<string>();
-                if (player.getCar().state == CarState.selecting)
-                {
-                    // List<string> notifyMsg = new List<string>();
-                    player.getCar().setState(player, ref notifyMsg, oldState);
-                    player.SendBG(player, ref notifyMsg);
-
-                    var randomV = this.that.rm.Next(0, 100);
-                    if (randomV < 9 && !player.improvementRecord.CollectIsDouble)
-                        player.improvementRecord.addAttack(player, ref notifyMsg);
-                }
-                this.sendSeveralMsgs(notifyMsg);
-                p();
-
-                player.direcitonAndID.AskWitchToSelect = false;
             }
             else if (selectionCenter.postionCrossKey == player.direcitonAndID.PostionCrossKey)
             {

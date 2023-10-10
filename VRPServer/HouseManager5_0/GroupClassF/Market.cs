@@ -615,14 +615,15 @@ namespace HouseManager5_0.GroupClassF
         {
             get
             {
-                if (this.GiftByViewer == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return false;
+                //if (this.GiftByViewer == null)
+                //{
+                //    return false;
+                //}
+                //else
+                //{
+                //    return true;
+                //}
             }
         }
 

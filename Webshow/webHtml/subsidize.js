@@ -46,24 +46,24 @@
             <tr>
                 <td style="width:50%">
                     <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(50000)" >
-                        取出500
+                        取出500.00
                     </div>
                 </td>
                 <td style="width: 50%">
                     <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;"  onclick="subsidizeSys.subsidize(100000)" >
-                        取出1000
+                        取出1000.00
                     </div>
                 </td>
             </tr>
             <tr>
                 <td style="width:50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(200000)" >
-                        取出2000
+                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(500000)" >
+                        取出5000.00
                     </div>
                 </td>
                 <td style="width: 50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(500000)">
-                        资助5000
+                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.beginnerMode()">
+                        开启新手模式
                     </div>
                 </td>
             </tr> 
@@ -183,6 +183,10 @@
                 objMain.music.theme = 'Aloha_Heja_He_Achim_Reichel';
             }
         }
+    },
+    beginnerMode: function () {
+        var passObj = { "c": "TurnOnBeginnerMode" };
+        objMain.ws.send(JSON.stringify(passObj));
     },
     signOnline: function () {
         subsidizeSys.add();

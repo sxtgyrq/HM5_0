@@ -1308,7 +1308,20 @@ namespace WsOfWebClient
             return "";
             // throw new NotImplementedException();
         }
-
+        //TurnOnBeginnerMode
+        internal static string turnOnBeginnerMode(State s)
+        {
+            var ms = new TurnOnBeginnerMode()
+            {
+                c = "TurnOnBeginnerMode",
+                Key = s.Key,
+                GroupKey = s.GroupKey
+            };
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ms);
+            Thread th = new Thread(() => Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg));
+            th.Start();
+            return ""; 
+        }
         internal static string TakeApart(State s)
         {
             var ms = new CommonClass.TakeApart()

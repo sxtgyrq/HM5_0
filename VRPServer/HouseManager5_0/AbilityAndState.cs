@@ -459,7 +459,7 @@ namespace HouseManager5_0
                 return selfValue;
             }
         }
-
+        public const int reducePercentWhenbeginnerModeIsOn = 4;
         internal long ReduceBusinessAndVolume(Player player, Car car, ref List<string> notifyMsg)
         {
             if (player.Group.Live)
@@ -468,24 +468,36 @@ namespace HouseManager5_0
             }
             else
             {
-                long reduceValue = 0;
-                // var reduceBusiness = this.costBusiness / 5;
-                var reduceVolume = this.costVolume;// 1;
-
-                //if (this.costBusiness > 0)
-                //{
-                //    reduceBusiness = Math.Max(1, reduceBusiness);
-                //}
-                if (this.costVolume > 0)
+                if (player.Group.beginnerModeOn)
                 {
-                    reduceVolume = Math.Max(1, reduceVolume);
+                    /*
+                     * 开启新手保护模式
+                     */
+                    long reduceValue = 0;
+                    var reduceVolume = this.costVolume * reducePercentWhenbeginnerModeIsOn / 100;
+                    if (this.costVolume > 0)
+                    {
+                        reduceVolume = Math.Max(1, reduceVolume);
+                    }
+                    reduceValue += reduceVolume;
+                    this.setCostVolume(this.costVolume - reduceVolume, player, car, ref notifyMsg);
+                    return reduceValue;
                 }
-                // reduceValue += reduceBusiness;
-                reduceValue += reduceVolume;
-                //this.setCostMiles(this.costMiles + this.mile / 20, player, car, ref notifyMsg);
-                //  this.setCostBusiness(this.costBusiness - reduceBusiness, player, car, ref notifyMsg);
-                this.setCostVolume(this.costVolume - reduceVolume, player, car, ref notifyMsg);
-                return reduceValue;
+                else
+                {
+                    long reduceValue = 0;
+                    var reduceVolume = this.costVolume;// 1;
+
+                    if (this.costVolume > 0)
+                    {
+                        reduceVolume = Math.Max(1, reduceVolume);
+                    }
+                    reduceValue += reduceVolume;
+                    //this.setCostMiles(this.costMiles + this.mile / 20, player, car, ref notifyMsg);
+                    //  this.setCostBusiness(this.costBusiness - reduceBusiness, player, car, ref notifyMsg);
+                    this.setCostVolume(this.costVolume - reduceVolume, player, car, ref notifyMsg);
+                    return reduceValue;
+                }
             }
         }
 

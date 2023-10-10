@@ -84,7 +84,49 @@ namespace HouseManager5_0.GroupClassF
         /// </summary>
         public int groupNumber { get { return this._groupNumber; } }
 
+
+
         int _groupNumber;
+
+
+        bool _beginnerModeOn = false;
+        /// <summary>
+        /// 开启新手模式
+        /// </summary>
+        public bool beginnerModeOn
+        {
+            /*
+             * 首先新手模式的开启，需要在单人模式下。
+             * 其次新手模式的开启，需要在登录状态下。
+             * 再次新手模式的开启，需要在无任何收集的状态下。
+             * 
+             * 新手模式，收集，需要提供30%的收集奖励作为新手保护费用。
+             * 新手模式，选择错误，扣除4%的汽车上的积分。
+             * 新手模式，问道功能，只需要花费10.00%*4%/2=20的积分
+             */
+            get
+            {
+                if (this.groupNumber == 1)
+                {
+                    return this._beginnerModeOn;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            set
+            {
+                if (this.groupNumber == 1)
+                {
+                    this._beginnerModeOn = value;
+                }
+                else
+                {
+                    this._beginnerModeOn = false;
+                }
+            }
+        }
 
         public int GameStartBaseMoney
         {

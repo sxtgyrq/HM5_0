@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Geometry;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -59,7 +60,7 @@ namespace HouseManager5_0
 
                 Console.WriteLine("输入密钥或exit");
                 var privateKey = Console.ReadLine();
-                if (privateKey == "exit") 
+                if (privateKey == "exit")
                 {
                     break;
                 }
@@ -93,6 +94,41 @@ namespace HouseManager5_0
 
         internal static void writeToAliyun()
         {
+            {
+                Program.boundary = new Geometry.Boundary();
+                Program.boundary.load();
+                Program.dt = new Data();
+                Program.dt.LoadRoad();
+                var dt = Program.dt;
+                var codes = dt.GetAllRoadCodes();
+                for (int i = 0; i < codes.Count; i++)
+                {
+                    var roadCode = codes[i];
+
+                    List<int> meshPoints;
+                    List<int> basePoint;
+                    dt.getSingle(roadCode, out meshPoints, out basePoint);
+                    var obj = new
+                    {
+                        meshPoints = meshPoints,
+                        basePoint = basePoint,
+                        roadCode = roadCode
+                    };
+                    var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+                    var path = $"roadData/{dt.RoadDataSha256}/{roadCode}.json";
+                    var success = Aliyun.Json.Add($"roadData/{dt.RoadDataSha256}/{roadCode}.json", json);
+                    if (success)
+                    {
+                        Console.WriteLine($"道路数据{path}写入成功！");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"道路数据{path}写入失败！");
+                        Console.ReadLine();
+                    }
+                }
+            }
+
             {
                 var material = new Dictionary<string, CommonClass.databaseModel.abtractmodelsPassData>();
 
@@ -155,6 +191,8 @@ namespace HouseManager5_0
                         }
                 }
             }
+
+
         }
     }
 }

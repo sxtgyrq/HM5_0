@@ -120,10 +120,10 @@ namespace HouseManager5_0.RoomMainF
 
                             //    MoneyCanSaveChanged(player, m2, ref notifyMsgs);
 
-                            SendPromoteCountOfPlayer("mile", player, ref notifyMsgs);
+                            SendPromoteCountOfPlayer("mile", player, ref notifyMsgs, false);
                             //  SendPromoteCountOfPlayer("business", player, ref notifyMsgs);
-                            SendPromoteCountOfPlayer("volume", player, ref notifyMsgs);
-                            SendPromoteCountOfPlayer("speed", player, ref notifyMsgs);
+                            SendPromoteCountOfPlayer("volume", player, ref notifyMsgs, false);
+                            SendPromoteCountOfPlayer("speed", player, ref notifyMsgs, false);
 
                             //   BroadCoastFrequency(player, ref notifyMsgs);
                             player.SetMoneyCanSave(player, ref notifyMsgs);
@@ -209,7 +209,12 @@ namespace HouseManager5_0.RoomMainF
                                         }
                                     }
                                 }
-                                Startup.sendSeveralMsgs(notifyMsgs2);
+
+                                for (int i = 0; i < notifyMsgs2.Count; i++)
+                                {
+                                    result.NotifyMsgs.Add(notifyMsgs2[i]);
+                                }
+                                //Startup.sendSeveralMsgs(notifyMsgs2);
                             }
                         }
                         else

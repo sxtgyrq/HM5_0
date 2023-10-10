@@ -1800,7 +1800,7 @@ var objMain =
             case 'BradCastMoneyForSave':
                 {
                     objMain.MoneyForSave = received_obj.Money;
-                  //  moneyOperator.updateSaveMoneyNotify();
+                    //  moneyOperator.updateSaveMoneyNotify();
                 }; break;
             case 'BradCastPromoteDiamondCount':
                 {
@@ -1934,6 +1934,12 @@ var objMain =
                     };
                     drawRoadInfomation();
                 }; break;
+            case 'SingleRoadPathData_V2':
+                {
+                    var roadCode = received_obj.RoadCode;
+                    var dataHash = received_obj.DataHash;
+                    roadDisplayFunction.show(dataHash, roadCode);
+                }; break;
             case 'SetLeaveGameIcon':
                 {
                     objMain.ws.send('SetLeaveGameIcon');
@@ -2060,8 +2066,9 @@ var objMain =
                     if (received_obj.countStamp > objMain.carState.stamp) {
                         objMain.carState.stamp = received_obj.countStamp;
                         objMain.carState[received_obj.carID] = received_obj.State;
-                        var oldLength = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target);
-                        objMain.carStateTimestamp[received_obj.carID] = { 't': Date.now(), 'l': oldLength };
+                        //if()
+                       // var oldLength = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target);
+                        //objMain.carStateTimestamp[received_obj.carID] = { 't': Date.now(), 'l': oldLength };
                         objNotify.notifyCar(received_obj.carID, received_obj.State);
                         operatePanel.refresh();
                         //setInterval(function () {
@@ -2462,7 +2469,7 @@ var objMain =
                             whetherGo.show2();
                             smallMapClass.draw2(whetherGo.obj);
 
-                        } 
+                        }
                     }
                     else {
                         smallMapClass.draw(received_obj);
@@ -2608,6 +2615,10 @@ var objMain =
             else
                 operateStateShow.update(msg2);
         }
+    },
+    animateParameter:
+    {
+        loopCount: 0
     }
 };
 var startA = function () {
@@ -2667,8 +2678,9 @@ var startA = function () {
     };
     ws.onclose = function () {
         // 关闭 websocket
+        alert("连接已关闭...不要慌，千万不要退出。点击确认后，刷新网页，重新连接");
         connectionBroken();
-        alert("连接已关闭...不要慌，千万不要退出，刷新网页，重新连接");
+
     };
     objMain.ws = ws;
     $.notify.addStyle('happyblue', {
@@ -2718,6 +2730,7 @@ function animate() {
         switch (objMain.state) {
             case 'OnLine':
                 {
+                    objMain.animateParameter.loopCount++;
                     const lengthOfCC = objMain.mainF.getLength(objMain.camera.position, objMain.controls.target);
                     var deltaYOfSelectObj = 0;
                     deltaYOfSelectObj = animateDetailF.moveCamara(lengthOfCC);
@@ -3367,6 +3380,10 @@ function animate() {
                     //    }
                     //}
                     douyinPanleShow.animate();
+
+                    if (objMain.animateParameter.loopCount % 5000 == 0) {
+                        onWindowResize();
+                    }
                 }; break;
             case 'LookForBuildings':
                 {
@@ -6592,7 +6609,13 @@ var BuildingModelObj =
                 }
                 QueryReward.lookAt();
                 objMain.buildingModel[amodel] = null;
-                delete objMain.buildingModel[amodel];
+                //  s
+                var amodelIdWillDel = amodel + '';
+                setTimeout(function () {
+                    delete objMain.buildingModel[amodel];
+                    // 这里放置要延迟执行的代码
+                }, 30000);
+                // delete objMain.buildingModel[amodel];
             }
         }
     },
@@ -6608,14 +6631,94 @@ var BuildingModelObj =
     },
     Refresh: function () {
         for (var dModeItem in objMain.buildingData.dModel) {
+
+            var dItem = objMain.buildingData.dModel[dModeItem];
+
+            if (objMain.buildingGroup.getObjectByName(dModeItem)) { }
+            else {
+                var amodelID = dItem.amodel;
+                if (objMain.buildingModel[amodelID] == undefined) {
+                    if (this.RequestTime[dModeItem] == undefined) {
+                        this.RequestTime[dModeItem] = 0;
+                    }
+                    if (Date.now() - this.RequestTime[dModeItem] > 30000) {
+                        this.RequestTime[dModeItem] = Date.now();
+                        var url = "http://127.0.0.1:11001/objdata/" + amodelID;
+
+                        if (objMain.debug != 2) {
+                            url = "http://127.0.0.1:11001/objdata/" + amodelID;
+
+                        }
+                        else {
+                            //  url = "https://www.nyrq123.com/objtaiyuan/" + amodelID;
+                            //  url = "http://127.0.0.1:11001/objdata/"
+                            url = "https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/objmodel/" + amodelID + ".json";
+                        }
+                        $.getJSON(url, function (json) {
+                            var manager = new THREE.LoadingManager();
+                            var amID = json.AmID;
+                            var objText = json.objText;
+                            var mtlText = json.mtlText;
+                            var imgBase64 = json.imgBase64;
+                            var modelType = json.modelType;
+                            var mtlManaget = null;
+                            var mtlOnload = function (materials) {
+                                materials.preload();
+                                var objL = new THREE.OBJLoader(manager)
+                                    .setMaterials(materials)
+                                    .loadTextOnly(objText, function (object) {
+                                        object.userData.modelType = modelType;
+                                        objMain.buildingModel[amID] = object;
+                                        BuildingModelObj.Refresh();
+                                        objL = null;
+                                        manager = null;
+                                        mtlManaget = null;
+                                    }, function () { }, function () { });
+                            };
+                            //var imgUrl=
+                            if (objMain.debug != 2) {
+                                //   url = "http://127.0.0.1:11001/objdata/" + amodelID;
+                                if (objMain.buildingGroup.getObjectByName(amID) == undefined) {
+                                    //   var manager = new THREE.LoadingManager();
+                                    mtlManaget = new THREE.MTLLoader(manager)
+                                        .loadTextOnly(mtlText, 'data:image/jpeg;base64,' + imgBase64, mtlOnload);
+                                }
+                            }
+                            else {
+                                //  url = "https://www.nyrq123.com/objtaiyuan/" + amodelID;
+                                //  url = "http://127.0.0.1:11001/objdata/"
+                                //  url = "https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/objmodel/" + amodelID + ".json";
+                                //var ima
+                                if (objMain.buildingGroup.getObjectByName(amID) == undefined) {
+                                    var imgUrl = "https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/objmodel/" + amID + ".jpg";
+                                    var manager = new THREE.LoadingManager();
+                                    mtlManaget = new THREE.MTLLoader(manager).loadTextWithImageUrl(mtlText, imgUrl, mtlOnload);
+                                }
+                            }
+
+                        })
+                    }
+
+                }
+                else {
+                    BuildingModelObj.copy(amodelID, dItem);
+                }
+            }
+            //var amodelID = dItem.amodel;
+
+        }
+    },
+    Refresh_bak: function () {
+        for (var dModeItem in objMain.buildingData.dModel) {
+
             var dItem = objMain.buildingData.dModel[dModeItem];
             var amodelID = dItem.amodel;
             if (objMain.buildingModel[amodelID] == undefined) {
-                if (this.RequestTime[amodelID] == undefined) {
-                    this.RequestTime[amodelID] = 0;
+                if (this.RequestTime[dModeItem] == undefined) {
+                    this.RequestTime[dModeItem] = 0;
                 }
-                if (Date.now() - this.RequestTime[amodelID] > 30000) {
-                    this.RequestTime[amodelID] = Date.now();
+                if (Date.now() - this.RequestTime[dModeItem] > 30000) {
+                    this.RequestTime[dModeItem] = Date.now();
                     var url = "http://127.0.0.1:11001/objdata/" + amodelID;
 
                     if (objMain.debug != 2) {
@@ -6678,7 +6781,100 @@ var BuildingModelObj =
             }
         }
     },
+
+
     RequestTime: {}
+};
+
+var roadDisplayFunction =
+{
+    show: function (dataHash, roadCode) {
+        var url = "http://127.0.0.1:11001/roaddata/" + roadCode;
+
+        if (objMain.debug != 2) {
+            url = "http://127.0.0.1:11001/roaddata/" + roadCode;
+        }
+        else {
+            url = "https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/roadData/" + dataHash + "/" + roadCode + ".json";
+        }
+        $.getJSON(url, function (received_obj) {
+            //var meshPoints = json.meshPoints;
+            var basePoint = received_obj.basePoint;
+            for (var i = 0; i < received_obj.meshPoints.length; i += 12) {
+                var itemData = [
+                    (received_obj.meshPoints[i + 0] + basePoint[0]) / 1000000,
+                    (received_obj.meshPoints[i + 1] + basePoint[1]) / 1000000,
+                    (received_obj.meshPoints[i + 2] + basePoint[2]) / 1000000,
+                    (received_obj.meshPoints[i + 3] + basePoint[0]) / 1000000,
+                    (received_obj.meshPoints[i + 4] + basePoint[1]) / 1000000,
+                    (received_obj.meshPoints[i + 5] + basePoint[2]) / 1000000,
+                    (received_obj.meshPoints[i + 6] + basePoint[0]) / 1000000,
+                    (received_obj.meshPoints[i + 7] + basePoint[1]) / 1000000,
+                    (received_obj.meshPoints[i + 8] + basePoint[2]) / 1000000,
+                    (received_obj.meshPoints[i + 9] + basePoint[0]) / 1000000,
+                    (received_obj.meshPoints[i + 10] + basePoint[1]) / 1000000,
+                    (received_obj.meshPoints[i + 11] + basePoint[2]) / 1000000
+                ];
+                MapData.meshPoints.push(itemData);
+                // MapData.meshPoints.push(received_obj.meshPoints[i]);
+            }
+
+            var drawRoadInfomation = function () {
+
+                {
+                    var group = objMain.roadGroup;
+                    var startIndex = group.children.length - 1;
+                    for (var i = startIndex; i >= 0; i--) {
+                        //if (group.children[i].type == "Mesh")
+                        {
+                            group.children[i].geometry.dispose();
+                            group.children[i].material.dispose();
+                        }
+                    }
+                }
+
+                objMain.mainF.removeF.clearGroup(objMain.roadGroup);
+                //  objMain.F.clearGroup(
+                var obj = MapData.meshPoints;
+
+                var positions = [];
+                //   var colors = [];
+                for (var i = 0; i < obj.length; i++) {
+                    positions.push(
+                        MercatorGetXbyLongitude(obj[i][0]), MercatorGetXbyLongitude(obj[i][2]) * objMain.heightAmplify, -MercatorGetYbyLatitude(obj[i][1]),
+                        MercatorGetXbyLongitude(obj[i][3]), MercatorGetXbyLongitude(obj[i][5]) * objMain.heightAmplify, -MercatorGetYbyLatitude(obj[i][4]),
+                        MercatorGetXbyLongitude(obj[i][6]), MercatorGetXbyLongitude(obj[i][8]) * objMain.heightAmplify, -MercatorGetYbyLatitude(obj[i][7]),
+                        MercatorGetXbyLongitude(obj[i][6]), MercatorGetXbyLongitude(obj[i][8]) * objMain.heightAmplify, -MercatorGetYbyLatitude(obj[i][7]),
+                        MercatorGetXbyLongitude(obj[i][9]), MercatorGetXbyLongitude(obj[i][11]) * objMain.heightAmplify, -MercatorGetYbyLatitude(obj[i][10]),
+                        MercatorGetXbyLongitude(obj[i][0]), MercatorGetXbyLongitude(obj[i][2]) * objMain.heightAmplify, -MercatorGetYbyLatitude(obj[i][1]),
+
+                    );
+                }
+                function disposeArray() {
+
+                    this.array = null;
+
+                }
+                //  console.log('p', positions);
+                //var vertices = new Float32Array(positions);
+                var geometry = new THREE.BufferGeometry();
+                geometry.addAttribute('position', new THREE.Float32BufferAttribute(positions, 3).onUpload(disposeArray));
+                //geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3).onUpload(disposeArray));
+                geometry.computeBoundingSphere();
+                //var material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
+                var material = new THREE.MeshBasicMaterial({ color: 0xeedd78 });
+                var mesh = new THREE.Mesh(geometry, material);
+
+                objMain.roadGroup.add(mesh);
+
+
+                var edges = new THREE.EdgesGeometry(geometry);
+                var line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xeeddf0 }));
+                objMain.roadGroup.add(line);
+            };
+            drawRoadInfomation();
+        })
+    }
 };
 
 var SetBustPage = function () {

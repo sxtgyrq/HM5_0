@@ -7,7 +7,8 @@ namespace HouseManager5_0.RoomMainF
 {
     public partial class RoomMain
     {
-        public void DrawSingleRoadF(Player player, string roadCode, ref List<string> notifyMsg)
+        [Obsolete]
+        public void DrawSingleRoadF_bak(Player player, string roadCode, ref List<string> notifyMsg)
         {
             List<int> meshPoints;
             List<int> basePoint;
@@ -17,7 +18,46 @@ namespace HouseManager5_0.RoomMainF
                 c = "SingleRoadPathData",
                 WebSocketID = player.WebSocketID,
                 meshPoints = meshPoints,
-                basePoint = basePoint
+                basePoint = basePoint,
+                AsynSend = false
+            };
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(srpd);
+            notifyMsg.Add(player.FromUrl);
+            notifyMsg.Add(json);
+
+            //SingleRoadPathData_V2 srpd = new SingleRoadPathData_V2()
+            //{
+            //    c = "SingleRoadPathData_V2",
+            //    WebSocketID = player.WebSocketID,
+            //    DataHash = Program.dt.RoadDataSha256,
+            //    RoadCode = roadCode,
+            //    AsynSend = false
+            //};
+        }
+
+        public void DrawSingleRoadF(Player player, string roadCode, ref List<string> notifyMsg)
+        {
+            //List<int> meshPoints;
+            //List<int> basePoint;
+            //Program.dt.getSingle(roadCode, out meshPoints, out basePoint);
+            //SingleRoadPathData srpd = new SingleRoadPathData()
+            //{
+            //    c = "SingleRoadPathData",
+            //    WebSocketID = player.WebSocketID,
+            //    meshPoints = meshPoints,
+            //    basePoint = basePoint,
+            //    AsynSend = false
+            //};
+            //var json = Newtonsoft.Json.JsonConvert.SerializeObject(srpd);
+            //notifyMsg.Add(player.FromUrl);
+            //notifyMsg.Add(json);
+
+            SingleRoadPathData_V2 srpd = new SingleRoadPathData_V2()
+            {
+                c = "SingleRoadPathData_V2",
+                WebSocketID = player.WebSocketID,
+                DataHash = Program.dt.RoadDataSha256,
+                RoadCode = roadCode
             };
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(srpd);
             notifyMsg.Add(player.FromUrl);
@@ -25,6 +65,7 @@ namespace HouseManager5_0.RoomMainF
         }
         public void DrawSingleRoadF(string roadCode, ref List<string> notifyMsg)
         {
+
             List<int> meshPoints;
             List<int> basePoint;
             Program.dt.getSingle(roadCode, out meshPoints, out basePoint);

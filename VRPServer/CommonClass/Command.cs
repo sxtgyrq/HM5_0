@@ -265,6 +265,12 @@ namespace CommonClass
         public List<int> meshPoints { get; set; }
         public List<int> basePoint { get; set; }
     }
+    public class SingleRoadPathData_V2 : CommandNotify
+    {
+        //  public List<double[]> meshPoints { get; set; }
+        public string DataHash { get; set; }
+        public string RoadCode { get; set; }
+    }
 
     public class ModelDataShow : CommandNotify
     {
@@ -620,10 +626,15 @@ namespace CommonClass
     }
     public class Ask : Command
     {
-        public string Key { get; set; } 
-        public string GroupKey { get; set; }  
+        public string Key { get; set; }
+        public string GroupKey { get; set; }
     }
     public class SaveInFile : Command
+    {
+        public string Key { get; set; }
+        public string GroupKey { get; set; }
+    }
+    public class TurnOnBeginnerMode : Command
     {
         public string Key { get; set; }
         public string GroupKey { get; set; }
@@ -1300,5 +1311,10 @@ namespace CommonClass
                 public string uid { get; set; }
             }
         }
+    }
+
+    public class GetRoadMesh : Command 
+    {
+        public string RoadCode { get; set; }
     }
 }
