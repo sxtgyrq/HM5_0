@@ -25,12 +25,41 @@ namespace HouseManager5_0.GroupClassF
             return index;
         }
 
+        public int GetRandomPositionFromAnotherRegion(bool withWeight, GetRandomPos gp, int currentIndexOfRegion)
+        {
+            if (currentIndexOfRegion >= 0 && currentIndexOfRegion < gp.GetFpCount())
+            {
+                var rm = that.rm;
+                int index;
+                do
+                {
+                    index = rm.Next(0, gp.GetFpCount());
+                }
+                while (this.FpIsUsing(index)
+                || gp.GetFpByIndex(index).region == gp.GetFpByIndex(currentIndexOfRegion).region);
+                return index;
+            }
+            else
+            {
+                return GetRandomPosition(withWeight, gp);
+            }
+        }
+
         //private bool FpIsUsing(int index)
         //{
         //    throw new NotImplementedException();
         //}
         public bool FpIsUsing(int fpIndex)
         {
+            foreach (var player in this._PlayerInGroup)
+            { 
+                {
+                    if (fpIndex == player.Value.getCar().targetFpIndex)
+                    {
+                        return true;
+                    }
+                }
+            }
             var A = false
                  || fpIndex == this.StartFPIndex
                  || fpIndex == this.promoteMilePosition

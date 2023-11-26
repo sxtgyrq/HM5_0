@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static Zstandard.Net.ZstandardInterop;
 using OssModel = Model;
 
 namespace HouseManager5_0.RoomMainF
@@ -1263,17 +1264,22 @@ namespace HouseManager5_0.RoomMainF
             //}
         }
 
-        static Dictionary<string, long> getValueOfAddr(string addr)
+        static Dictionary<string, long> getValueOfAddr(string addr, out bool tradeDetailSuccess)
         {
-
-            var tradeDetail = ConsoleBitcoinChainApp.GetData.GetTradeInfomationFromChain(addr);
+            var tradeDetail = ConsoleBitcoinChainApp.GetData.GetTradeInfomationFromChain(addr, out tradeDetailSuccess);
             //t1.Wait();
             //var tradeDetail = t1.GetAwaiter().GetResult();
             //var tradeDetail = await ConsoleBitcoinChainApp.GetData.GetTradeInfomationFromChain(addr);
-
-            var list = DalOfAddress.TradeRecord.GetAll(addr);
-            var r = ConsoleBitcoinChainApp.GetData.SetTrade(ref tradeDetail, list);
-            return r;
+            if (tradeDetailSuccess)
+            {
+                var list = DalOfAddress.TradeRecord.GetAll(addr);
+                var r = ConsoleBitcoinChainApp.GetData.SetTrade(ref tradeDetail, list);
+                return r;
+            }
+            else
+            {
+                return new Dictionary<string, long>();
+            }
         }
 
         public string TradeCoinF(ModelTranstraction.TradeCoin tc)
@@ -1304,73 +1310,76 @@ namespace HouseManager5_0.RoomMainF
                             addrTo == tc.addrTo &&
                             addrBussiness == tc.addrBussiness)
                         {
-
-                            var trDetail = getValueOfAddr(addrBussiness);
-                            var passCoin = Convert.ToInt64(passCoinStr.Substring(0, passCoinStr.Length - 7));
-                            if (passCoin > 0 && tc.passCoin == passCoin)
+                            bool success;
+                            var trDetail = getValueOfAddr(addrBussiness, out success);
+                            if (success)
                             {
-                                if (trDetail.ContainsKey(addrFrom))
+                                var passCoin = Convert.ToInt64(passCoinStr.Substring(0, passCoinStr.Length - 7));
+                                if (passCoin > 0 && tc.passCoin == passCoin)
                                 {
-                                    if (trDetail[addrFrom] >= passCoin)
+                                    if (trDetail.ContainsKey(addrFrom))
                                     {
-                                        string notifyMsg;
-                                        if (tc.addrTo.Trim() != tc.addrBussiness.Trim())
+                                        if (trDetail[addrFrom] >= passCoin)
                                         {
-                                            bool r;
-                                            if (bySystem)
-                                                r = DalOfAddress.TradeRecord.AddBySystem(tc.tradeIndex, tc.addrFrom, tc.addrBussiness, tc.sign, tc.msg, tc.passCoin, out notifyMsg);
-                                            else
+                                            string notifyMsg;
+                                            if (tc.addrTo.Trim() != tc.addrBussiness.Trim())
                                             {
-                                                r = DalOfAddress.TradeRecord.Add(tc.tradeIndex, tc.addrFrom, tc.addrBussiness, tc.sign, tc.msg, tc.passCoin, out notifyMsg);
+                                                bool r;
+                                                if (bySystem)
+                                                    r = DalOfAddress.TradeRecord.AddBySystem(tc.tradeIndex, tc.addrFrom, tc.addrBussiness, tc.sign, tc.msg, tc.passCoin, out notifyMsg);
+                                                else
                                                 {
-                                                    //List<Player> playerOperatings = new List<Player>();
-                                                    //foreach (var item in this._Players)
-                                                    //{
-                                                    //    if (item.Value.playerType == Player.PlayerType.player)
-                                                    //    {
-                                                    //        var player = (Player)item.Value;
-                                                    //        if (player.BTCAddress == addrFrom)
-                                                    //        {
-                                                    //            playerOperatings.Add(player);
-                                                    //        }
-                                                    //    }
-                                                    //}
+                                                    r = DalOfAddress.TradeRecord.Add(tc.tradeIndex, tc.addrFrom, tc.addrBussiness, tc.sign, tc.msg, tc.passCoin, out notifyMsg);
                                                     {
-                                                        /*
-                                                         * 由于这里没有采用传输Key,WsOfWebClient传输的对象不固定，
-                                                         * 
-                                                         */
-                                                        //var data = DalOfAddress.TaskCopy.GetALLItem(addrFrom);
-                                                        // this.taskM.TradeCoinF(playerOperatings.ToArray(), tc.addrBussiness, tc.addrTo, tc.passCoin, data);
+                                                        //List<Player> playerOperatings = new List<Player>();
+                                                        //foreach (var item in this._Players)
+                                                        //{
+                                                        //    if (item.Value.playerType == Player.PlayerType.player)
+                                                        //    {
+                                                        //        var player = (Player)item.Value;
+                                                        //        if (player.BTCAddress == addrFrom)
+                                                        //        {
+                                                        //            playerOperatings.Add(player);
+                                                        //        }
+                                                        //    }
+                                                        //}
+                                                        {
+                                                            /*
+                                                             * 由于这里没有采用传输Key,WsOfWebClient传输的对象不固定，
+                                                             * 
+                                                             */
+                                                            //var data = DalOfAddress.TaskCopy.GetALLItem(addrFrom);
+                                                            // this.taskM.TradeCoinF(playerOperatings.ToArray(), tc.addrBussiness, tc.addrTo, tc.passCoin, data);
+                                                        }
                                                     }
                                                 }
+                                                var objR = new ModelTranstraction.TradeCoin.Result()
+                                                {
+                                                    msg = notifyMsg,
+                                                    success = r
+                                                };
+                                                return Newtonsoft.Json.JsonConvert.SerializeObject(objR);
                                             }
-                                            var objR = new ModelTranstraction.TradeCoin.Result()
+                                            else
                                             {
-                                                msg = notifyMsg,
-                                                success = r
-                                            };
-                                            return Newtonsoft.Json.JsonConvert.SerializeObject(objR);
+                                                var r = DalOfAddress.TradeRecord.AddWithBTCExtracted(tc.tradeIndex, tc.addrFrom, tc.addrBussiness, tc.sign, tc.msg, tc.passCoin, out notifyMsg);
+                                                var objR = new ModelTranstraction.TradeCoin.Result()
+                                                {
+                                                    msg = notifyMsg,
+                                                    success = r
+                                                };
+                                                return Newtonsoft.Json.JsonConvert.SerializeObject(objR);
+                                            }
                                         }
                                         else
                                         {
-                                            var r = DalOfAddress.TradeRecord.AddWithBTCExtracted(tc.tradeIndex, tc.addrFrom, tc.addrBussiness, tc.sign, tc.msg, tc.passCoin, out notifyMsg);
-                                            var objR = new ModelTranstraction.TradeCoin.Result()
-                                            {
-                                                msg = notifyMsg,
-                                                success = r
-                                            };
-                                            return Newtonsoft.Json.JsonConvert.SerializeObject(objR);
+
                                         }
                                     }
                                     else
                                     {
 
                                     }
-                                }
-                                else
-                                {
-
                                 }
                             }
                         }
@@ -1445,27 +1454,29 @@ namespace HouseManager5_0.RoomMainF
                                     var passCoin = Convert.ToInt64(passCoinStr.Substring(0, passCoinStr.Length - 7));
                                     if (passCoin > 0 && passCoin == tsar.passCoin)
                                     {
-                                        var trDetail = getValueOfAddr(addrBussiness);
-                                        if (trDetail.ContainsKey(addrFrom))
-                                        {
-                                            if (trDetail[addrFrom] >= passCoin)
+                                        bool getTradeDetailSuccess;
+                                        var trDetail = getValueOfAddr(addrBussiness, out getTradeDetailSuccess);
+                                        if (getTradeDetailSuccess)
+                                            if (trDetail.ContainsKey(addrFrom))
                                             {
-                                                bool success;
-                                                var msg = DalOfAddress.TradeReward.Update(out success, dataInt, tsar.tradeIndex, tsar.addrReward, tsar.addrBussiness, tsar.passCoin, tsar.signOfAddrReward, tsar.signOfaddrBussiness, tsar.msg);
-                                                return Newtonsoft.Json.JsonConvert.SerializeObject(new ModelTranstraction.TradeSetAsReward.Result()
+                                                if (trDetail[addrFrom] >= passCoin)
                                                 {
-                                                    msg = msg,
-                                                    success = success
-                                                });
+                                                    bool success;
+                                                    var msg = DalOfAddress.TradeReward.Update(out success, dataInt, tsar.tradeIndex, tsar.addrReward, tsar.addrBussiness, tsar.passCoin, tsar.signOfAddrReward, tsar.signOfaddrBussiness, tsar.msg);
+                                                    return Newtonsoft.Json.JsonConvert.SerializeObject(new ModelTranstraction.TradeSetAsReward.Result()
+                                                    {
+                                                        msg = msg,
+                                                        success = success
+                                                    });
+                                                }
+                                                else
+                                                {
+
+                                                }
                                             }
                                             else
                                             {
-
                                             }
-                                        }
-                                        else
-                                        {
-                                        }
                                     }
                                 }
                             }
@@ -1621,5 +1632,489 @@ namespace HouseManager5_0.RoomMainF
             else
                 return "fail";
         }
+
+        public string GetAddrFromAndToWhenGenerateAgreementBetweenTwo(GAFATWGABT gaobj)
+        {
+            if (this._Groups.ContainsKey(gaobj.GroupKey))
+            {
+                var group = this._Groups[gaobj.GroupKey];
+                if (group == null) return "";
+                else
+                {
+                    if (group.groupNumber == 2)
+                    {
+                        if (group._PlayerInGroup.ContainsKey(gaobj.Key))
+                        {
+                            var seller = group._PlayerInGroup[gaobj.Key];
+                            Player buyer = null;
+                            foreach (var item in group._PlayerInGroup)
+                            {
+                                if (item.Key != gaobj.Key)
+                                {
+                                    buyer = item.Value;
+                                }
+                            }
+                            if (buyer == null) return "";
+                            else
+                            {
+                                if (string.IsNullOrEmpty(seller.BTCAddress))
+                                {
+                                    this.WebNotify(seller, "你还没有登录");
+                                }
+                                else if (string.IsNullOrEmpty(buyer.BTCAddress))
+                                {
+                                    this.WebNotify(buyer, "你还没有登录，不能生成交易协议。");
+                                    this.WebNotify(seller, "你的队友还没有登录");
+                                }
+                                else
+                                {
+                                    GAFATWGABT.ReturnResultObj r = new GAFATWGABT.ReturnResultObj()
+                                    {
+                                        addrFrom = seller.BTCAddress,
+                                        addrTo = buyer.BTCAddress,
+                                    };
+                                    return Newtonsoft.Json.JsonConvert.SerializeObject(r);
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+            return "";
+            //   throw new NotImplementedException();
+        }
+
+        public string TradeCoinForSaveF(ModelTranstraction.TradeCoinForSave tcfs)
+        {
+            if (this._Groups.ContainsKey(tcfs.GroupKey))
+            {
+                var group = this._Groups[tcfs.GroupKey];
+                if (group.groupNumber == 2)
+                {
+                    if (group._PlayerInGroup.ContainsKey(tcfs.Key))
+                    {
+                        var seller = group._PlayerInGroup[tcfs.Key];
+                        Player buyer = null;
+                        foreach (var item in group._PlayerInGroup)
+                        {
+                            if (item.Key != tcfs.Key)
+                            {
+                                buyer = item.Value;
+                            }
+                        }
+                        if (buyer == null) return "";
+                        else
+                        {
+                            if (string.IsNullOrEmpty(seller.BTCAddress))
+                            {
+                                this.WebNotify(seller, "你还没有登录");
+                            }
+                            else if (string.IsNullOrEmpty(buyer.BTCAddress))
+                            {
+                                this.WebNotify(seller, "你的队友还没有登录");
+                                this.WebNotify(buyer, "你还没有登录，不能生成交易协议。");
+                            }
+                            else
+                            {
+                                //group.TradeCoinForSave = tcfs;
+                                //group.tradeState = GroupClassF.GroupClass.StockScoreTradeState.WaitToCancelOrAgree;
+                                if (group.stockScoreTradeObj.ContainsKey(tcfs.addrBussiness))
+                                {
+                                }
+                                else
+                                {
+                                    group.stockScoreTradeObj.Add(tcfs.addrBussiness,
+                                        new GroupClassF.GroupClass.StockScoreTradeClass()
+                                        {
+                                            tradeCoinForSave = tcfs,
+                                            tradeState = GroupClassF.GroupClass.StockScoreTradeClass.StockScoreTradeState.WaitToCancelOrAgree
+                                        });
+
+                                    List<string> notifyMsg = new List<string>();
+
+                                    seller.updateStockScoreInfoDelegateF(seller, "canCancle", tcfs.addrBussiness, ref notifyMsg);
+                                    buyer.updateStockScoreInfoDelegateF(buyer, "needToAgree", tcfs.addrBussiness, ref notifyMsg);
+                                    Startup.sendSeveralMsgs(notifyMsg);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+            return "";
+            // throw new NotImplementedException();
+        }
+
+        public string ConfirmTheTransactionF(ModelTranstraction.ConfirmTheTransaction ctt)
+        {
+            List<string> notifyMsg = new List<string>();
+            if (this._Groups.ContainsKey(ctt.GroupKey))
+            {
+                var group = this._Groups[ctt.GroupKey];
+                if (group.groupNumber == 2)
+                {
+                    if (group._PlayerInGroup.ContainsKey(ctt.Key))
+                    {
+                        Player seller = null;
+                        foreach (var item in group._PlayerInGroup)
+                        {
+                            if (item.Key != ctt.Key && !string.IsNullOrEmpty(item.Value.BTCAddress))
+                            {
+                                seller = item.Value;
+                            }
+                        }
+
+                        var buyer = group._PlayerInGroup[ctt.Key];
+                        if (seller == null) { }
+                        else if (string.IsNullOrEmpty(buyer.BTCAddress) || string.IsNullOrEmpty(seller.BTCAddress))
+                        {
+                        }
+                        else
+                        {
+                            if (group.stockScoreTradeObj.ContainsKey(ctt.businessAddr))
+                            {
+                                if (group.stockScoreTradeObj[ctt.businessAddr].Hash256Code == ctt.hasCode && !string.IsNullOrEmpty(group.stockScoreTradeObj[ctt.businessAddr].Hash256Code))
+                                {
+                                    if (group.stockScoreTradeObj[ctt.businessAddr].tradeCoinForSave != null)
+                                    {
+                                        if (group.stockScoreTradeObj[ctt.businessAddr].AddrTo == buyer.BTCAddress)
+                                        {
+                                            if (group.stockScoreTradeObj[ctt.businessAddr].tradeState == GroupClassF.GroupClass.StockScoreTradeClass.StockScoreTradeState.WaitToCancelOrAgree)
+                                            {
+                                                string errorNotifyMsg;
+                                                var r = TradeCoinF2(group.stockScoreTradeObj[ctt.businessAddr].tradeCoinForSave, out errorNotifyMsg);
+                                                if (r)
+                                                {
+                                                    group.stockScoreTradeObj[ctt.businessAddr].tradeState = GroupClassF.GroupClass.StockScoreTradeClass.StockScoreTradeState.Success;
+                                                    seller.updateStockScoreInfoDelegateF(seller, "success_seller", ctt.businessAddr, ref notifyMsg);
+                                                    buyer.updateStockScoreInfoDelegateF(buyer, "success_buyer", ctt.businessAddr, ref notifyMsg);
+                                                }
+                                                else
+                                                {
+                                                    group.stockScoreTradeObj[ctt.businessAddr].tradeState = GroupClassF.GroupClass.StockScoreTradeClass.StockScoreTradeState.Fail;
+                                                    group.stockScoreTradeObj[ctt.businessAddr].FailReason = errorNotifyMsg;
+                                                    seller.updateStockScoreInfoDelegateF(seller, "fail", ctt.businessAddr, ref notifyMsg);
+                                                    buyer.updateStockScoreInfoDelegateF(buyer, "fail", ctt.businessAddr, ref notifyMsg);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Startup.sendSeveralMsgs(notifyMsg);
+            return "";
+        }
+
+        private bool TradeCoinF2(ModelTranstraction.TradeCoinForSave tc, out string notifyMsg)
+        {
+            notifyMsg = "";
+            var parameter = tc.msg.Split(new char[] { '@', '-', '>', ':' }, StringSplitOptions.RemoveEmptyEntries);
+            var regex = new Regex("^[0-9]{1,8}@[A-HJ-NP-Za-km-z1-9]{1,50}@[A-HJ-NP-Za-km-z1-9]{1,50}->[A-HJ-NP-Za-km-z1-9]{1,50}:[0-9]{1,13}[Ss]{1}atoshi$");
+            if (regex.IsMatch(tc.msg))
+            {
+                if (parameter.Length == 5)
+                {
+                    if (BitCoin.Sign.checkSign(tc.sign, tc.msg, parameter[1]))
+                    {
+                        var tradeIndex = int.Parse(parameter[0]);
+                        var addrFrom = parameter[1];
+                        var addrBussiness = parameter[2];
+                        var addrTo = parameter[3];
+                        var passCoinStr = parameter[4];
+                        if ((passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi" || passCoinStr.Substring(passCoinStr.Length - 7, 7) == "satoshi") &&
+                            tradeIndex == tc.tradeIndex &&
+                            addrFrom == tc.addrFrom &&
+                            addrTo == tc.addrTo &&
+                            addrBussiness == tc.addrBussiness)
+                        {
+                            bool success;
+                            var trDetail = getValueOfAddr(addrBussiness, out success);
+                            if (success)
+                            {
+                                var passCoin = Convert.ToInt64(passCoinStr.Substring(0, passCoinStr.Length - 7));
+                                if (passCoin > 0 && tc.passCoin == passCoin)
+                                {
+                                    if (trDetail.ContainsKey(addrFrom))
+                                    {
+                                        if (trDetail[addrFrom] >= passCoin)
+                                        {
+                                            if (tc.addrTo.Trim() != tc.addrBussiness.Trim())
+                                            {
+                                                bool r;
+
+                                                r = DalOfAddress.TradeRecord.AddWithBuyerScore(tc.tradeIndex, tc.addrFrom, tc.addrTo, tc.addrBussiness, tc.sign, tc.msg, tc.passCoin, tc.TradeScore, out notifyMsg);
+                                                return r;
+                                            }
+                                        }
+                                        else
+                                        {
+
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+            {
+                notifyMsg = "条件校验失败";
+                return false;
+            }
+        }
+
+        public string GetStockScoreTransctionStateF(ModelTranstraction.GetStockScoreTransctionState ctt)
+        {
+            List<string> notifyMsg = new List<string>();
+            if (this._Groups.ContainsKey(ctt.GroupKey))
+            {
+                var group = this._Groups[ctt.GroupKey];
+                if (group.groupNumber == 2)
+                {
+                    if (group._PlayerInGroup.ContainsKey(ctt.Key))
+                    {
+                        Player player = group._PlayerInGroup[ctt.Key];
+                        if (group.stockScoreTradeObj.ContainsKey(ctt.bussinessAddr))
+                        {
+                            if (!string.IsNullOrEmpty(group.stockScoreTradeObj[ctt.bussinessAddr].AddrTo))
+                            {
+                                if (group.stockScoreTradeObj[ctt.bussinessAddr].AddrTo == player.BTCAddress)
+                                {
+                                    switch (group.stockScoreTradeObj[ctt.bussinessAddr].tradeState)
+                                    {
+                                        case GroupClassF.GroupClass.StockScoreTradeClass.StockScoreTradeState.None:
+                                            {
+                                            }; break;
+                                        case GroupClassF.GroupClass.StockScoreTradeClass.StockScoreTradeState.WaitToCancelOrAgree:
+                                            {
+                                                // player.updateStockScoreInfoDelegateF(player, "canCancle", tcfs.addrBussiness, ref notifyMsg);
+                                                player.updateStockScoreInfoDelegateF(player, "needToAgree", ctt.bussinessAddr, ref notifyMsg);
+                                            }; break;
+                                        case GroupClassF.GroupClass.StockScoreTradeClass.StockScoreTradeState.Success:
+                                            {
+                                                player.updateStockScoreInfoDelegateF(player, "success_buyer", ctt.bussinessAddr, ref notifyMsg);
+                                            }; break;
+                                        case GroupClassF.GroupClass.StockScoreTradeClass.StockScoreTradeState.Fail:
+                                            {
+                                                player.updateStockScoreInfoDelegateF(player, "fail", ctt.bussinessAddr, ref notifyMsg);
+                                            }; break;
+                                    }
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(group.stockScoreTradeObj[ctt.bussinessAddr].AddrFrom))
+                            {
+                                if (group.stockScoreTradeObj[ctt.bussinessAddr].AddrFrom == player.BTCAddress)
+                                {
+                                    switch (group.stockScoreTradeObj[ctt.bussinessAddr].tradeState)
+                                    {
+                                        case GroupClassF.GroupClass.StockScoreTradeClass.StockScoreTradeState.None:
+                                            {
+                                            }; break;
+                                        case GroupClassF.GroupClass.StockScoreTradeClass.StockScoreTradeState.WaitToCancelOrAgree:
+                                            {
+                                                // player.updateStockScoreInfoDelegateF(player, "canCancle", tcfs.addrBussiness, ref notifyMsg);
+                                                player.updateStockScoreInfoDelegateF(player, "canCancle", ctt.bussinessAddr, ref notifyMsg);
+                                            }; break;
+                                        case GroupClassF.GroupClass.StockScoreTradeClass.StockScoreTradeState.Success:
+                                            {
+                                                player.updateStockScoreInfoDelegateF(player, "success_seller", ctt.bussinessAddr, ref notifyMsg);
+                                            }; break;
+                                        case GroupClassF.GroupClass.StockScoreTradeClass.StockScoreTradeState.Fail:
+                                            {
+                                                player.updateStockScoreInfoDelegateF(player, "fail", ctt.bussinessAddr, ref notifyMsg);
+                                            }; break;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+            Startup.sendSeveralMsgs(notifyMsg);
+            return "";
+        }
+
+        public string CancleTheTransaction(ModelTranstraction.CancleTheTransactionToServer ctt)
+        {
+            List<string> notifyMsg = new List<string>();
+            if (this._Groups.ContainsKey(ctt.GroupKey))
+            {
+                var group = this._Groups[ctt.GroupKey];
+                if (group.groupNumber == 2)
+                {
+                    if (group._PlayerInGroup.ContainsKey(ctt.Key))
+                    {
+                        Player seller = group._PlayerInGroup[ctt.Key];
+                        Player buyer = null;
+                        foreach (var item in group._PlayerInGroup)
+                        {
+                            if (item.Key != ctt.Key && !string.IsNullOrEmpty(item.Value.BTCAddress))
+                            {
+                                buyer = item.Value;
+                            }
+                        }
+
+                        //  var buyer = group._PlayerInGroup[ctt.Key];
+                        if (buyer == null) { }
+                        else if (string.IsNullOrEmpty(buyer.BTCAddress) || string.IsNullOrEmpty(seller.BTCAddress))
+                        {
+                        }
+                        else
+                        {
+                            if (group.stockScoreTradeObj.ContainsKey(ctt.businessAddr))
+                            {
+                                if (group.stockScoreTradeObj[ctt.businessAddr].Hash256Code == ctt.hasCode && !string.IsNullOrEmpty(group.stockScoreTradeObj[ctt.businessAddr].Hash256Code))
+                                {
+                                    if (group.stockScoreTradeObj[ctt.businessAddr].tradeCoinForSave != null)
+                                    {
+                                        if (group.stockScoreTradeObj[ctt.businessAddr].AddrFrom == seller.BTCAddress)
+                                        {
+                                            if (group.stockScoreTradeObj[ctt.businessAddr].tradeState == GroupClassF.GroupClass.StockScoreTradeClass.StockScoreTradeState.WaitToCancelOrAgree)
+                                            {
+                                                group.stockScoreTradeObj[ctt.businessAddr].tradeState = GroupClassF.GroupClass.StockScoreTradeClass.StockScoreTradeState.Fail;
+                                                group.stockScoreTradeObj[ctt.businessAddr].FailReason = "卖家取消了交易";
+                                                seller.updateStockScoreInfoDelegateF(seller, "fail", ctt.businessAddr, ref notifyMsg);
+                                                buyer.updateStockScoreInfoDelegateF(buyer, "fail", ctt.businessAddr, ref notifyMsg);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Startup.sendSeveralMsgs(notifyMsg);
+            return "";
+        }
+
+        //public string TradeCoinF2(ModelTranstraction.TradeCoin tc, bool bySystem)
+        //{
+        //    // throw new Exception();
+
+        //    var parameter = tc.msg.Split(new char[] { '@', '-', '>', ':' }, StringSplitOptions.RemoveEmptyEntries);
+        //    //  var agreement = $"{indexNumber}@{ga.addrFrom}@{ga.addrBussiness}->{ga.addrTo}:{ga.tranNum * 100000000}Satoshi";
+        //    var regex = new Regex("^[0-9]{1,8}@[A-HJ-NP-Za-km-z1-9]{1,50}@[A-HJ-NP-Za-km-z1-9]{1,50}->[A-HJ-NP-Za-km-z1-9]{1,50}:[0-9]{1,13}[Ss]{1}atoshi$");
+        //    if (regex.IsMatch(tc.msg))
+        //    {
+        //        if (parameter.Length == 5)
+        //        {
+        //            if (BitCoin.Sign.checkSign(tc.sign, tc.msg, parameter[1]))
+        //            {
+        //                var tradeIndex = int.Parse(parameter[0]);
+        //                var addrFrom = parameter[1];
+        //                var addrBussiness = parameter[2];
+        //                var addrTo = parameter[3];
+        //                var passCoinStr = parameter[4];
+        //                if ((passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi" || passCoinStr.Substring(passCoinStr.Length - 7, 7) == "satoshi") &&
+        //                    tradeIndex == tc.tradeIndex &&
+        //                    addrFrom == tc.addrFrom &&
+        //                    addrTo == tc.addrTo &&
+        //                    addrBussiness == tc.addrBussiness)
+        //                {
+        //                    bool success;
+        //                    var trDetail = getValueOfAddr(addrBussiness, out success);
+        //                    if (success)
+        //                    {
+        //                        var passCoin = Convert.ToInt64(passCoinStr.Substring(0, passCoinStr.Length - 7));
+        //                        if (passCoin > 0 && tc.passCoin == passCoin)
+        //                        {
+        //                            if (trDetail.ContainsKey(addrFrom))
+        //                            {
+        //                                if (trDetail[addrFrom] >= passCoin)
+        //                                {
+        //                                    string notifyMsg;
+        //                                    if (tc.addrTo.Trim() != tc.addrBussiness.Trim())
+        //                                    {
+        //                                        bool r;
+        //                                        if (bySystem)
+        //                                            r = DalOfAddress.TradeRecord.AddBySystem(tc.tradeIndex, tc.addrFrom, tc.addrBussiness, tc.sign, tc.msg, tc.passCoin, out notifyMsg);
+        //                                        else
+        //                                        {
+        //                                            r = DalOfAddress.TradeRecord.Add(tc.tradeIndex, tc.addrFrom, tc.addrBussiness, tc.sign, tc.msg, tc.passCoin, out notifyMsg);
+        //                                            {
+        //                                                //List<Player> playerOperatings = new List<Player>();
+        //                                                //foreach (var item in this._Players)
+        //                                                //{
+        //                                                //    if (item.Value.playerType == Player.PlayerType.player)
+        //                                                //    {
+        //                                                //        var player = (Player)item.Value;
+        //                                                //        if (player.BTCAddress == addrFrom)
+        //                                                //        {
+        //                                                //            playerOperatings.Add(player);
+        //                                                //        }
+        //                                                //    }
+        //                                                //}
+        //                                                {
+        //                                                    /*
+        //                                                     * 由于这里没有采用传输Key,WsOfWebClient传输的对象不固定，
+        //                                                     * 
+        //                                                     */
+        //                                                    //var data = DalOfAddress.TaskCopy.GetALLItem(addrFrom);
+        //                                                    // this.taskM.TradeCoinF(playerOperatings.ToArray(), tc.addrBussiness, tc.addrTo, tc.passCoin, data);
+        //                                                }
+        //                                            }
+        //                                        }
+        //                                        var objR = new ModelTranstraction.TradeCoin.Result()
+        //                                        {
+        //                                            msg = notifyMsg,
+        //                                            success = r
+        //                                        };
+        //                                        return Newtonsoft.Json.JsonConvert.SerializeObject(objR);
+        //                                    }
+        //                                    else
+        //                                    {
+        //                                        var r = DalOfAddress.TradeRecord.AddWithBTCExtracted(tc.tradeIndex, tc.addrFrom, tc.addrBussiness, tc.sign, tc.msg, tc.passCoin, out notifyMsg);
+        //                                        var objR = new ModelTranstraction.TradeCoin.Result()
+        //                                        {
+        //                                            msg = notifyMsg,
+        //                                            success = r
+        //                                        };
+        //                                        return Newtonsoft.Json.JsonConvert.SerializeObject(objR);
+        //                                    }
+        //                                }
+        //                                else
+        //                                {
+
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+
+        //            }
+        //        }
+        //    }
+        //    {
+        //        var objR = new ModelTranstraction.TradeCoin.Result()
+        //        {
+        //            msg = "传输错误，校验数据为无效！",
+        //            success = false
+        //        };
+        //        return Newtonsoft.Json.JsonConvert.SerializeObject(objR);
+        //    }
+        //}
     }
 }

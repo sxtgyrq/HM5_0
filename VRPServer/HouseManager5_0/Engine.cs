@@ -95,7 +95,8 @@ namespace HouseManager5_0
                 car.setState(player, ref notifyMsg, CarState.working);
                 //car.state = CarState.roadForCollect;
                 //  var position = new Model.MapGo.nyrqPosition(fp1.RoadCode, fp1.RoadOrder, fp1.RoadPercent, fp1.positionLongitudeOnRoad, fp1.positionLatitudeOnRoad, Program.dt.GetItemRoadInfo(fp1.RoadCode, fp1.RoadOrder).MaxSpeed);
-                grp.GetAFromBPoint(goPath.path[0].path, goPath.path[0].position, speed, ref result, ref startT_FirstPath, player.improvementRecord.HasValueToImproveSpeed, that);
+                if (goPath.path.Count > 0)
+                    grp.GetAFromBPoint(goPath.path[0].path, goPath.path[0].position, speed, ref result, ref startT_FirstPath, player.improvementRecord.HasValueToImproveSpeed, that);
                 //  result.RemoveAll(item => item.t == 0);
                 var animation = new AnimateDataItem(startPosition, result, false, startT_FirstPath, goPath.path.Count > 0 ? privateKeys[0] : 255, ref that.rm);
                 animations.Add(animation);
@@ -117,7 +118,8 @@ namespace HouseManager5_0
                         result = new List<int>();
                         that.getStartPositionByGoPath(out startPosition, goPath.path[indexValue]);
                     }
-                    grp.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed, that);
+                    if (goPath.path[indexValue].path.Count > 0)//这里为什么要判断，是因为这里报过错
+                        grp.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed, that);
                     var animation = new AnimateDataItem(startPosition, result, false, startT_PathLast, privateKeys[indexValue], ref that.rm);
                     animations.Add(animation);
                 }
@@ -647,7 +649,8 @@ namespace HouseManager5_0
                     result = new List<int>();
                     that.getStartPositionByGoPath(out startPosition, node.path[indexValue]);
                 }
-                Program.dt.GetAFromBPoint(node.path[indexValue].path, node.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed, that);
+                if (node.path[indexValue].path.Count > 0)
+                    Program.dt.GetAFromBPoint(node.path[indexValue].path, node.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed, that);
                 {
                     int positionInStation;
                     if (player.Key == targetPlayer.Key)

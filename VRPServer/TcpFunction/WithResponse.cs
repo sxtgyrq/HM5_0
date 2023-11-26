@@ -12,47 +12,107 @@ namespace TcpFunction
 {
     public class WithResponse
     {
-        public static async Task<string> SendInmationToUrlAndGetRes(string roomUrl, string sendMsg)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="roomUrl"></param>
+        /// <param name="sendMsg"></param>
+        /// <returns>如果返回null，表示运行方法失败了。调用此方法，要进行判断。</returns>
+        public static async Task<string> SendInmationToUrlAndGetRes_V2(string roomUrl, string sendMsg)
         {
+            #region 生产日志
 
-            var startTime = DateTime.Now;
-            string result = "";
+            /*
+             * 2023年11月11日，在生产环境中，这里报了错。以下是报错内容
+             * Unhandled exception.System.Net.Internal.SocketExceptionFactory+ExtendedSocketException(10060):由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。 
+             */
+            #endregion
 
-            IPAddress ipa;
-            if (IPAddress.TryParse(roomUrl.Split(':')[0], out ipa))
+
+            int testCount = 0;
+            while (true)
             {
-                TcpClient tc = new TcpClient();
-                tc.Connect(ipa, int.Parse(roomUrl.Split(':')[1]));
-
-                if (tc.Connected)
+                try
                 {
-                    NetworkStream ns = tc.GetStream();
-                    var sendData = Encoding.UTF8.GetBytes(sendMsg);
-                    Common.SendLength(sendData.Length, ns);
-                    //  Common.CheckBeforeReadReason reason;
-                    var length = Common.ReceiveLength(ns);
-                    if (sendData.Length == length) { }
+                    var startTime = DateTime.Now;
+                    string result = "";
+
+                    IPAddress ipa;
+                    if (IPAddress.TryParse(roomUrl.Split(':')[0], out ipa))
+                    {
+                        TcpClient tc = new TcpClient();
+                        // tc.SendTimeout = 2000;
+                        //tc.ReceiveTimeout = 2000;
+                        tc.Connect(ipa, int.Parse(roomUrl.Split(':')[1]));
+                        tc.SendTimeout = 300000; // 发送超时时间设置为5000毫秒
+                        tc.ReceiveTimeout = 300000; // 接收超时时间设置为5000毫秒
+
+                        if (tc.Connected)
+                        {
+                            NetworkStream ns = tc.GetStream();
+                            var sendData = Encoding.UTF8.GetBytes(sendMsg);
+                            Common.SendLength(sendData.Length, ns);
+                            //  Common.CheckBeforeReadReason reason;
+                            var length = Common.ReceiveLength(ns);
+                            if (sendData.Length == length) { }
+                            else
+                            {
+                                var msg = $"sendData.Length ({sendData.Length})!= length({length})";
+                                //Consol.WriteLine(msg);
+                                throw new Exception(msg);
+                            }
+                            //  Common.CheckBeforeSend(ns);
+                            await ns.WriteAsync(sendData, 0, sendData.Length);
+
+                            var length2 = Common.ReceiveLength(ns);
+                            Common.SendLength(length2, ns);
+                            byte[] bytes = Common.ByteReader(length2, ns);
+                            result = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+                            ns.Close(6000);
+                        }
+                        tc.Close();
+                    }
+                    var endTime = DateTime.Now;
+                    return result;
+                }
+                catch (SocketException ex)
+                {
+                    testCount++;
+                    Thread.Sleep(10);
+
+                    if (testCount > 5)
+                    {
+                        Console.WriteLine($"连接失败。roomUrl:{roomUrl},sendMsg:{sendMsg}");
+                        var fileName = $"error{DateTime.Now.ToString("yyyyMMddHHmmss")}.txt";
+                        var content = $"code:WithResponse-67。roomUrl:{roomUrl},sendMsg:{sendMsg},exStackTrace:{ex.StackTrace},--{ex.Message},--{ex.HResult},--{ex.Message}";
+                        File.WriteAllText(fileName, content);
+                        return null;
+                    }
                     else
                     {
-                        var msg = $"sendData.Length ({sendData.Length})!= length({length})";
-                        //Consol.WriteLine(msg);
-                        throw new Exception(msg);
+                        Console.WriteLine($"连接失败-正在重连第{testCount}次。roomUrl:{roomUrl},sendMsg:{sendMsg}");
                     }
-                    //  Common.CheckBeforeSend(ns);
-                    await ns.WriteAsync(sendData, 0, sendData.Length);
-
-                    var length2 = Common.ReceiveLength(ns);
-                    Common.SendLength(length2, ns);
-                    byte[] bytes = Common.ByteReader(length2, ns);
-                    result = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-                    ns.Close(6000);
                 }
-                tc.Close();
-            }
-            var endTime = DateTime.Now;
-            return result;
-        }
+                catch (Exception ex)
+                {
+                    testCount++;
+                    Thread.Sleep(10);
 
+                    if (testCount > 5)
+                    {
+                        Console.WriteLine($"连接失败。roomUrl:{roomUrl},sendMsg:{sendMsg}");
+                        var fileName = $"error{DateTime.Now.ToString("yyyyMMddHHmmss")}.txt";
+                        var content = $"code:WithResponse-67。roomUrl:{roomUrl},sendMsg:{sendMsg},exStackTrace:{ex.StackTrace},--{ex.Message},--{ex.HResult},--{ex.Message}";
+                        File.WriteAllText(fileName, content);
+                        return null;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"连接失败-正在重连第{testCount}次。roomUrl:{roomUrl},sendMsg:{sendMsg}");
+                    }
+                }
+            }
+        }
 
 
 

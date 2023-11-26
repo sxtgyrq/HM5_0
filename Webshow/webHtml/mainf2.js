@@ -804,11 +804,11 @@ var objMain =
                                     bgm.children[i].remove();
                                 }
                                 var source1 = document.createElement('source');
-                                source1.src = 'bgm/All_Hit_Singles_Immortals_Instrumental_Version.ogg';
+                                source1.src = 'bgm/GameofThrones.ogg';
                                 source1.type = 'audio/ogg';
 
                                 var source2 = document.createElement('source');
-                                source2.src = 'bgm/All_Hit_Singles_Immortals_Instrumental_Version.mp3';
+                                source2.src = 'bgm/GameofThrones.mp3';
                                 source2.type = 'audio/mpeg';
 
                                 bgm.appendChild(source1);
@@ -854,7 +854,7 @@ var objMain =
             }
         },
         on: true,
-        MarketRepeat: function () { 
+        MarketRepeat: function () {
         },
         isSetByWeb: false
     },
@@ -1092,6 +1092,10 @@ var objMain =
             case 'setSession':
                 {
                     sessionStorage['session'] = received_obj.session;
+
+                    if (window.localStorage.getItem('notSaveSession') == null) {
+                        window.localStorage.setItem('session', sessionStorage['session'])
+                    }
                 }; break;
             case 'TeamCreateFinish':
                 {
@@ -2287,16 +2291,17 @@ var objMain =
                 }; break;
             case 'ClearSession':
                 {
+                    objMain.ws.send('ClearSession');
                     if (sessionStorage['session'] == undefined) {
 
                     }
                     else {
                         delete sessionStorage.session;
-                        objMain.ws.send('ClearSession');
+                        //objMain.ws.send('ClearSession');
 
                         //location.reload();
                     }
-
+                    window.localStorage.removeItem('session');
                     //stateNeedToChange:
                     //{
                     //    'isLogin': false,
@@ -2445,6 +2450,10 @@ var objMain =
                 {
                     localStorage.playerName = received_obj.playerName;
                 }; break;
+            case 'StockScoreNotify':
+                {
+                    setTransactionHtml.editAgreementPanelWhenTransactionWithScore(received_obj);
+                }; break;
             default:
                 {
                     console.log('命令未注册', received_obj.c + "__没有注册。");
@@ -2543,7 +2552,15 @@ var startA = function () {
         {
             var session = '';
             if (sessionStorage['session'] == undefined) {
-
+                if (window.localStorage.getItem('notSaveSession') == null) {
+                    session = window.localStorage.getItem('session');
+                    if (session == null || session == undefined) {
+                        session = '';
+                    }
+                    else {
+                        sessionStorage['session'] = session;
+                    }
+                }
             }
             else {
                 session = sessionStorage['session'];
@@ -3843,8 +3860,16 @@ var setTransactionHtml =
     generateAgreement: function () {
         objMain.ws.send(transactionBussiness().generateAgreement(setTransactionHtml.bussinessAddress));
     },
+    generateTransactionWithScore: function () {
+        objMain.ws.send(transactionBussiness().generateTransactionWithScore(setTransactionHtml.bussinessAddress));
+    },
     transSign: function () {
         objMain.ws.send(transactionBussiness().transSign(setTransactionHtml.bussinessAddress));
+    },
+    transSignWhenTrade: function () {
+        var tradeJson = transactionBussiness().transSignWhenTrade(setTransactionHtml.bussinessAddress);
+        if (tradeJson != null)
+            objMain.ws.send(transactionBussiness().transSignWhenTrade(setTransactionHtml.bussinessAddress));
     },
     editRootContainer: function () {
         transactionBussiness().editRootContainer();
@@ -3856,6 +3881,16 @@ var setTransactionHtml =
     cancle: function () {
         transactionBussiness().Cancle();
         transactionBussiness().notifyMsg(false);
+    },
+    editAgreementPanelWhenTransactionWithScore: function (inputObj) {
+        if (setTransactionHtml.bussinessAddress == inputObj.baseBusinessAddr)
+            transactionBussiness().editAgreementPanelWhenTransactionWithScore(inputObj);
+    },
+    confirmTransaction: function (hasCode) {
+        objMain.ws.send(transactionBussiness().confirmTransaction(hasCode, setTransactionHtml.bussinessAddress));
+    },
+    cancleTransaction: function (hasCode) {
+        objMain.ws.send(transactionBussiness().cancleTransaction(hasCode, setTransactionHtml.bussinessAddress));
     }
 }
 
@@ -3992,6 +4027,22 @@ var set3DHtml = function () {
     //objMain.labelRenderer.domElement.addEventListener
 
     var operateEnd = function (event) {
+
+        if (event.clientX != undefined && event.clientX != null) {
+            //此处对应鼠标
+            objMain.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            objMain.mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+            lookInfoForCar();
+        }
+        else if (event.changedTouches && event.changedTouches.length > 0) {
+            // 获取第一个触摸点。这个对应手机触摸屏。
+            var touch = event.changedTouches[0];
+            objMain.mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
+            objMain.mouse.y = - (touch.clientY / window.innerHeight) * 2 + 1;
+            lookInfoForCar();
+        }
+
+
         operatePanel.refresh();
 
         if (objMain.directionGroup.visible) {
@@ -7002,6 +7053,30 @@ var UpdateOtherBasePoint = function () {
         //  console.log('哦哦', '出现了预料的情况！！！');
         //alert();
     }
+}
+
+
+var lookInfoForCar = function () {
+    // objMain.mouse = new THREE.Vector2(1, 1);
+    objMain.raycaster.setFromCamera(objMain.mouse, objMain.camera);
+
+    for (var i = 0; i < objMain.carGroup.children.length; i++) {
+        if (objMain.carGroup.children[i].type == "Group") {
+            for (var j = 0; j < objMain.carGroup.children[i].children.length; j++) {
+                var intersection = objMain.raycaster.intersectObject(objMain.carGroup.children[i].children[j]);
+                if (intersection.length > 0) {
+                    var carName = objMain.carGroup.children[i].name;
+                    var indexKey = carName.split('_')[1];
+                    if (objMain.othersBasePoint[indexKey]) {
+                        $.notify('这是【' + objMain.othersBasePoint[indexKey].playerName + '】的车', 'msg');
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+
 }
 //////////
 /*

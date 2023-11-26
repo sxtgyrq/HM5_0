@@ -1622,15 +1622,15 @@ namespace WsOfWebClient
                 // Consoe.WriteLine($"正则匹配成功：{m.Groups["car"] }+{m.Groups["key"] }");
                 // if (m.Groups["key"].Value == s.Key)
                 {
-                    var getPosition = new SetTax()
-                    {
-                        c = "SetTax",
-                        Key = s.Key,
-                        //       car = "car" + m.Groups["car"].Value,
-                        target = tax.Target
-                    };
-                    var msg = Newtonsoft.Json.JsonConvert.SerializeObject(getPosition);
-                    Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+                    //var getPosition = new SetTax()
+                    //{
+                    //    c = "SetTax",
+                    //    Key = s.Key,
+                    //    //       car = "car" + m.Groups["car"].Value,
+                    //    target = tax.Target
+                    //};
+                    //var msg = Newtonsoft.Json.JsonConvert.SerializeObject(getPosition);
+                    //Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
                 }
             }
             return "";

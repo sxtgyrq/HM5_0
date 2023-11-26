@@ -399,6 +399,6 @@ namespace HouseManager5_0.RoomMainF
             //Startup.sendSeveralMsgs(notifyMsg);
         }
 
-
+       
     }
 }

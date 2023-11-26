@@ -138,7 +138,8 @@ namespace HouseManager5_0
                     result = new List<int>();
                     that.getStartPositionByGoPath(out startPosition, goPath.path[indexValue]);
                 }
-                Program.dt.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed, that);
+                if (goPath.path[indexValue].path.Count > 0)
+                    Program.dt.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed, that);
                 var animation = new AnimateDataItem(startPosition, result, false, startT_PathLast, privateKeys[i], ref that.rm);
                 animations.Add(animation);
             }
@@ -182,7 +183,8 @@ namespace HouseManager5_0
                             Data.PathStartPoint3 startPosition;
                             var fp1 = Program.dt.GetFpByIndex(boss.StartFPIndex);
                             result = that.getStartPositon(fp1, boss.positionInStation + 1, ref startT_FirstPath, out startPosition, player.improvementRecord.HasValueToImproveSpeed);
-                            Program.dt.GetAFromBPoint(cmp.returningOjb.returnToSelfAddrPath.path[0].path, cmp.returningOjb.returnToSelfAddrPath.path[0].position, speed, ref result, ref startT_FirstPath, player.improvementRecord.HasValueToImproveSpeed, that);
+                            if (cmp.returningOjb.returnToSelfAddrPath.path.Count > 0)
+                                Program.dt.GetAFromBPoint(cmp.returningOjb.returnToSelfAddrPath.path[0].path, cmp.returningOjb.returnToSelfAddrPath.path[0].position, speed, ref result, ref startT_FirstPath, player.improvementRecord.HasValueToImproveSpeed, that);
 
 
                             // that.getEndPositon(Program.dt.GetFpByIndex(self.StartFPIndex), self.positionInStation, ref result, ref startT, player.improvementRecord.speedValue > 0);
@@ -205,7 +207,8 @@ namespace HouseManager5_0
                                 result = new List<int>();
                                 that.getStartPositionByGoPath(out startPosition, goPath.path[indexValue]);
                             }
-                            Program.dt.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed, that);
+                            if (goPath.path[indexValue].path.Count > 0)
+                                Program.dt.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed, that);
                             var animation = new AnimateDataItem(startPosition, result, false, startT_PathLast, privateKeys[i], ref that.rm);
                             animations.Add(animation);
                         }
@@ -279,7 +282,8 @@ namespace HouseManager5_0
                                     result = new List<int>();
                                     that.getStartPositionByGoPath(out startPosition, goPath.path[indexValue]);
                                 }
-                                Program.dt.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed, that);
+                                if (goPath.path[indexValue].path.Count > 0)
+                                    Program.dt.GetAFromBPoint(goPath.path[indexValue].path, goPath.path[indexValue].path[0], speed, ref result, ref startT_PathLast, player.improvementRecord.HasValueToImproveSpeed, that);
                                 var animation = new AnimateDataItem(startPosition, result, false, startT_PathLast, privateKeys[i], ref that.rm);
                                 animations.Add(animation);
                             }
@@ -453,11 +457,11 @@ namespace HouseManager5_0
                 return this.updateAction(this, otr, grp, otr.Key, otr.GroupKey);
             }
             //  return this.updateAction(this, otr, grp, otr.Key);
-            else if (otr.c == "OrderToReturnBySystem")
-            {
-                OrderToReturnBySystem otrbs = (OrderToReturnBySystem)otr;
-                return this.updateActionBySys(this, otrbs, grp, otrbs.Key);
-            }
+            //else if (otr.c == "OrderToReturnBySystem")
+            //{
+            //    OrderToReturnBySystem otrbs = (OrderToReturnBySystem)otr;
+            //    return this.updateActionBySys(this, otrbs, grp, otrbs.Key);
+            //}
             else
             {
                 throw new Exception($"{otr.c}__没有注册！！！");
@@ -465,52 +469,6 @@ namespace HouseManager5_0
             //throw new NotImplementedException();
         }
 
-        string updateActionBySys(interfaceOfEngine.tryCatchAction actionDo, OrderToReturnBySystem c, GetRandomPos grp, string operateKey)
-        {
-            throw new Exception();
-
-            //string conditionNotReason;
-            //if (actionDo.conditionsOk(c, grp, out conditionNotReason))
-            //{
-            //    List<string> notifyMsg = new List<string>();
-            //    lock (that.PlayerLock)
-            //    {
-            //        if (that._Players.ContainsKey(operateKey))
-            //        {
-            //            if (that._Players[operateKey].Bust)
-            //            {
-            //                var player = that._Players[operateKey];
-            //                var car = that._Players[operateKey].getCar();
-            //                switch (car.state)
-            //                {
-            //                    case CarState.waitOnRoad:
-            //                        {
-            //                            if (actionDo.carAbilitConditionsOk(player, car, c, grp))
-            //                            {
-            //                                car.setState(player, ref notifyMsg, CarState.returning);
-            //                                setReturn(new returnning()
-            //                                {
-            //                                    c = "returnning",
-            //                                    changeType = returnning.ChangeType.BeforeTax,
-            //                                    key = player.Key,
-            //                                    returningOjb = player.returningOjb,
-            //                                    target = car.targetFpIndex
-            //                                }, grp);
-            //                            }
-            //                        }; break;
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //    this.sendSeveralMsgs(notifyMsg);
-            //    return "";
-            //}
-            //else
-            //{
-            //    return conditionNotReason;
-            //}
-        }
 
 
         public ReturningOjb maindDo(Player player, Car car, Command c, GetRandomPos grp, ref List<string> notifyMsg, out MileResultReason mrr)

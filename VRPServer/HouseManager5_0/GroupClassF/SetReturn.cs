@@ -10,9 +10,12 @@ using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static CommonClass.Img.DrawFont.FontCodeResult;
+using static CommonClass.ModelTranstraction;
 using static HouseManager5_0.Car;
 using static HouseManager5_0.Engine;
 using static HouseManager5_0.RoomMainF.RoomMain;
+using static NBitcoin.Scripting.OutputDescriptor;
 
 namespace HouseManager5_0.GroupClassF
 {
@@ -102,7 +105,9 @@ namespace HouseManager5_0.GroupClassF
                         {
                             if (!this.taskFineshedTime.ContainsKey(player.Key))
                             {
+
                                 this.taskFineshedTime.Add(player.Key, DateTime.Now.AddMinutes(this.countOfAskRoad));
+
                                 if (this.countOfAskRoad > 0)
                                 {
                                     if (this._groupNumber == 1)
@@ -264,8 +269,11 @@ namespace HouseManager5_0.GroupClassF
         }
         Dictionary<string, string> recordErrorMsgs = new Dictionary<string, string>();
         Dictionary<string, bool> records = new Dictionary<string, bool>();
+
+
         public void recordRaceTime(string key)
         {
+
             if (this.taskFineshedTime.ContainsKey(key))
             {
                 if (this.recordErrorMsgs.ContainsKey(key)) { }
@@ -274,6 +282,8 @@ namespace HouseManager5_0.GroupClassF
                     this.recordErrorMsgs.Add(key, "您还未登录！");
                 }
                 var player = this._PlayerInGroup[key];
+               // DalOfAddress.traderewardtimerecord.GetBestRaceAchievementSingle();
+                //(raceEndTime- player.Group.startTime).TotalHours
                 if (string.IsNullOrEmpty(player.BTCAddress))
                 {
                     this.recordErrorMsgs[key] = "挑战记录未能记录";
@@ -289,6 +299,7 @@ namespace HouseManager5_0.GroupClassF
                         }
                         else
                         {
+                            int findResultCount;
                             var r = DalOfAddress.traderewardtimerecord.Add(new CommonClass.databaseModel.traderewardtimerecord()
                             {
                                 applyAddr = player.BTCAddress,
@@ -297,11 +308,17 @@ namespace HouseManager5_0.GroupClassF
                                 raceMember = this.groupNumber,
                                 rewardGiven = 0,
                                 startDate = int.Parse(this.RewardDate)
-                            });
+                            }, out findResultCount);
                             if (r)
                             {
                                 this.recordErrorMsgs[key] = $"记录于{this.RewardDate}期荣誉"; ;
                                 this.records.Add(key, true);
+
+                                if (findResultCount == 0)
+                                {
+                                    that.WebNotify(player, "你刷新了记录。");
+                                    rewardAnother(player);
+                                }
                             }
                             else
                             {
@@ -319,6 +336,13 @@ namespace HouseManager5_0.GroupClassF
             {
 
             }
+        }
+
+        private void rewardAnother(Player player)
+        {
+            that.breakRecordReward.reward(player);
+
+            //  throw new NotImplementedException();
         }
 
         public void MoneySet(long value, ref List<string> notifyMsg)

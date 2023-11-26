@@ -186,7 +186,7 @@ namespace MateWsAndHouse
                                             GroupKey = teamBegain.GroupKey,
                                         };
                                         var json = Newtonsoft.Json.JsonConvert.SerializeObject(teamNumWithSecret);
-                                        var url = t.member[i].FromUrl;
+                                        var url = t.member[i].FromUrl+"";
                                         var msg = sendMsg(url, json);
                                         Console.WriteLine(msg);
 
@@ -703,7 +703,7 @@ namespace MateWsAndHouse
         private static string sendMsg(string fromUrl, string json)
         {
             // var r = await Task.Run<string>(() => TcpFunction.WithResponse.SendInmationToUrlAndGetRes(fromUrl, json));
-            var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes(fromUrl, json);
+            var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes_V2(fromUrl, json);
 
             return t.GetAwaiter().GetResult();
         }

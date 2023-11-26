@@ -220,7 +220,9 @@
                     <button id="RewardTimeReback">返回</button>
                     <button id="nextRewardTimeBtn">下一期</button> 
                 </div>
+                  
                 <div id="rewardAppleItemContainer"></div>  
+                <div id="msgUserNeedToKnow"></div>
                 <table border="1" style="margin-top:4em">
                     <tr>
                         <th>奖励信息</th>
@@ -259,6 +261,39 @@
                 else if (data.waitingForAddition == 1) {
                     document.getElementById('rewardHasDataPage').style.backgroundColor = 'green';
                     document.getElementById('rewardPublishState').innerText = '未颁发';
+                    {
+                        // <div id="msgUserNeedToKnow"></div>
+                        var title1 = document.createElement('h3');
+                        title1.innerText = '股份分配机制';
+                        title1.style.fontSize = "2em;"
+                        
+                        var title2 = document.createElement('h3');
+                        title2.innerText = '股份在未分配之前是浮动的';
+                        title2.style.fontSize = "1.5em";
+
+                        var contentB = document.createElement('b');
+                        contentB.innerText = '每一期的股份总值是不变的。但在股份颁发前，随着取得成绩的玩家增多，股份会按照取得的名次来分配。名次越靠前，比重越大。如果玩家取得无论单人、双人、三人、四人、五人的名次，只要名次在100之内，那么玩家分配股份的比重=101-你的名次。你的比重/总比重×总股份就是玩家单次任务获得的股份。在股份颁发之后，成绩不会再有变动，股份也就确认。';
+                        //<div id="msgUserNeedToKnow"></div>
+                        document.getElementById('msgUserNeedToKnow').appendChild(title1);
+                        document.getElementById('msgUserNeedToKnow').appendChild(title2);
+                        document.getElementById('msgUserNeedToKnow').appendChild(contentB);
+                    }
+                    {
+                        var title1 = document.createElement('h3');
+                        title1.innerText = '记录打破机制';
+                        title1.style.fontSize="2em;"
+
+                        var title2 = document.createElement('h3');
+                        title2.innerText = '记录是可以打破的';
+                        title2.style.fontSize="1.5em";
+
+                        var contentB = document.createElement('b');
+                        contentB.innerText = '单人游戏，需要超越当前期数所有单人游戏的成绩，即判为打破记录。双人游戏，需要超越当前期数所有单人、双人游戏的成绩，即判为打破记录。三人游戏，需要超越当前期数所有单人、双人、三人游戏的成绩，即判为打破记录。四人游戏，需要超越当前期数所有单人、双人、三人游戏、四人游戏的成绩，即判为打破记录。五人游戏，需要超越当前期数所有单人、双人、三人游戏、四人、五人游戏的成绩，即判为打破记录。';
+                        //<div id="msgUserNeedToKnow"></div>
+                        document.getElementById('msgUserNeedToKnow').appendChild(title1);
+                        document.getElementById('msgUserNeedToKnow').appendChild(title2);
+                        document.getElementById('msgUserNeedToKnow').appendChild(contentB);
+                    }
                 }
 
             }

@@ -67,7 +67,7 @@ namespace HouseManager5_0
 
         public void sendSeveralMsgs(List<string> notifyMsg)
         {
-              Startup.sendSeveralMsgs(notifyMsg);
+            Startup.sendSeveralMsgs(notifyMsg);
         }
         //public List<string> sendMsg(List<string> notifyMsg)
         //{

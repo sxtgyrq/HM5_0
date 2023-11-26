@@ -718,6 +718,88 @@ namespace DalOfAddress
             }
         }
 
+        public static bool AddWithBuyerScore(int tradeIndex, string addrFrom, string addrTo, string addrBussiness, string sign, string msg, long passCoin, long costScore, out string notifyMsg)
+        {
+            var mysql = "INSERT INTO traderecord(msg,sign,bussinessAddr,tradeIndex,addrFrom,TimeStamping) VALUES(@msg,@sign,@bussinessAddr,@tradeIndex,@addrFrom,@TimeStamping);";
 
+            using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
+            {
+                con.Open();
+                using (MySqlTransaction tran = con.BeginTransaction())
+                {
+                    try
+                    {
+                        if (TradeReward.CheckOccupied(tran, con, addrBussiness, addrFrom) >= tradeIndex)
+                        {
+                            notifyMsg = MsgMoneyIsLocked(addrFrom);
+                            tran.Rollback();
+                            return false;
+                        }
+                        else
+                        {
+                            int tradeIndexInDB;
+                            string sQL = "SELECT count(*) FROM traderecord WHERE bussinessAddr=@bussinessAddr AND addrFrom=@addrFrom";
+                            using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                            {
+                                command.Parameters.AddWithValue("@bussinessAddr", addrBussiness);
+                                command.Parameters.AddWithValue("@addrFrom", addrFrom);
+                                tradeIndexInDB = Convert.ToInt32(command.ExecuteScalar());
+                            }
+                            if (tradeIndexInDB != tradeIndex)
+                            {
+                                notifyMsg = "逻辑错误！！！";
+                                tran.Rollback();
+                                return false;
+                            }
+                        }
+                        {
+                            // const long costMoney = 1000000;
+                            if (DalOfAddress.MoneyAdd.GetMoney(con, tran, addrTo) > costScore + 200000)//这里要扣卖家的积分。
+                            {
+                                long subsidizeGet, subsidizeLeft;
+                                DalOfAddress.MoneyGet.GetSubsidizeAndLeft(con, tran, addrTo, costScore + 200000, out subsidizeGet, out subsidizeLeft);
+                                if (subsidizeLeft > 0)//这里千万不能等于0
+                                {
+                                    DalOfAddress.MoneyAdd.AddMoney(addrFrom, costScore);
+                                    string sQL = mysql;
+                                    // long moneycount;
+                                    using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                                    {
+                                        DateTime operateT = DateTime.Now;
+                                        command.Parameters.AddWithValue("@msg", msg);
+                                        command.Parameters.AddWithValue("@sign", sign);
+                                        command.Parameters.AddWithValue("@bussinessAddr", addrBussiness);
+                                        command.Parameters.AddWithValue("@tradeIndex", tradeIndex);
+                                        command.Parameters.AddWithValue("@addrFrom", addrFrom);
+                                        command.Parameters.AddWithValue("@TimeStamping", operateT);
+                                        command.ExecuteNonQuery();
+                                    }
+                                    notifyMsg = MsgSuccess;
+                                    tran.Commit();
+                                    return true;
+                                }
+                                else
+                                {
+                                    tran.Rollback();
+                                    notifyMsg = "系统逻辑错误！！！";
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                tran.Rollback();
+                                notifyMsg = $"{addrTo}积分储蓄不足{CommonClass.F.LongToDecimalString(costScore + 200000 + 1)}积分。";
+                                return false;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                        throw new Exception("新增错误");
+                    }
+                }
+            }
+        }
     }
 }

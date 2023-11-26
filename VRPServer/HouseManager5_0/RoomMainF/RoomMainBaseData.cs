@@ -222,5 +222,6 @@ namespace HouseManager5_0.RoomMainF
         public Manager_TaskCopy taskM;
         public Manager_FileSave fileSM;
         public Manager_BeginnerMode modelBM;
+        public Manager_NewRecordReward breakRecordReward;
     }
 }

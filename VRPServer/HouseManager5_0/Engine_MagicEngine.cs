@@ -246,10 +246,20 @@ namespace HouseManager5_0
 
         internal int shotTime(int v, bool speedImproved)
         {
-            if (speedImproved)
-                return v * 5 / 7;
-            else
-                return v;
+            //if (reduce)
+            //{
+            //    if (speedImproved)
+            //        return v * 5 / 7 * 102 / 100;
+            //    else
+            //        return v * 102 / 100;
+            //}
+            //else
+            {
+                if (speedImproved)
+                    return v * 5 / 7;
+                else
+                    return v;
+            }
         }
 
 

@@ -582,14 +582,14 @@ namespace HouseManager5_0.GroupClassF
             {
                 do
                 {
-                    this.promoteMilePosition = GetRandomPosition(true, Program.dt);
+                    this.promoteMilePosition = GetRandomPositionFromAnotherRegion(true, Program.dt, this.promoteMilePosition);
                 }
                 while (this.IsOutTheAbility(grp));
             }
             else if (changeType == "volume")
-                this.promoteVolumePosition = GetRandomPosition(true, Program.dt);
+                this.promoteVolumePosition = GetRandomPositionFromAnotherRegion(true, Program.dt, this.promoteVolumePosition);
             else if (changeType == "speed")
-                this.promoteSpeedPosition = GetRandomPosition(true, Program.dt);
+                this.promoteSpeedPosition = GetRandomPositionFromAnotherRegion(true, Program.dt, this.promoteSpeedPosition);
             else
             {
                 throw new Exception($"{changeType}是什么类型？");

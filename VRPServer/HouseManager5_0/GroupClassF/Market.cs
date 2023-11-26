@@ -23,6 +23,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static CommonClass.Douyin;
 using static CommonClass.MapEditor;
+using static CommonClass.ModelTranstraction;
 using static HouseManager5_0.Car;
 using static HouseManager5_0.Engine;
 using static HouseManager5_0.GroupClassF.GroupClass;
@@ -1413,5 +1414,141 @@ namespace HouseManager5_0.GroupClassF
         {
             return this._roleAction.ContainsKey(p);
         }
+
+
+        #region
+
+        public class StockScoreTradeClass
+        {
+            public TradeCoinForSave tradeCoinForSave = null;
+            public int TradeCoinForSaveTradeIndex
+            {
+                get
+                {
+                    if (tradeCoinForSave == null)
+                    {
+                        return -1;
+                    }
+                    else
+                        return tradeCoinForSave.tradeIndex;
+                }
+            }
+            public string AddrFrom
+            {
+                get
+                {
+                    if (tradeCoinForSave == null)
+                    {
+                        return "";
+                    }
+                    else
+                        return tradeCoinForSave.addrFrom;
+                }
+            }
+            public string AddrBussiness
+            {
+                get
+                {
+                    if (tradeCoinForSave == null)
+                    {
+                        return "";
+                    }
+                    else
+                        return tradeCoinForSave.addrBussiness;
+                }
+            }
+            public string AddrTo
+            {
+                get
+                {
+                    if (tradeCoinForSave == null)
+                    {
+                        return "";
+                    }
+                    else
+                        return tradeCoinForSave.addrTo;
+                }
+            }
+            public long PassCoin
+            {
+                get
+                {
+                    if (tradeCoinForSave == null)
+                    {
+                        return 0;
+                    }
+                    else
+                        return tradeCoinForSave.passCoin;
+                }
+            }
+            public string Sign
+            {
+                get
+                {
+                    if (tradeCoinForSave == null)
+                    {
+                        return "";
+                    }
+                    else
+                        return tradeCoinForSave.sign;
+                }
+            }
+            public string Msg
+            {
+                get
+                {
+                    if (tradeCoinForSave == null)
+                    {
+                        return "";
+                    }
+                    else
+                        return tradeCoinForSave.msg;
+                }
+            }
+
+
+            public long TradeScore
+            {
+                get
+                {
+                    if (tradeCoinForSave == null)
+                    {
+                        return 0;
+                    }
+                    else
+                        return tradeCoinForSave.TradeScore;
+                }
+            }
+            public string Hash256Code
+            {
+
+                get
+                {
+                    if (tradeCoinForSave == null)
+                    {
+                        return "";
+                    }
+                    else
+                        return CommonClass.Random.GetSha256FromStr($"{this.Msg}_{this.TradeScore}");
+                }
+            }
+
+            public string FailReason { get; set; }
+
+            public enum StockScoreTradeState
+            {
+                None,
+                WaitToCancelOrAgree,
+                Fail,
+                Success
+            }
+            public StockScoreTradeState tradeState = StockScoreTradeState.None;
+        }
+
+        public Dictionary<string, StockScoreTradeClass> stockScoreTradeObj = new Dictionary<string, StockScoreTradeClass>();
+
+        #endregion
+
+
     }
 }

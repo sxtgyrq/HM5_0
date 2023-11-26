@@ -105,6 +105,13 @@ namespace WsOfWebClient
     }
     public class RequstToSaveInFile : CommonClass.Command { }
 
+    public class AgreeTheTransaction : CommonClass.Command
+    {
+        public string hasCode { get; set; }
+        public string businessAddr { get; set; }
+    }
+    public class CancleTheTransaction : AgreeTheTransaction { }
+
     public class Bust : Attack
     {
         public int Target { get; set; }
@@ -176,6 +183,14 @@ namespace WsOfWebClient
         public double tranNum { get; set; }
         public string addrBussiness { get; set; }
     }
+
+    public class GenerateAgreementBetweenTwo : CommonClass.Command
+    {
+        public double tranNum { get; set; }
+        public double tranScoreNum { get; set; }
+        public string addrBussiness { get; set; }
+    }
+
     public class RewardSet : CommonClass.Command
     {
         public string administratorAddr { get; set; }
@@ -192,6 +207,13 @@ namespace WsOfWebClient
         public string msg { get; set; }
         public string sign { get; set; }
         public string addrBussiness { get; set; }
+    }
+    public class ModelTransSignWhenTrade : CommonClass.Command
+    {
+        public string msg { get; set; }
+        public string sign { get; set; }
+        public string addrBussiness { get; set; }
+        public double tranScoreNum { get; set; }
     }
     public class RewardPublicSign : RewardSet
     {

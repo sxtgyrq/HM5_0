@@ -45,6 +45,12 @@ namespace CommonClass
         {
             public string bussinessAddr { get; set; }
         }
+        public class GetStockScoreTransctionState : Command
+        {
+            public string bussinessAddr { get; set; }
+            public string Key { get; set; }
+            public string GroupKey { get; set; }
+        }
 
         public class GetTransctionFromChain : Command
         {
@@ -56,6 +62,18 @@ namespace CommonClass
             public string addrBussiness { get; set; }
             public string addrFrom { get; set; }
         }
+
+        public class ConfirmTheTransaction : CommonClass.Command
+        {
+            public string hasCode { get; set; }
+            public string businessAddr { get; set; }
+            public string Key { get; set; }
+            public string GroupKey { get; set; }
+        }
+        public class CancleTheTransactionToServer : ConfirmTheTransaction
+        { 
+        }
+
         public class AllBuiisnessAddr : Command
         {
         }
@@ -75,6 +93,19 @@ namespace CommonClass
                 public bool success { get; set; }
             }
         }
+        public class TradeCoinForSave : TradeCoin
+        { 
+            public long TradeScore { get; set; }
+
+            public string Key { get; set; }
+            public string GroupKey { get; set; }
+            //public class Result
+            //{
+            //    public string msg { get; set; }
+            //    public bool success { get; set; }
+            //}
+        }
+
 
         public class TradeSetAsReward : Command
         {
@@ -248,7 +279,7 @@ namespace CommonClass
         {
             public string btcAddr { get; set; }
         }
-        public class UpdateScoreItem : CommonClass.Command 
+        public class UpdateScoreItem : CommonClass.Command
         {
             public string indexGuid { get; set; }
             public string btcAddr { get; set; }

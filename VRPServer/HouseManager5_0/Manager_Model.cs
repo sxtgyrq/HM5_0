@@ -124,12 +124,62 @@ namespace HouseManager5_0
                                                             else
                                                             {
                                                                 defendLevel = 3;
-                                                                long sum = 1000000;
+                                                                //  long sum = 1000000;
+                                                                int randomMax = 10;
                                                                 for (var i = 0; i < 7; i++)
                                                                 {
-                                                                    if (sum * Program.rm.rm.Next(100) < sumSatoshi * 100)
+                                                                    if (sumSatoshi > Program.rm.rm.Next(0, randomMax))
                                                                     {
-                                                                        defendLevel++;
+                                                                        double breakValue;
+                                                                        if (sumSatoshi < 10)
+                                                                        {
+                                                                            breakValue = 0.8;
+                                                                        }
+                                                                        else if (sumSatoshi < 100)
+                                                                        {
+                                                                            breakValue = 0.7;
+                                                                        }
+                                                                        else if (sumSatoshi < 1000)
+                                                                        {
+                                                                            breakValue = 0.6;
+                                                                        }
+                                                                        else if (sumSatoshi < 10000)
+                                                                        {
+                                                                            breakValue = 0.5;
+                                                                        }
+                                                                        else if (sumSatoshi < 100000)
+                                                                        {
+                                                                            breakValue = 0.4;
+                                                                        }
+                                                                        else if (sumSatoshi < 1000000)
+                                                                        {
+                                                                            breakValue = 0.3;
+                                                                        }
+                                                                        else if (sumSatoshi < 10000000)
+                                                                        {
+                                                                            breakValue = 0.2;
+                                                                        }
+                                                                        else if (sumSatoshi < 100000000)
+                                                                        {
+                                                                            breakValue = 0.1;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            breakValue = 0;
+                                                                        }
+                                                                        if (Program.rm.rm.NextDouble() < breakValue)
+                                                                        {
+                                                                            break;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            randomMax *= 12;
+                                                                            defendLevel++;
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        break;
                                                                     }
                                                                 }
                                                                 rewardLittleReason = $"在此有{sumSatoshi}点股,";

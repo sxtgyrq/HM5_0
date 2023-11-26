@@ -3,6 +3,7 @@ using DalOfAddress;
 using HouseManager5_0.interfaceOfHM;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace HouseManager5_0.RoomMainF
@@ -298,6 +299,27 @@ namespace HouseManager5_0.RoomMainF
                 WebSocketID = player.WebSocketID,
                 Money = subsidizeLeft,
                 address = address
+            };
+            var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(lmdb);
+            notifyMsg.Add(url);
+            notifyMsg.Add(sendMsg);
+        }
+
+        internal void updateStockScore(Player player, string showType, string baseBusinessAddr, ref List<string> notifyMsg)
+        {
+            var url = player.FromUrl;
+            StockScoreNotify lmdb = new StockScoreNotify()
+            {
+                c = "StockScoreNotify",
+                WebSocketID = player.WebSocketID,
+                showType = showType,
+                baseBusinessAddr = baseBusinessAddr,
+                Msg = player.Group.stockScoreTradeObj.ContainsKey(baseBusinessAddr) ? player.Group.stockScoreTradeObj[baseBusinessAddr].Msg : "",
+                PassCoin = player.Group.stockScoreTradeObj.ContainsKey(baseBusinessAddr) ? player.Group.stockScoreTradeObj[baseBusinessAddr].PassCoin : 0,
+                TradeScore = player.Group.stockScoreTradeObj.ContainsKey(baseBusinessAddr) ? player.Group.stockScoreTradeObj[baseBusinessAddr].TradeScore : 0,
+                Hash256Code = player.Group.stockScoreTradeObj.ContainsKey(baseBusinessAddr) ? player.Group.stockScoreTradeObj[baseBusinessAddr].Hash256Code : "",
+                hasValue = player.Group.stockScoreTradeObj.ContainsKey(baseBusinessAddr),
+                FailReason = player.Group.stockScoreTradeObj.ContainsKey(baseBusinessAddr) ? player.Group.stockScoreTradeObj[baseBusinessAddr].FailReason : "",
             };
             var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(lmdb);
             notifyMsg.Add(url);

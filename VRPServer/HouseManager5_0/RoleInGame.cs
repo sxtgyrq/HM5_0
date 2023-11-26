@@ -758,6 +758,9 @@ namespace HouseManager5_0
             return this.StartFPIndex;
             // throw new NotImplementedException();
         }
+
+
+
         public string roadCurrentOn = "";
         //    BradcastRoadName bradcastRoadName;
         //internal void TellName(Player player, string roadCode)
@@ -817,6 +820,16 @@ namespace HouseManager5_0
         /// 选择错误的次数
         /// </summary>
         public int SelectWrongCount { get; internal set; }
+
+        //string showType, string baseBusinessAddr,
+        public delegate void UpdateStockScoreInfoDelegate(Player buyer, string type, string baseBusinessAddr, ref List<string> notifyMsg);
+
+        public UpdateStockScoreInfoDelegate updateStockScoreInfoDelegateF;
+
+        //internal static void UpdateStockScoreInfo(Player buyer, string v)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
     public partial class Player : interfaceTag.HasContactInfo
     {

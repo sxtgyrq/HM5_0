@@ -51,6 +51,7 @@ namespace HouseManager5_0.RoomMainF
             this.taskM = new Manager_TaskCopy(this);
             this.fileSM = new Manager_FileSave(this);
             this.modelBM = new Manager_BeginnerMode(this);
+            this.breakRecordReward = new Manager_NewRecordReward(this);
 
             // lock (PlayerLock)
             {

@@ -107,9 +107,14 @@ namespace HouseManager5_0
                     double endX, endY, endZ;
                     CommonClass.Geography.calculatBaideMercatorIndex.getBaiduPicIndex(dataResult[i].BDlongitude, dataResult[i].BDlatitude, dataResult[i].BDheight, out endX, out endY, out endZ);
                     //  var interview =
-                    var interview = Convert.ToInt32(CommonClass.Geography.getLengthOfTwoPoint.GetDistance(position.BDlatitude, position.BDlongitude, position.BDheight, dataResult[i].BDlatitude, dataResult[i].BDlongitude, dataResult[i].BDheight) / dataResult[i].maxSpeed * 3.6 / 20 * 1000 * 50 / speed);
+
+                    int interview = Convert.ToInt32(CommonClass.Geography.getLengthOfTwoPoint.GetDistance(position.BDlatitude, position.BDlongitude, position.BDheight, dataResult[i].BDlatitude, dataResult[i].BDlongitude, dataResult[i].BDheight) / dataResult[i].maxSpeed * 3.6 / 20 * 1000 * 50 / speed);
+
+
 
                     interview = rmain.magicE.shotTime(interview, speedImproved);
+
+                    // if()
 
                     if (result.Count == 0)
                     {
@@ -862,10 +867,10 @@ namespace HouseManager5_0
 
         }
 
-        public List<string> GetAllRoadCodes() 
+        public List<string> GetAllRoadCodes()
         {
             List<string> list = new List<string>();
-            foreach (var item in this._road) 
+            foreach (var item in this._road)
             {
                 list.Add(item.Key);
             }

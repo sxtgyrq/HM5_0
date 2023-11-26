@@ -149,6 +149,7 @@ namespace HouseManager5_0.GroupClassF
                 {
                     this._collectPosition[key] = this.GetRandomPosition(true, Program.dt);
                 }
+
             }
         }
 
