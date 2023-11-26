@@ -29,7 +29,7 @@ namespace HouseManager5_0.GroupClassF
                 return result;
             }
         }
-        public Dictionary<string, DateTime> taskFineshedTime { get; private set; }
+        public Dictionary<bool, DateTime> taskFineshedTime { get; private set; }
         public GroupClass(string gkey, RoomMainF.RoomMain roomMain)
         {
             _collectPosition = new Dictionary<int, int>();
@@ -44,7 +44,7 @@ namespace HouseManager5_0.GroupClassF
             this.Money = 0;
             this.startTime = DateTime.Now;
             //this.countOfAskRoad = 0;
-            this.taskFineshedTime = new Dictionary<string, DateTime>();
+            this.taskFineshedTime = new Dictionary<bool, DateTime>();
             this.recordErrorMsgs = new Dictionary<string, string>();
             this.records = new Dictionary<string, bool>();
 

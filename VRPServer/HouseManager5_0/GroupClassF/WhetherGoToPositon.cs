@@ -76,10 +76,10 @@ namespace HouseManager5_0.GroupClassF
 
         private void GetFineshedInfomation(string key, out bool isFinished, out string FinishedMsg)
         {
-            isFinished = this.taskFineshedTime.ContainsKey(key);
+            isFinished = this.taskFineshedTime.ContainsKey(true);
             if (isFinished)
             {
-                var ts = this.taskFineshedTime[key] - this.startTime;
+                var ts = this.taskFineshedTime[true] - this.startTime;
                 if (this.Live)
                 {
                     var list = this.GetRankedWithScoreList();

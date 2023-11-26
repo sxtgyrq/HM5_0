@@ -72,12 +72,13 @@
         html = `<div style="width:100%;height:100%;background-color:cadetblue;">
             <div style="width:10000px;overflow:hidden;">
                 <img src="bg/t2.jpg" />
-                <img src="bg/t3.jpg" />
-                <img src="bg/t4.jpg" />
                 <img src="bg/t5.png" />
+                <img src="bg/t3.jpg" />
+                <img src="bg/t4.jpg" /> 
                 <img src="bg/t3.jpg" />
                 <img src="bg/t4.jpg" />
                 <img src="bg/t2.jpg" />
+                <img src="bg/t5.png" />
                 <img src="bg/t3.jpg" />
                 <img src="bg/t4.jpg" />
             </div>

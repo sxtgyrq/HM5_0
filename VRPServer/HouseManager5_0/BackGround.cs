@@ -139,6 +139,7 @@ namespace HouseManager5_0
                     case "古交市": { return "region/gujiao"; };
                     case "榆次区": { return "region/yuci"; };
                     case "万柏林区": { return "region/wanbailin"; };
+                    case "清徐县": { return "region/qingxuxian"; };
                     default:
                         {
                             return "";

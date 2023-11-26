@@ -380,7 +380,7 @@ namespace WsOfWebClient
                                                 RoadCode = pathValue.Substring(1, 10),
                                             }
                                             );
-                        var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes($"{ip}:{tcpPort}", msg);
+                        var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes_V2($"{ip}:{tcpPort}", msg);
                         var resultString = t.GetAwaiter().GetResult();
 
                         context.Response.ContentType = "application/json";
@@ -1056,12 +1056,24 @@ namespace WsOfWebClient
                                             GenerateAgreement ga = Newtonsoft.Json.JsonConvert.DeserializeObject<GenerateAgreement>(returnResult.result);
                                             Room.GenerateAgreementF(s, connectInfoDetail, ga);
                                         }; break;
+                                    case "GenerateAgreementBetweenTwo":
+                                        {
+                                            GenerateAgreementBetweenTwo gabw = Newtonsoft.Json.JsonConvert.DeserializeObject<GenerateAgreementBetweenTwo>(returnResult.result);
+                                            Room.GenerateAgreementF(s, connectInfoDetail, gabw);
+                                        }; break;
                                     case "ModelTransSign":
                                         {
                                             // if (s.Ls == LoginState.OnLine)
                                             {
                                                 ModelTransSign mts = Newtonsoft.Json.JsonConvert.DeserializeObject<ModelTransSign>(returnResult.result);
                                                 Room.ModelTransSignF(s, connectInfoDetail, mts);
+                                            }
+                                        }; break;
+                                    case "ModelTransSignWhenTrade":
+                                        {
+                                            {
+                                                ModelTransSignWhenTrade mtswt = Newtonsoft.Json.JsonConvert.DeserializeObject<ModelTransSignWhenTrade>(returnResult.result);
+                                                Room.ModelTransSignF(s, connectInfoDetail, mtswt);
                                             }
                                         }; break;
                                     case "RewardPublicSign":
@@ -1322,6 +1334,22 @@ namespace WsOfWebClient
                                                 Room.turnOnBeginnerMode(s);
                                             }
                                         }; break;
+                                    case "AgreeTheTransaction":
+                                        {
+                                            if (s.Ls == LoginState.LookForBuildings)
+                                            {
+                                                AgreeTheTransaction att = Newtonsoft.Json.JsonConvert.DeserializeObject<AgreeTheTransaction>(returnResult.result);
+                                                Room.ConfirmTheTransactionF(s, att);
+                                            }
+                                        }; break;
+                                    case "CancleTheTransaction": 
+                                        {
+                                            if (s.Ls == LoginState.LookForBuildings)
+                                            {
+                                                CancleTheTransaction ctt = Newtonsoft.Json.JsonConvert.DeserializeObject<CancleTheTransaction>(returnResult.result);
+                                                Room.CancleTheTransactionF(s, ctt);
+                                            }
+                                        }; break;
                                     default:
                                         {
                                             // Console.WriteLine(returnResult.result);
@@ -1432,7 +1460,7 @@ namespace WsOfWebClient
         //static Dictionary<string, ClientWebSocket> _sockets = new Dictionary<string, ClientWebSocket>();
         public static string sendInmationToUrlAndGetRes(string roomUrl, string sendMsg)
         {
-            var t1 = TcpFunction.WithResponse.SendInmationToUrlAndGetRes(roomUrl, sendMsg);
+            var t1 = TcpFunction.WithResponse.SendInmationToUrlAndGetRes_V2(roomUrl, sendMsg);
             return t1.GetAwaiter().GetResult();
         }
 

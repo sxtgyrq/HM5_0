@@ -38,4 +38,19 @@ namespace CommonClass.databaseModel
         }
         public int rank { get; set; }
     }
+
+    public class introducedetai
+    {
+        public int raceRecordIndex { get; set; }
+        public int startDate { get; set; }
+        public string applyAddr { get; set; }
+        public int introduceCount { get; set; }
+        public int rewardGiven { get; set; }
+
+    }
+    public class introducedetairecordShow : introducedetai
+    {
+        public int rank { get; set; }
+        public string percentStr { get; set; }
+    }
 }

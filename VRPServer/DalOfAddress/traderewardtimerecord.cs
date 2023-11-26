@@ -8,54 +8,82 @@ namespace DalOfAddress
 {
     public class traderewardtimerecord
     {
-        public static bool Add(CommonClass.databaseModel.traderewardtimerecord dataItem)
+        public static bool Add(List<CommonClass.databaseModel.traderewardtimerecord> dataItems, out int findResultCount)
         {
-            // return 0;
-            using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
+            if (dataItems.Count > 0)
             {
-                con.Open();
-                using (MySqlTransaction tran = con.BeginTransaction())
+                var firstItem = dataItems[0];
+                using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
                 {
-                    try
+                    con.Open();
+                    using (MySqlTransaction tran = con.BeginTransaction())
                     {
-                        dataItem.rewardGiven = 0;
-                        // dataItem.re
-                        if (TradeReward.HasDataToOperate(dataItem.startDate, con, tran))
+                        try
                         {
-                            var sql = "INSERT INTO traderewardtimerecord (startDate,raceMember,applyAddr,raceStartTime,raceEndTime,rewardGiven) VALUES (@startDate,@raceMember,@applyAddr,@raceStartTime,@raceEndTime,@rewardGiven);";
-                            using (MySqlCommand commad = new MySqlCommand(sql, con))
+                            firstItem.rewardGiven = 0;
+                            //  var firstItem =
+                            // dataItem.re
+                            if (TradeReward.HasDataToOperate(firstItem.startDate, con, tran))
                             {
-                                commad.Parameters.AddWithValue(@"startDate", dataItem.startDate);
-                                commad.Parameters.AddWithValue(@"raceMember", dataItem.raceMember);
-                                commad.Parameters.AddWithValue(@"applyAddr", dataItem.applyAddr);
-                                commad.Parameters.AddWithValue(@"raceStartTime", dataItem.raceStartTime);
-                                commad.Parameters.AddWithValue(@"raceEndTime", dataItem.raceEndTime);
-                                commad.Parameters.AddWithValue(@"rewardGiven", dataItem.rewardGiven);
+                                {
+                                    var sql = $@"SELECT count(*) FROM traderewardtimerecord WHERE startDate={firstItem.startDate} AND raceMember<={firstItem.raceMember}  AND 
+TIMESTAMPDIFF(MICROSECOND,raceStartTime,raceEndTime) / 1000000.0 <{(firstItem.raceEndTime - firstItem.raceStartTime).TotalSeconds - 0.02}";
+                                    using (MySqlCommand command = new MySqlCommand(sql, con))
+                                    {
+                                        findResultCount = Convert.ToInt32(command.ExecuteScalar());
+                                    }
+                                }
+                                int rows = 0;
+                                for (int i = 0; i < dataItems.Count; i++)
+                                {
+                                    var dataItem = dataItems[i];
+                                    var sql = "INSERT INTO traderewardtimerecord (startDate,raceMember,applyAddr,raceStartTime,raceEndTime,rewardGiven) VALUES (@startDate,@raceMember,@applyAddr,@raceStartTime,@raceEndTime,@rewardGiven);";
+                                    using (MySqlCommand commad = new MySqlCommand(sql, con))
+                                    {
+                                        commad.Parameters.AddWithValue(@"startDate", dataItem.startDate);
+                                        commad.Parameters.AddWithValue(@"raceMember", dataItem.raceMember);
+                                        commad.Parameters.AddWithValue(@"applyAddr", dataItem.applyAddr);
+                                        commad.Parameters.AddWithValue(@"raceStartTime", dataItem.raceStartTime);
+                                        commad.Parameters.AddWithValue(@"raceEndTime", dataItem.raceEndTime);
+                                        commad.Parameters.AddWithValue(@"rewardGiven", dataItem.rewardGiven);
 
-                                var row = commad.ExecuteNonQuery();
-                                if (row == 1)
+                                        var row = commad.ExecuteNonQuery();
+                                        rows += row;
+                                    }
+                                }
+                                if (rows == dataItems.Count)
                                 {
                                     tran.Commit();
                                     return true;
                                 }
                                 else
+                                {
                                     tran.Rollback();
+                                    return false;
+                                }
                             }
-
+                            else
+                            {
+                                findResultCount = -1;
+                                tran.Rollback();
+                            }
+                            return false;
                         }
-                        else
+                        catch (Exception e)
                         {
-                            tran.Rollback();
+                            throw e;
+                            throw new Exception("新增错误");
                         }
-                        return false;
-                    }
-                    catch (Exception e)
-                    {
-                        throw e;
-                        throw new Exception("新增错误");
                     }
                 }
             }
+            else
+            {
+                findResultCount = -1;
+                return false;
+            }
+            // return 0;
+
         }
 
         public static List<CommonClass.databaseModel.traderewardtimerecordShow> GetByStartDate(int startDate, int raceMember, bool limited)
@@ -75,7 +103,7 @@ SELECT
 FROM
 	traderewardtimerecord 
 WHERE
-	startDate={startDate} AND raceMember={raceMember} ORDER BY raceTime ASC {(limited ? "LIMIT 0,100" : "")}
+	startDate={startDate} AND raceMember={raceMember} ORDER BY raceTime ASC,raceStartTime ASC,raceEndTime ASC,raceRecordIndex ASC {(limited ? "LIMIT 0,100" : "")}
 ";
 
             using (var r = MySqlHelper.ExecuteReader(Connection.ConnectionStr, sQL))
@@ -102,15 +130,44 @@ WHERE
 
         internal static int Count(MySqlConnection con, MySqlTransaction tran, int startDate)
         {
+            /*
+             * 这里的目的是筛选前100名
+             */
             int count = 0;
-            var sQL = $"SELECT raceRecordIndex FROM traderewardtimerecord WHERE startDate={startDate};";
-            using (var command = new MySqlCommand(sQL, con, tran))
             {
-                using (var reader = command.ExecuteReader())
+                for (int raceMember = 1; raceMember <= 5; raceMember++)
                 {
-                    while (reader.Read()) { count++; }
+                    var sQL = $"SELECT raceRecordIndex FROM traderewardtimerecord WHERE startDate={startDate} and raceMember={raceMember} LIMIT 0,100;";
+                    using (var command = new MySqlCommand(sQL, con, tran))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            for (int i = 0; i < 100; i++)
+                            {
+                                if (reader.Read())
+                                {
+                                    count++;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
+
             }
+            //{
+            //    var sQL = $"SELECT raceRecordIndex FROM traderewardtimerecord WHERE startDate={startDate};";
+            //    using (var command = new MySqlCommand(sQL, con, tran))
+            //    {
+            //        using (var reader = command.ExecuteReader())
+            //        {
+            //            while (reader.Read()) { count++; }
+            //        }
+            //    }
+            //}
             return count;
         }
 
@@ -120,16 +177,53 @@ WHERE
         //}
         internal static bool HasAddrGetNoReward(MySqlTransaction tran, MySqlConnection con, int startDate)
         {
-            bool result;
-            string sQL = $"SELECT * FROM traderewardtimerecord WHERE startDate={startDate} AND rewardGiven=0;";
-            using (var command = new MySqlCommand(sQL, con, tran))
+            /*
+             * 这里的目的是筛选前100名
+             */
+            for (int raceMember = 1; raceMember <= 5; raceMember++)
             {
-                using (var reader = command.ExecuteReader())
+                //bool result;
+                string sQL = $@"SELECT
+	rewardGiven 
+FROM
+	traderewardtimerecord 
+WHERE
+	startDate = {startDate}  
+	AND raceMember = {raceMember} 
+ORDER BY
+	rewardGiven DESC 
+	LIMIT 0,
+	100;";
+                using (var command = new MySqlCommand(sQL, con, tran))
                 {
-                    result = reader.Read();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var rewardGiven = Convert.ToInt32(reader["rewardGiven"]);
+                            if (rewardGiven == 0)
+                            {
+                                return true;
+                            }
+                        }
+                        //  result = reader.Read();
+                    }
                 }
+
             }
-            return result;
+            return false;
+            //{
+            //    bool result;
+            //    string sQL = $"SELECT * FROM traderewardtimerecord WHERE startDate={startDate} AND rewardGiven=0;";
+            //    using (var command = new MySqlCommand(sQL, con, tran))
+            //    {
+            //        using (var reader = command.ExecuteReader())
+            //        {
+            //            result = reader.Read();
+            //        }
+            //    }
+            //    return result;
+            //}
         }
         internal static int UpdateItem(MySqlConnection con, MySqlTransaction tran, int startDate, int raceRecordIndex, string applyAddr, int rewardGiven)
         {

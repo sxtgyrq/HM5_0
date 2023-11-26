@@ -52,7 +52,7 @@ namespace HouseManager5_0
                     {
                         this.WebNotify(player, $"存档前，请将{CommonClass.F.LongToDecimalString(player.MoneyForSave)}先存储；");
                     }
-                    else if (player.Group.taskFineshedTime.ContainsKey(player.Key))
+                    else if (player.Group.taskFineshedTime.ContainsKey(true))
                     {
                         this.WebNotify(player, "任务已完成没必要存档！");
                     }

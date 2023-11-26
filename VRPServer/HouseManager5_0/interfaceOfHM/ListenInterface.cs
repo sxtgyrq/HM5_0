@@ -128,6 +128,7 @@ namespace HouseManager5_0.interfaceOfHM
 
 
         string GetRoadMeshF(GetRoadMesh tbm);
+
     }
 
     interface MapEditor
@@ -163,7 +164,7 @@ namespace HouseManager5_0.interfaceOfHM
         string GetAbtractmodelsF(GetAbtractmodels ca);
         string ModelReplaceF(CommonClass.MapEditor.ModelReplace mr);
 
-       
+
     }
 
     interface ModelTranstractionI
@@ -173,6 +174,7 @@ namespace HouseManager5_0.interfaceOfHM
         string GetTransctionFromChainF(ModelTranstraction.GetTransctionFromChain gtfc);
         string GetRoadNearby(ModelTranstraction.GetRoadNearby grn);
         string TradeCoinF(ModelTranstraction.TradeCoin tc);
+        string TradeCoinForSaveF(ModelTranstraction.TradeCoinForSave tcfs);
         string TradeSetAsRewardF(ModelTranstraction.TradeSetAsReward tsar);
         string GetAllModelPosition();
         string GetModelByID(ModelTranstraction.GetModelByID gmbid);
@@ -181,6 +183,7 @@ namespace HouseManager5_0.interfaceOfHM
         string GetAllBuiisnessAddr();
         // string GetAllStockAddr(AllStockAddr ss);
         string GetRewardInfomationByStartDate(ModelTranstraction.RewardInfomation ri);
+        string GetForwardRewardInfomationByStartDate(ModelTranstraction.RewardInfomation ri);
         string GetRewardApplyInfomationByStartDate(ModelTranstraction.RewardInfomation ri);
         string RewardApplyF(ModelTranstraction.RewardApply rA, bool ignoreDataCheck);
         string AwardsGive(ModelTranstraction.AwardsGivingPass aG, bool ignoreDataCheck);
@@ -194,6 +197,10 @@ namespace HouseManager5_0.interfaceOfHM
         string LookForScoreOutPutF(ModelTranstraction.LookForScoreOutPut condition);
         string LookForScoreInPutF(ModelTranstraction.LookForScoreInPut condition);
         string UpdateScoreItemF(ModelTranstraction.UpdateScoreItem ucs);
+        string GetAddrFromAndToWhenGenerateAgreementBetweenTwo(GAFATWGABT gaobj);
+        string ConfirmTheTransactionF(ModelTranstraction.ConfirmTheTransaction ctt);
+        string CancleTheTransaction(ModelTranstraction.CancleTheTransactionToServer ctt);
+        string GetStockScoreTransctionStateF(ModelTranstraction.GetStockScoreTransctionState ctt);
     }
 
     interface Resistance

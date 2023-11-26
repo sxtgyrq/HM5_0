@@ -3,6 +3,7 @@ using DalOfAddress;
 using HouseManager5_0.interfaceOfHM;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace HouseManager5_0.RoomMainF
@@ -123,6 +124,27 @@ namespace HouseManager5_0.RoomMainF
                                         DalOfAddress.MoneyRefererAdd.AddMoney(player.RefererAddr, player.RefererCount * 100);
                                         var tasks = DalOfAddress.TaskCopy.GetALLItem(player.RefererAddr);
                                         this.taskM.AddReferer(player.RefererCount, tasks);
+
+                                        {
+                                            var item = DalOfAddress.TradeReward.GetByStartDate(int.Parse(player.Group.RewardDate));
+                                            if (item != null)
+                                            {
+                                                if (item.waitingForAddition == 0)
+                                                {
+                                                }
+                                                else
+                                                {
+                                                    introducedetai.Add(new CommonClass.databaseModel.introducedetai()
+                                                    {
+                                                        startDate = item.startDate,
+                                                        applyAddr = player.RefererAddr,
+                                                        introduceCount = player.RefererCount,
+                                                        rewardGiven = 0
+                                                    }); 
+                                                }
+                                            }
+                                        }
+
                                         player.RefererCount = 0;
                                     }
 
@@ -260,6 +282,10 @@ namespace HouseManager5_0.RoomMainF
                                             DalOfAddress.MoneyGet.GetSubsidizeAndLeft(ots.address, ots.value, out subsidizeGet, out subsidizeLeft);
                                             // var player = group._PlayerInGroup[ots.Key];
                                             ((Player)player).BTCAddress = ots.address;
+
+                                            {
+                                                UpdateReferAddr((Player)player);
+                                            }
                                             player.MoneySet(player.Money + subsidizeGet + Referer, ref notifyMsg);
                                             if (Referer > 0)
                                             {
@@ -289,6 +315,29 @@ namespace HouseManager5_0.RoomMainF
             }
         }
 
+        private void UpdateReferAddr(Player player)
+        {
+            if (string.IsNullOrEmpty(player.BTCAddress))
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(player.RefererAddr))
+            {
+                //从数据库获取
+                player.RefererAddr = DalOfAddress.introducerstabel.GetIntroducer(player.BTCAddress);
+            }
+            else if (player.RefererAddr == player.BTCAddress)
+            {
+                //从数据库获取
+                player.RefererAddr = DalOfAddress.introducerstabel.GetIntroducer(player.BTCAddress);
+            }
+            else if (BitCoin.CheckAddress.CheckAddressIsUseful(player.RefererAddr))
+            {
+                DalOfAddress.introducerstabel.InsertOrUpdate(player.BTCAddress, player.RefererAddr);
+            }
+        }
+
         private void SendLeftMoney(Player player, long subsidizeLeft, string address, ref List<string> notifyMsg)
         {
             var url = player.FromUrl;
@@ -298,6 +347,27 @@ namespace HouseManager5_0.RoomMainF
                 WebSocketID = player.WebSocketID,
                 Money = subsidizeLeft,
                 address = address
+            };
+            var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(lmdb);
+            notifyMsg.Add(url);
+            notifyMsg.Add(sendMsg);
+        }
+
+        internal void updateStockScore(Player player, string showType, string baseBusinessAddr, ref List<string> notifyMsg)
+        {
+            var url = player.FromUrl;
+            StockScoreNotify lmdb = new StockScoreNotify()
+            {
+                c = "StockScoreNotify",
+                WebSocketID = player.WebSocketID,
+                showType = showType,
+                baseBusinessAddr = baseBusinessAddr,
+                Msg = player.Group.stockScoreTradeObj.ContainsKey(baseBusinessAddr) ? player.Group.stockScoreTradeObj[baseBusinessAddr].Msg : "",
+                PassCoin = player.Group.stockScoreTradeObj.ContainsKey(baseBusinessAddr) ? player.Group.stockScoreTradeObj[baseBusinessAddr].PassCoin : 0,
+                TradeScore = player.Group.stockScoreTradeObj.ContainsKey(baseBusinessAddr) ? player.Group.stockScoreTradeObj[baseBusinessAddr].TradeScore : 0,
+                Hash256Code = player.Group.stockScoreTradeObj.ContainsKey(baseBusinessAddr) ? player.Group.stockScoreTradeObj[baseBusinessAddr].Hash256Code : "",
+                hasValue = player.Group.stockScoreTradeObj.ContainsKey(baseBusinessAddr),
+                FailReason = player.Group.stockScoreTradeObj.ContainsKey(baseBusinessAddr) ? player.Group.stockScoreTradeObj[baseBusinessAddr].FailReason : "",
             };
             var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(lmdb);
             notifyMsg.Add(url);

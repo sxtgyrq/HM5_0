@@ -220,7 +220,9 @@
                     <button id="RewardTimeReback">返回</button>
                     <button id="nextRewardTimeBtn">下一期</button> 
                 </div>
+                  
                 <div id="rewardAppleItemContainer"></div>  
+                <div id="msgUserNeedToKnow"></div>
                 <table border="1" style="margin-top:4em">
                     <tr>
                         <th>奖励信息</th>
@@ -237,7 +239,7 @@
                 </table>
             </div>
         </div>`,
-    'hasData': function (title, data, array, indexNumber) {
+    'hasData': function (title, data, array, forwardArray, indexNumber) {
         var that = reward;
         if (document.getElementById(that.id) == null) {
             document.getElementById('rootContainer').innerHTML = '';
@@ -259,6 +261,39 @@
                 else if (data.waitingForAddition == 1) {
                     document.getElementById('rewardHasDataPage').style.backgroundColor = 'green';
                     document.getElementById('rewardPublishState').innerText = '未颁发';
+                    {
+                        // <div id="msgUserNeedToKnow"></div>
+                        var title1 = document.createElement('h3');
+                        title1.innerText = '股份分配机制';
+                        title1.style.fontSize = "2em;"
+
+                        var title2 = document.createElement('h3');
+                        title2.innerText = '股份在未分配之前是浮动的';
+                        title2.style.fontSize = "1.5em";
+
+                        var contentB = document.createElement('b');
+                        contentB.innerText = '每一期的股份总值是不变的。但在股份颁发前，随着取得成绩的玩家增多，股份会按照取得的名次来分配。名次越靠前，比重越大。如果玩家取得无论单人、双人、三人、四人、五人的名次，只要名次在100之内，那么玩家分配股份的比重=101-你的名次。你的比重/总比重×总股份就是玩家单次任务获得的股份。在股份颁发之后，成绩不会再有变动，股份也就确认。';
+                        //<div id="msgUserNeedToKnow"></div>
+                        document.getElementById('msgUserNeedToKnow').appendChild(title1);
+                        document.getElementById('msgUserNeedToKnow').appendChild(title2);
+                        document.getElementById('msgUserNeedToKnow').appendChild(contentB);
+                    }
+                    {
+                        var title1 = document.createElement('h3');
+                        title1.innerText = '记录打破机制';
+                        title1.style.fontSize = "2em;"
+
+                        var title2 = document.createElement('h3');
+                        title2.innerText = '记录是可以打破的';
+                        title2.style.fontSize = "1.5em";
+
+                        var contentB = document.createElement('b');
+                        contentB.innerText = '单人游戏，需要超越当前期数所有单人游戏的成绩，即判为打破记录。双人游戏，需要超越当前期数所有单人、双人游戏的成绩，即判为打破记录。三人游戏，需要超越当前期数所有单人、双人、三人游戏的成绩，即判为打破记录。四人游戏，需要超越当前期数所有单人、双人、三人游戏、四人游戏的成绩，即判为打破记录。五人游戏，需要超越当前期数所有单人、双人、三人游戏、四人、五人游戏的成绩，即判为打破记录。';
+                        //<div id="msgUserNeedToKnow"></div>
+                        document.getElementById('msgUserNeedToKnow').appendChild(title1);
+                        document.getElementById('msgUserNeedToKnow').appendChild(title2);
+                        document.getElementById('msgUserNeedToKnow').appendChild(contentB);
+                    }
                 }
 
             }
@@ -358,12 +393,60 @@
                     </tr>
 
                     <tr style="background:${bgColor}">
-                        <th td colspan="3">奖励</th>
-                        <th td colspan="3">耗时</th> 
+                        <th colspan="3">奖励</th>
+                        <th colspan="3">耗时</th> 
                     </tr>
                     <tr style="background:${bgColor}">
                         <td style="text-align:center;" colspan="3">${list[i].rewardGiven}satoshi</td> 
                         <td style="text-align:center;" colspan="3">${list[i].raceTimeStr}</td>   
+                    </tr>`;
+                }
+                var itemHtml = `<table border="1" style="margin-top:1em;">${tableCenter}</table>`;
+                var tableFrag = document.createRange().createContextualFragment(itemHtml);
+                document.getElementById('rewardAppleItemContainer').appendChild(tableFrag);
+
+            }
+
+            for (var indexOfArray = 0; indexOfArray < forwardArray.length; indexOfArray++) {
+                var list = forwardArray[indexOfArray];
+                var tableCenter = '';
+                var roleCountInTask = '网站分享';
+                //switch (indexOfArray) {
+                //    case 0: { roleCountInTask = '单人'; }; break;
+                //    case 1: { roleCountInTask = '双人'; }; break;
+                //    case 2: { roleCountInTask = '三人'; }; break;
+                //    case 3: { roleCountInTask = '四人'; }; break;
+                //    case 4: { roleCountInTask = '五人'; }; break;
+                //}
+                for (var i = 0; i < list.length; i++) {
+                    var bgColor = '#ff000020';
+                    if (i % 2 == 0) {
+                        bgColor = '#00ff0020';
+                    } 
+                    tableCenter += `<tr style="background:${bgColor}">
+                        <th colspan="1">任务↓</th>
+                        <th colspan="5">申请地址↓</th>
+                    </tr>
+                    <tr style="background:${bgColor}">
+                        <td style="text-align:center;vertical-align:middle;">${roleCountInTask}</td>
+                        <td style="word-break:break-all;word-wrap:anywhere;" colspan="5">${list[i].applyAddr}</td>
+                    </tr>
+                    <tr style="background:${bgColor}">
+                        <th>名次↓</th>
+                        <th colspan="5">分享力度↓</th>
+                    </tr>
+                    <tr style="background:${bgColor}">
+                        <td style="text-align:center;vertical-align:middle;">${list[i].rank}</td>
+                        <td colspan="5" style="text-align:center;">${list[i].introduceCount}</td>
+                    </tr>
+                    <tr style="background:${bgColor}">
+                        <th colspan="3">比例↓</th> 
+                        <th td colspan="3">奖励</th>
+                        
+                    </tr>
+                    <tr style="background:${bgColor}">
+                        <td colspan="3" style="text-align:center;vertical-align:middle;">${list[i].percentStr}</td>
+                        <td style="text-align:center;" colspan="3">${list[i].rewardGiven}satoshi</td> 
                     </tr>`;
                 }
                 var itemHtml = `<table border="1" style="margin-top:1em;">${tableCenter}</table>`;
@@ -402,8 +485,16 @@
                     }
                 }
             }
-
-
+            for (var indexOfArray = 0; indexOfArray < forwardArray.length; indexOfArray++) {
+                var list = forwardArray[indexOfArray];
+                for (var i = 0; i < list.length; i++) {
+                    if (i < 100) {
+                        var msg = `${indexNumber}@${data.tradeAddress}@${data.bussinessAddr}->${list[i].applyAddr}:${list[i].rewardGiven}satoshi`;
+                        that.msgsToTransferSshares.push(msg);
+                        indexNumber++;
+                    }
+                }
+            }
         }
         else {
         }

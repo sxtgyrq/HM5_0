@@ -907,6 +907,12 @@
             </p>
             <p style="text-align:left;margin-top: 1em;">
                 &emsp;&emsp;3.每期各项任务的前100名，会获得相应的股份。<br /> 
+            </p>
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;4.获得的股份可以直接交易，即直接转让股份。<br /> 
+            </p>
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;5.获得的股份可与积分交易，即<a href="javascript:void(null);" onclick="GuidObj.stocksTradeByScore.show();">股份积分交易</a>。（正在研发）<br /> 
             </p> 
         </div>
         <div style="text-align:center;">
@@ -1529,6 +1535,126 @@
                 Sinature: Sinature
             };
             objMain.ws.send(JSON.stringify(obj));
+        }
+    },
+    stocksTradeByScore:
+    {
+        html: function () {
+            return `<div id="stocksTradeByScorePanel" style="${GuidObj.bgData};width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
+            <h1 style="text-align:left;font-size: x-large;">股份积分交易</h1> 
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;1.你如果准备出售股份，可以挂牌你的股份值多少积分，即<a href="javascript:void(null);" onclick="GuidObj.stocksTradeByScoreAddNewTrade.show();">新建交易</a>。<br /> 
+            </p>
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;2.您如果准备买积分或者查询交易的状态，可以<a href="javascript:void(null);" onclick="GuidObj.stocksTradeByScore.show();">查询股份积分交易</a>。<br /> 
+            </p> 
+        </div>
+        <div style="text-align:center;">
+            <button onclick="GuidObj.gameIntroShow();" style="width: 5em;
+        height: 3em;
+        margin-top: 1em;margin-bottom:10em;">
+                返回
+            </button>
+        </div>
+    </div>`;
+        },
+        id: 'stocksTradeByScorePanel',
+        show: function () {
+            var that = GuidObj.stocksTradeByScore;
+            if (document.getElementById(that.id) == null) {
+                document.getElementById('rootContainer').innerHTML = '';
+                var frag = document.createRange().createContextualFragment(that.html());
+                frag.id = that.id;
+                document.getElementById('rootContainer').appendChild(frag);
+            }
+            else {
+            }
+        }
+    },
+    stocksTradeByScoreAddNewTrade:
+    {
+        html: function () {
+            return `<div id="stocksTradeByScoreAddNewTradePanel" style="${GuidObj.bgData};width: 100%; height: 100%; overflow-x:hidden;overflow-y:scroll;position:absolute;left:0px;top:0px;">
+        <div style="text-align:left;word-wrap:anywhere;word-break:break-all;">
+            <h1 style="text-align:left;font-size:xx-large;">股票积分交易界面（此界面正在编写，暂不可用）</h1>
+            <p style="text-align:left;margin-top: 1em;">
+
+                &emsp;&emsp;1.你需要输入交易协议。交易协议可以在建筑物的详情里生成。
+            </p> 
+            <p style="text-align:left;margin-top: 1em;">
+                &emsp;&emsp;2.作为卖方，你需要输入对协议的签名。在未达成交易之前，你应该保护要签名不泄露。
+            </p> 
+        </div>
+        <div style=" width:100%;">
+            <table style=" width:100%;">
+                <tr>
+                    <th style="width:4em;"><label>协议</label> </th>
+                    <td> <textarea style="min-width:20em;min-height:20em;" id="bindWordAddr">356irRFazab63B3m95oyiYeR5SDKJRFa99</textarea></td>
+                </tr>
+                <tr>
+                    <th><label>换取积分数额</label> </th>
+                    <td> <textarea style="min-width: 20em;" id="bindWordMsg">999999.99</textarea></td>
+                </tr>
+                <tr>
+                    <th><label>签名</label> </th>
+                    <td> <textarea style="min-width: 20em;" id="bindWordSign">IDsBRU37kmlF+NAEJZEUz12bxI2ter02Ga5jQNI6SqYbeekPBaYZuMr03C+xZQzrHtfCSCAHvzrHf8j1kOYE3mQ=</textarea></td>
+                </tr>
+                <tr>
+                    <th><label>验证码</label> </th>
+                    <td><textarea style="min-width: 4em;" id="verifyCodeValue"></textarea>
+                    <img id="verifyCodeImg" />
+                    </td>
+                </tr>
+                 <tr>
+                    <td  colspan="2">
+                       <div id="bindVerifyCodeNotifyMsg" style="text-align:center;"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <div>
+                            <button onclick="GuidObj.charging.sendBindWordInfo();" style="width: 5em;
+        height: 3em;
+        margin-top: 1em;
+        background-color:aqua;
+        ">
+                                上架
+                            </button>
+                            <button onclick="GuidObj.charging.clearBindWordInfo();" style="width: 5em; height: 3em; margin-top: 1em; background-color:transparent;">
+                                清空
+                            </button>
+                            <button onclick="GuidObj.charging.signOnLine.show();" style="width: 5em; height: 3em; margin-top: 1em; background-color: red;">
+                                在线签名
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+        <div style="text-align:center;">
+            <button  onclick="GuidObj.gameIntroShow();"  style="width: 5em;
+        height: 3em;
+        margin-top: 1em;margin-bottom:10em;">
+                返回
+            </button>
+        </div>
+    </div>`;
+        },
+        id: 'stocksTradeByScoreAddNewTradePanel',
+        show: function () {
+            var that = GuidObj.stocksTradeByScoreAddNewTrade;
+            if (document.getElementById(that.id) == null) {
+                document.getElementById('rootContainer').innerHTML = '';
+                var frag = document.createRange().createContextualFragment(that.html());
+                frag.id = that.id;
+                document.getElementById('rootContainer').appendChild(frag);
+                document.getElementById('verifyCodeImg').src = 'data:image/gif;base64,' + localStorage['nyrqVerifyImg'];
+            }
+            else {
+            }
         }
     }
 };

@@ -304,6 +304,18 @@ namespace CommonClass
         public string address { get; set; }
     }
 
+    public class StockScoreNotify : CommandNotify
+    {
+        public string showType { get; set; }
+        public string baseBusinessAddr { get; set; }
+        public string Msg { get; set; }
+        public long PassCoin { get; set; }
+        public long TradeScore { get; set; }
+        public string Hash256Code { get; set; }
+        public bool hasValue { get; set; }
+        public string FailReason { get; set; }
+    }
+
     public class AnimationEncryptedItem
     {
         public List<Int64> dataEncrypted { get; set; }
@@ -1323,5 +1335,23 @@ namespace CommonClass
     public class GetRoadMesh : Command
     {
         public string RoadCode { get; set; }
+    }
+
+    /// <summary>
+    /// GAFATWGABT=GetAddrFromAndToWhenGenerateAgreementBetweenTwo
+    /// </summary>
+    public class GAFATWGABT : CommonClass.Command
+    {
+        /*
+         * GetAddrFromAndToWhenGenerateAgreementBetweenTwo
+         */
+        public string Key { get; set; }
+        public string GroupKey { get; set; }
+
+        public class ReturnResultObj 
+        {
+            public string addrFrom { get; set; }
+            public string addrTo { get; set; }
+        }
     }
 }

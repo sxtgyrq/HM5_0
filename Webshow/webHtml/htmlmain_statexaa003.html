@@ -281,6 +281,35 @@
                 </div>
                 <div style="margin-bottom: 20px;">
                     <input type="button" value="转让" />
+                    <div>当与陌生人或不熟悉的玩家进行股份交易时，请勿使用直接转让。请使用股份积分交易的功能。</div>
+                    <div>1.加以双方组队（两人队伍），进入同一个游戏房间。</div>
+                    <div>2.开始游戏，后双方都输入地址与签名，登录游戏</div>
+                    <div>3.都到达要交易的地点，点击详情。</div>
+                    <div>4.卖家发起股份与积分的交易。</div>
+                    <div>5.买家同意，完成交易。</div>
+                    <div>6.更多详情可以查看攻略。</div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <input type="button" value="股份交易积分" /><span></span>
+                    <input id="tranScoreNum" type="number" value="0.01" max="100000" min="0.01" step="500"/>
+                    <script>
+                        document.getElementById('tranScoreNum').addEventListener('input', function (e) {
+                            var value = this.value;
+                            if (value.includes('.') && value.split('.')[1].length > 2) {
+                                this.value = parseFloat(value).toFixed(2);
+                            }
+                        });
+                    </script>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <input type="button" value="取消股份积分交易" />
+                    <div>正在交易中，待买方确认后，买方将用9999.89积分卖方在换此处的0.0000434股份，其中2000.00积分是交易消耗。对方获得7999.89积分。在交易未达成之前，请勿泄露签名。</div>
+                    
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <input type="button" value="确认" />
+                    <div>点击确认后，将用9999.89积分换此处的0.0000434股份，其中2000.00积分是交易消耗。对方获得7999.89积分</div>
+                    <textarea readonly></textarea>
                 </div>
             </div>
 

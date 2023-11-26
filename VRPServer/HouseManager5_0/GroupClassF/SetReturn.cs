@@ -1,6 +1,7 @@
 ﻿using CommonClass;
 using HouseManager5_0.interfaceOfEngine;
 using HouseManager5_0.interfaceOfHM;
+using Microsoft.AspNetCore.Routing.Tree;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,9 +11,13 @@ using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static CommonClass.Img.DrawFont.FontCodeResult;
+using static CommonClass.ModelTranstraction;
+using static CommonClass.ResistanceDisplay_V3;
 using static HouseManager5_0.Car;
 using static HouseManager5_0.Engine;
 using static HouseManager5_0.RoomMainF.RoomMain;
+using static NBitcoin.Scripting.OutputDescriptor;
 
 namespace HouseManager5_0.GroupClassF
 {
@@ -88,107 +93,23 @@ namespace HouseManager5_0.GroupClassF
                     var car = player.getCar();
                     if (car.state == CarState.returning)
                     {
-                        if (this.taskFineshedTime.ContainsKey(player.Key))
+                        if (this.taskFineshedTime.ContainsKey(true))
                         {
                             that.WebNotify(player, "任务完成后，收集不会记录入个人收入中！");
                         }
                         else
                         {
                             player.MoneySet(player.Money + car.ability.costVolume, ref notifyMsg);
+                            player.CollectMoney += car.ability.costVolume;
                         }
                         this.MoneySet(this.Money + car.ability.costVolume, ref notifyMsg);
-                        player.CollectMoney += car.ability.costVolume;
+
                         if (this.Money >= player.getCar().ability.Business)
                         {
-                            if (!this.taskFineshedTime.ContainsKey(player.Key))
+                            if (!this.taskFineshedTime.ContainsKey(true))
                             {
-                                this.taskFineshedTime.Add(player.Key, DateTime.Now.AddMinutes(this.countOfAskRoad));
-                                if (this.countOfAskRoad > 0)
-                                {
-                                    if (this._groupNumber == 1)
-                                    {
-                                        this.taskFineshedTime[player.Key] = DateTime.Now.AddMinutes(this.countOfAskRoad);
-                                        that.WebNotify(player, $"您在完成任务中，额外进行了{this.countOfAskRoad}次问道，成绩多记{this.countOfAskRoad}分钟。");
-                                    }
-                                    else if (this._groupNumber == 2)
-                                    {
-                                        this.taskFineshedTime[player.Key] = DateTime.Now.AddMinutes(this.countOfAskRoad / 2.0);
-                                        that.WebNotify(player, $"您与队友在完成任务中，额外进行了{this.countOfAskRoad}次问道，成绩多记{(this.countOfAskRoad / 2.0).ToString("f2")}分钟。");
-                                    }
-                                    else if (this._groupNumber == 3)
-                                    {
-                                        this.taskFineshedTime[player.Key] = DateTime.Now.AddMinutes(this.countOfAskRoad / 3.0);
-                                        that.WebNotify(player, $"您与队友在完成任务中，额外进行了{this.countOfAskRoad}次问道，成绩多记{(this.countOfAskRoad / 3.0).ToString("f2")}分钟。");
-                                    }
-                                    else if (this._groupNumber == 4)
-                                    {
-                                        this.taskFineshedTime[player.Key] = DateTime.Now.AddMinutes(this.countOfAskRoad / 4.0);
-                                        that.WebNotify(player, $"您与队友在完成任务中，额外进行了{this.countOfAskRoad}次问道，成绩多记{(this.countOfAskRoad / 4.0).ToString("f2")}分钟。");
-                                    }
-                                    else if (this._groupNumber == 5)
-                                    {
-                                        this.taskFineshedTime[player.Key] = DateTime.Now.AddMinutes(this.countOfAskRoad / 5.0);
-                                        that.WebNotify(player, $"您与队友在完成任务中，额外进行了{this.countOfAskRoad}次问道，成绩多记{(this.countOfAskRoad / 5.0).ToString("f2")}分钟。");
-                                    }
-                                }
-                                this.recordRaceTime(player.Key);
-                                if (this.countOfAskRoad <= 10)
-                                {
-                                    long addMoney = 0;
-                                    /*宝石额外奖励*/
-                                    if (!string.IsNullOrEmpty(player.BTCAddress))
-                                    {
-                                        int rewardOfBindWords = 3000;
-                                        var bindWords = DalOfAddress.BindWordInfo.GetWordByAddr(player.BTCAddress);
-                                        if (!string.IsNullOrEmpty(bindWords))
-                                        {
-                                            that.WebNotify(player, $"绑定了“{bindWords}”奖励额外{rewardOfBindWords / 100}.{(rewardOfBindWords / 10) % 10}{(rewardOfBindWords / 1) % 10}积分");
-                                            addMoney += rewardOfBindWords;
-                                        }
-                                        else
-                                        {
-                                            that.WebNotify(player, $"未关联任何绑定词，未能获得额外{rewardOfBindWords / 100}.{(rewardOfBindWords / 10) % 10}{(rewardOfBindWords / 1) % 10}的积分奖励");
-                                        }
-                                    }
-                                    var diamondCollectCount = player.getCar().ability.DiamondCount();
-                                    if (diamondCollectCount > 0)
-                                    {
-                                        if (diamondCollectCount > 10)
-                                        {
-                                            /*
-                                             * 这里的目的，是为了防止人们恶意刷宝石！
-                                             */
-                                            int rewardOfDiamondCollect = 10 * 200;
-                                            addMoney += rewardOfDiamondCollect;
-                                            that.WebNotify(player, $"您收集了{diamondCollectCount}颗宝石，获得了额外{rewardOfDiamondCollect / 100}.{(rewardOfDiamondCollect / 10) % 10}{(rewardOfDiamondCollect / 1) % 10}的积分奖励");
-                                            addMoney += rewardOfDiamondCollect;
-                                        }
-                                        else
-                                        {
-                                            int rewardOfDiamondCollect = diamondCollectCount * 200;
-                                            addMoney += rewardOfDiamondCollect;
-                                            that.WebNotify(player, $"您收集了{diamondCollectCount}颗宝石，获得了额外{rewardOfDiamondCollect / 100}.{(rewardOfDiamondCollect / 10) % 10}{(rewardOfDiamondCollect / 1) % 10}的积分奖励");
-                                            addMoney += rewardOfDiamondCollect;
-                                        }
-                                    }
-                                    if (addMoney > 0)
-                                        player.MoneySet(player.Money + addMoney, ref notifyMsg);
-                                }
-                                else
-                                {
-                                    /*宝石额外奖励*/
-                                    if (!string.IsNullOrEmpty(player.BTCAddress))
-                                    {
-                                        that.WebNotify(player, $"问道次数≥10，未能获得绑定词奖励");
-
-                                    }
-                                    var diamondCollectCount = player.getCar().ability.DiamondCount();
-                                    if (diamondCollectCount > 0)
-                                    {
-                                        that.WebNotify(player, $"问道次数≥10，未能获得宝石收集额外奖励");
-                                    }
-                                }
-                                // player.MoneyChanged(player,)
+                                this.taskFineshedTime.Add(true, DateTime.Now.AddMinutes(this.countOfAskRoad));
+                                publishAchievement(ref notifyMsg);
                             }
                         }
                         player.improvementRecord.reduceSpeed(player, ref notifyMsg);
@@ -225,7 +146,7 @@ namespace HouseManager5_0.GroupClassF
                         if (player.playerType == Player.PlayerType.player)
                         {
                             this.askWhetherGoToPositon(player.Key, grp);
-                            if (this.taskFineshedTime.ContainsKey(player.Key))
+                            if (this.taskFineshedTime.ContainsKey(true))
                             {
                                 player.SetMoneyCanSave(player, ref notifyMsg);
                             }
@@ -253,7 +174,7 @@ namespace HouseManager5_0.GroupClassF
                 {
                     // var player = this._PlayerInGroup.First().Value;
                     var player = this._PlayerInGroup[comeBack.key];
-                    var isFinished = this.taskFineshedTime.ContainsKey(player.Key);
+                    var isFinished = this.taskFineshedTime.ContainsKey(true);
                     if (!isFinished)
                     {
                         CollectFunctionWhenAuto(player, grp);
@@ -262,63 +183,336 @@ namespace HouseManager5_0.GroupClassF
             }
 
         }
-        Dictionary<string, string> recordErrorMsgs = new Dictionary<string, string>();
-        Dictionary<string, bool> records = new Dictionary<string, bool>();
-        public void recordRaceTime(string key)
+
+        private void publishAchievement(ref List<string> notifyMsg)
         {
-            if (this.taskFineshedTime.ContainsKey(key))
+            //item.Value.CollectMoney
+            #region step1 OrderByDescending by item.Value.CollectMoney
+            var playersOrderByCollectCount = this._PlayerInGroup.ToArray().OrderByDescending(item => item.Value.CollectMoney).ToList();
+            #endregion
+
+            #region step2 add raceTime by count of Askroad
+            if (this.countOfAskRoad > 0)
             {
-                if (this.recordErrorMsgs.ContainsKey(key)) { }
-                else
+                if (this._groupNumber == 1)
                 {
-                    this.recordErrorMsgs.Add(key, "您还未登录！");
+                    this.taskFineshedTime[true] = DateTime.Now.AddMinutes(this.countOfAskRoad);
                 }
-                var player = this._PlayerInGroup[key];
-                if (string.IsNullOrEmpty(player.BTCAddress))
+                else if (this._groupNumber == 2)
                 {
-                    this.recordErrorMsgs[key] = "挑战记录未能记录";
+                    this.taskFineshedTime[true] = DateTime.Now.AddMinutes(this.countOfAskRoad / 2.0);
                 }
-                else
+                else if (this._groupNumber == 3)
                 {
-                    var item = DalOfAddress.TradeReward.GetByStartDate(int.Parse(this.RewardDate));
-                    if (item != null)
+                    this.taskFineshedTime[true] = DateTime.Now.AddMinutes(this.countOfAskRoad / 3.0);
+                }
+                else if (this._groupNumber == 4)
+                {
+                    this.taskFineshedTime[true] = DateTime.Now.AddMinutes(this.countOfAskRoad / 4.0);
+                }
+                else if (this._groupNumber == 5)
+                {
+                    this.taskFineshedTime[true] = DateTime.Now.AddMinutes(this.countOfAskRoad / 5.0);
+                }
+
+                for (int i = 0; i < playersOrderByCollectCount.Count; i++)
+                {
+                    var player = playersOrderByCollectCount[i].Value;
+                    if (this.countOfAskRoad > 0)
                     {
-                        if (item.waitingForAddition == 0)
+                        if (this._groupNumber == 1)
                         {
-                            this.recordErrorMsgs[key] = $"记录于{this.RewardDate}期荣誉";
+                            that.WebNotify(player, $"您在完成任务中，额外进行了{this.countOfAskRoad}次问道，成绩多记{this.countOfAskRoad}分钟。");
+                        }
+                        else if (this._groupNumber == 2)
+                        {
+                            that.WebNotify(player, $"您与队友在完成任务中，额外进行了{this.countOfAskRoad}次问道，成绩多记{(this.countOfAskRoad / 2.0).ToString("f2")}分钟。");
+                        }
+                        else if (this._groupNumber == 3)
+                        {
+                            that.WebNotify(player, $"您与队友在完成任务中，额外进行了{this.countOfAskRoad}次问道，成绩多记{(this.countOfAskRoad / 3.0).ToString("f2")}分钟。");
+                        }
+                        else if (this._groupNumber == 4)
+                        {
+                            that.WebNotify(player, $"您与队友在完成任务中，额外进行了{this.countOfAskRoad}次问道，成绩多记{(this.countOfAskRoad / 4.0).ToString("f2")}分钟。");
+                        }
+                        else if (this._groupNumber == 5)
+                        {
+                            that.WebNotify(player, $"您与队友在完成任务中，额外进行了{this.countOfAskRoad}次问道，成绩多记{(this.countOfAskRoad / 5.0).ToString("f2")}分钟。");
+                        }
+                    }
+                }
+            }
+            #endregion
+
+            #region step3 record in DB
+            List<string> playerKeys = new List<string>();
+            for (int i = 0; i < playersOrderByCollectCount.Count; i++)
+            {
+                var player = playersOrderByCollectCount[i].Value;
+                playerKeys.Add(player.Key);
+            }
+            this.recordRaceTime(playerKeys);
+            #endregion
+
+            #region step4 reward by count of diamond 
+            if (this.countOfAskRoad <= 10)
+            {
+                for (int i = 0; i < playerKeys.Count; i++)
+                {
+                    var player = this._PlayerInGroup[playerKeys[i]];
+
+                    long addMoney = 0;
+                    /*宝石额外奖励*/
+                    if (!string.IsNullOrEmpty(player.BTCAddress))
+                    {
+                        int rewardOfBindWords = 3000;
+                        var bindWords = DalOfAddress.BindWordInfo.GetWordByAddr(player.BTCAddress);
+                        if (!string.IsNullOrEmpty(bindWords))
+                        {
+                            that.WebNotify(player, $"绑定了“{bindWords}”奖励额外{rewardOfBindWords / 100}.{(rewardOfBindWords / 10) % 10}{(rewardOfBindWords / 1) % 10}积分");
+                            addMoney += rewardOfBindWords;
                         }
                         else
                         {
-                            var r = DalOfAddress.traderewardtimerecord.Add(new CommonClass.databaseModel.traderewardtimerecord()
-                            {
-                                applyAddr = player.BTCAddress,
-                                raceEndTime = this.taskFineshedTime[key],
-                                raceStartTime = this.startTime,
-                                raceMember = this.groupNumber,
-                                rewardGiven = 0,
-                                startDate = int.Parse(this.RewardDate)
-                            });
-                            if (r)
-                            {
-                                this.recordErrorMsgs[key] = $"记录于{this.RewardDate}期荣誉"; ;
-                                this.records.Add(key, true);
-                            }
-                            else
-                            {
-                                this.recordErrorMsgs[key] = $"系统错误。";
-                            }
+                            that.WebNotify(player, $"未关联任何绑定词，未能获得额外{rewardOfBindWords / 100}.{(rewardOfBindWords / 10) % 10}{(rewardOfBindWords / 1) % 10}的积分奖励");
                         }
                     }
-                    else
+                    var diamondCollectCount = player.getCar().ability.DiamondCount();
+                    if (diamondCollectCount > 0)
                     {
-                        this.recordErrorMsgs[key] = $"不存在日期{this.RewardDate}期奖励，挑战记录未能记录";
+                        if (diamondCollectCount > 10)
+                        {
+                            /*
+                             * 这里的目的，是为了防止人们恶意刷宝石！
+                             */
+                            int rewardOfDiamondCollect = 10 * 200;
+                            addMoney += rewardOfDiamondCollect;
+                            that.WebNotify(player, $"您收集了{diamondCollectCount}颗宝石，获得了额外{rewardOfDiamondCollect / 100}.{(rewardOfDiamondCollect / 10) % 10}{(rewardOfDiamondCollect / 1) % 10}的积分奖励");
+                            addMoney += rewardOfDiamondCollect;
+                        }
+                        else
+                        {
+                            int rewardOfDiamondCollect = diamondCollectCount * 200;
+                            addMoney += rewardOfDiamondCollect;
+                            that.WebNotify(player, $"您收集了{diamondCollectCount}颗宝石，获得了额外{rewardOfDiamondCollect / 100}.{(rewardOfDiamondCollect / 10) % 10}{(rewardOfDiamondCollect / 1) % 10}的积分奖励");
+                            addMoney += rewardOfDiamondCollect;
+                        }
                     }
+                    if (addMoney > 0)
+                        player.MoneySet(player.Money + addMoney, ref notifyMsg);
                 }
+
             }
             else
             {
+                for (int i = 0; i < playerKeys.Count; i++)
+                {
+                    var player = this._PlayerInGroup[playerKeys[i]];
+                    if (!string.IsNullOrEmpty(player.BTCAddress))
+                    {
+                        that.WebNotify(player, $"问道次数≥10，未能获得绑定词奖励");
+
+                    }
+                    var diamondCollectCount = player.getCar().ability.DiamondCount();
+                    if (diamondCollectCount > 0)
+                    {
+                        that.WebNotify(player, $"问道次数≥10，未能获得宝石收集额外奖励");
+                    }
+                }
+                /*宝石额外奖励*/
 
             }
+            #endregion
+
+
+
+            //foreach (var item in this._PlayerInGroup)
+            //{
+
+            //    this.recordRaceTime(player.Key);
+            //    if (this.countOfAskRoad <= 10)
+            //    {
+            //        long addMoney = 0;
+            //        /*宝石额外奖励*/
+            //        if (!string.IsNullOrEmpty(player.BTCAddress))
+            //        {
+            //            int rewardOfBindWords = 3000;
+            //            var bindWords = DalOfAddress.BindWordInfo.GetWordByAddr(player.BTCAddress);
+            //            if (!string.IsNullOrEmpty(bindWords))
+            //            {
+            //                that.WebNotify(player, $"绑定了“{bindWords}”奖励额外{rewardOfBindWords / 100}.{(rewardOfBindWords / 10) % 10}{(rewardOfBindWords / 1) % 10}积分");
+            //                addMoney += rewardOfBindWords;
+            //            }
+            //            else
+            //            {
+            //                that.WebNotify(player, $"未关联任何绑定词，未能获得额外{rewardOfBindWords / 100}.{(rewardOfBindWords / 10) % 10}{(rewardOfBindWords / 1) % 10}的积分奖励");
+            //            }
+            //        }
+            //        var diamondCollectCount = player.getCar().ability.DiamondCount();
+            //        if (diamondCollectCount > 0)
+            //        {
+            //            if (diamondCollectCount > 10)
+            //            {
+            //                /*
+            //                 * 这里的目的，是为了防止人们恶意刷宝石！
+            //                 */
+            //                int rewardOfDiamondCollect = 10 * 200;
+            //                addMoney += rewardOfDiamondCollect;
+            //                that.WebNotify(player, $"您收集了{diamondCollectCount}颗宝石，获得了额外{rewardOfDiamondCollect / 100}.{(rewardOfDiamondCollect / 10) % 10}{(rewardOfDiamondCollect / 1) % 10}的积分奖励");
+            //                addMoney += rewardOfDiamondCollect;
+            //            }
+            //            else
+            //            {
+            //                int rewardOfDiamondCollect = diamondCollectCount * 200;
+            //                addMoney += rewardOfDiamondCollect;
+            //                that.WebNotify(player, $"您收集了{diamondCollectCount}颗宝石，获得了额外{rewardOfDiamondCollect / 100}.{(rewardOfDiamondCollect / 10) % 10}{(rewardOfDiamondCollect / 1) % 10}的积分奖励");
+            //                addMoney += rewardOfDiamondCollect;
+            //            }
+            //        }
+            //        if (addMoney > 0)
+            //            player.MoneySet(player.Money + addMoney, ref notifyMsg);
+            //    }
+            //    else
+            //    {
+            //        /*宝石额外奖励*/
+            //        if (!string.IsNullOrEmpty(player.BTCAddress))
+            //        {
+            //            that.WebNotify(player, $"问道次数≥10，未能获得绑定词奖励");
+
+            //        }
+            //        var diamondCollectCount = player.getCar().ability.DiamondCount();
+            //        if (diamondCollectCount > 0)
+            //        {
+            //            that.WebNotify(player, $"问道次数≥10，未能获得宝石收集额外奖励");
+            //        }
+            //    }
+            //}
+            //{
+
+            //}
+        }
+
+        Dictionary<string, string> recordErrorMsgs = new Dictionary<string, string>();
+        Dictionary<string, bool> records = new Dictionary<string, bool>();
+
+
+        public void recordRaceTime(List<string> keys)
+        {
+
+            for (int i = 0; i < keys.Count; i++)
+            {
+                var key = keys[i];
+                if (this.taskFineshedTime.ContainsKey(true))
+                {
+                    if (this.recordErrorMsgs.ContainsKey(key)) { }
+                    else
+                    {
+                        this.recordErrorMsgs.Add(key, "您还未登录！");
+                    }
+                    var player = this._PlayerInGroup[key];
+
+                    if (string.IsNullOrEmpty(player.BTCAddress))
+                    {
+                        this.recordErrorMsgs[key] = "挑战记录未能记录";
+                    }
+                    else
+                    {
+                        var item = DalOfAddress.TradeReward.GetByStartDate(int.Parse(this.RewardDate));
+                        if (item != null)
+                        {
+                            if (item.waitingForAddition == 0)
+                            {
+                                this.recordErrorMsgs[key] = $"未能记录于{this.RewardDate}期荣誉";
+                            }
+                            else
+                            {
+                                this.recordErrorMsgs[key] = $"记录于{this.RewardDate}期荣誉";
+                            }
+                        }
+                        else
+                        {
+                            this.recordErrorMsgs[key] = $"不存在日期{this.RewardDate}期奖励，挑战记录未能记录";
+                        }
+                    }
+                }
+                else
+                {
+
+                }
+            }
+            List<CommonClass.databaseModel.traderewardtimerecord> traderewardtimerecordRecords = new List<CommonClass.databaseModel.traderewardtimerecord>();
+            List<Player> playerList = new List<Player>();
+
+            for (int i = 0; i < keys.Count; i++)
+            {
+                var key = keys[i];
+                if (this.taskFineshedTime.ContainsKey(true))
+                {
+                    var player = this._PlayerInGroup[key];
+                    if (string.IsNullOrEmpty(player.BTCAddress))
+                    {
+                    }
+                    else
+                    {
+                        var item = DalOfAddress.TradeReward.GetByStartDate(int.Parse(this.RewardDate));
+                        if (item != null)
+                        {
+                            if (item.waitingForAddition == 0)
+                            {
+                            }
+                            else
+                            {
+                                traderewardtimerecordRecords.Add(new CommonClass.databaseModel.traderewardtimerecord()
+                                {
+                                    applyAddr = player.BTCAddress,
+                                    raceStartTime = this.startTime,
+                                    raceEndTime = this.taskFineshedTime[true].AddSeconds(i / 10.0),
+                                    raceMember = this.groupNumber,
+                                    rewardGiven = 0,
+                                    startDate = int.Parse(this.RewardDate),
+                                });
+                                playerList.Add(player);
+                            }
+                        }
+                    }
+                }
+
+            }
+            if (traderewardtimerecordRecords.Count > 0 && traderewardtimerecordRecords.Count == playerList.Count)
+            {
+                int findResultCount;
+                var r = DalOfAddress.traderewardtimerecord.Add(traderewardtimerecordRecords, out findResultCount);
+
+                if (r)
+                {
+                    for (int i = 0; i < traderewardtimerecordRecords.Count; i++)
+                    {
+                        this.records.Add(playerList[i].Key, true);
+                        var player = playerList[i];
+                        if (findResultCount == 0)
+                        {
+                            that.WebNotify(player, this.groupNumber > 1 ? "你们刷新了记录。" : "你刷新了记录");
+                            rewardAnother(player);
+                        }
+                    }
+                    ////  this.recordErrorMsgs[key] = $"记录于{this.RewardDate}期荣誉"; ;
+
+                    //for (int i = 0; i < playerList.Count; i++)
+                    //{
+
+                    //}
+
+                }
+            }
+
+        }
+
+        private void rewardAnother(Player player)
+        {
+            that.breakRecordReward.reward(player);
+
+            //  throw new NotImplementedException();
         }
 
         public void MoneySet(long value, ref List<string> notifyMsg)

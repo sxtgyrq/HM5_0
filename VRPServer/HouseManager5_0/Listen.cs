@@ -336,6 +336,11 @@ namespace HouseManager5_0
                             CommonClass.ModelTranstraction.TradeCoin tc = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.TradeCoin>(notifyJson);
                             outPut = objI.TradeCoinF(tc);
                         }; break;
+                    case "TradeCoinForSave":
+                        {
+                            CommonClass.ModelTranstraction.TradeCoinForSave tcfs = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.TradeCoinForSave>(notifyJson);
+                            outPut = objI.TradeCoinForSaveF(tcfs);
+                        }; break;
                     case "TradeSetAsReward":
                         {
 
@@ -422,6 +427,12 @@ namespace HouseManager5_0
                         {
                             CommonClass.ModelTranstraction.RewardInfomation ri = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.RewardInfomation>(notifyJson);
                             outPut = objI.GetRewardInfomationByStartDate(ri);
+                        }; break;
+                    case "RewardApplyInfomation_Forward":
+                        {
+                            /*获取转发的奖励*/
+                            CommonClass.ModelTranstraction.RewardInfomation ri = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.ModelTranstraction.RewardInfomation>(notifyJson);
+                            outPut = objI.GetForwardRewardInfomationByStartDate(ri);
                         }; break;
                     case "RewardApplyInfomation":
                         {
@@ -607,6 +618,26 @@ namespace HouseManager5_0
                             GetRoadMesh tbm = Newtonsoft.Json.JsonConvert.DeserializeObject<GetRoadMesh>(notifyJson);
 
                             outPut = objI.GetRoadMeshF(tbm);
+                        }; break;
+                    case "GAFATWGABT":
+                        {
+                            GAFATWGABT gaobj = Newtonsoft.Json.JsonConvert.DeserializeObject<GAFATWGABT>(notifyJson);
+                            outPut = objI.GetAddrFromAndToWhenGenerateAgreementBetweenTwo(gaobj);
+                        }; break;
+                    case "ConfirmTheTransaction":
+                        {
+                            ConfirmTheTransaction ctt = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfirmTheTransaction>(notifyJson);
+                            outPut = objI.ConfirmTheTransactionF(ctt);
+                        }; break;
+                    case "CancleTheTransactionToServer":
+                        {
+                            CancleTheTransactionToServer ctt = Newtonsoft.Json.JsonConvert.DeserializeObject<CancleTheTransactionToServer>(notifyJson);
+                            outPut = objI.CancleTheTransaction(ctt);
+                        }; break;
+                    case "GetStockScoreTransctionState":
+                        {
+                            GetStockScoreTransctionState ctt = Newtonsoft.Json.JsonConvert.DeserializeObject<GetStockScoreTransctionState>(notifyJson);
+                            outPut = objI.GetStockScoreTransctionStateF(ctt);
                         }; break;
                 }
             }

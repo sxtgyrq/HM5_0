@@ -122,9 +122,10 @@ B   获取该付比特币
                 {
                     var strMsg = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}无需转BTC";
                     Console.WriteLine(strMsg);
+                    //if (!File.Exists(fileName))
                     File.AppendAllText(fileName, strMsg);
                 }
-                Thread.Sleep(24 * 60 * 60 * 1000);
+                Thread.Sleep(6 * 60 * 60 * 1000);
             }
         }
 

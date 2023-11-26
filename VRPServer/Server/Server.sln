@@ -61,7 +61,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HouseManager5_0", "..\House
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aliyun", "..\Aliyun\Aliyun.csproj", "{AA5E1FD1-2082-4002-9143-FF6F75645CEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadSqlLiteAndWebPass", "ReadSqlLiteAndWebPass\ReadSqlLiteAndWebPass.csproj", "{63BB5FF5-3AB9-4B04-BA35-EF0772A4087A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadSqlLiteAndWebPass", "ReadSqlLiteAndWebPass\ReadSqlLiteAndWebPass.csproj", "{63BB5FF5-3AB9-4B04-BA35-EF0772A4087A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ErrorImg", "ErrorImg", "{CA7043CD-95A5-487C-B928-385FDE77054C}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\W202311\error20231103.jpeg = ..\..\..\..\W202311\error20231103.jpeg
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

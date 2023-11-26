@@ -131,7 +131,7 @@ namespace MarketConsoleApp
                                 {
                                     c = "ServerStatictis"
                                 });
-                        var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes(controllerUrl, json);
+                        var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes_V2(controllerUrl, json);
 
                         var rResult = t.GetAwaiter().GetResult();
                         // var r = t;
@@ -147,7 +147,7 @@ namespace MarketConsoleApp
                             File.AppendAllText(fileName, msg);
                         }
                     }
-                    catch(Exception ex) 
+                    catch (Exception ex)
                     {
                         Console.WriteLine($"{this.servers[j]}统计失败！");
                         Console.WriteLine(ex.Message);
@@ -174,7 +174,7 @@ namespace MarketConsoleApp
             //  throw new NotImplementedException();
         }
 
-        private   void getAllBitInfomation()
+        private void getAllBitInfomation()
         {
             while (true)
             {
@@ -198,8 +198,16 @@ namespace MarketConsoleApp
                                 continue;
                             }
                             //detail.bussinessAddress;
-                            var dicResult = ConsoleBitcoinChainApp.GetData.GetTradeInfomationFromChain(detail.bussinessAddress);
+                            bool dicResultGetSuccess;
+                            var dicResult = ConsoleBitcoinChainApp.GetData.GetTradeInfomationFromChain(detail.bussinessAddress, out dicResultGetSuccess);
+                            if (dicResultGetSuccess)
+                            {
 
+                            }
+                            else
+                            {
+                                continue;
+                            }
                             //BitCoin.Transtraction.TradeInfo t = new BitCoin.Transtraction.TradeInfo(detail.bussinessAddress);
                             ////   < Dictionary<string, long>(() => t.GetTradeInfomationFromChain());
                             //var result =  <Dictionary<string, long>>(() => t.GetTradeInfomationFromChain());
@@ -255,7 +263,7 @@ namespace MarketConsoleApp
                                         var addrTo = parameter[3];
 
                                         var passCoinStr = parameter[4];
-                                        if (passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi"|| passCoinStr.Substring(passCoinStr.Length - 7, 7) == "satoshi")
+                                        if (passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi" || passCoinStr.Substring(passCoinStr.Length - 7, 7) == "satoshi")
                                         {
                                             var passCoin = Convert.ToInt64(passCoinStr.Substring(0, passCoinStr.Length - 7));
 
@@ -622,7 +630,7 @@ namespace MarketConsoleApp
             // TcpFunction.WithResponse.SendInmationToUrlAndGetRes
             try
             {
-                var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes(controllerUrl, json);
+                var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes_V2(controllerUrl, json);
                 t.GetAwaiter().GetResult();
 
                 //await ) => TcpFunction.WithResponse.SendInmationToUrlAndGetRes(controllerUrl, json));

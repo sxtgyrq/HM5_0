@@ -77,7 +77,7 @@ namespace HouseManager5_0.GroupClassF
                         };
                             ((Player)this._PlayerInGroup[checkItem.Key]).OpenMore++;
 
-                           
+
                             this._PlayerInGroup[checkItem.Key] = player;
                             if (false)
                             {
@@ -85,9 +85,9 @@ namespace HouseManager5_0.GroupClassF
                             }
                             else
                             {
-                                
+
                             }
-                           
+
                             if (false)
                             {
                                 this._PlayerInGroup[checkItem.Key].backgroundData.Clear();
@@ -233,6 +233,7 @@ namespace HouseManager5_0.GroupClassF
                 newPlayer.beforeBroke = that.BeforePlayerBroken;
                 // newPlayer.driverSelected = this.driverSelected;
                 that.ConfigMagic(newPlayer);
+                newPlayer.updateStockScoreInfoDelegateF = that.updateStockScore;
                 ((Player)this._PlayerInGroup[addItem.Key]).direcitonAndID =
                     new Player.DirecitonAndSelectID()
                     {

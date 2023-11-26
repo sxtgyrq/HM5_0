@@ -133,21 +133,21 @@ namespace BitCoin
         }
 
 
-        public static string getPrivateByString(string input, out string address)
-        {
-            System.Security.Cryptography.SHA256 sha256 = new System.Security.Cryptography.SHA256Managed();
-            byte[] hash = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(input));
-            var privateKey = Bytes32.ConvetToBigInteger(hash);
-            privateKey = privateKey % Secp256k1.q;
-            var privateByte = hash;
-            var resultAdd = Calculate.BiteSplitJoint(new byte[] { 0x80 }, privateByte);
-            resultAdd = Calculate.BiteSplitJoint(resultAdd, new byte[] { 0x01 });
-            byte[] chechHash = Calculate.GetCheckSum(resultAdd);
-            resultAdd = Calculate.BiteSplitJoint(resultAdd, chechHash);
-            var privateKeyString = Calculate.Encode(resultAdd);
-            address = BitCoin.PublicKeyF.GetAddressOfcompressed(BitCoin.Calculate.getPublicByPrivate(privateKey));
-            return privateKeyString;
-        }
+        //public static string getPrivateByString(string input, out string address)
+        //{
+        //    System.Security.Cryptography.SHA256 sha256 = new System.Security.Cryptography.SHA256Managed();
+        //    byte[] hash = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(input));
+        //    var privateKey = Bytes32.ConvetToBigInteger(hash);
+        //    privateKey = privateKey % Secp256k1.q;
+        //    var privateByte = hash;
+        //    var resultAdd = Calculate.BiteSplitJoint(new byte[] { 0x80 }, privateByte);
+        //    resultAdd = Calculate.BiteSplitJoint(resultAdd, new byte[] { 0x01 });
+        //    byte[] chechHash = Calculate.GetCheckSum(resultAdd);
+        //    resultAdd = Calculate.BiteSplitJoint(resultAdd, chechHash);
+        //    var privateKeyString = Calculate.Encode(resultAdd);
+        //    address = BitCoin.PublicKeyF.GetAddressOfcompressed(BitCoin.Calculate.getPublicByPrivate(privateKey));
+        //    return privateKeyString;
+        //}
         //internal static void Adapter(ref byte[] privateByte)
         //{
         //    var result = new byte[32];

@@ -81,6 +81,75 @@ namespace DalOfAddress
             }
         }
 
+        internal static void AddMoney(MySqlConnection con, MySqlTransaction tran, string address, long money)
+        {
+            
+            {
+                 
+                 
+                {
+                    
+                    {
+                        bool hasValue;
+                        long moneycount;
+                        {
+                            string sQL = @"SELECT
+                            	moneyaddress,
+                            	moneycount 
+                            FROM
+                            	addressmoney WHERE moneyaddress=@moneyaddress";
+                            // long moneycount;
+                            using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                            {
+                                command.Parameters.AddWithValue("@moneyaddress", address);
+
+                                using (var reader = command.ExecuteReader())
+                                {
+                                    if (reader.Read())
+                                    {
+
+                                        moneycount = Convert.ToInt64(reader["moneycount"]);
+
+                                        hasValue = true;
+                                    }
+                                    else
+                                    {
+                                        moneycount = 0;
+                                        hasValue = false;
+                                    }
+                                    moneycount += money;
+                                }
+                            }
+                        }
+                        if (hasValue)
+                        {
+                            string sQL = @"UPDATE addressmoney SET moneycount=@moneycount WHERE moneyaddress=@moneyaddress";
+                            // long moneycount;
+                            using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                            {
+                                command.Parameters.AddWithValue("@moneycount", moneycount);
+                                command.Parameters.AddWithValue("@moneyaddress", address);
+                                command.ExecuteNonQuery();
+                            }
+
+                        }
+                        else
+                        {
+                            string sQL = @"INSERT INTO addressmoney(moneyaddress,moneycount)VALUES(@moneyaddress,@moneycount)";
+                            // long moneycount;
+                            using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                            {
+                                command.Parameters.AddWithValue("@moneyaddress", address);
+                                command.Parameters.AddWithValue("@moneycount", moneycount);
+                                command.ExecuteNonQuery();
+                            }
+                        } 
+                    }
+                     
+                }
+            }
+        }
+
         internal static long GetMoney(MySqlConnection con, MySqlTransaction tran, string address)
         {
             long moneycount;

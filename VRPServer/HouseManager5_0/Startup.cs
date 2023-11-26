@@ -22,8 +22,12 @@ namespace HouseManager5_0
                 {
                     //msgsNeedToSend.Add(controllerUrl);
                     //msgsNeedToSend.Add(json);
-                    var t1 = TcpFunction.WithResponse.SendInmationToUrlAndGetRes(controllerUrl, json);
-                    return t1.GetAwaiter().GetResult();
+                    //bool success;
+                    //  for(int i=0;i<100;i++)
+
+                    var t1 = TcpFunction.WithResponse.SendInmationToUrlAndGetRes_V2(controllerUrl, json);
+                    var resultGet = t1.GetAwaiter().GetResult();
+                    return resultGet;
                 }
 
             }

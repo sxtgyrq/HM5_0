@@ -19,14 +19,23 @@ namespace ConsoleBitcoinChainApp
                 return _UriStr;
             }
         }
-        public static Dictionary<string, long> GetTradeInfomationFromChain(string addr)
+        public static Dictionary<string, long> GetTradeInfomationFromChain(string addr, out bool success)
         {
-            var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes(UriStr, addr);
+            var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes_V2(UriStr, addr);
             var resultString = t.GetAwaiter().GetResult();
 
-            //var resultString = t.Result;
-            //var resultString = await TcpFunction.WithResponse.SendInmationToUrlAndGetRes(UriStr, addr);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, long>>(resultString);
+            if (t == null)
+            {
+                success = false;
+                return new Dictionary<string, long>();
+            }
+            else
+            {
+                //var resultString = t.Result;
+                //var resultString = await TcpFunction.WithResponse.SendInmationToUrlAndGetRes(UriStr, addr);
+                success = true;
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, long>>(resultString);
+            }
         }
 
         public static Dictionary<string, long> SetTrade(ref Dictionary<string, long> tradeDetail, List<string> list)
