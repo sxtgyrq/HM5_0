@@ -140,7 +140,7 @@ namespace HouseManager5_0.RoomMainF
                                                         applyAddr = player.RefererAddr,
                                                         introduceCount = player.RefererCount,
                                                         rewardGiven = 0
-                                                    }); 
+                                                    });
                                                 }
                                             }
                                         }
@@ -322,7 +322,7 @@ namespace HouseManager5_0.RoomMainF
                 return;
             }
 
-            if (string.IsNullOrEmpty(player.RefererAddr))
+            else if (string.IsNullOrEmpty(player.RefererAddr))
             {
                 //从数据库获取
                 player.RefererAddr = DalOfAddress.introducerstabel.GetIntroducer(player.BTCAddress);
@@ -335,6 +335,10 @@ namespace HouseManager5_0.RoomMainF
             else if (BitCoin.CheckAddress.CheckAddressIsUseful(player.RefererAddr))
             {
                 DalOfAddress.introducerstabel.InsertOrUpdate(player.BTCAddress, player.RefererAddr);
+            }
+            else
+            {
+                player.RefererAddr = "";
             }
         }
 
