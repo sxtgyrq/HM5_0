@@ -146,5 +146,36 @@ giveDatetime
             }
             return count;
         }
+
+
+        internal static void AddMoney(MySqlConnection con, MySqlTransaction tran, string addressFrom, string addressTo, long money)
+        {
+            var indexGuid = Guid.NewGuid().ToString();
+
+            var operateTime = DateTime.Now;
+            {
+                string sQL = @"INSERT INTO addressmoneygiverecord(indexGuid,moneyAddressFrom,
+moneyCount,
+moneyAddressTo,
+giveDatetime
+) VALUES (
+@indexGuid,
+@moneyAddressFrom,
+@moneyCount,
+@moneyAddressTo,
+@giveDatetime)";
+                // long moneycount;
+                using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                {
+                    command.Parameters.AddWithValue("@indexGuid", indexGuid);
+                    command.Parameters.AddWithValue("@moneyAddressFrom", addressFrom);
+                    command.Parameters.AddWithValue("@moneyCount", money);
+                    command.Parameters.AddWithValue("@moneyAddressTo", addressTo);
+                    command.Parameters.AddWithValue("@giveDatetime", operateTime);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

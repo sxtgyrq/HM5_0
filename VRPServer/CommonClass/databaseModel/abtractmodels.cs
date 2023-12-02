@@ -18,20 +18,25 @@ namespace CommonClass.databaseModel
     }
     public class abtractmodelsPassData
     {
-        public string mtlText 
+        public string mtlText
         {
-            get 
+            get
             {
-                var result = "";
+                //var result = "";
+                StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < this.mtlTexts.Length; i++)
                 {
-                    result += mtlTexts[i];
+                    sb.Append(this.mtlTexts[i]);
+
+                    //result += mtlTexts[i];
                     if (i != this.mtlTexts.Length - 1)
                     {
-                        result += Environment.NewLine;
+                        sb.Append(Environment.NewLine);
+                        //  result += Environment.NewLine;
                     }
                 }
-                return result;
+                return sb.ToString();
+                //  return result;
             }
         }
 
@@ -39,16 +44,19 @@ namespace CommonClass.databaseModel
         {
             get
             {
-                var result = "";
+                //var result = "";
+                StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < this.objTexts.Length; i++)
                 {
-                    result += objTexts[i];
-                    if (i != this.objTexts.Length - 1) 
+                    sb.Append(this.objTexts[i]);
+                    //     result += objTexts[i];
+                    if (i != this.objTexts.Length - 1)
                     {
-                        result+= Environment.NewLine;
+                        sb.Append(Environment.NewLine);
+                        //  result += Environment.NewLine;
                     }
                 }
-                return result;
+                return sb.ToString();
             }
         }
 
@@ -56,12 +64,15 @@ namespace CommonClass.databaseModel
         {
             get
             {
-                var result = "";
+                //  var result = "";
+                StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < imgBase64.Length; i++)
                 {
-                    result += imgBase64[i];
+                    sb.Append(imgBase64[i]);
+                    //result += imgBase64[i];
                 }
-                return result;
+                return sb.ToString();
+                // return result;
             }
         }
 

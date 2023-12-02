@@ -58,7 +58,7 @@
             <tr>
                 <td style="width:50%">
                     <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(500000)" >
-                        取出5000.00
+                        交易大额积分
                     </div>
                 </td>
                 <td style="width: 50%">
@@ -141,28 +141,33 @@
     subsidize: function (subsidizeValue) {
         var bitcoinAddress = document.getElementById('bitcoinSubsidizeAddressInput').value;
         if (yrqCheckAddress(bitcoinAddress)) {
-            document.getElementById('bitcoinSubsidizeAddressInput').style.background = 'rgba(127, 255, 127, 0.6)';
-
-            var signature = document.getElementById('signatureInputTextArea').value;
-            var signMsg = JSON.parse(sessionStorage['session']).Key;
-            document.getElementById('msgNeedToSign').value = signMsg;
-            if (yrqVerify(bitcoinAddress, signature, signMsg)) {
-                document.getElementById('signatureInputTextArea').style.background = 'rgba(127, 255, 127, 0.6)';
-                objMain.ws.send(JSON.stringify({ c: 'GetSubsidize', signature: signature, address: bitcoinAddress, value: subsidizeValue }));
-                subsidizeSys.operateAddress = bitcoinAddress;
-                subsidizeSys.signInfoMatiion = [signature, bitcoinAddress];
-
-                sessionStorage['addrAfterSuccess'] = bitcoinAddress;
-                sessionStorage['signAfterSuccess'] = signature;
-                sessionStorage['msg_AfterSuccess'] = signMsg;
-                //  nyrqUrl.set(bitcoinAddress);
+            if (subsidizeValue == 500000) {
+                subsidizeSys.add();
+                subsidizeSys.add3(bitcoinAddress);
             }
             else {
-                document.getElementById('signatureInputTextArea').style.background = 'rgba(255, 127, 127, 0.9)';
-            }
-            //var signature=
-            //            if (yrqVerify(bitcoinAddress
+                document.getElementById('bitcoinSubsidizeAddressInput').style.background = 'rgba(127, 255, 127, 0.6)';
 
+                var signature = document.getElementById('signatureInputTextArea').value;
+                var signMsg = JSON.parse(sessionStorage['session']).Key;
+                document.getElementById('msgNeedToSign').value = signMsg;
+                if (yrqVerify(bitcoinAddress, signature, signMsg)) {
+                    document.getElementById('signatureInputTextArea').style.background = 'rgba(127, 255, 127, 0.6)';
+                    objMain.ws.send(JSON.stringify({ c: 'GetSubsidize', signature: signature, address: bitcoinAddress, value: subsidizeValue }));
+                    subsidizeSys.operateAddress = bitcoinAddress;
+                    subsidizeSys.signInfoMatiion = [signature, bitcoinAddress];
+
+                    sessionStorage['addrAfterSuccess'] = bitcoinAddress;
+                    sessionStorage['signAfterSuccess'] = signature;
+                    sessionStorage['msg_AfterSuccess'] = signMsg;
+                    //  nyrqUrl.set(bitcoinAddress);
+                }
+                else {
+                    document.getElementById('signatureInputTextArea').style.background = 'rgba(255, 127, 127, 0.9)';
+                }
+                //var signature=
+                //            if (yrqVerify(bitcoinAddress
+            }
         }
 
         else {
@@ -235,6 +240,173 @@
         else {
             document.getElementById(PrivateSignPanelObj.id).remove();
         }
+    },
+    add3: function (bitcoinAddrFrom) {
+        var panelID = 'subsidizePanel_MoneyTransctractionToOther';
+        var html = `<div id="${panelID}" style="position: absolute;
+        z-index: 8;
+        top: calc(10% - 1px);
+        width: 24em;
+        left: calc(50% - 12em);
+        height: auto;
+        border: solid 1px red;
+        text-align: center;
+        background: rgba(104, 48, 8, 0.85);
+        color: #83ffff;
+        overflow: hidden;
+        overflow-y: scroll;
+        max-height: calc(90%);
+">
+         
+        <div style="
+        margin-bottom: 0.25em;
+        margin-top: 0.25em;border:1px solid gray;">
+
+            <label>
+                --↓↓↓当前地址↓↓↓--
+            </label>
+            <input type="text" style="width: calc(90% - 10px); margin-bottom: 0.25em; background: rgba(0, 255, 0, 0.5);" readonly value="${bitcoinAddrFrom}"/>
+        </div>
+
+        <div style="margin-bottom: 0.25em;margin-top: 0.25em;border:1px solid gray;">
+
+            <label onclick="subsidizeSys.readStr('scoreTranstractionToBitcoinAddr');">
+                --↓↓↓转出地址↓↓↓--
+            </label>
+            <input id="scoreTranstractionToBitcoinAddr" type="text" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(255, 0, 0, 0.5);"/>
+        </div> 
+        <div style="
+        margin-bottom: 0.25em;
+        margin-top: 0.25em;border:1px solid gray;">
+
+            <label>
+                --积分额度→
+            </label>
+            <input id="scoreTranstractionValue" type="number" value="5000.00"/>
+
+        </div> 
+         <div style="background: yellowgreen;
+        margin-bottom: 0.25em;
+        margin-top: 0.25em;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.scoreTranstraction();">
+            转让
+        </div>
+        <div style="background: orange;
+        margin-bottom: 0.25em;
+        margin-top: 0.25em;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.add3();">
+            取消
+        </div>
+    </div>`;
+
+
+        //var that = subsidizeSys; 
+        if (document.getElementById(panelID) == null) {
+            // var obj = new DOMParser().parseFromString(that.html, 'text/html');
+            var frag = document.createRange().createContextualFragment(html);
+            frag.id = panelID;
+
+            document.body.appendChild(frag);
+
+            function addObjNumberCheck() {
+                if (document.getElementById('scoreTranstractionValue') != null) {
+                    document.getElementById('scoreTranstractionValue').addEventListener('input', function (e) {
+                        var value = this.value;
+                        if (value.includes('.') && value.split('.')[1].length > 2) {
+                            this.value = parseFloat(value).toFixed(2);
+                        }
+                    });
+                }
+                //yrqCheckAddress('16CkZUFmzb1cLNUzwTTqdL7vugmdr3Pyy4')
+                if (document.getElementById('scoreTranstractionToBitcoinAddr') != null) {
+                    document.getElementById('scoreTranstractionToBitcoinAddr').addEventListener('input', function (e) {
+                        var value = this.value;
+                        if (yrqCheckAddress(value)) {
+                            document.getElementById('scoreTranstractionToBitcoinAddr').style.background = 'rgba(0, 255, 0, 0.5)';
+                        }
+                        else {
+                            document.getElementById('scoreTranstractionToBitcoinAddr').style.background = 'rgba(255, 0, 0, 0.5)';
+                        }
+                        //if (value.includes('.') && value.split('.')[1].length > 2) {
+                        //    this.value = parseFloat(value).toFixed(2);
+                        //}
+                    });
+                    document.getElementById('scoreTranstractionToBitcoinAddr').addEventListener('change', function (e) {
+                        var value = this.value;
+                        if (yrqCheckAddress(value)) {
+                            document.getElementById('scoreTranstractionToBitcoinAddr').style.background = 'rgba(0, 255, 0, 0.5)';
+                        }
+                        else {
+                            document.getElementById('scoreTranstractionToBitcoinAddr').style.background = 'rgba(255, 0, 0, 0.5)';
+                        }
+                        //if (value.includes('.') && value.split('.')[1].length > 2) {
+                        //    this.value = parseFloat(value).toFixed(2);
+                        //}
+                    });
+                }
+            }
+
+            setTimeout(addObjNumberCheck, 50); // 1000毫秒后执行myFunction
+            //that.updateMoney();
+            //that.updateSignInfomation();
+            //that.updateMoneyOfSumSubsidized();
+            //that.updateMoneyOfSumSubsidizing();
+
+            //that.updateBtnInnerHtml();
+
+            //var el = document.getElementById('moneySubsidize');
+            //el.classList.remove('msg');
+            //if (objMain.stateNeedToChange.isLogin) {
+
+            //}
+            //else {
+            //    var bthNeedToUpdateLevel = document.getElementById('bthNeedToUpdateLevel');
+            //    bthNeedToUpdateLevel.classList.add('needToClick');
+
+            //}
+            //localStorage['addrOfMainss']
+        }
+        else {
+            document.getElementById(panelID).remove();
+        }
+    },
+    scoreTranstraction: function () {
+        var scoreTranstractionToBitcoinAddr = document.getElementById('scoreTranstractionToBitcoinAddr').value;
+        var scoreTranstractionValue = document.getElementById('scoreTranstractionValue').value;
+        if (yrqCheckAddress(scoreTranstractionToBitcoinAddr)) {
+            if (parseFloat(scoreTranstractionValue) >= 2000) {
+                objMain.ws.send(JSON.stringify({ c: 'ScoreTransaction', scoreTranstractionToBitcoinAddr: scoreTranstractionToBitcoinAddr, scoreTranstractionValue: parseFloat(scoreTranstractionValue) }));
+                var panelID = 'subsidizePanel_MoneyTransctractionToOther';
+                if (document.getElementById(panelID) == null) { }
+                else {
+                    document.getElementById(panelID).remove();
+                }
+                subsidizeSys.add();
+            }
+            else {
+                $.notify('交易积分额度应该大于等于2000.00', 'error');
+            }
+        }
+        else {
+            $.notify('输入了错误格式的转入地址', 'error');
+        }
+        //var scoreTranstractionValue = document.getElementById('scoreTranstractionValue').value;
+        //if (!/^[0-9]+(\.[0-9]{1,2})?$/.test(scoreTranstractionValue)) {
+        //    document.getElementById('tranScoreNum').style.borderColor = '';
+        //    transactionBussiness().showErrMsg("");
+        //    var obj = {
+        //        'c': 'ModelTransSignWhenTrade',
+        //        'msg': msg,
+        //        'sign': sign,
+        //        'addrBussiness': addrBase,
+        //        'tranScoreNum': tranScoreNum
+        //    };
+        //    //var  sendT=
+        //    return JSON.stringify(obj);
+        //}
+        //else {
+        //    document.getElementById('tranScoreNum').style.borderColor = 'red'
+        //    transactionBussiness().showErrMsg("输入正确格式的数字。来表示你要获取的积分。");
+        //    return null;
+        //}
     },
     signInfoMatiion: null,
     LeftMoneyInDB: {},
@@ -368,6 +540,16 @@
                         }
 
                     }
+
+                    if ('scoreTranstractionToBitcoinAddr' == eId) {
+                        var inputValue = document.getElementById(eId).value;
+                        if (yrqCheckAddress(inputValue)) {
+                            document.getElementById(eId).style.background = 'rgba(0, 255, 0, 0.5)';
+                        }
+                        else {
+                            document.getElementById(eId).style.background = 'rgba(255, 0, 0, 0.5)';
+                        }
+                    }
                 });
         }
         else {
@@ -388,8 +570,7 @@
     clearInfo: function () {
         this.signInfoMatiion = null;
     },
-    updateBtnInnerHtml: function ()
-    {
+    updateBtnInnerHtml: function () {
         switch (objMain.groupNumber) {
             case 1: { document.getElementById('bthNeedToUpdateLevel').innerText = '登录/读档'; }; break;
             case 2: { document.getElementById('bthNeedToUpdateLevel').innerText = '登录'; }; break;

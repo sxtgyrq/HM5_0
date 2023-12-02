@@ -284,7 +284,10 @@ namespace WsOfWebClient.MapEditor
                                                     }; break;
                                                 case "CreateNewObj":
                                                     {
+                                                        var t1 = DateTime.Now;
                                                         CreateNewObj cno = Newtonsoft.Json.JsonConvert.DeserializeObject<CreateNewObj>(returnResult.result);
+                                                        var t2 = DateTime.Now;
+                                                        Console.WriteLine($"CreateNewObj DeserializeObject 还原花费{(t2 - t1).TotalSeconds}秒");
                                                         var msg = mm.CreateNew(cno, address, modelTypes, rm);
                                                         //Consol.WriteLine(msg);
                                                         mm.GetCatege(rm);

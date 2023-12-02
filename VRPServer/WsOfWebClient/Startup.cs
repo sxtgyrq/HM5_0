@@ -225,8 +225,11 @@ namespace WsOfWebClient
             }
             catch (Exception e)
             {
-
-                throw e;
+                //
+                var fileContent=e.ToString();
+                File.WriteAllText($"error{DateTime.Now.ToString("yyyyMMddHHmmss")}", fileContent);
+                return "";
+                //throw e;
             }
             // return "";
         }
@@ -1350,6 +1353,11 @@ namespace WsOfWebClient
                                                 Room.CancleTheTransactionF(s, ctt);
                                             }
                                         }; break;
+                                    case "ScoreTransaction": 
+                                        {
+                                            ScoreTransaction stt = Newtonsoft.Json.JsonConvert.DeserializeObject<ScoreTransaction>(returnResult.result);
+                                            Room.ScoreTransactionF(s, stt);
+                                        };break;
                                     default:
                                         {
                                             // Console.WriteLine(returnResult.result);

@@ -1,3 +1,5 @@
 is_global = true
 build_property.RootNamespace = FileUpload
 build_property.ProjectDir = E:\Project\HouseManager5_0\VRPServer\FileUpload\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 

@@ -4581,7 +4581,7 @@ var SysOperatePanel =
         {
             var img = document.createElement('img');
             img.id = 'moneySubsidize';
-            img.src = 'Pic/subsidize.png';
+            img.src = 'Pic/trophy.png';
             img.classList.add('chatdialog');
             img.style.border = 'solid 1px yellowgreen';
             img.style.borderRadius = '5px';

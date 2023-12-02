@@ -2739,7 +2739,7 @@ var BuildingModelObj =
                 if (this.RequestTime[amodelID] == undefined) {
                     this.RequestTime[amodelID] = 0;
                 }
-                if (Date.now() - this.RequestTime[amodelID] > 30000) {
+                if (Date.now() - this.RequestTime[amodelID] > 60000) {
                     this.RequestTime[amodelID] = Date.now();
                     var url = "http://127.0.0.1:21001/objdata/" + amodelID;
                     if (objMain.debug) {

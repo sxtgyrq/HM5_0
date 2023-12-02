@@ -406,6 +406,25 @@ namespace WsOfWebClient
             var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
         }
 
+        internal static void ScoreTransactionF(State s, ScoreTransaction stt)
+        {
+            if (stt.scoreTranstractionValue >= 2000 && BitCoin.CheckAddress.CheckAddressIsUseful(stt.scoreTranstractionToBitcoinAddr))
+            {
+                var ti = new ScoreTransactionToServer()
+                {
+                    c = "ScoreTransactionToServer",
+                    GroupKey = s.GroupKey,
+                    Key = s.Key,
+                    scoreTranstractionValue = Convert.ToInt64(stt.scoreTranstractionValue * 100),
+                    scoreTranstractionToBitcoinAddr = stt.scoreTranstractionToBitcoinAddr
+                };
+                var index = s.roomIndex;
+                var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ti);
+                var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+            } 
+        }
+
+
         private static int GetIndexOfTrade(string addrBussiness, string addrFrom)
         {
             var ti = new TradeIndex()

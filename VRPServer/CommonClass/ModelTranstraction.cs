@@ -71,7 +71,15 @@ namespace CommonClass
             public string GroupKey { get; set; }
         }
         public class CancleTheTransactionToServer : ConfirmTheTransaction
-        { 
+        {
+        }
+
+        public class ScoreTransactionToServer : CommonClass.Command 
+        {
+            public string Key { get; set; }
+            public string GroupKey { get; set; }
+            public long scoreTranstractionValue { get; set; }
+            public string scoreTranstractionToBitcoinAddr { get; set; }
         }
 
         public class AllBuiisnessAddr : Command
@@ -94,7 +102,7 @@ namespace CommonClass
             }
         }
         public class TradeCoinForSave : TradeCoin
-        { 
+        {
             public long TradeScore { get; set; }
 
             public string Key { get; set; }

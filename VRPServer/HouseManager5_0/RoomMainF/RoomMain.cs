@@ -48,7 +48,7 @@ namespace HouseManager5_0.RoomMainF
             this.modelR = new Manager_Resistance(this);
             this.modelC = new Manager_Connection(this);
             this.modelL = new Manager_Level(this);
-            this.taskM = new Manager_TaskCopy(this);
+            //  this.taskM = new Manager_TaskCopy(this);
             this.fileSM = new Manager_FileSave(this);
             this.modelBM = new Manager_BeginnerMode(this);
             this.breakRecordReward = new Manager_NewRecordReward(this);

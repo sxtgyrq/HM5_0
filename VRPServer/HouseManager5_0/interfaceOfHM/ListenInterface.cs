@@ -201,6 +201,7 @@ namespace HouseManager5_0.interfaceOfHM
         string ConfirmTheTransactionF(ModelTranstraction.ConfirmTheTransaction ctt);
         string CancleTheTransaction(ModelTranstraction.CancleTheTransactionToServer ctt);
         string GetStockScoreTransctionStateF(ModelTranstraction.GetStockScoreTransctionState ctt);
+        string ScoreTransactionToServerF(ModelTranstraction.ScoreTransactionToServer ssts);
     }
 
     interface Resistance

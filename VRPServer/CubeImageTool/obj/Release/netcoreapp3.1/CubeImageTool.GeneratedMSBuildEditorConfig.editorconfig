@@ -1,3 +1,5 @@
 is_global = true
 build_property.RootNamespace = CubeImageTool
 build_property.ProjectDir = E:\Project\HouseManager5_0\VRPServer\CubeImageTool\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 

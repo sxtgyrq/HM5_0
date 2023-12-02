@@ -202,10 +202,11 @@ namespace WsOfWebClient
         [Obsolete]
         internal static string GetObjFileJson(string amid)
         {
-          //  throw new Exception("此处功能已不再需要！");
+            //  throw new Exception("此处功能已不再需要！");
             int roomindex = rm.Next(0, Room.roomUrls.Count);
             if (roomindex >= 0 && roomindex < Room.roomUrls.Count)
             {
+                var t1 = DateTime.Now;
                 var obj = new GetAbtractmodels()
                 {
                     c = "GetAbtractmodels",
@@ -214,6 +215,10 @@ namespace WsOfWebClient
                 };
                 var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
                 var receivedMsg = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[roomindex], sendMsg);
+                var t2 = DateTime.Now;
+
+                Console.WriteLine($"GetObjFileJson-{amid},花费{(t2 - t1).TotalSeconds}秒");
+
                 return receivedMsg;
             }
             else
@@ -263,7 +268,7 @@ namespace WsOfWebClient
             var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
         }
 
-       
+        
     }
 
 

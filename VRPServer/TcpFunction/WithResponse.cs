@@ -40,37 +40,41 @@ namespace TcpFunction
                     IPAddress ipa;
                     if (IPAddress.TryParse(roomUrl.Split(':')[0], out ipa))
                     {
-                        TcpClient tc = new TcpClient();
-                        // tc.SendTimeout = 2000;
-                        //tc.ReceiveTimeout = 2000;
-                        tc.Connect(ipa, int.Parse(roomUrl.Split(':')[1]));
-                        tc.SendTimeout = 300000; // 发送超时时间设置为5000毫秒
-                        tc.ReceiveTimeout = 300000; // 接收超时时间设置为5000毫秒
-
-                        if (tc.Connected)
+                        using (TcpClient tc = new TcpClient())
                         {
-                            NetworkStream ns = tc.GetStream();
-                            var sendData = Encoding.UTF8.GetBytes(sendMsg);
-                            Common.SendLength(sendData.Length, ns);
-                            //  Common.CheckBeforeReadReason reason;
-                            var length = Common.ReceiveLength(ns);
-                            if (sendData.Length == length) { }
-                            else
-                            {
-                                var msg = $"sendData.Length ({sendData.Length})!= length({length})";
-                                //Consol.WriteLine(msg);
-                                throw new Exception(msg);
-                            }
-                            //  Common.CheckBeforeSend(ns);
-                            await ns.WriteAsync(sendData, 0, sendData.Length);
+                            // tc.SendTimeout = 2000;
+                            //tc.ReceiveTimeout = 2000;
+                            tc.Connect(ipa, int.Parse(roomUrl.Split(':')[1]));
+                            tc.SendTimeout = 300000; // 发送超时时间设置为5000毫秒
+                            tc.ReceiveTimeout = 300000; // 接收超时时间设置为5000毫秒
 
-                            var length2 = Common.ReceiveLength(ns);
-                            Common.SendLength(length2, ns);
-                            byte[] bytes = Common.ByteReader(length2, ns);
-                            result = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-                            ns.Close(6000);
+                            if (tc.Connected)
+                            {
+                                using (NetworkStream ns = tc.GetStream())
+                                {
+                                    ns.ReadTimeout = 10000;
+                                    ns.WriteTimeout = 10000;
+                                    var sendData = Encoding.UTF8.GetBytes(sendMsg);
+                                    Common.SendLength(sendData.Length, ns);
+                                    //  Common.CheckBeforeReadReason reason;
+                                    var length = Common.ReceiveLength(ns);
+                                    if (sendData.Length == length) { }
+                                    else
+                                    {
+                                        var msg = $"sendData.Length ({sendData.Length})!= length({length})";
+                                        //Consol.WriteLine(msg);
+                                        throw new Exception(msg);
+                                    }
+                                    //  Common.CheckBeforeSend(ns);
+                                    await ns.WriteAsync(sendData, 0, sendData.Length);
+
+                                    var length2 = Common.ReceiveLength(ns);
+                                    Common.SendLength(length2, ns);
+                                    byte[] bytes = Common.ByteReader(length2, ns);
+                                    result = Encoding.UTF8.GetString(bytes, 0, bytes.Length); 
+                                }
+                            }
                         }
-                        tc.Close();
                     }
                     var endTime = DateTime.Now;
                     return result;
@@ -128,18 +132,21 @@ namespace TcpFunction
                 //   Console.Write("Waiting for a connection... ");
 
                 string notifyJson;
-                TcpClient client = server.AcceptTcpClient();
+                using (TcpClient client = server.AcceptTcpClient())
                 {
-                    using (NetworkStream ns = client.GetStream())
+                    client.ReceiveTimeout = 300000;
+                    client.SendTimeout = 300000;
                     {
-
-                        notifyJson = GetMsg01(client, ns);
-                        var outPut = dealWith(notifyJson, tcpPort);
-                        GetMsg02(client, ns, outPut);
-                        ns.Close(6000);
+                        using (NetworkStream ns = client.GetStream())
+                        {
+                            ns.ReadTimeout = 10000;
+                            ns.WriteTimeout = 10000;
+                            notifyJson = GetMsg01(client, ns);
+                            var outPut = dealWith(notifyJson, tcpPort);
+                            GetMsg02(client, ns, outPut);
+                        }
                     }
                 }
-                client.Close();
             }
         }
 

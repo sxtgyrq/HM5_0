@@ -38,10 +38,10 @@ namespace DalOfAddress
                                 var sql = "INSERT INTO introducedetai(startDate,applyAddr,introduceCount,rewardGiven)VALUES(@startDate,@applyAddr,@introduceCount,@rewardGiven);";
                                 using (MySqlCommand commad = new MySqlCommand(sql, con))
                                 {
-                                    commad.Parameters.AddWithValue(@"startDate", dataItem.applyAddr);
-                                    commad.Parameters.AddWithValue(@"applyAddr", dataItem.startDate);
-                                    commad.Parameters.AddWithValue(@"introduceCount", dataItem.applyAddr);
-                                    commad.Parameters.AddWithValue(@"rewardGiven", dataItem.startDate);
+                                    commad.Parameters.AddWithValue(@"startDate", dataItem.startDate);
+                                    commad.Parameters.AddWithValue(@"applyAddr", dataItem.applyAddr);
+                                    commad.Parameters.AddWithValue(@"introduceCount", dataItem.introduceCount);
+                                    commad.Parameters.AddWithValue(@"rewardGiven", dataItem.rewardGiven);
 
                                     var row = commad.ExecuteNonQuery();
                                     rows += row;
@@ -67,8 +67,7 @@ namespace DalOfAddress
 
                     catch (Exception e)
                     {
-                        throw e;
-                        throw new Exception("新增错误");
+                        tran.Rollback();
                     }
                 }
             }

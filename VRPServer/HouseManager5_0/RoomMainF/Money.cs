@@ -94,8 +94,8 @@ namespace HouseManager5_0.RoomMainF
                                         if (money > 0)
                                         {
                                             role.MoneySet(role.Money - money, ref notifyMsg);
-                                            if (role.playerType == Player.PlayerType.player)
-                                                taskM.MoneySet((Player)role);
+                                            //if (role.playerType == Player.PlayerType.player)
+                                            // taskM.MoneySet((Player)role);
                                         }
                                     }; break;
                                 case "all":
@@ -104,8 +104,8 @@ namespace HouseManager5_0.RoomMainF
                                         if (money > 0)
                                         {
                                             role.MoneySet(role.Money - money, ref notifyMsg);
-                                            if (role.playerType == Player.PlayerType.player)
-                                                taskM.MoneySet((Player)role);
+                                            //if (role.playerType == Player.PlayerType.player)
+                                            //    taskM.MoneySet((Player)role);
 
                                             if (!string.IsNullOrEmpty(role.BTCAddress))
                                             {
@@ -122,8 +122,8 @@ namespace HouseManager5_0.RoomMainF
                                     if (BitCoin.CheckAddress.CheckAddressIsUseful(player.RefererAddr) && player.RefererAddr.Trim() != player.BTCAddress.Trim())
                                     {
                                         DalOfAddress.MoneyRefererAdd.AddMoney(player.RefererAddr, player.RefererCount * 100);
-                                        var tasks = DalOfAddress.TaskCopy.GetALLItem(player.RefererAddr);
-                                        this.taskM.AddReferer(player.RefererCount, tasks);
+                                        //var tasks = DalOfAddress.TaskCopy.GetALLItem(player.RefererAddr);
+                                        //this.taskM.AddReferer(player.RefererCount, tasks);
 
                                         {
                                             var item = DalOfAddress.TradeReward.GetByStartDate(int.Parse(player.Group.RewardDate));
@@ -140,7 +140,7 @@ namespace HouseManager5_0.RoomMainF
                                                         applyAddr = player.RefererAddr,
                                                         introduceCount = player.RefererCount,
                                                         rewardGiven = 0
-                                                    }); 
+                                                    });
                                                 }
                                             }
                                         }
@@ -268,36 +268,43 @@ namespace HouseManager5_0.RoomMainF
                             {
                                 if (!group._PlayerInGroup[ots.Key].Bust)
                                 {
-                                    var success = this.modelL.OrderToUpdateLevel(ots.Key, ots.GroupKey, ots.address, ots.signature);
-                                    if (success)
+                                    //var success = this.modelL.OrderToUpdateLevel(ots.Key, ots.GroupKey, ots.address, ots.signature);
+                                    // if (true)
                                     {
                                         var player = group._PlayerInGroup[ots.Key];
-                                        var Referer = DalOfAddress.MoneyRefererAdd.GetMoney(ots.address);
-                                        if (Referer > 0)
+                                        if (player.Money + ots.value >= 200000)
                                         {
-                                            DalOfAddress.MoneyRefererGet.GetSubsidizeAndLeft(ots.address, Referer);
+                                            this.WebNotify(player, "身上不要带太多积分，够用就好。积分用完即时存储");
                                         }
+                                        else
                                         {
-                                            long subsidizeGet, subsidizeLeft;
-                                            DalOfAddress.MoneyGet.GetSubsidizeAndLeft(ots.address, ots.value, out subsidizeGet, out subsidizeLeft);
-                                            // var player = group._PlayerInGroup[ots.Key];
-                                            ((Player)player).BTCAddress = ots.address;
-
-                                            {
-                                                UpdateReferAddr((Player)player);
-                                            }
-                                            player.MoneySet(player.Money + subsidizeGet + Referer, ref notifyMsg);
+                                            var Referer = DalOfAddress.MoneyRefererAdd.GetMoney(ots.address);
                                             if (Referer > 0)
                                             {
-                                                this.WebNotify(player, $"热心的分享使您获得了额外的{Referer / 100}.{(Referer % 100) / 10}{(Referer % 100) % 10}积分。");
+                                                DalOfAddress.MoneyRefererGet.GetSubsidizeAndLeft(ots.address, Referer);
                                             }
-                                            else
                                             {
-                                                this.WebNotify(player, $"系统当前没有检测到您对本网站的分享成果，分享可以获得积分，助您游戏！如何分享，请查看攻略与帮助！");
+                                                long subsidizeGet, subsidizeLeft;
+                                                DalOfAddress.MoneyGet.GetSubsidizeAndLeft(ots.address, ots.value, out subsidizeGet, out subsidizeLeft);
+                                                // var player = group._PlayerInGroup[ots.Key];
+                                                ((Player)player).BTCAddress = ots.address;
+
+                                                {
+                                                    UpdateReferAddr((Player)player);
+                                                }
+                                                player.MoneySet(player.Money + subsidizeGet + Referer, ref notifyMsg);
+                                                if (Referer > 0)
+                                                {
+                                                    this.WebNotify(player, $"热心的分享使您获得了额外的{Referer / 100}.{(Referer % 100) / 10}{(Referer % 100) % 10}积分。");
+                                                }
+                                                else
+                                                {
+                                                    this.WebNotify(player, $"系统当前没有检测到您对本网站的分享成果，分享可以获得积分，助您游戏！如何分享，请查看攻略与帮助！");
+                                                }
+                                                ;
+                                                if (player.playerType == Player.PlayerType.player)
+                                                    this.SendLeftMoney((Player)player, subsidizeLeft, ots.address, ref notifyMsg);
                                             }
-                                            ;
-                                            if (player.playerType == Player.PlayerType.player)
-                                                this.SendLeftMoney((Player)player, subsidizeLeft, ots.address, ref notifyMsg);
                                         }
                                     }
                                 }
@@ -322,7 +329,7 @@ namespace HouseManager5_0.RoomMainF
                 return;
             }
 
-            if (string.IsNullOrEmpty(player.RefererAddr))
+            else if (string.IsNullOrEmpty(player.RefererAddr))
             {
                 //从数据库获取
                 player.RefererAddr = DalOfAddress.introducerstabel.GetIntroducer(player.BTCAddress);
@@ -335,6 +342,10 @@ namespace HouseManager5_0.RoomMainF
             else if (BitCoin.CheckAddress.CheckAddressIsUseful(player.RefererAddr))
             {
                 DalOfAddress.introducerstabel.InsertOrUpdate(player.BTCAddress, player.RefererAddr);
+            }
+            else
+            {
+                player.RefererAddr = "";
             }
         }
 

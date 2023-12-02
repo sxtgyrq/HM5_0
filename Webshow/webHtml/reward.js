@@ -406,24 +406,24 @@
                 document.getElementById('rewardAppleItemContainer').appendChild(tableFrag);
 
             }
-
-            for (var indexOfArray = 0; indexOfArray < forwardArray.length; indexOfArray++) {
-                var list = forwardArray[indexOfArray];
-                var tableCenter = '';
-                var roleCountInTask = '网站分享';
-                //switch (indexOfArray) {
-                //    case 0: { roleCountInTask = '单人'; }; break;
-                //    case 1: { roleCountInTask = '双人'; }; break;
-                //    case 2: { roleCountInTask = '三人'; }; break;
-                //    case 3: { roleCountInTask = '四人'; }; break;
-                //    case 4: { roleCountInTask = '五人'; }; break;
-                //}
-                for (var i = 0; i < list.length; i++) {
-                    var bgColor = '#ff000020';
-                    if (i % 2 == 0) {
-                        bgColor = '#00ff0020';
-                    } 
-                    tableCenter += `<tr style="background:${bgColor}">
+            if (forwardArray)
+                for (var indexOfArray = 0; indexOfArray < forwardArray.length; indexOfArray++) {
+                    var list = forwardArray[indexOfArray];
+                    var tableCenter = '';
+                    var roleCountInTask = '网站分享';
+                    //switch (indexOfArray) {
+                    //    case 0: { roleCountInTask = '单人'; }; break;
+                    //    case 1: { roleCountInTask = '双人'; }; break;
+                    //    case 2: { roleCountInTask = '三人'; }; break;
+                    //    case 3: { roleCountInTask = '四人'; }; break;
+                    //    case 4: { roleCountInTask = '五人'; }; break;
+                    //}
+                    for (var i = 0; i < list.length; i++) {
+                        var bgColor = '#ff000020';
+                        if (i % 2 == 0) {
+                            bgColor = '#00ff0020';
+                        }
+                        tableCenter += `<tr style="background:${bgColor}">
                         <th colspan="1">任务↓</th>
                         <th colspan="5">申请地址↓</th>
                     </tr>
@@ -448,12 +448,12 @@
                         <td colspan="3" style="text-align:center;vertical-align:middle;">${list[i].percentStr}</td>
                         <td style="text-align:center;" colspan="3">${list[i].rewardGiven}satoshi</td> 
                     </tr>`;
-                }
-                var itemHtml = `<table border="1" style="margin-top:1em;">${tableCenter}</table>`;
-                var tableFrag = document.createRange().createContextualFragment(itemHtml);
-                document.getElementById('rewardAppleItemContainer').appendChild(tableFrag);
+                    }
+                    var itemHtml = `<table border="1" style="margin-top:1em;">${tableCenter}</table>`;
+                    var tableFrag = document.createRange().createContextualFragment(itemHtml);
+                    document.getElementById('rewardAppleItemContainer').appendChild(tableFrag);
 
-            }
+                }
 
             //useLevelToApplyRewardBtn
             //document.getElementById('useLevelToApplyRewardBtn').onclick = function () {
@@ -485,16 +485,17 @@
                     }
                 }
             }
-            for (var indexOfArray = 0; indexOfArray < forwardArray.length; indexOfArray++) {
-                var list = forwardArray[indexOfArray];
-                for (var i = 0; i < list.length; i++) {
-                    if (i < 100) {
-                        var msg = `${indexNumber}@${data.tradeAddress}@${data.bussinessAddr}->${list[i].applyAddr}:${list[i].rewardGiven}satoshi`;
-                        that.msgsToTransferSshares.push(msg);
-                        indexNumber++;
+            if (forwardArray)
+                for (var indexOfArray = 0; indexOfArray < forwardArray.length; indexOfArray++) {
+                    var list = forwardArray[indexOfArray];
+                    for (var i = 0; i < list.length; i++) {
+                        if (i < 100) {
+                            var msg = `${indexNumber}@${data.tradeAddress}@${data.bussinessAddr}->${list[i].applyAddr}:${list[i].rewardGiven}satoshi`;
+                            that.msgsToTransferSshares.push(msg);
+                            indexNumber++;
+                        }
                     }
                 }
-            }
         }
         else {
         }

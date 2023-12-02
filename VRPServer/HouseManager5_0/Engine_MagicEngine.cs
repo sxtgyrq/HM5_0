@@ -436,7 +436,7 @@ namespace HouseManager5_0
             {
                 if (player.playerType == Player.PlayerType.player)
                 {
-                    that.taskM.MagicReleased((Player)player);
+                   // that.taskM.MagicReleased((Player)player);
                 }
                 CommonClass.driversource.Skill skill;
                 if (ms.selectIndex == 1)

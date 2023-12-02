@@ -1113,15 +1113,15 @@ namespace HouseManager5_0
             this.taskCopys = new List<taskcopy>();
             if (BitCoin.CheckAddress.CheckAddressIsUseful(this.BTCAddress))
             {
-                this.taskCopys = DalOfAddress.TaskCopy.GetALLItem(this.BTCAddress);
+                // this.taskCopys = DalOfAddress.TaskCopy.GetALLItem(this.BTCAddress);
                 //鼓楼Stock,此副本作为新手引导而用。
-                var addSuccess1 = Program.rm.taskM.Add("GLSTOCK", this.BTCAddress.ToString(), this);
-                var addSuccess2 = Program.rm.taskM.Add("URLSHARE", this.BTCAddress.ToString(), this);
-                if (addSuccess1 || addSuccess2)
-                {
-                    this.taskCopys = DalOfAddress.TaskCopy.GetALLItem(this.BTCAddress);
-                    this.hntts(this);
-                }
+                // var addSuccess1 = Program.rm.taskM.Add("GLSTOCK", this.BTCAddress.ToString(), this);
+                //var addSuccess2 = Program.rm.taskM.Add("URLSHARE", this.BTCAddress.ToString(), this);
+                //if (addSuccess1 || addSuccess2)
+                //{
+                //    this.taskCopys = DalOfAddress.TaskCopy.GetALLItem(this.BTCAddress);
+                //    this.hntts(this);
+                //}
             }
         }
 

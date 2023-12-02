@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "keq5QyYlsmJ2yyOgvPt4hDGXP2RpIHX/45EeVn8K5LfF3GlYQAiV4uBKByt7raxy1VD8z7eKHW7aonYBNeNJUw==",
+  "dgSpecHash": "swI3kwW/REPlHnFDKqliV4Is8mIbRbejF6pSuncBXiv01vTJhdJ1fauFGd8Gu2B7E2TLM8+Y1T+8LzNGz/dCaQ==",
   "success": true,
   "projectFilePath": "E:\\Project\\HouseManager5_0\\VRPServer\\FileUpload\\FileUpload.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\sxtgy\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.32\\microsoft.netcore.app.host.win-x64.3.1.32.nupkg.sha512"
+  ],
   "logs": []
 }

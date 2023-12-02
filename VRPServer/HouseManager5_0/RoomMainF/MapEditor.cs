@@ -1,7 +1,10 @@
 ﻿using CommonClass;
 using CommonClass.databaseModel;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 //using HouseManager5_0.interfaceOfHM;
 using Model;
+using NBitcoin;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +33,13 @@ namespace HouseManager5_0.RoomMainF
         }
         public string CreateNew(MapEditor.CreateNew cn)
         {
+            var t1 = DateTime.Now;
             string amID = CalMD5(cn.imageBase64 + cn.objText + cn.mtlText);
+
+            var t2 = DateTime.Now;
+
+            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} -CreateNew CalMD5 花费{(t2 - t1).TotalSeconds}秒");
+
             string modelType = cn.modelType;
             string imageBase64 = cn.imageBase64;
             string objText = cn.objText;
@@ -51,8 +60,24 @@ namespace HouseManager5_0.RoomMainF
                 dmState = 0,
 
             };
+            t1 = DateTime.Now;
 
-            DalOfAddress.AbtractModels.Insert(amID, modelType, imageBase64, objText, mtlText, animation, author, amState, modelName, dm);
+            var insertSuccess = DalOfAddress.AbtractModels.Insert(amID, modelType, imageBase64, objText, mtlText, animation, author, amState, modelName, dm);
+            t2 = DateTime.Now;
+
+            //if (insertSuccess)
+            //{
+            //    var writeObj = new abtractmodelsPassData() 
+            //    {
+
+            //    };
+            //    WriteToFile(amID, ref new abtractmodelsPassData()
+            //    {
+
+            //    });
+            //}
+
+            Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} -DalOfAddress.AbtractModels.Insert 花费{(t2 - t1).TotalSeconds}秒");
             return "";
             // throw new NotImplementedException();
         }
@@ -752,7 +777,7 @@ namespace HouseManager5_0.RoomMainF
         public string TaskCopyPassOrNGF(Finance.TaskCopyPassOrNG pOrNG)
         {
             var items = DalOfAddress.TaskCopy.GetALLItem(pOrNG.addr, pOrNG.code);
-            this.taskM.Pass(items);
+            // this.taskM.Pass(items);
             return LookForTaskCopyF(new Finance.LookForTaskCopy()
             {
                 addr = pOrNG.addr,
@@ -760,12 +785,12 @@ namespace HouseManager5_0.RoomMainF
                 code = pOrNG.code,
             });
         }
-
+        const string pathBase = "abtrctID";
         public string GetAbtractmodelsF(GetAbtractmodels ca)
         {
             if (ca.FromDB)
             {
-                const string pathBase = "abtrctID";
+
                 if (!Directory.Exists($"{pathBase}"))
                 {
                     Directory.CreateDirectory($"{pathBase}");
@@ -796,11 +821,8 @@ namespace HouseManager5_0.RoomMainF
                     }
                     else
                     {
-                        Directory.CreateDirectory($"{pathBase}/{ca.AmID}");
-                        File.WriteAllText($"{pathBase}/{ca.AmID}/objText", amInfomationData.objText);
-                        File.WriteAllText($"{pathBase}/{ca.AmID}/mtlText", amInfomationData.mtlText);
-                        File.WriteAllText($"{pathBase}/{ca.AmID}/imageBase64", amInfomationData.imageBase64);
-                        File.WriteAllText($"{pathBase}/{ca.AmID}/modelType", amInfomationData.modelType);
+                        WriteToFile(ca.AmID, ref amInfomationData);
+
                         var returnObj = new
                         {
                             objText = amInfomationData.objText,
@@ -833,6 +855,15 @@ namespace HouseManager5_0.RoomMainF
                     return "";
                 }
             }
+        }
+
+        private void WriteToFile(string amID, ref abtractmodelsPassData amInfomationData)
+        {
+            Directory.CreateDirectory($"{pathBase}/{amID}");
+            File.WriteAllText($"{pathBase}/{amID}/objText", amInfomationData.objText);
+            File.WriteAllText($"{pathBase}/{amID}/mtlText", amInfomationData.mtlText);
+            File.WriteAllText($"{pathBase}/{amID}/imageBase64", amInfomationData.imageBase64);
+            File.WriteAllText($"{pathBase}/{amID}/modelType", amInfomationData.modelType);
         }
 
         public string SetBackFPgroundSceneF(MapEditor.SetBackFPgroundScene_BLL sbf)
@@ -1005,7 +1036,7 @@ namespace HouseManager5_0.RoomMainF
                     if (success)
                     {
                         var items = DalOfAddress.TaskCopy.GetALLItem(bwi.bindWordAddr);
-                        this.taskM.BindWordInfoF(taskM, items);
+                        //this.taskM.BindWordInfoF(taskM, items);
                     }
                     ModelTranstraction.BindWordInfo.Result r = new ModelTranstraction.BindWordInfo.Result()
                     {
@@ -1563,7 +1594,7 @@ namespace HouseManager5_0.RoomMainF
                 DalOfAddress.MoneyAdd.AddMoney(bitcoinAddr, chargingValue);
                 {
                     var copyTasks = DalOfAddress.TaskCopy.GetALLItem(bitcoinAddr);
-                    this.taskM.ChargingF(copyTasks, chargingValue);
+                    //this.taskM.ChargingF(copyTasks, chargingValue);
                 }
                 r = new Finance.Charging.Result()
                 {
@@ -2016,6 +2047,51 @@ namespace HouseManager5_0.RoomMainF
                                             }
                                         }
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Startup.sendSeveralMsgs(notifyMsg);
+            return "";
+        }
+
+        public string ScoreTransactionToServerF(ModelTranstraction.ScoreTransactionToServer ssts)
+        {
+            List<string> notifyMsg = new List<string>();
+            if (this._Groups.ContainsKey(ssts.GroupKey))
+            {
+                var group = this._Groups[ssts.GroupKey];
+                if (group == null) { }
+                else
+                {
+                    if (group._PlayerInGroup.ContainsKey(ssts.Key))
+                    {
+                        var player = group._PlayerInGroup[ssts.Key];
+                        if (player == null) { }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(player.BTCAddress)) { }
+                            else if (player.BTCAddress.Trim() == ssts.scoreTranstractionToBitcoinAddr.Trim())
+                            {
+                                this.WebNotify(player, "不能自己转自己");
+                            }
+                            else if (BitCoin.CheckAddress.CheckAddressIsUseful(ssts.scoreTranstractionToBitcoinAddr.Trim()))
+                            {
+                                string msg;
+                                var success = DalOfAddress.MoneyAdd.MoneyTransctraction(player.BTCAddress.Trim(), ssts.scoreTranstractionToBitcoinAddr.Trim(), ssts.scoreTranstractionValue, out msg);
+                                if (success)
+                                {
+                                    long subsidizeGet, subsidizeLeft;
+                                    DalOfAddress.MoneyGet.GetSubsidizeAndLeft(player.BTCAddress, 0, out subsidizeGet, out subsidizeLeft);
+                                    this.SendLeftMoney((Player)player, subsidizeLeft, player.BTCAddress, ref notifyMsg);
+                                    this.WebNotify(player, msg, 60);
+                                    this.WebNotify(player, $"转{ssts.scoreTranstractionToBitcoinAddr.Trim()}积分{CommonClass.F.LongToDecimalString(ssts.scoreTranstractionValue * 99 / 100)}。成功", 60);
+                                }
+                                else
+                                {
+                                    this.WebNotify(player, msg);
                                 }
                             }
                         }

@@ -112,6 +112,12 @@ namespace WsOfWebClient
     }
     public class CancleTheTransaction : AgreeTheTransaction { }
 
+    public class ScoreTransaction : CommonClass.Command
+    {
+        public string scoreTranstractionToBitcoinAddr { get; set; }
+        public double scoreTranstractionValue { get; set; }
+    }
+
     public class Bust : Attack
     {
         public int Target { get; set; }

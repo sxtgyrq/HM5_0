@@ -23,6 +23,7 @@ namespace AppDoProgramFunction
             {
                 Console.WriteLine("A/加密，其他解密,exit，退出");
                 Console.WriteLine("readNewRecordReward  --读取奖励加密信息");
+                Console.WriteLine("readNewRecordRewardWithOutSecret  --读取奖励加密信息");
 
                 var input = Console.ReadLine().Trim();
                 if (input == "exit")
@@ -43,7 +44,7 @@ namespace AppDoProgramFunction
                 else if (input == "readNewRecordReward")
                 {
                     Console.WriteLine("拖入文件");
-                    var path=Console.ReadLine();
+                    var path = Console.ReadLine();
                     if (File.Exists(path))
                     {
                         Console.WriteLine("输入密钥");
@@ -78,6 +79,60 @@ namespace AppDoProgramFunction
                                 }
                             }
 
+                            Console.WriteLine($"第{i}项：{json}");
+                            if (privateKeyIsRight)
+                            {
+                                Console.WriteLine($"第{i}项：私钥正确");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"第{i}项：私钥错误");
+                                Console.WriteLine($"按任意键继续");
+                                Console.ReadLine();
+                            }
+                        }
+
+                    }
+                }
+                else if (input == "readNewRecordRewardWithOutSecret")
+                {
+                    Console.WriteLine("拖入文件");
+                    var path = Console.ReadLine();
+                    if (File.Exists(path))
+                    {
+                        Console.WriteLine("输入密钥");
+                        var key = Console.ReadLine();
+                        var str = File.ReadAllText(path);
+                        var contents = str.Split(',');
+                        Console.WriteLine($"共{contents.Length}项");
+                        for (int i = 0; i < contents.Length; i++)
+                        {
+                            var index = i;
+                            var content = contents[index];
+                            var password = key;
+                            var json = CommonClass.AES.AesDecrypt(content, password);
+                            RewardInfo ri = Newtonsoft.Json.JsonConvert.DeserializeObject<RewardInfo>(json);
+
+                            System.Numerics.BigInteger privateBigInteger;
+                            bool privateKeyIsRight = false;
+                            if (PrivateKeyF.Check(ri.privateKey, out privateBigInteger))
+                            {
+                                if (ri.privateKey.Length == 51)
+                                {
+                                    //compressed = false;
+                                    var address = PublicKeyF.GetAddressOfUncompressed(Calculate.getPublicByPrivate(privateBigInteger));
+                                    privateKeyIsRight = address == ri.RewardBtcAddr;
+                                }
+                                else if (ri.privateKey.Length == 52)
+                                {
+                                    //  compressed = true;
+                                    var address1 = PublicKeyF.GetAddressOfcompressed(Calculate.getPublicByPrivate(privateBigInteger));
+                                    var address2 = PublicKeyF.GetAddressOfP2SH(Calculate.getPublicByPrivate(privateBigInteger));
+                                    privateKeyIsRight = address1 == ri.RewardBtcAddr || address2 == ri.RewardBtcAddr;
+                                }
+                            }
+                            ri.privateKey = "***";
+                            json = Newtonsoft.Json.JsonConvert.SerializeObject(ri);
                             Console.WriteLine($"第{i}项：{json}");
                             if (privateKeyIsRight)
                             {

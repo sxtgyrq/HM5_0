@@ -689,7 +689,12 @@ namespace WsOfWebClient.MapEditor
                     {
                         var index = rm.Next(0, roomUrls.Count);
                         var roomUrl = roomUrls[index];
+                        var t1 = DateTime.Now;
                         var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(cn);
+                        var t2 = DateTime.Now;
+
+                        Console.WriteLine($"CreateNew方法SerializeObject 花费{(t2 - t1).TotalSeconds}秒");
+
                         return Startup.sendInmationToUrlAndGetRes(roomUrl, sendMsg);
 
                     }

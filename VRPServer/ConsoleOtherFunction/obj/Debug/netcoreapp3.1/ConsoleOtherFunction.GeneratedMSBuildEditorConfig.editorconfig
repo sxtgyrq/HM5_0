@@ -1,3 +1,5 @@
 is_global = true
 build_property.RootNamespace = ConsoleOtherFunction
 build_property.ProjectDir = E:\Project\HouseManager5_0\VRPServer\ConsoleOtherFunction\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 

@@ -302,7 +302,7 @@ namespace HouseManager5_0.RoomMainF
                     if (role.playerType == Player.PlayerType.player)
                     {
                         SendPromoteCountOfPlayer(ss.pType, (Player)role, ref notifyMsg);
-                        this.taskM.DiamondSell((Player)role);
+                        // this.taskM.DiamondSell((Player)role);
                     }
                     Thread th = new Thread(() => this.Market.Receive(ss.pType, sellCount));
                     th.Start();
@@ -399,6 +399,6 @@ namespace HouseManager5_0.RoomMainF
             //Startup.sendSeveralMsgs(notifyMsg);
         }
 
-       
+
     }
 }

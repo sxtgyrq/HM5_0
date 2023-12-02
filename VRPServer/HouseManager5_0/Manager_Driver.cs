@@ -225,7 +225,7 @@ namespace HouseManager5_0
 
             }
             if (player.playerType == Player.PlayerType.player)
-                that.taskM.DriverSelected((Player)player);
+            { } // that.taskM.DriverSelected((Player)player);
         }
 
 

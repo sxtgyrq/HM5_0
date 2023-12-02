@@ -91,7 +91,7 @@ namespace DalOfAddress
         //    }
         //}
 
-        public static void Insert(string amID, string modelType, string imageBase64, string objText, string mtlText, string animation, string author, int amState, string modelName, CommonClass.databaseModel.detailmodel dm)
+        public static bool Insert(string amID, string modelType, string imageBase64, string objText, string mtlText, string animation, string author, int amState, string modelName, CommonClass.databaseModel.detailmodel dm)
         {
             using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
             {
@@ -147,6 +147,7 @@ namespace DalOfAddress
                             detailmodel.Add(con, tran, dm);
                         }
                         tran.Commit();
+                        return true;
                     }
                     catch (Exception e)
                     {
@@ -155,6 +156,7 @@ namespace DalOfAddress
                     }
                 }
             }
+            return false;
         }
 
         public static CommonClass.databaseModel.abtractmodelsPassData GetAbtractModelItem(string amID)

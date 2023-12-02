@@ -274,7 +274,11 @@ namespace HouseManager5_0
                         }; break;
                     case "CreateNew":
                         {
+                            var t1 = DateTime.Now;
                             CommonClass.MapEditor.CreateNew cn = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.MapEditor.CreateNew>(notifyJson);
+                            var t2 = DateTime.Now;
+                            Console.WriteLine($"CreateNew DeserializeObject 花费{(t2 - t1).TotalSeconds}秒");
+
                             outPut = objI.CreateNew(cn);
                         }; break;
                     case "GetModelDetail":
@@ -638,6 +642,11 @@ namespace HouseManager5_0
                         {
                             GetStockScoreTransctionState ctt = Newtonsoft.Json.JsonConvert.DeserializeObject<GetStockScoreTransctionState>(notifyJson);
                             outPut = objI.GetStockScoreTransctionStateF(ctt);
+                        }; break;
+                    case "ScoreTransactionToServer":
+                        {
+                            ScoreTransactionToServer ssts = Newtonsoft.Json.JsonConvert.DeserializeObject<ScoreTransactionToServer>(notifyJson);
+                            outPut = objI.ScoreTransactionToServerF(ssts);
                         }; break;
                 }
             }
