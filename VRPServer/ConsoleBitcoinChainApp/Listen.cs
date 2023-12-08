@@ -10,8 +10,8 @@ namespace ConsoleBitcoinChainApp
     {
         internal static void IpAndPort(string hostIP, int tcpPort)
         {
-            var dealWith = new TcpFunction.WithResponse.DealWith(DealWith);
-            TcpFunction.WithResponse.ListenIpAndPort(hostIP, tcpPort, dealWith);
+            var dealWith = new TcpFunction.ResponseC.DealWith(DealWith);
+            TcpFunction.ResponseC.f.ListenIpAndPort(hostIP, tcpPort, dealWith);
         }
 
         private static string DealWith(string addr, int port)

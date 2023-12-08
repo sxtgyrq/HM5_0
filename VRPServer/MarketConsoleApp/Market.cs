@@ -131,7 +131,7 @@ namespace MarketConsoleApp
                                 {
                                     c = "ServerStatictis"
                                 });
-                        var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes_V2(controllerUrl, json);
+                        var t = TcpFunction.ResponseC.f.SendInmationToUrlAndGetRes_V2(controllerUrl, json);
 
                         var rResult = t.GetAwaiter().GetResult();
                         // var r = t;
@@ -351,8 +351,8 @@ namespace MarketConsoleApp
             {
                 this.Port = int.Parse(input);
             }
-            var dealWith = new TcpFunction.WithResponse.DealWith(this.DealWith);
-            TcpFunction.WithResponse.ListenIpAndPort(this.IP, this.Port, dealWith);
+            var dealWith = new TcpFunction.ResponseC.DealWith(this.DealWith);
+            TcpFunction.ResponseC.f.ListenIpAndPort(this.IP, this.Port, dealWith);
 
             // Listen.IpAndPort(ip, tcpPort)
             // throw new NotImplementedException();
@@ -630,7 +630,7 @@ namespace MarketConsoleApp
             // TcpFunction.WithResponse.SendInmationToUrlAndGetRes
             try
             {
-                var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes_V2(controllerUrl, json);
+                var t = TcpFunction.ResponseC.f.SendInmationToUrlAndGetRes_V2(controllerUrl, json);
                 t.GetAwaiter().GetResult();
 
                 //await ) => TcpFunction.WithResponse.SendInmationToUrlAndGetRes(controllerUrl, json));

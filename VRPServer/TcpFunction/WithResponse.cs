@@ -1,25 +1,51 @@
 ﻿using CommonClass;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace TcpFunction
 {
-    public class WithResponse
+    public abstract class ResponseC
     {
+        public static ResponseF f = new WithHttpResponse();
+        public delegate string DealWith(string notifyJson, int tcpPort);
+    }
+    public interface ResponseF
+    {
+        public Task<string> SendInmationToUrlAndGetRes_V2(string roomUrl, string sendMsg);
+        public void ListenIpAndPort(string hostIP, int tcpPort, ResponseC.DealWith dealWith);
+
+    }
+    public class WithTCPResponse : ResponseF
+    {
+        public async Task<string> SendInmationToUrlAndGetRes_V2(string roomUrl, string sendMsg)
+        {
+            return await WithTCPResponse.SendInmationToUrlAndGetRes_V2_Private(roomUrl, sendMsg);
+        }
+        public void ListenIpAndPort(string hostIP, int tcpPort, ResponseC.DealWith dealWith)
+        {
+            WithTCPResponse.ListenIpAndPort_Private(hostIP, tcpPort, dealWith);
+        }
+        const int clientTimeOut = 1000 * 60 * 24 * 7;
+        const int networkStreamTimeOut = 1000 * 60 * 24;
+        //static Dictionary<string, TcpClient> tcpClientsSent = new Dictionary<string, TcpClient>();
         /// <summary>
         /// 
         /// </summary>
         /// <param name="roomUrl"></param>
         /// <param name="sendMsg"></param>
         /// <returns>如果返回null，表示运行方法失败了。调用此方法，要进行判断。</returns>
-        public static async Task<string> SendInmationToUrlAndGetRes_V2(string roomUrl, string sendMsg)
+        static async Task<string> SendInmationToUrlAndGetRes_V2_Private(string roomUrl, string sendMsg)
         {
+            roomUrl = roomUrl.Trim();
+            sendMsg = sendMsg.Trim();
             #region 生产日志
 
             /*
@@ -30,7 +56,7 @@ namespace TcpFunction
 
 
             int testCount = 0;
-            while (true)
+            // while (true)
             {
                 try
                 {
@@ -42,22 +68,22 @@ namespace TcpFunction
                     {
                         using (TcpClient tc = new TcpClient())
                         {
-                            // tc.SendTimeout = 2000;
-                            //tc.ReceiveTimeout = 2000;
                             tc.Connect(ipa, int.Parse(roomUrl.Split(':')[1]));
-                            tc.SendTimeout = 300000; // 发送超时时间设置为5000毫秒
-                            tc.ReceiveTimeout = 300000; // 接收超时时间设置为5000毫秒
+                            tc.SendTimeout = clientTimeOut; // 发送超时时间设置为5000毫秒
+                            tc.ReceiveTimeout = clientTimeOut; // 接收超时时间设置为5000毫秒
+                                                               // tcpClientsSent.Add(roomUrl, tc);
 
                             if (tc.Connected)
                             {
                                 using (NetworkStream ns = tc.GetStream())
                                 {
-                                    ns.ReadTimeout = 10000;
-                                    ns.WriteTimeout = 10000;
+                                    // ns.Position = 0;
+                                    ns.ReadTimeout = networkStreamTimeOut;
+                                    ns.WriteTimeout = networkStreamTimeOut;
                                     var sendData = Encoding.UTF8.GetBytes(sendMsg);
-                                    Common.SendLength(sendData.Length, ns);
+                                    await Common.SendLength(sendData.Length, ns);
                                     //  Common.CheckBeforeReadReason reason;
-                                    var length = Common.ReceiveLength(ns);
+                                    var length = await Common.ReceiveLength(ns);
                                     if (sendData.Length == length) { }
                                     else
                                     {
@@ -68,10 +94,10 @@ namespace TcpFunction
                                     //  Common.CheckBeforeSend(ns);
                                     await ns.WriteAsync(sendData, 0, sendData.Length);
 
-                                    var length2 = Common.ReceiveLength(ns);
-                                    Common.SendLength(length2, ns);
-                                    byte[] bytes = Common.ByteReader(length2, ns);
-                                    result = Encoding.UTF8.GetString(bytes, 0, bytes.Length); 
+                                    var length2 = await Common.ReceiveLength(ns);
+                                    await Common.SendLength(length2, ns);
+                                    byte[] bytes = await Common.ByteReader(length2, ns);
+                                    result = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
                                 }
                             }
                         }
@@ -95,6 +121,7 @@ namespace TcpFunction
                     else
                     {
                         Console.WriteLine($"连接失败-正在重连第{testCount}次。roomUrl:{roomUrl},sendMsg:{sendMsg}");
+                        return null;
                     }
                 }
                 catch (Exception ex)
@@ -113,6 +140,7 @@ namespace TcpFunction
                     else
                     {
                         Console.WriteLine($"连接失败-正在重连第{testCount}次。roomUrl:{roomUrl},sendMsg:{sendMsg}");
+                        return null;
                     }
                 }
             }
@@ -120,9 +148,14 @@ namespace TcpFunction
 
 
 
-        public delegate string DealWith(string notifyJson, int tcpPort);
-        public static void ListenIpAndPort(string hostIP, int tcpPort, DealWith dealWith)
+
+
+        //static List<TcpClient> tcpClients = new List<TcpClient>();
+        //static object tcpClientsClock = new object();
+        static async void ListenIpAndPort_Private(string hostIP, int tcpPort, ResponseC.DealWith dealWith)
         {
+
+
             Int32 port = tcpPort;
             IPAddress localAddr = IPAddress.Parse(hostIP);
             var server = new TcpListener(localAddr, port);
@@ -131,47 +164,94 @@ namespace TcpFunction
             {
                 //   Console.Write("Waiting for a connection... ");
 
-                string notifyJson;
+                //  string notifyJson;
                 using (TcpClient client = server.AcceptTcpClient())
                 {
-                    client.ReceiveTimeout = 300000;
-                    client.SendTimeout = 300000;
+                    client.ReceiveTimeout = clientTimeOut;
+                    client.SendTimeout = clientTimeOut;
+
+                    using (NetworkStream ns = client.GetStream())
                     {
-                        using (NetworkStream ns = client.GetStream())
-                        {
-                            ns.ReadTimeout = 10000;
-                            ns.WriteTimeout = 10000;
-                            notifyJson = GetMsg01(client, ns);
-                            var outPut = dealWith(notifyJson, tcpPort);
-                            GetMsg02(client, ns, outPut);
-                        }
+                        ns.ReadTimeout = networkStreamTimeOut;
+                        ns.WriteTimeout = networkStreamTimeOut;
+                        string notifyJson = await GetMsg01(client, ns);
+                        var outPut = dealWith(notifyJson, tcpPort);
+                        await GetMsg02(client, ns, outPut);
                     }
+                    // lock (tcpClientsClock)
+                    {
+                        //   tcpClients.Add(client);
+                        //lock (tcpClientsClock)
+                        //{
+                        //    Thread Th = new Thread(() => ReadNS(client, tcpPort, dealWith));
+                        //    Th.Start();
+                        //}
+                    }
+
+                    //{
+                    //    using (NetworkStream ns = client.GetStream())
+                    //    {
+                    //        ns.ReadTimeout = 300000;
+                    //        ns.WriteTimeout = 300000;
+                    //        notifyJson = await GetMsg01(client, ns);
+                    //        var outPut = dealWith(notifyJson, tcpPort);
+                    //        await GetMsg02(client, ns, outPut);
+                    //    }
+                    //}
+                    //client.
                 }
             }
+
+            //Th.Abort();
         }
 
-        private static void GetMsg02(TcpClient client, NetworkStream ns, string outPut)
+        //public static async void ReadNS(TcpClient client, int tcpPort, DealWith dealWith)
+        //{
+        //    //for (int i = 0; i < tcpClients.Count; i++)
+        //    {
+
+        //        //lock (tcpClientsClock)
+        //        // var client = tcpClients[i];
+
+        //        while (true)
+        //        {
+        //            NetworkStream ns = client.GetStream();
+        //            {
+        //                // ns.Position = 0;
+
+        //                ns.ReadTimeout = networkStreamTimeOut;
+        //                ns.WriteTimeout = networkStreamTimeOut;
+        //                string notifyJson = await GetMsg01(client, ns);
+        //                var outPut = dealWith(notifyJson, tcpPort);
+        //                await GetMsg02(client, ns, outPut);
+        //                //  ns.Flush();
+        //            }
+        //        }
+        //    }
+        //}
+
+        static async Task GetMsg02(TcpClient client, NetworkStream ns, string outPut)
         {
             var sendData = Encoding.UTF8.GetBytes(outPut);
-            Common.SendLength(sendData.Length, ns);
-            var length2 = Common.ReceiveLength(ns);
+            await Common.SendLength(sendData.Length, ns);
+            var length2 = await Common.ReceiveLength(ns);
             if (length2 != sendData.Length)
             {
                 var msg = $"length2({length2})!= sendData.Length({sendData.Length})";
                 //Consol.WriteLine(msg);
                 throw new Exception(msg);
             }
-            var t = ns.WriteAsync(sendData, 0, sendData.Length);
-            t.GetAwaiter().GetResult();
+            await ns.WriteAsync(sendData, 0, sendData.Length);
+            // t.GetAwaiter().GetResult();
         }
 
-        private static string GetMsg01(TcpClient client, NetworkStream ns)
+        static async Task<string> GetMsg01(TcpClient client, NetworkStream ns)
         {
-            var length = Common.ReceiveLength(ns);
-            Common.SendLength(length, ns);
+            var length = await Common.ReceiveLength(ns);
+            await Common.SendLength(length, ns);
             byte[] bytes = new byte[length];
 
-            bytes = Common.ByteReader(length, ns);
+            bytes = await Common.ByteReader(length, ns);
             //  int bytesRead = await ns.ReadAsync(bytes, 0, length);
             //if (length != bytesRead)
             //{
@@ -288,7 +368,7 @@ namespace TcpFunction
     //}
     class Common
     {
-        internal static byte[] ByteReader(int length, Stream stream)
+        internal static async Task<byte[]> ByteReader(int length, Stream stream)
         {
             byte[] data = new byte[length];
             using (MemoryStream ms = new MemoryStream())
@@ -297,9 +377,9 @@ namespace TcpFunction
                 int numBytesReadsofar = 0;
                 while (true)
                 {
-                    numBytesRead = stream.Read(data, 0, data.Length);
+                    numBytesRead = await stream.ReadAsync(data, 0, data.Length);
                     numBytesReadsofar += numBytesRead;
-                    ms.Write(data, 0, numBytesRead);
+                    await ms.WriteAsync(data, 0, numBytesRead);
                     if (numBytesReadsofar == length)
                     {
                         break;
@@ -308,15 +388,15 @@ namespace TcpFunction
                 return ms.ToArray();
             }
         }
-        public static int ReceiveLength(NetworkStream ns)
+        public static async Task<int> ReceiveLength(NetworkStream ns)
         {
 
             byte[] bytes = new byte[4];
-            bytes = ByteReader(4, ns);
+            bytes = await ByteReader(4, ns);
             var length = bytes[0] * 256 * 256 * 256 + bytes[1] * 256 * 256 + bytes[2] * 256 + bytes[3] * 1;
             return length;
         }
-        public static void SendLength(int length, NetworkStream ns)
+        public static async Task SendLength(int length, NetworkStream ns)
         {
             var sendDataPreviw = new byte[]
             {
@@ -325,8 +405,7 @@ namespace TcpFunction
                 Convert.ToByte((length>>8)%256),
                 Convert.ToByte((length>>0)%256),
             };
-            var t = ns.WriteAsync(sendDataPreviw, 0, 4);
-            t.GetAwaiter().GetResult();
+            await ns.WriteAsync(sendDataPreviw, 0, 4);
         }
     }
 }

@@ -19,9 +19,10 @@ namespace ConsoleBitcoinChainApp
                 return _UriStr;
             }
         }
+
         public static Dictionary<string, long> GetTradeInfomationFromChain(string addr, out bool success)
         {
-            var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes_V2(UriStr, addr);
+            var t = TcpFunction.ResponseC.f.SendInmationToUrlAndGetRes_V2(UriStr, addr);
             var resultString = t.GetAwaiter().GetResult();
 
             if (t == null)

@@ -106,8 +106,8 @@ namespace WsOfWebClient
         }
         private void startTcp()
         {
-            var dealWithF = new TcpFunction.WithResponse.DealWith(StartTcpDealWithF);
-            TcpFunction.WithResponse.ListenIpAndPort(ConnectInfo.HostIP, ConnectInfo.tcpServerPort, dealWithF);
+            var dealWithF = new TcpFunction.ResponseC.DealWith(StartTcpDealWithF);
+            TcpFunction.ResponseC.f.ListenIpAndPort(ConnectInfo.HostIP, ConnectInfo.tcpServerPort, dealWithF);
         }
         //private async void startTcp()
         string StartTcpDealWithF(string notifyJson, int tcpPort)
@@ -226,7 +226,7 @@ namespace WsOfWebClient
             catch (Exception e)
             {
                 //
-                var fileContent=e.ToString();
+                var fileContent = e.ToString();
                 File.WriteAllText($"error{DateTime.Now.ToString("yyyyMMddHHmmss")}", fileContent);
                 return "";
                 //throw e;
@@ -383,7 +383,7 @@ namespace WsOfWebClient
                                                 RoadCode = pathValue.Substring(1, 10),
                                             }
                                             );
-                        var t = TcpFunction.WithResponse.SendInmationToUrlAndGetRes_V2($"{ip}:{tcpPort}", msg);
+                        var t = TcpFunction.ResponseC.f.SendInmationToUrlAndGetRes_V2($"{ip}:{tcpPort}", msg);
                         var resultString = t.GetAwaiter().GetResult();
 
                         context.Response.ContentType = "application/json";
@@ -1345,7 +1345,7 @@ namespace WsOfWebClient
                                                 Room.ConfirmTheTransactionF(s, att);
                                             }
                                         }; break;
-                                    case "CancleTheTransaction": 
+                                    case "CancleTheTransaction":
                                         {
                                             if (s.Ls == LoginState.LookForBuildings)
                                             {
@@ -1353,11 +1353,11 @@ namespace WsOfWebClient
                                                 Room.CancleTheTransactionF(s, ctt);
                                             }
                                         }; break;
-                                    case "ScoreTransaction": 
+                                    case "ScoreTransaction":
                                         {
                                             ScoreTransaction stt = Newtonsoft.Json.JsonConvert.DeserializeObject<ScoreTransaction>(returnResult.result);
                                             Room.ScoreTransactionF(s, stt);
-                                        };break;
+                                        }; break;
                                     default:
                                         {
                                             // Console.WriteLine(returnResult.result);
@@ -1468,7 +1468,7 @@ namespace WsOfWebClient
         //static Dictionary<string, ClientWebSocket> _sockets = new Dictionary<string, ClientWebSocket>();
         public static string sendInmationToUrlAndGetRes(string roomUrl, string sendMsg)
         {
-            var t1 = TcpFunction.WithResponse.SendInmationToUrlAndGetRes_V2(roomUrl, sendMsg);
+            var t1 = TcpFunction.ResponseC.f.SendInmationToUrlAndGetRes_V2(roomUrl, sendMsg);
             return t1.GetAwaiter().GetResult();
         }
 
