@@ -60,7 +60,9 @@ namespace TcpFunction
                     else
                     {
                         Console.WriteLine($"Error: {response.StatusCode}");
-                        throw new Exception(response.StatusCode.ToString());
+                        Console.WriteLine($"Error: SendInmationToUrlAndGetRes_V2");
+                        return "";
+                        //  throw new Exception(response.StatusCode.ToString());
                     }
                 }
                 //catch (Exception ex)
@@ -159,6 +161,7 @@ namespace TcpFunction
                     context.Response.ContentType = "application/json";
                     var bytes = Encoding.UTF8.GetBytes(result);
                     await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
+
                 });
             }
 

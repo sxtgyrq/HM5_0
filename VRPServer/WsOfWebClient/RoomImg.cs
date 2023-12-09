@@ -217,7 +217,7 @@ namespace WsOfWebClient
                 var receivedMsg = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[roomindex], sendMsg);
                 var t2 = DateTime.Now;
 
-                Console.WriteLine($"GetObjFileJson-{amid},花费{(t2 - t1).TotalSeconds}秒");
+                // Console.WriteLine($"GetObjFileJson-{amid},花费{(t2 - t1).TotalSeconds}秒");
 
                 return receivedMsg;
             }
@@ -268,7 +268,7 @@ namespace WsOfWebClient
             var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
         }
 
-        
+
     }
 
 

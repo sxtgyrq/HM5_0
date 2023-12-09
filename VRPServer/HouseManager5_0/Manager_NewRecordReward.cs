@@ -1,5 +1,5 @@
 ﻿using HouseManager5_0.RoomMainF;
-using Renci.SshNet.Messages.Authentication;
+//using Renci.SshNet.Messages.Authentication;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -543,7 +543,10 @@ namespace HouseManager5_0
 
 
 
-
+        public long MoneySumEarned
+        {
+            get { return this.MoneyForSave + this.MoneyForFixRoad; }
+        }
 
         public long MoneyForSave
         {
@@ -551,7 +554,7 @@ namespace HouseManager5_0
             {
                 if (this.Group.taskFineshedTime.ContainsKey(true))
                 {
-                    return this.Money;
+                    return Program.rm.roadFixFee.MoneyForSave(this.Money);
                 }
                 else
                 {
@@ -571,11 +574,11 @@ namespace HouseManager5_0
                                     {
                                         return 0;
                                     }
-                                    else return this.Money - basePart;
+                                    else return Program.rm.roadFixFee.MoneyForSave(this.Money - basePart);
                                 }
                                 else
                                 {
-                                    return this.Money;
+                                    return Program.rm.roadFixFee.MoneyForSave(this.Money);
                                 }
                             };
                         default: return 0;
@@ -584,7 +587,44 @@ namespace HouseManager5_0
             }
         }
 
-
+        public long MoneyForFixRoad
+        {
+            get
+            {
+                if (this.Group.taskFineshedTime.ContainsKey(true))
+                {
+                    return Program.rm.roadFixFee.MoneyForFixRoad(this.Money);
+                }
+                else
+                {
+                    switch (this.Group.groupNumber)
+                    {
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+                            {
+                                if (this.getCar().ability.costBusiness <= this.getCar().ability.Business)
+                                {
+                                    var basePart = (this.getCar().ability.Business * this.getCar().ability.Business - this.getCar().ability.costBusiness * this.getCar().ability.costBusiness) * Group.GameStartBaseMoney / (this.getCar().ability.Business * this.getCar().ability.Business);
+                                    //if (percent >)
+                                    if (this.Money - basePart < 0)
+                                    {
+                                        return 0;
+                                    }
+                                    else return Program.rm.roadFixFee.MoneyForFixRoad(this.Money - basePart);
+                                }
+                                else
+                                {
+                                    return Program.rm.roadFixFee.MoneyForFixRoad(this.Money);
+                                }
+                            };
+                        default: return 0;
+                    }
+                }
+            }
+        }
 
         public RoomMainF.RoomMain.commandWithTime.ReturningOjb returningOjb { get; set; }
 

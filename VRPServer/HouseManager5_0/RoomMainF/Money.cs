@@ -19,7 +19,8 @@ namespace HouseManager5_0.RoomMainF
             {
                 c = "MoneyForSaveNotify",
                 WebSocketID = player.WebSocketID,
-                MoneyForSave = player.MoneyForSave
+                MoneyForSave = player.MoneyForSave,
+                MoneyForFixRoad = player.MoneyForFixRoad
             };
             var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(tn);
             notifyMsg.Add(url);
@@ -74,7 +75,8 @@ namespace HouseManager5_0.RoomMainF
             }
             if (group != null)
             {
-                long money = 0;
+                long moneyMinusToCurrent = 0;
+                long moneyAddToDB = 0;
                 List<string> notifyMsg = new List<string>();
                 string BTCAddress = "";
                 // lock (group.PlayerLock)
@@ -90,20 +92,22 @@ namespace HouseManager5_0.RoomMainF
                             {
                                 case "half":
                                     {
-                                        money = group._PlayerInGroup[saveMoney.Key].MoneyForSave / 2;
-                                        if (money > 0)
+                                        moneyMinusToCurrent += group._PlayerInGroup[saveMoney.Key].MoneySumEarned / 2;
+                                        moneyAddToDB += group._PlayerInGroup[saveMoney.Key].MoneyForSave / 2;
+                                        if (moneyMinusToCurrent > 0)
                                         {
-                                            role.MoneySet(role.Money - money, ref notifyMsg);
+                                            role.MoneySet(role.Money - moneyMinusToCurrent, ref notifyMsg);
                                             //if (role.playerType == Player.PlayerType.player)
                                             // taskM.MoneySet((Player)role);
                                         }
                                     }; break;
                                 case "all":
                                     {
-                                        money = group._PlayerInGroup[saveMoney.Key].MoneyForSave;
-                                        if (money > 0)
+                                        moneyMinusToCurrent += group._PlayerInGroup[saveMoney.Key].MoneySumEarned;
+                                        moneyAddToDB += group._PlayerInGroup[saveMoney.Key].MoneyForSave;
+                                        if (moneyMinusToCurrent > 0)
                                         {
-                                            role.MoneySet(role.Money - money, ref notifyMsg);
+                                            role.MoneySet(role.Money - moneyMinusToCurrent, ref notifyMsg);
                                             //if (role.playerType == Player.PlayerType.player)
                                             //    taskM.MoneySet((Player)role);
 
@@ -156,52 +160,9 @@ namespace HouseManager5_0.RoomMainF
                 }
                 Startup.sendSeveralMsgs(notifyMsg);
 
-                if (money > 0)
+                if (moneyAddToDB > 0)
                 {
-                    if (BTCAddress == saveMoney.address)
-                    {
-                        DalOfAddress.MoneyAdd.AddMoney(saveMoney.address, money);
-                    }
-                    else
-                    {
-                        if (money < 50000)
-                        {
-                            var saveMoneyCount = money * 99 / 100;
-                            if (saveMoneyCount > 0)
-                            {
-
-                                DalOfAddress.MoneyAdd.AddMoney(saveMoney.address, saveMoneyCount);
-
-                                var tax = money - saveMoneyCount;
-                                if (tax > 0)
-                                {
-                                    this.WebNotify(group._PlayerInGroup[saveMoney.Key], $"转账，扣除{tax / 100}.{(tax % 100) / 10}{(tax % 100) % 10}手续费");
-                                    AddressMoneyGiveRecord.AddMoney(BTCAddress, saveMoney.address, saveMoneyCount);
-                                }
-
-
-                            }
-                        }
-                        else
-                        {
-                            var saveMoneyCount = money - 500;
-                            if (saveMoneyCount > 0)
-                            {
-
-                                DalOfAddress.MoneyAdd.AddMoney(saveMoney.address, saveMoneyCount);
-
-                                var tax = money - saveMoneyCount;
-                                if (tax > 0)
-                                {
-                                    this.WebNotify(group._PlayerInGroup[saveMoney.Key], $"转账，扣除{tax / 100}.{(tax % 100) / 10}{(tax % 100) % 10}手续费");
-                                    AddressMoneyGiveRecord.AddMoney(BTCAddress, saveMoney.address, saveMoneyCount);
-                                }
-
-
-                            }
-                        }
-                    }
-                    //if(saveMoney.address)
+                    DalOfAddress.MoneyAdd.AddMoney(saveMoney.address, moneyAddToDB);
                 }
 
             }

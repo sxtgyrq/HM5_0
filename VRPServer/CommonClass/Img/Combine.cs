@@ -102,31 +102,26 @@ namespace CommonClass.Img
         public MemoryStream GetMsWithFront()
         {
             var ms = new MemoryStream();
-            using (Image<Rgba32> img1 = Image.Load<Rgba32>(this._path1)) // load up source images
-            {
-                PngDecoder pd = new SixLabors.ImageSharp.Formats.Png.PngDecoder();
-                using (Image<Rgba32> img2 = Image.Load<Rgba32>(this._stream2, pd))
-                {
-                    using (Image<Rgba32> outputImage = new Image<Rgba32>(1200, 1200)) // create output image of the correct dimensions
-                    {
-                        // reduce source images to correct dimensions
-                        // skip if already correct size
-                        // if you need to use source images else where use Clone and take the result instead
-                        img1.Mutate(o => o.Resize(new Size(1200, 1200)));
-                        img2.Mutate(o => o.Resize(new Size(300, 300)));
-                        img2.Mutate(o => o.Rotate(RotateMode.Rotate270));
+            //using (Image<Rgba32> img1 = Image.Load<Rgba32>(this._path1)) // load up source images
+            //{
+            //    PngDecoder pd = new SixLabors.ImageSharp.Formats.Png.PngDecoder();
+            //    using (Image<Rgba32> img2 = Image.Load<Rgba32>(this._stream2, pd))
+            //    {
+            //        using (Image<Rgba32> outputImage = new Image<Rgba32>(1200, 1200)) // create output image of the correct dimensions
+            //        {
+            //            img1.Mutate(o => o.Resize(new Size(1200, 1200)));
+            //            img2.Mutate(o => o.Resize(new Size(300, 300)));
+            //            img2.Mutate(o => o.Rotate(RotateMode.Rotate270));
 
-                        //outputImage.Mutate(o => o.DrawText()
-                        // take the 2 source images and draw them onto the image
-                        outputImage.Mutate(o => o
-                            .DrawImage(img1, new Point(0, 0), 1f) // draw the first one top left
-                            .DrawImage(img2, new Point(10, 564), 1f) // draw the second next to it
-                        );
-                        outputImage.Save(ms, new PngEncoder());
-                    }
-                }
+            //            outputImage.Mutate(o => o
+            //                .DrawImage(img1, new Point(0, 0), 1f) // draw the first one top left
+            //                .DrawImage(img2, new Point(10, 564), 1f) // draw the second next to it
+            //            );
+            //            outputImage.Save(ms, new PngEncoder());
+            //        }
+            //    }
 
-            }
+            //}
             return ms;
         }
     }

@@ -22,7 +22,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Ubiety.Dns.Core;
+//using Ubiety.Dns.Core;
 using static BitCoin.Transtraction.TradeInfo;
 using static NBitcoin.Scripting.OutputDescriptor;
 using static WsOfWebClient.ConnectInfo;

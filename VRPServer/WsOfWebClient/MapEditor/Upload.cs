@@ -8,7 +8,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Ubiety.Dns.Core;
+//using Ubiety.Dns.Core;
 using static CommonClass.MapEditor;
 
 namespace WsOfWebClient.MapEditor

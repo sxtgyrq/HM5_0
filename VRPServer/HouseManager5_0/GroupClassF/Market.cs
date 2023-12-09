@@ -5,7 +5,7 @@ using HouseManager5_0.interfaceOfHM;
 using Microsoft.VisualBasic;
 using Model;
 using Org.BouncyCastle.Crypto;
-using Renci.SshNet.Messages.Transport;
+//using Renci.SshNet.Messages.Transport;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;

@@ -1696,6 +1696,7 @@ var objMain =
             case 'MoneyForSaveNotify':
                 {
                     moneyOperator.MoneyForSave = received_obj.MoneyForSave;
+                    moneyOperator.MoneyForFixRoad = received_obj.MoneyForFixRoad;
                     moneyOperator.updateMoneyForSave();
                 }; break;
             case 'LeftMoneyInDB':

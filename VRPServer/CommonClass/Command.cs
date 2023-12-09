@@ -94,6 +94,7 @@ namespace CommonClass
     public class MoneyForSaveNotify : CommandNotify
     {
         public long MoneyForSave { get; set; }
+        public long MoneyForFixRoad { get; set; }
     }
     public class GoodsSelectionNotify : CommandNotify
     {

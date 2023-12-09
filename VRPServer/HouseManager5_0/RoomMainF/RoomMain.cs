@@ -52,6 +52,7 @@ namespace HouseManager5_0.RoomMainF
             this.fileSM = new Manager_FileSave(this);
             this.modelBM = new Manager_BeginnerMode(this);
             this.breakRecordReward = new Manager_NewRecordReward(this);
+            this.roadFixFee = new Manager_RoadFixFee(this);
 
             // lock (PlayerLock)
             {
