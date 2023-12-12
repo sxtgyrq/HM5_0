@@ -22,7 +22,14 @@ namespace HouseManager5_0
         internal long MoneyForSave(long money)
         {
             return money * (100 - this.Tax) / 100;
-            throw new NotImplementedException();
+            //   throw new NotImplementedException();
+        }
+
+        internal long RefererFix(ref long referer)
+        {
+            referer = referer * 100 / (100 - Tax);
+            return referer;
+            // throw new NotImplementedException();
         }
     }
 

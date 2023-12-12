@@ -172,6 +172,15 @@ namespace HouseManager5_0.RoomMainF
         public void OrderToSubsidize(OrderToSubsidize ots)
         {
             // throw new Exception();
+            switch (ots.value)
+            {
+                case 0: { }; break;
+                case 10000: { }; break;
+                case 50000: { }; break;
+                case 100000: { }; break;
+                default: return;
+
+            }
 
             if (ots.value > 0)
             {
@@ -253,6 +262,9 @@ namespace HouseManager5_0.RoomMainF
                                                 {
                                                     UpdateReferAddr((Player)player);
                                                 }
+
+                                                Referer = Program.rm.roadFixFee.RefererFix(ref Referer);
+
                                                 player.MoneySet(player.Money + subsidizeGet + Referer, ref notifyMsg);
                                                 if (Referer > 0)
                                                 {
