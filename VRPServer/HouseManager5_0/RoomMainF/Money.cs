@@ -3,6 +3,7 @@ using DalOfAddress;
 using HouseManager5_0.interfaceOfHM;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Numerics;
 using System.Text;
 
@@ -163,6 +164,11 @@ namespace HouseManager5_0.RoomMainF
                 if (moneyAddToDB > 0)
                 {
                     DalOfAddress.MoneyAdd.AddMoney(saveMoney.address, moneyAddToDB);
+                    var role = group._PlayerInGroup[saveMoney.Key];
+                    var player = (Player)role;
+                    if (moneyAddToDB > 1)
+                        UpdateReferAddr((Player)player);
+
                 }
 
             }
@@ -172,6 +178,15 @@ namespace HouseManager5_0.RoomMainF
         public void OrderToSubsidize(OrderToSubsidize ots)
         {
             // throw new Exception();
+            switch (ots.value)
+            {
+                case 0: { }; break;
+                case 10000: { }; break;
+                case 50000: { }; break;
+                case 100000: { }; break;
+                default: return;
+
+            }
 
             if (ots.value > 0)
             {
@@ -250,9 +265,10 @@ namespace HouseManager5_0.RoomMainF
                                                 // var player = group._PlayerInGroup[ots.Key];
                                                 ((Player)player).BTCAddress = ots.address;
 
-                                                {
-                                                    UpdateReferAddr((Player)player);
-                                                }
+                                                SetReferAddr(ref player);
+
+                                                Referer = Program.rm.roadFixFee.RefererFix(ref Referer);
+
                                                 player.MoneySet(player.Money + subsidizeGet + Referer, ref notifyMsg);
                                                 if (Referer > 0)
                                                 {
@@ -283,7 +299,7 @@ namespace HouseManager5_0.RoomMainF
             }
         }
 
-        private void UpdateReferAddr(Player player)
+        private void SetReferAddr(ref Player player)
         {
             if (string.IsNullOrEmpty(player.BTCAddress))
             {
@@ -299,6 +315,37 @@ namespace HouseManager5_0.RoomMainF
             {
                 //从数据库获取
                 player.RefererAddr = DalOfAddress.introducerstabel.GetIntroducer(player.BTCAddress);
+            }
+            else if (BitCoin.CheckAddress.CheckAddressIsUseful(player.RefererAddr))
+            {
+                 
+            }
+            else
+            {
+                player.RefererAddr = "";
+            }
+        }
+
+        private void UpdateReferAddr(Player player)
+        {
+            /*
+             * 之前范了一个错误。就是登录的时候，引用此方法。登录的时候引用此方法，容易导致随意登录的账号（只是想登录退出）覆盖污染真实的转发者。
+             * 后来，将此方法，在存储积分的时候，进行引用。判断可存储积分>10,就可以更新
+             */
+            if (string.IsNullOrEmpty(player.BTCAddress))
+            {
+                return;
+            }
+
+            else if (string.IsNullOrEmpty(player.RefererAddr))
+            {
+                //从数据库获取
+                // player.RefererAddr = DalOfAddress.introducerstabel.GetIntroducer(player.BTCAddress);
+            }
+            else if (player.RefererAddr == player.BTCAddress)
+            {
+                //从数据库获取
+                //player.RefererAddr = DalOfAddress.introducerstabel.GetIntroducer(player.BTCAddress);
             }
             else if (BitCoin.CheckAddress.CheckAddressIsUseful(player.RefererAddr))
             {

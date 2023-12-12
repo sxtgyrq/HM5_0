@@ -34,8 +34,14 @@ namespace DalOfAddress
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="refereeAddr">这里指被介绍的人</param>
+        /// <param name="refererAddr">这里介绍人</param>
         public static void InsertOrUpdate(string refereeAddr, string refererAddr)
         {
+            //
             bool hasValue;
             using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
             {
@@ -43,7 +49,7 @@ namespace DalOfAddress
                 using (MySqlTransaction tran = con.BeginTransaction())
                 {
                     {
-                        string sQL = @"SELECT refererAddr FROM introducerstabel WHERE RefereeAddr=@RefereeAddr;";
+                        string sQL = @"SELECT refererAddr FROM introducerstabel WHERE RefereeAddr=@RefereeAddr;";//依据登录对象，选择介绍人。
                         using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                         {
                             command.Parameters.AddWithValue("@RefereeAddr", refereeAddr.Trim());
@@ -62,7 +68,7 @@ namespace DalOfAddress
 
                     }
                     if (hasValue)
-                    { 
+                    {
                         string sQL = @"UPDATE introducerstabel set refererAddr=@refererAddr WHERE RefereeAddr=@RefereeAddr;";
                         using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                         {
@@ -79,8 +85,8 @@ namespace DalOfAddress
                             }
                         }
                     }
-                    else 
-                    { 
+                    else
+                    {
                         string sQL = @"INSERT INTO introducerstabel (refererAddr,RefereeAddr)VALUES (@refererAddr,@RefereeAddr);";
                         using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                         {

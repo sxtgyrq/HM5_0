@@ -132,6 +132,13 @@
                 </button>
             </div>
             <div style="text-align:center;width:100%;">
+                <button id="BtnToClearOffLineWhenOrganize" style="width: 5em;
+        height: 3em;
+        margin-top: 1em;position:center;">
+                    清理离线
+                </button>
+            </div>
+            <div style="text-align:center;width:100%;">
                 <button id="BtnToDismissWhenOrganize" style="width: 5em;
         height: 3em;
         margin-top: 1em;position:center;">
@@ -150,6 +157,7 @@
         {
             var button_Exit = document.getElementById("BtnToDismissWhenOrganize");
             var button_Start = document.getElementById("BtnToStartGameWhenOrganize");
+            var button_ClearOffLine = document.getElementById("BtnToClearOffLineWhenOrganize");
 
             button_Exit.innerText = '解散';
             button_Exit.style.width = "5em";
@@ -160,6 +168,7 @@
                 objMain.ws.send(token.CommandStart + 'exit');
                 button_Start.onclick = function () { };
                 button_Exit.onclick = function () { };
+                button_ClearOffLine.onclick = function () { };
             };
 
             button_Start.style.width = "5em";
@@ -170,6 +179,18 @@
                 // this.onclick = function () { };
                 button_Start.onclick = function () { };
                 button_Exit.onclick = function () { };
+                button_ClearOffLine.onclick = function () { };
+            };
+            //  var div4 = document.createElement('div');
+            //div4.style.textAlign = 'center';
+            // var button_ClearOffLine = document.createElement("button");
+            button_ClearOffLine.innerText = '清理离线';
+            button_ClearOffLine.style.width = "5em";
+            button_ClearOffLine.style.height = "3em";
+            button_ClearOffLine.style.marginTop = "5em";
+            // button_ClearOffLine.style.backgroundColor = "orange";
+            button_ClearOffLine.onclick = function () {
+                objMain.ws.send(token.CommandStart + 'clear'); 
             };
         }
     },

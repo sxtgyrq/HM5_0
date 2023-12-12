@@ -45,13 +45,13 @@
         <table style="width:100%">
             <tr>
                 <td style="width:50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(50000)" >
-                        取出500.00
+                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(10000)" >
+                        取出100.00
                     </div>
                 </td>
                 <td style="width: 50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;"  onclick="subsidizeSys.subsidize(100000)" >
-                        取出1000.00
+                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;"  onclick="subsidizeSys.subsidize(50000)" >
+                        取出500.00
                     </div>
                 </td>
             </tr>
@@ -174,8 +174,8 @@
             document.getElementById('bitcoinSubsidizeAddressInput').style.background = 'rgba(255, 127, 127, 0.9)';
 
             if (/^[A-Z]{10}$/.test(bitcoinAddress) && subsidizeValue == 500000) {
-                var objssss = { 'c': 'SetNextPlace', 'Key': '', 'GroupKey': '', 'FastenPositionID': bitcoinAddress };
-                objMain.ws.send(JSON.stringify(objssss));
+                //var objssss = { 'c': 'SetNextPlace', 'Key': '', 'GroupKey': '', 'FastenPositionID': bitcoinAddress };
+                //objMain.ws.send(JSON.stringify(objssss));
             }
             else if (bitcoinAddress == "dy" && subsidizeValue == 500000) {
                 var objssss = { 'c': 'SetGroupLive', 'Key': '', 'GroupKey': '' };

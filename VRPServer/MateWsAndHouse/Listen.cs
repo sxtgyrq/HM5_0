@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -655,6 +656,50 @@ namespace MateWsAndHouse
                                         }
                                     }
                                 }
+                            }
+                            outPut = Newtonsoft.Json.JsonConvert.SerializeObject(membersOffLine);
+                        }; break;
+                    case "ClearOffLine":
+                        {
+                            CommonClass.CheckMembersIsAllOnLine teamBegain = Newtonsoft.Json.JsonConvert.DeserializeObject<CommonClass.CheckMembersIsAllOnLine>(notifyJson);
+
+                            List<TeamJoin> membersOffLine = new List<TeamJoin>(); ;
+                            Team t = null;
+                            lock (Program.teamLock)
+                            {
+                                t = Program.allTeams[teamBegain.TeamNumber];
+                            }
+                            if (t != null)
+                            {
+                                if (t.IsBegun) { }
+                                else
+                                {
+                                    //  bool hasMemberIsOffLine = false;
+                                    List<int> indexOffLine = new List<int>();
+                                    for (var i = 0; i < t.member.Count; i++)
+                                    {
+                                        if (IsOnline(t.member[i]))
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            membersOffLine.Add(t.member[i]);
+                                        }
+                                    }
+                                }
+                            }
+
+                            for (int i = 0; i < membersOffLine.Count; i++)
+                            {
+                                var msg = Newtonsoft.Json.JsonConvert.SerializeObject(new CommonClass.LeaveTeam()
+                                {
+                                    WebSocketID = membersOffLine[i].WebSocketID,
+                                    c = "LeaveTeam",
+                                    FromUrl = membersOffLine[i].FromUrl,
+                                    TeamIndex = t.TeamID.ToString(),
+                                });
+                                DealWith(msg, tcpPort);
                             }
                             outPut = Newtonsoft.Json.JsonConvert.SerializeObject(membersOffLine);
                         }; break;

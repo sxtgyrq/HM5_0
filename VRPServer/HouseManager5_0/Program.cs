@@ -51,7 +51,7 @@ namespace HouseManager5_0
             }
 
             // Console.WriteLine("Hello World!");
-            var version = "4.0.0";
+            var version = "4.23.12.20";
             string Text = $@"
 版本号{version}
 主要实现功能是寻宝、攻击、收集一体化。这是为前台提供新的服务！

@@ -35,42 +35,55 @@ namespace TcpFunction
 
         public async Task<string> SendInmationToUrlAndGetRes_V2(string roomUrl, string sendMsg)
         {
-            roomUrl = roomUrl.Trim();
-            sendMsg = sendMsg.Trim();
-
-            using (HttpClient client = new HttpClient())
+            for (int i = 0; i < 10; i++)
             {
-                //  try
+                try
                 {
-                    // Send an HTTP GET request to the URL
-                    var content = new StringContent(sendMsg, Encoding.UTF8, "application/json");
-                    HttpResponseMessage response = await client.PostAsync($"http://{roomUrl}/m", content);
+                    roomUrl = roomUrl.Trim();
+                    sendMsg = sendMsg.Trim();
 
-                    // Check if the response status code is successful (200 OK)
-                    if (response.IsSuccessStatusCode)
+                    using (HttpClient client = new HttpClient())
                     {
-                        // Read the JSON content as a string
-                        var data = await response.Content.ReadAsStringAsync();
+                        //  try
+                        {
+                            // Send an HTTP GET request to the URL
+                            var content = new StringContent(sendMsg, Encoding.UTF8, "application/json");
+                            HttpResponseMessage response = await client.PostAsync($"http://{roomUrl}/m", content);
 
-                        return data;
-                        // Now you can work with the JSON data
-                        // Console.WriteLine(json);
+                            // Check if the response status code is successful (200 OK)
+                            if (response.IsSuccessStatusCode)
+                            {
+                                // Read the JSON content as a string
+                                var data = await response.Content.ReadAsStringAsync();
+
+                                return data;
+                                // Now you can work with the JSON data
+                                // Console.WriteLine(json);
+                            }
+
+                            else if (i < 9)
+                            {
+                                continue;
+                            }
+                            else
+                            { 
+                                Console.WriteLine($"Error: {response.StatusCode}");
+                                Console.WriteLine($"Error: SendInmationToUrlAndGetRes_V2");
+                                return ""; 
+                            }
+                        }
+                        //catch (Exception ex)
+                        //{
+                        //    Console.WriteLine($"Exception: {ex.Message}");
+                        //}
                     }
 
-                    else
-                    {
-                        Console.WriteLine($"Error: {response.StatusCode}");
-                        Console.WriteLine($"Error: SendInmationToUrlAndGetRes_V2");
-                        return "";
-                        //  throw new Exception(response.StatusCode.ToString());
-                    }
+                    break;
+                    //return "";
                 }
-                //catch (Exception ex)
-                //{
-                //    Console.WriteLine($"Exception: {ex.Message}");
-                //}
+                catch { }
             }
-            //return "";
+            return "";
         }
 
         public class ResponseObj
@@ -134,6 +147,17 @@ namespace TcpFunction
                     //   ReceiveBufferSize = webWsSize,
                 };
 
+                //app.Use(async (context, next) =>
+                //{
+                //    // 设置响应头
+                //    context.Response.OnStarting(() =>
+                //    {
+                //        context.Response.Headers["Connection"] = "keep-alive";
+                //        return Task.CompletedTask;
+                //    });
+
+                //    await next.Invoke();
+                //});
 
                 app.UseWebSockets(webSocketOptions);
                 app.Map("/m", mainF);

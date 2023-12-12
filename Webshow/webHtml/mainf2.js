@@ -1697,12 +1697,21 @@ var objMain =
                 {
                     moneyOperator.MoneyForSave = received_obj.MoneyForSave;
                     moneyOperator.MoneyForFixRoad = received_obj.MoneyForFixRoad;
+
+                    if (moneyOperator.MoneyForSave > 1) {
+                        if (sessionStorage['addrAfterSuccess'] == undefined) { }
+                        else if (sessionStorage['addrAfterSuccess'] == '') { }
+                        else {
+                            /*从LeftMoneyInDB 移到 MoneyForSaveNotify*/
+                            /*预防只是登录一下，刷新真实数据*/
+                            nyrqUrl.set(sessionStorage['addrAfterSuccess']);
+                        }
+                    }
                     moneyOperator.updateMoneyForSave();
                 }; break;
             case 'LeftMoneyInDB':
                 {
-                    subsidizeSys.LeftMoneyInDB[received_obj.address] = received_obj.Money;
-                    nyrqUrl.set(received_obj.address);
+                    subsidizeSys.LeftMoneyInDB[received_obj.address] = received_obj.Money; 
                     subsidizeSys.updateMoneyOfSumSubsidizing();
                 }; break;
             case 'SupportNotify':
@@ -2249,7 +2258,7 @@ var objMain =
                 {
                     //reward.hasData(received_obj.title, received_obj.data, received_obj.list, received_obj.indexNumber);
                     // alert('有数据');
-                    reward.hasData(received_obj.title, received_obj.data, received_obj.array, received_obj.forwardArray ,received_obj.indexNumber);
+                    reward.hasData(received_obj.title, received_obj.data, received_obj.array, received_obj.forwardArray, received_obj.indexNumber);
                 }; break;
             case 'VerifyCodePic':
                 {
@@ -4733,9 +4742,24 @@ var createTeam = function (teamCreateFinish) {
             button_Exit.onclick = function () { };
         };
 
+        var div4 = document.createElement('div');
+        div4.style.textAlign = 'center';
+        var button_ClearOffLine = document.createElement("button");
+        button_ClearOffLine.innerText = '清理离线';
+        button_ClearOffLine.style.width = "5em";
+        button_ClearOffLine.style.height = "3em";
+        button_ClearOffLine.style.marginTop = "5em";
+        // button_ClearOffLine.style.backgroundColor = "orange";
+        button_ClearOffLine.onclick = function () {
+            objMain.ws.send(token.CommandStart + 'clear');
+        };
+
         div2.appendChild(button_Start);
         div3.appendChild(button_Exit);
+        div4.appendChild(button_ClearOffLine);
+
         document.getElementById('rootContainer').appendChild(div2);
+        document.getElementById('rootContainer').appendChild(div4);
         document.getElementById('rootContainer').appendChild(div3);
     }
 

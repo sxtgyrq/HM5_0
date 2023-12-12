@@ -104,6 +104,28 @@ namespace HouseManager5_0.GroupClassF
                         }
                         this.MoneySet(this.Money + car.ability.costVolume, ref notifyMsg);
 
+                        try
+                        {
+                            if (this.groupNumber >= 2)
+                            {
+                                if (car.ability.costVolume >= 1000)
+                                {
+                                    var msg = $"【{player.PlayerName}】带回了{CommonClass.F.LongToDecimalString(car.ability.costVolume)}积分。";
+                                    foreach (var item in player.Group._PlayerInGroup)
+                                    {
+                                        if (item.Value.Key != player.Key)
+                                        {
+                                            var other = item.Value;
+                                            this.that.WebNotify(other, msg);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch
+                        {
+                        }
+
                         if (this.Money >= player.getCar().ability.Business)
                         {
                             if (!this.taskFineshedTime.ContainsKey(true))

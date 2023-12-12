@@ -1457,6 +1457,12 @@ namespace WsOfWebClient
                 success = true;
                 return s;
             }
+            else if (returnResult.result == command_start + "clear")
+            {
+                s = Room.ClearOffLineAfterCreateTeam(s, connectInfoDetail, team, playerName, refererAddr);
+                return WaitCaptaiCommand(ref returnResult, ref s, command_start, team, playerName, refererAddr, connectInfoDetail, size, out success);
+
+            }
             else
             {
                 success = false;

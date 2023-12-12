@@ -1682,6 +1682,15 @@ namespace WsOfWebClient
             s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
             return s;
         }
+        //ClearOffLineAfterCreateTeam
+        internal static State ClearOffLineAfterCreateTeam(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail, TeamResult team, string playerName, string refererAddr)
+        {
+            var receivedMsg = Team.SetToClear(team);
+            // s = Room.setState(s, connectInfoDetail, LoginState.selectSingleTeamJoin);
+            return s;
+        }
+
+
         public static State GetRoomThenStartAfterCreateTeam(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail, TeamResult team, string playerName, string refererAddr)
         {
             /*
@@ -2165,6 +2174,19 @@ namespace WsOfWebClient
             var result = Startup.sendInmationToUrlAndGetRes($"{teamUrl}", msg);
             return result;
         }
+
+        //SetToClear
+        internal static string SetToClear(TeamResult team)
+        {
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(new CommonClass.CheckMembersIsAllOnLine()
+            {
+                c = "ClearOffLine",
+                TeamNumber = team.TeamNumber
+            });
+            var result = Startup.sendInmationToUrlAndGetRes($"{teamUrl}", msg);
+            return result;
+        }
+
 
         internal static int TeamMemberCountResult(int TeamNum)
         {

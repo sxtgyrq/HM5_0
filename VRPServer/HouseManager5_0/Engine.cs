@@ -618,6 +618,24 @@ namespace HouseManager5_0
             else
             {
                 this.WebNotify(player, $"错误的选择让您损失了{reduceValue / 100}.{(reduceValue % 100) / 10}{(reduceValue % 10)}。");
+                if (player.Group.groupNumber >= 2)
+                {
+                    if (reduceValue >= 500)
+                    {
+                        if (player.getCar().targetFpIndex > 0)
+                        {
+                            var msg = $"在去往{Program.dt.GetFpByIndex(player.getCar().targetFpIndex).FastenPositionName}的路上，【{player.PlayerName}】损失了{CommonClass.F.LongToDecimalString(reduceValue)}积分。";
+                            foreach (var item in player.Group._PlayerInGroup)
+                            {
+                                if (item.Value.Key != player.Key)
+                                {
+                                    var other = item.Value;
+                                    this.WebNotify(other, msg);
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             if (Program.dt.AllCrossesBGData.ContainsKey(selectionCenter.postionCrossKey))
