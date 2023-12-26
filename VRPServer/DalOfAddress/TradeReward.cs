@@ -186,7 +186,7 @@ waitingForAddition) VALUES (@startDate,@tradeIndex,@tradeAddress,@bussinessAddr,
                         tradeAddress = Convert.ToString(r["tradeAddress"]).Trim(),
                         tradeIndex = Convert.ToInt32(r["tradeIndex"]),
                         waitingForAddition = Convert.ToInt32(r["waitingForAddition"]),
-
+                         
                     };
                 }
                 else

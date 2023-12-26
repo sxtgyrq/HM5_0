@@ -1,11 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "XP4PRxaqqeAfIe9JZ/o/vgs8HmtxMgxCpOnJ0iDT0iB2VJXyic9lnoBpqpJZJeJMKpflrP+b7dj7+GV+E24VGQ==",
+  "dgSpecHash": "/EdW+opKep5u2VbPxZbWKLbjQAPJa8c1beDjsgDn9K5yV7ifXYHt42QaKLx/vEDT0mvsMJWnu6r3q1w6QOlAJQ==",
   "success": true,
   "projectFilePath": "E:\\Project\\HouseManager5_0\\VRPServer\\CubeImageTool\\CubeImageTool.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\sxtgy\\.nuget\\packages\\system.drawing.common\\8.0.0\\system.drawing.common.8.0.0.nupkg.sha512",
-    "C:\\Users\\sxtgy\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.32\\microsoft.netcore.app.host.win-x64.3.1.32.nupkg.sha512"
+    "C:\\Users\\sxtgy\\.nuget\\packages\\system.drawing.common\\8.0.0\\system.drawing.common.8.0.0.nupkg.sha512"
   ],
   "logs": []
 }

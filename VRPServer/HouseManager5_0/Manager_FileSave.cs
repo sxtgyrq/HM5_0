@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Threading;
 using RoomMain = HouseManager5_0.RoomMainF.RoomMain;
 
 namespace HouseManager5_0
@@ -198,6 +199,22 @@ namespace HouseManager5_0
 
                                                 }
 
+                                                Thread th = new Thread(() =>
+                                                {
+                                                    Thread.Sleep(1000);
+                                                    List<string> notifyMsgs2 = new List<string>();
+                                                    for (int i = 0; i < so.usedRoadsList.Count; i++)
+                                                    {
+                                                        /*
+                                                         *这里需要重新发送，是为了偶发性的前台道路不能显示做弥补 
+                                                         */
+                                                        var roadCode = so.usedRoadsList[i];
+                                                        player.DrawSingleRoadF(player, roadCode, ref notifyMsgs);
+
+                                                    }
+                                                    Startup.sendSeveralMsgs(notifyMsgs2);
+                                                });
+                                                th.Start();
                                                 /*
                                                  * step2 draw model
                                                  */
