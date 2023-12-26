@@ -504,7 +504,7 @@ namespace HouseManager5_0.GroupClassF
             if (traderewardtimerecordRecords.Count > 0 && traderewardtimerecordRecords.Count == playerList.Count)
             {
                 int findResultCount;
-                var r = DalOfAddress.traderewardtimerecord.Add(traderewardtimerecordRecords, out findResultCount);
+                var r = DalOfAddress.traderewardtimerecord.Add2(traderewardtimerecordRecords, out findResultCount);
 
                 if (r)
                 {
@@ -614,6 +614,7 @@ namespace HouseManager5_0.GroupClassF
                         }
                         else
                         {
+                            car.ability.setCostMiles(car.ability.costMiles + dor.costMile, player, car, ref notifyMsg);
                             that.WebNotify(player, "车来迟了，宝石被别人取走啦！");
                             that.diamondOwnerE.carParkOnRoad(dor.target, ref car, player, ref notifyMsg);
                             car.setState(player, ref notifyMsg, CarState.waitOnRoad);

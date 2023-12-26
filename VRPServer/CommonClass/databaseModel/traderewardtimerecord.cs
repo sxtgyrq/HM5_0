@@ -37,6 +37,7 @@ namespace CommonClass.databaseModel
             }
         }
         public int rank { get; set; }
+        public int attemptCount { get; set; }
     }
 
     public class introducedetai

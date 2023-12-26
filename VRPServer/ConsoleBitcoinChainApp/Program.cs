@@ -14,6 +14,28 @@ namespace ConsoleBitcoinChainApp
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
+            {
+                Console.Write("输入密码:");
+                var pass = string.Empty;
+                ConsoleKey key;
+                do
+                {
+                    var keyInfo = Console.ReadKey(intercept: true);
+                    key = keyInfo.Key;
+
+                    if (key == ConsoleKey.Backspace && pass.Length > 0)
+                    {
+                        Console.Write("\b \b");
+                        pass = pass[0..^1];
+                    }
+                    else if (!char.IsControl(keyInfo.KeyChar))
+                    {
+                        Console.Write("*");
+                        pass += keyInfo.KeyChar;
+                    }
+                } while (key != ConsoleKey.Enter);
+                DalOfAddress.Connection.SetPassWord(pass);
+            }
             Console.WriteLine(@"选择
 A   同步交易数据
 B   获取该付比特币

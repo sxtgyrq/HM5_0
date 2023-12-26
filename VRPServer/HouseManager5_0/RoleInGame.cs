@@ -9,6 +9,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace HouseManager5_0
 {
@@ -650,6 +651,17 @@ namespace HouseManager5_0
                 {
                     this.usedRoad.Add(roadCode, true);
                     this.DrawSingleRoadF((Player)this, roadCode, ref notifyMsgs);
+                    Thread th = new Thread(() =>
+                    {
+                        /*
+                         * 这里需要重新发送，是为了偶发性的前台道路不能显示做弥补
+                         */
+                        Thread.Sleep(1000);
+                        List<string> notifyMsgs2 = new List<string>();
+                        this.DrawSingleRoadF((Player)this, roadCode, ref notifyMsgs2);
+                        Startup.sendSeveralMsgs(notifyMsgs2);
+                    });
+                    th.Start();
                 }
         }
 

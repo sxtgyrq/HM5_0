@@ -65,6 +65,8 @@ namespace HouseManager5_0.RoomMainF
 
         public string SaveMoney(SaveMoney saveMoney)
         {
+
+
             GroupClassF.GroupClass group = null;
             //  lock (this.PlayerLock)
             {
@@ -87,8 +89,22 @@ namespace HouseManager5_0.RoomMainF
                         if (group._PlayerInGroup[saveMoney.Key].Bust) { }
                         else
                         {
+
+
                             var role = group._PlayerInGroup[saveMoney.Key];
+
+                            if (saveMoney.address.Trim() == role.BTCAddress.Trim() && BitCoin.CheckAddress.CheckAddressIsUseful(role.BTCAddress.Trim()))
+                            {
+
+                            }
+                            else
+                            {
+                                this.WebNotify(role, "存储前，请先登录。只能存到登录的地址。");
+                                return "";
+                            }
+
                             BTCAddress = role.BTCAddress;
+
                             switch (saveMoney.dType)
                             {
                                 case "half":
@@ -318,7 +334,7 @@ namespace HouseManager5_0.RoomMainF
             }
             else if (BitCoin.CheckAddress.CheckAddressIsUseful(player.RefererAddr))
             {
-                 
+
             }
             else
             {

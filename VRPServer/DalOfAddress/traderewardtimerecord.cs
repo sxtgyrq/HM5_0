@@ -8,6 +8,7 @@ namespace DalOfAddress
 {
     public class traderewardtimerecord
     {
+        [Obsolete]
         public static bool Add(List<CommonClass.databaseModel.traderewardtimerecord> dataItems, out int findResultCount)
         {
             if (dataItems.Count > 0)
@@ -86,6 +87,141 @@ TIMESTAMPDIFF(MICROSECOND,raceStartTime,raceEndTime) / 1000000.0 <{(firstItem.ra
 
         }
 
+        public static bool Add2(List<CommonClass.databaseModel.traderewardtimerecord> dataItems, out int findResultCount)
+        {
+            if (dataItems.Count > 0)
+            {
+
+                using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
+                {
+                    con.Open();
+                    using (MySqlTransaction tran = con.BeginTransaction())
+                    {
+                        try
+                        {
+                            var checkStartDate = dataItems[0].startDate;
+
+                            //  var firstItem =
+                            // dataItem.re
+                            if (TradeReward.HasDataToOperate(checkStartDate, con, tran))
+                            {
+                                {
+                                    var firstItem = dataItems[0];
+                                    firstItem.rewardGiven = 0;
+                                    var sql = $@"SELECT count(*) FROM traderewardtimerecord WHERE startDate={firstItem.startDate} AND raceMember<={firstItem.raceMember}  AND 
+TIMESTAMPDIFF(MICROSECOND,raceStartTime,raceEndTime) / 1000000.0 <{(firstItem.raceEndTime - firstItem.raceStartTime).TotalSeconds}";
+                                    using (MySqlCommand command = new MySqlCommand(sql, con))
+                                    {
+                                        findResultCount = Convert.ToInt32(command.ExecuteScalar());
+                                    }
+                                }
+                                int rows = 0;
+                                for (int i = 0; i < dataItems.Count; i++)
+                                {
+                                    if (string.IsNullOrEmpty(dataItems[i].applyAddr.Trim()))
+                                    {
+                                        rows++;
+                                    }
+                                    else
+                                    {
+                                        int exitCount = 0;
+                                        {
+                                            var sql = $@"SELECT count(*) FROM traderewardtimerecord WHERE startDate={dataItems[i].startDate} AND raceMember={dataItems[i].raceMember}  AND applyAddr='{dataItems[i].applyAddr}'";
+                                            ;
+                                            using (MySqlCommand command = new MySqlCommand(sql, con))
+                                            {
+                                                exitCount = Convert.ToInt32(command.ExecuteScalar());
+                                            }
+                                        }
+                                        if (exitCount == 0)
+                                        {
+                                            var dataItem = dataItems[i];
+                                            int attemptCount = 1;
+                                            var sql = "INSERT INTO traderewardtimerecord(startDate, raceMember, applyAddr, raceStartTime, raceEndTime, rewardGiven,attemptCount) VALUES(@startDate, @raceMember, @applyAddr, @raceStartTime, @raceEndTime, @rewardGiven,@attemptCount); ";
+                                            using (MySqlCommand commad = new MySqlCommand(sql, con))
+                                            {
+                                                commad.Parameters.AddWithValue(@"startDate", dataItem.startDate);
+                                                commad.Parameters.AddWithValue(@"raceMember", dataItem.raceMember);
+                                                commad.Parameters.AddWithValue(@"applyAddr", dataItem.applyAddr);
+                                                commad.Parameters.AddWithValue(@"raceStartTime", dataItem.raceStartTime);
+                                                commad.Parameters.AddWithValue(@"raceEndTime", dataItem.raceEndTime);
+                                                commad.Parameters.AddWithValue(@"rewardGiven", dataItem.rewardGiven);
+                                                commad.Parameters.AddWithValue(@"attemptCount", attemptCount);
+                                                var row = commad.ExecuteNonQuery();
+                                                rows += row;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var dataItem = dataItems[i];
+                                            var sql = @"UPDATE traderewardtimerecord
+    SET attemptCount=attemptCount+1
+    WHERE startDate=@startDate AND raceMember=@raceMember  AND applyAddr=@applyAddr";
+                                            using (MySqlCommand commad = new MySqlCommand(sql, con))
+                                            {
+                                                commad.Parameters.AddWithValue(@"startDate", dataItem.startDate);
+                                                commad.Parameters.AddWithValue(@"raceMember", dataItem.raceMember);
+                                                commad.Parameters.AddWithValue(@"applyAddr", dataItem.applyAddr);
+                                                var row = commad.ExecuteNonQuery();
+                                                rows += row;
+                                            }
+                                        }
+                                        {
+                                            var dataItem = dataItems[i];
+                                            var sql = $@"UPDATE traderewardtimerecord
+    SET 
+    raceStartTime=@raceStartTime,
+    raceEndTime=@raceEndTime
+    WHERE startDate=@startDate AND raceMember=@raceMember  AND applyAddr=@applyAddr AND 
+TIMESTAMPDIFF(MICROSECOND,raceStartTime,raceEndTime) / 1000000.0 >{(dataItem.raceEndTime - dataItem.raceStartTime).TotalSeconds}";
+                                            using (MySqlCommand commad = new MySqlCommand(sql, con))
+                                            {
+                                                commad.Parameters.AddWithValue(@"raceStartTime", dataItem.raceStartTime);
+                                                commad.Parameters.AddWithValue(@"raceEndTime", dataItem.raceEndTime);
+                                                commad.Parameters.AddWithValue(@"startDate", dataItem.startDate);
+                                                commad.Parameters.AddWithValue(@"raceMember", dataItem.raceMember);
+                                                commad.Parameters.AddWithValue(@"applyAddr", dataItem.applyAddr);
+                                                commad.ExecuteNonQuery(); 
+                                            }
+                                        }
+                                    }
+                                }
+                                if (rows == dataItems.Count)
+                                {
+                                    tran.Commit();
+                                    return true;
+                                }
+                                else
+                                {
+                                    tran.Rollback();
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                findResultCount = -1;
+                                tran.Rollback();
+                            }
+                            return false;
+                        }
+                        catch (Exception e)
+                        {
+                            throw e;
+                            throw new Exception("新增错误");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                findResultCount = -1;
+                return false;
+            }
+            // return 0;
+
+        }
+
+
         public static List<CommonClass.databaseModel.traderewardtimerecordShow> GetByStartDate(int startDate, int raceMember, bool limited)
         {
             List<CommonClass.databaseModel.traderewardtimerecordShow> list = new List<CommonClass.databaseModel.traderewardtimerecordShow>();
@@ -99,7 +235,8 @@ SELECT
 	TIMESTAMPDIFF( MICROSECOND, raceStartTime, raceEndTime ) AS raceTime,
 	rewardGiven,
 	raceStartTime,
-	raceEndTime 
+	raceEndTime,
+    attemptCount
 FROM
 	traderewardtimerecord 
 WHERE
@@ -120,7 +257,7 @@ WHERE
                         startDate = Convert.ToInt32(r["startDate"]),
                         endTime = Convert.ToDateTime(r["raceEndTime"]),
                         startTime = Convert.ToDateTime(r["raceStartTime"]),
-
+                        attemptCount = Convert.ToInt32(r["attemptCount"]),
                     };
                     list.Add(apply);
                 }

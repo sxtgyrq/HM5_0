@@ -368,37 +368,39 @@
                     //    <td style="text-align:center;">${list[i].rewardGiven}satoshi</td>
                     //</tr>`;
                     tableCenter += `<tr style="background:${bgColor}">
-                        <th colspan="1">任务↓</th>
-                        <th colspan="5">申请地址↓</th>
+                        <th colspan="2">任务↓</th>
+                        <th colspan="10">申请地址↓</th>
                     </tr>
                     <tr style="background:${bgColor}">
-                        <td style="text-align:center;vertical-align:middle;">${roleCountInTask}${list[i].TaskValue}</td>
-                        <td style="word-break:break-all;word-wrap:anywhere;" colspan="5">${list[i].applyAddr}</td>
+                        <td style="text-align:center;vertical-align:middle;" colspan="2">${roleCountInTask}${list[i].TaskValue}</td>
+                        <td style="word-break:break-all;word-wrap:anywhere;" colspan="10">${list[i].applyAddr}</td>
                     </tr>
                     <tr style="background:${bgColor}">
-                        <th>名次↓</th>
-                        <th colspan="5">起始↓</th>
+                        <th colspan="2">名次↓</th>
+                        <th colspan="10">起始↓</th>
                     </tr>
                     <tr style="background:${bgColor}">
-                        <td style="text-align:center;vertical-align:middle;">${list[i].rank}</td>
-                        <td colspan="5" style="text-align:center;">${list[i].startTimeStr}</td>
+                        <td style="text-align:center;vertical-align:middle;" colspan="2">${list[i].rank}</td>
+                        <td colspan="10" style="text-align:center;">${list[i].startTimeStr}</td>
                     </tr>
                     <tr style="background:${bgColor}">
-                        <th>比例↓</th>
-                        <th colspan="5">结束↓</th>
+                        <th colspan="2">比例↓</th>
+                        <th colspan="10">结束↓</th>
                     </tr>
                     <tr style="background:${bgColor}">
-                        <td style="text-align:center;vertical-align:middle;">${list[i].percentStr}</td>
-                        <td colspan="5" style="text-align:center;">${list[i].endTimeStr}</td>
+                        <td style="text-align:center;vertical-align:middle;"colspan="2">${list[i].percentStr}</td>
+                        <td colspan="10" style="text-align:center;">${list[i].endTimeStr}</td>
                     </tr>
 
                     <tr style="background:${bgColor}">
-                        <th colspan="3">奖励</th>
-                        <th colspan="3">耗时</th> 
+                        <th colspan="6">奖励</th>
+                        <th colspan="3">${(list[i].attemptCount < 0 ? '耗时' : '最佳成绩')}</th> 
+                        <th colspan="3">尝试次数</th> 
                     </tr>
                     <tr style="background:${bgColor}">
-                        <td style="text-align:center;" colspan="3">${list[i].rewardGiven}satoshi</td> 
+                        <td style="text-align:center;" colspan="6">${list[i].rewardGiven}satoshi</td> 
                         <td style="text-align:center;" colspan="3">${list[i].raceTimeStr}</td>   
+                         <td style="text-align:center;" colspan="3">${(list[i].attemptCount < 0 ? "不统计" : list[i].attemptCount)}</td>   
                     </tr>`;
                 }
                 var itemHtml = `<table border="1" style="margin-top:1em;">${tableCenter}</table>`;
