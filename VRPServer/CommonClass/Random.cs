@@ -98,5 +98,32 @@ namespace CommonClass
             }
             return hashString;
         }
+
+        public static int GetNitrogen(long sumSatoshi, ref System.Random randomMachine)
+        {
+            int defendLevel = 3;
+            long startValuel = 300;
+            long stepValue = 2;
+            int[] valuesMaybe = [3, 3, 3, 3, 3, 3, 3, 3, 3];
+            do
+            {
+                var indexMaybe = randomMachine.Next(0, valuesMaybe.Length);
+                if (valuesMaybe[indexMaybe] < 9)
+                    valuesMaybe[indexMaybe]++;
+                if (sumSatoshi <= startValuel)
+                {
+                    indexMaybe = randomMachine.Next(0, valuesMaybe.Length);
+                    defendLevel = valuesMaybe[indexMaybe];
+                    break;
+                }
+                else
+                {
+                    startValuel *= stepValue;
+                    continue;
+                }
+            }
+            while (true);
+            return defendLevel;
+        }
     }
 }

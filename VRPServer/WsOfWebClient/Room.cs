@@ -324,6 +324,9 @@ namespace WsOfWebClient
                     }
                 }
                 {
+
+                }
+                {
                     var checkIsOk = leaveGameIcon(connectInfoDetail);
                     if (checkIsOk) { }
                     else
@@ -490,6 +493,13 @@ namespace WsOfWebClient
 
                 coinIcon ci = new coinIcon();
                 if (SetModelCopy(ci, connectInfoDetail)) { }
+                else
+                {
+                    return s;
+                }
+
+                GoldIngotIcon gi=new GoldIngotIcon();
+                if (SetModelCopy(gi, connectInfoDetail)) { }
                 else
                 {
                     return s;
@@ -897,6 +907,49 @@ namespace WsOfWebClient
             public void setObj(string obj)
             {
                 ConnectInfo.CoinIconObj = obj;
+            }
+        }
+
+        class GoldIngotIcon : interfaceTag.modelForCopy
+        {
+            public string Tag { get { return ConnectInfo.GoldIngotBase64; } }
+
+            public string imgPath { get { return "rmb/Mdrop_T_10001_baseColor.jpg"; } }
+
+            public string mtlPath { get { return "rmb/yuanbao.mtl"; } }
+
+            public string objPath { get { return "rmb/yuanbao.obj"; } }
+
+            public string Command { get { return "SetGoldIngotIcon"; } }
+
+            public string GetImg()
+            {
+                return ConnectInfo.GoldIngotBase64;
+            }
+
+            public string GetMtl()
+            {
+                return ConnectInfo.GoldIngotMtl;
+            }
+
+            public string GetObj()
+            {
+                return ConnectInfo.GoldIngotObj;
+            }
+
+            public void SetImgBase64(string base64)
+            {
+                ConnectInfo.GoldIngotBase64 = base64;
+            }
+
+            public void SetMtl(string mtl)
+            {
+                ConnectInfo.GoldIngotMtl = mtl;
+            }
+
+            public void setObj(string obj)
+            {
+                ConnectInfo.GoldIngotObj = obj;
             }
         }
 

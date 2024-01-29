@@ -347,21 +347,21 @@
     <script src="douyin.js"></script>
     <script>
 
-                            //var touched = document.getElementById('touched');
-                            //document.body.addEventListener('mousedown', function (e) {
-                            //    showTouched(e.clientX, e.clientY);
-                            //});
-                            //document.body.addEventListener('touchstart', function (e) {
-                            //    showTouched(e.touches[0].clientX, e.touches[0].clientY);
-                            //});
-                            //function showTouched(x, y) {
-                            //    touched.style.left = (x - 10) + 'px';
-                            //    touched.style.top = (y - 10) + 'px';
-                            //    touched.style.display = 'block';
-                            //    setTimeout(function () {
-                            //        touched.style.display = 'none';
-                            //    }, 100);
-                            //}
+        //var touched = document.getElementById('touched');
+        //document.body.addEventListener('mousedown', function (e) {
+        //    showTouched(e.clientX, e.clientY);
+        //});
+        //document.body.addEventListener('touchstart', function (e) {
+        //    showTouched(e.touches[0].clientX, e.touches[0].clientY);
+        //});
+        //function showTouched(x, y) {
+        //    touched.style.left = (x - 10) + 'px';
+        //    touched.style.top = (y - 10) + 'px';
+        //    touched.style.display = 'block';
+        //    setTimeout(function () {
+        //        touched.style.display = 'none';
+        //    }, 100);
+        //}
     </script>
     <div style="text-shadow:0 0.1em 0.1em white;color:wheat;"></div>
     <audio id="backGroudMusick">
@@ -372,6 +372,16 @@
         <source src="bgm/notifySound_StartAndLookfor.ogg" type="audio/ogg" />
         <source src="bgm/notifySound_StartAndLookfor.mp3" type="audio/mpeg" />
     </audio>
+    <script src="Scripts/jscwlib.js"></script>
+    <!--<div id="morseCodeplayer"></div>-->
+    <script type="text/javascript">
+        var testF = function (inputV)
+        {
+            var m = new jscw({ "wpm": 25 });
+            //m.setText(inputV);
+            m.renderPlayer('morseCodeplayer', m);
+        }
+    </script>
     <img id="imgShownWhenTransimit" style="width:0px;max-height:0px;height:0px;max-width:0px;overflow:hidden;" src="Pic/driverimage/123.jpg" />
     <!--<img src="Pic/mapty.jpg" />-->
     <div id="rootContainer">

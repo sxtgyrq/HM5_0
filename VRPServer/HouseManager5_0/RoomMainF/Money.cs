@@ -279,7 +279,17 @@ namespace HouseManager5_0.RoomMainF
                                                 long subsidizeGet, subsidizeLeft;
                                                 DalOfAddress.MoneyGet.GetSubsidizeAndLeft(ots.address, ots.value, out subsidizeGet, out subsidizeLeft);
                                                 // var player = group._PlayerInGroup[ots.Key];
-                                                ((Player)player).BTCAddress = ots.address;
+                                                if (string.IsNullOrEmpty(((Player)player).BTCAddress))
+                                                {
+                                                    ((Player)player).BTCAddress = ots.address; 
+                                                    try
+                                                    {
+                                                        var addsuccess = DalOfAddress.traderewardtimerecord.Add3(int.Parse(player.Group.RewardDate), player.BTCAddress.Trim(), player.Group.groupNumber, ref Program.rm.rm);
+                                                        if (addsuccess)
+                                                            this.WebNotify(player, "您获取一个保底成绩，请在主页-荣誉里查看");
+                                                    }
+                                                    catch { }
+                                                }
 
                                                 SetReferAddr(ref player);
 

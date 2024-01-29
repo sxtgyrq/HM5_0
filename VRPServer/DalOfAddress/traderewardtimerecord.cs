@@ -181,7 +181,7 @@ TIMESTAMPDIFF(MICROSECOND,raceStartTime,raceEndTime) / 1000000.0 >{(dataItem.rac
                                                 commad.Parameters.AddWithValue(@"startDate", dataItem.startDate);
                                                 commad.Parameters.AddWithValue(@"raceMember", dataItem.raceMember);
                                                 commad.Parameters.AddWithValue(@"applyAddr", dataItem.applyAddr);
-                                                commad.ExecuteNonQuery(); 
+                                                commad.ExecuteNonQuery();
                                             }
                                         }
                                     }
@@ -372,6 +372,107 @@ ORDER BY
             }
             return rowAffected;
             //throw new NotImplementedException();
+        }
+
+        public static bool Add3(int startDate_Input, string applyAddr_Input, int raceMember_Input, ref Random rm)
+        {
+            CommonClass.databaseModel.traderewardtimerecord dataItem = new CommonClass.databaseModel.traderewardtimerecord()
+            {
+                applyAddr = applyAddr_Input,
+                raceEndTime = DateTime.Now,
+                raceStartTime = DateTime.Now.AddDays(-1).AddMilliseconds(rm.Next(1, 10000)),
+                raceMember = raceMember_Input,
+                rewardGiven = 0,
+                startDate = startDate_Input
+            };
+            if (!string.IsNullOrEmpty(dataItem.applyAddr))
+            {
+                dataItem.rewardGiven = 0;
+                using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
+                {
+                    con.Open();
+                    using (MySqlTransaction tran = con.BeginTransaction())
+                    {
+
+                        try
+                        {
+                            var checkStartDate = dataItem.startDate;
+                            if (TradeReward.HasDataToOperate(checkStartDate, con, tran))
+                            {
+                                {
+                                    int exitCount = 0;
+                                    {
+                                        var sql = $@"SELECT count(*) FROM traderewardtimerecord WHERE startDate={dataItem.startDate} AND raceMember={dataItem.raceMember}  AND applyAddr='{dataItem.applyAddr}'";
+                                        ;
+                                        using (MySqlCommand command = new MySqlCommand(sql, con))
+                                        {
+                                            exitCount = Convert.ToInt32(command.ExecuteScalar());
+                                        }
+                                    }
+                                    if (exitCount == 0)
+                                    {
+                                        if (Exit(con, tran, dataItem.applyAddr))
+                                        {
+                                            // var dataItem = dataItem;
+                                            int attemptCount = 1;
+                                            var sql = "INSERT INTO traderewardtimerecord(startDate, raceMember, applyAddr, raceStartTime, raceEndTime, rewardGiven,attemptCount) VALUES(@startDate, @raceMember, @applyAddr, @raceStartTime, @raceEndTime, @rewardGiven,@attemptCount); ";
+                                            using (MySqlCommand commad = new MySqlCommand(sql, con))
+                                            {
+                                                commad.Parameters.AddWithValue(@"startDate", dataItem.startDate);
+                                                commad.Parameters.AddWithValue(@"raceMember", dataItem.raceMember);
+                                                commad.Parameters.AddWithValue(@"applyAddr", dataItem.applyAddr);
+                                                commad.Parameters.AddWithValue(@"raceStartTime", dataItem.raceStartTime);
+                                                commad.Parameters.AddWithValue(@"raceEndTime", dataItem.raceEndTime);
+                                                commad.Parameters.AddWithValue(@"rewardGiven", dataItem.rewardGiven);
+                                                commad.Parameters.AddWithValue(@"attemptCount", attemptCount);
+                                                var row = commad.ExecuteNonQuery();
+                                                tran.Commit();
+                                                return true;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            return false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
+                            return false;
+                        }
+                        catch (Exception e)
+                        {
+                            return false;
+                        }
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        static bool Exit(MySqlConnection con, MySqlTransaction tran, string bTCAddress)
+        {
+            bTCAddress = bTCAddress.Trim();
+            if (string.IsNullOrEmpty(bTCAddress)) { return false; }
+            else
+            {
+                int exitCount = 0;
+                var sql = $"SELECT COUNT(*) FROM traderewardtimerecord WHERE applyAddr='{bTCAddress}';";
+                {
+                    using (MySqlCommand command = new MySqlCommand(sql, con))
+                    {
+                        exitCount = Convert.ToInt32(command.ExecuteScalar());
+                    }
+                }
+                return exitCount > 0;
+            }
         }
     }
 }

@@ -290,7 +290,9 @@ namespace HouseManager5_0.GroupClassF
                 msg = msg,
                 select = ts.select,
                 tsType = ts.tsType.ToString(),
-                Live = WhetherGoLive
+                Live = WhetherGoLive,
+                musicID = ""
+
             };
             return obj;
         }
@@ -625,12 +627,12 @@ namespace HouseManager5_0.GroupClassF
                     var priceStr = player.Ts.costPriceStr;
                     if (string.IsNullOrEmpty(Fp.region))
                     {
-                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到【{Fp.FastenPositionName}】收集1.00元？</b>";
+                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到【{Fp.FastenPositionName}】收集1.00宝？</b>";
                         // msg = $"<b>是否花费<span>{priceStr}<span>到【{Fp.FastenPositionName}】收集1.00元？</b>";
                     }
                     else
                     {
-                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00元？</b>";
+                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00宝？</b>";
                         // msg = $"<b>是否花费<span>{priceStr}<span>到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00元？</b>";
                     }
                 }
@@ -639,12 +641,12 @@ namespace HouseManager5_0.GroupClassF
                     var priceStr = player.Ts.costPriceStr;
                     if (string.IsNullOrEmpty(Fp.region))
                     {
-                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到【{Fp.FastenPositionName}】找【<span style=\"color:blue;text-shadow:1px 1px white;\">{owner.dyNickName}</span>】收集1.00元？</b>";
+                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到【{Fp.FastenPositionName}】找【<span style=\"color:blue;text-shadow:1px 1px white;\">{owner.dyNickName}</span>】收集1.00宝？</b>";
                         // msg = $"<b>是否花费<span>{priceStr}<span>到【{Fp.FastenPositionName}】收集1.00元？</b>";
                     }
                     else
                     {
-                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到[{Fp.region}]【{Fp.FastenPositionName}】找【<span style=\"color:blue;text-shadow:1px 1px white;\">{owner.dyNickName}</span>】收集1.00元？</b>";
+                        msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到[{Fp.region}]【{Fp.FastenPositionName}】找【<span style=\"color:blue;text-shadow:1px 1px white;\">{owner.dyNickName}</span>】收集1.00宝？</b>";
                         // msg = $"<b>是否花费<span>{priceStr}<span>到[{Fp.region}]【{Fp.FastenPositionName}】收集1.00元？</b>";
                     }
                 }

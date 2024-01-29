@@ -98,7 +98,8 @@ var objMain =
         Opponent: null,
         Teammate: null,
         NitrogenEffect: null,
-        CollectCoinIcon: null
+        CollectCoinIcon: null,
+        GoldIngotIcon: null
     },
     shieldGroup: null,
     confusePrepareGroup: null,
@@ -443,7 +444,7 @@ var objMain =
                 switch (changeIndexToMoney(collectIndex)) {
                     case 1:
                         {
-                            model = objMain.rmbModel['rmb1'].clone();
+                            model = objMain.ModelInput.GoldIngotIcon.obj.clone();//objMain.rmbModel['rmb1'].clone();
                         }; break;
                     case 5:
                         {
@@ -1624,6 +1625,29 @@ var objMain =
                     });
                     objMain.ws.send('SetCoinIcon');
                 }; break;
+            case 'SetGoldIngotIcon':
+                {
+                    ModelOperateF.f(received_obj, {
+                        bind: function (objectInput) {
+                            //objMain.ModelInput.ambushPrepare = objectInput;
+                            //objMain.ModelInput.directionArrow = objectInput;
+                            //var oldM = objectInput.children[0].material;
+                            //var newM = objectInput.children[0].material.clone();
+                            //newM.transparent = false;
+                            //newM.color = new THREE.Color(1.2, 1.2, 1.2);
+                            objectInput.name = 'goldIngotIcon'
+                            objMain.ModelInput.GoldIngotIcon =
+                            {
+                                'obj': objectInput
+                            };//objectInput;
+                        },
+                        transparent: { opacity: 0.8 },
+                        scale: { x: 0.006, y: 0.006, z: 0.006 },
+                        rotateX: -Math.PI / 2
+                    });
+                    objMain.ws.send('SetGoldIngotIcon');
+
+                }; break;
             case 'BradCastAnimateOfOthersCar3':
                 {
                     var passObj = JSON.parse(evt.data);
@@ -1711,7 +1735,7 @@ var objMain =
                 }; break;
             case 'LeftMoneyInDB':
                 {
-                    subsidizeSys.LeftMoneyInDB[received_obj.address] = received_obj.Money; 
+                    subsidizeSys.LeftMoneyInDB[received_obj.address] = received_obj.Money;
                     subsidizeSys.updateMoneyOfSumSubsidizing();
                 }; break;
             case 'SupportNotify':
@@ -2521,7 +2545,8 @@ var objMain =
     {
         loopCount: 0
     },
-    groupNumber: -1
+    groupNumber: -1,
+    jscwObj: null
 };
 var startA = function () {
     var connected = false;
@@ -2577,6 +2602,7 @@ var startA = function () {
             }
             ws.send(JSON.stringify({ c: 'CheckSession', session: session, RefererAddr: nyrqUrl.get() }));
             objMain.clicktrail = clicktrail.initialize();
+            objMain.jscwObj = new jscw({ "wpm": 17 });
         }
         //   alert("数据发送中...");
     };
@@ -2656,10 +2682,10 @@ function animate() {
                             //}
                             //else
                             {
-                                var scale = 0.006;//; objMain.mainF.getLength(objMain.camera.position, objMain.controls.target) / 1840;
+                                var scale = 0.020;//; objMain.mainF.getLength(objMain.camera.position, objMain.controls.target) / 1840;
                                 objMain.collectGroup.children[i].scale.set(scale, scale, scale);
                             }
-                            objMain.collectGroup.children[i].rotation.set(-Math.PI / 2, 0, Date.now() % 3000 / 3000 * Math.PI * 2);
+                            objMain.collectGroup.children[i].rotation.set(-Math.PI / 2, 0, Date.now() % 30000 / 30000 * Math.PI * 2);
                             //  objMain.collectGroup.children[i].position.y = 0;
                         }
                     }
@@ -2779,7 +2805,7 @@ function animate() {
                                             objMainTaskstate = 'collect';
                                             selectObj = objMain.collectGroup.children[i];
                                             scale = 0.01 * objMain.mainF.getLength(objMain.camera.position, position) / 10;
-                                            scale = Math.max(scale, 0.01);
+                                            scale = Math.max(scale, 0.03);
                                         }
                                 }
                             }
@@ -2924,7 +2950,7 @@ function animate() {
                                         selectObj.scale.set(scale, scale, scale);
                                         objMain.selectObj.obj = selectObj;
                                         objMain.selectObj.type = objMain.Task.state;
-                                        selectObj.rotation.set(-Math.PI / 2, 0, Date.now() % 600 / 600 * Math.PI * 2);
+                                        selectObj.rotation.set(-Math.PI / 2, 0, Date.now() % 6000 / 6000 * Math.PI * 2);
                                         {
                                             var collectPosition = selectObj.userData.collectPosition;
                                             var element = document.createElement('div');
@@ -4083,6 +4109,11 @@ var set3DHtml = function () {
                         //userData.objState
                         objMain.directionGroup.children[selectIndex].userData.objState = 1;
                         objMain.selection.initialize();
+                        switch (selectIndex) {
+                            case 1: { objMain.jscwObj.play('A'); }; break;
+                            case 2: { objMain.jscwObj.play('B'); }; break;
+                            case 3: { objMain.jscwObj.play('C'); }; break;
+                        }
                     }
                 }
                 else {
@@ -5272,8 +5303,10 @@ var operatePanel =
                             var postionCrossKey = objMain.directionGroup.children[1].userData.postionCrossKey;
                             var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey, 'uid': '' });
                             objMain.ws.send(json);
+                            objMain.jscwObj.play('A');
                             objMain.directionGroup.children[1].userData.objState = 1;
                             operatePanel.refresh();
+
                         }
                     }
                 }, objMain.directionGroup.children[1].userData.objState);
@@ -5285,6 +5318,7 @@ var operatePanel =
                             var postionCrossKey = objMain.directionGroup.children[2].userData.postionCrossKey;
                             var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey, 'uid': '' });
                             objMain.ws.send(json);
+                            objMain.jscwObj.play('B');
                             objMain.directionGroup.children[2].userData.objState = 1;
                             operatePanel.refresh();
                         }
@@ -5298,6 +5332,7 @@ var operatePanel =
                             var postionCrossKey = objMain.directionGroup.children[3].userData.postionCrossKey;
                             var json = JSON.stringify({ c: 'ViewAngle', 'rotationY': rotationY, 'postionCrossKey': postionCrossKey, 'uid': '' });
                             objMain.ws.send(json);
+                            objMain.jscwObj.play('C');
                             objMain.directionGroup.children[3].userData.objState = 1;
                             operatePanel.refresh();
                         }
@@ -5310,6 +5345,7 @@ var operatePanel =
 
                         if (objMain.directionGroup.children.length > 0) {
                             var json = JSON.stringify({ c: 'AskWhichToSelect' });
+                            objMain.jscwObj.play('ASK');
                             objMain.ws.send(json);
                         }
                     }
@@ -6511,13 +6547,13 @@ var DirectionOperator =
             for (var i = 1; i < objMain.directionGroup.children.length; i++) {
 
                 if (i == 1 && adviseObj.select == 'A') {
-                    selectIndex = i;
+                    selectIndex = i; 
                 }
                 else if (i == 2 && adviseObj.select == 'B') {
-                    selectIndex = i;
+                    selectIndex = i; 
                 }
                 else if (i == 3 && adviseObj.select == 'C') {
-                    selectIndex = i;
+                    selectIndex = i; 
                 }
             }
             if (selectIndex > 0) {

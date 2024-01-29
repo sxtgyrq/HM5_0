@@ -481,6 +481,7 @@ namespace CommonClass
         public int select { get; set; }
         public string tsType { get; set; }
         public bool Live { get; set; }
+        public string musicID { get; set; }
     }
 
     public class BradCastWhereToGoInSmallMap : CommandNotify
@@ -1349,7 +1350,7 @@ namespace CommonClass
         public string Key { get; set; }
         public string GroupKey { get; set; }
 
-        public class ReturnResultObj 
+        public class ReturnResultObj
         {
             public string addrFrom { get; set; }
             public string addrTo { get; set; }

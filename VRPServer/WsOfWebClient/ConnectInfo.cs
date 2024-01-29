@@ -150,5 +150,8 @@ namespace WsOfWebClient
         public static string CoinIconObj = "";
         public static string CoinIconMtl = "";
 
+        public static string GoldIngotBase64 = "";
+        public static string GoldIngotObj = "";
+        public static string GoldIngotMtl = "";
     }
 }

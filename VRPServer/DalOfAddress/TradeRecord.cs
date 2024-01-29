@@ -23,7 +23,7 @@ namespace DalOfAddress
         /// <summary>
         /// 交易股份所花积分，折合￥10.00
         /// </summary>
-        public const long TradeStockCost = 2000 * 100;
+        public const long TradeStockCost = 12000 * 100;
         public static string MsgSuccess
         {
             get
@@ -845,10 +845,11 @@ namespace DalOfAddress
                         }
                         {
                             // const long costMoney = 1000000;
-                            if (DalOfAddress.MoneyAdd.GetMoney(con, tran, addrTo) > costScore + 200000)//这里要扣卖家的积分。
+                            const long costMoneyOfBuyer = 11000 * 100;
+                            if (DalOfAddress.MoneyAdd.GetMoney(con, tran, addrTo) > costScore + costMoneyOfBuyer)//这里要扣积分卖家（股份买家）的积分。
                             {
                                 long subsidizeGet, subsidizeLeft;
-                                DalOfAddress.MoneyGet.GetSubsidizeAndLeft(con, tran, addrTo, costScore + 200000, out subsidizeGet, out subsidizeLeft);
+                                DalOfAddress.MoneyGet.GetSubsidizeAndLeft(con, tran, addrTo, costScore + costMoneyOfBuyer, out subsidizeGet, out subsidizeLeft);
                                 if (subsidizeLeft > 0)//这里千万不能等于0
                                 {
                                     DalOfAddress.MoneyAdd.AddMoney(addrFrom, costScore);
@@ -879,7 +880,7 @@ namespace DalOfAddress
                             else
                             {
                                 tran.Rollback();
-                                notifyMsg = $"{addrTo}积分储蓄不足{CommonClass.F.LongToDecimalString(costScore + 200000 + 1)}积分。";
+                                notifyMsg = $"{addrTo}积分储蓄不足{CommonClass.F.LongToDecimalString(costScore + costMoneyOfBuyer + 1)}积分。";
                                 return false;
                             }
                         }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BitcoinInputValueThenSign")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8b48fb7577a1085673c706c06db0a468c460521c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("BitcoinInputValueThenSign")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BitcoinInputValueThenSign")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

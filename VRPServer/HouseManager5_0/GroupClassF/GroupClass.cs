@@ -158,7 +158,7 @@ namespace HouseManager5_0.GroupClassF
             //lock (this.PlayerLock_)
             {
                 //var now = Convert.ToInt32((DateTime.Now - new DateTime(2000, 1, 1)).TotalDays);
-                string c = File.ReadAllText("config/RewardFastenPositionIDAndDate.txt");
+                string c = File.ReadAllText("DBPublish/RewardFastenPositionIDAndDate.txt");
                 c.Split(',');
                 var fastenPositionID = c.Split(',')[0];
                 var rewardDate = c.Split(',')[1];

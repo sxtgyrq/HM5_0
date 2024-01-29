@@ -14,13 +14,14 @@ namespace HouseManager5_0
          * 2023-01-10  值为55 //
          * 2023-01-17  值为60 //
          * 2023-01-24  值为89 //
+         * 2024-01-31  值为88 //
          */
 
         /*
          * 如果有交易，赔本的化，+(10-Tax%10)；如果有交易，挣了，-1；
          * 一周没有交易的话，-1；
          */
-        const long Tax = 89;//最小值1，最大值99
+        const long Tax = 92;//最小值1，最大值99
         public Manager_RoadFixFee(RoomMain roomMain)
         {
             this.roomMain = roomMain;
