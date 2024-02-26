@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using static CommonClass.PathCal;
+using static CommonClass.ResistanceDisplay_V3;
 using OssModel = Model;
 namespace HouseManager5_0
 {
@@ -36,6 +37,7 @@ namespace HouseManager5_0
         }
 
         Data.UserSDouyinGroup GetDouyinNameByFpID(string fastenPositionID, ref Random rm);
+        string getMusic(string fastenPositionID);
     }
 
     public partial class Data : GetRandomPos
@@ -320,7 +322,18 @@ namespace HouseManager5_0
             return result.ToArray();
         }
 
-
+        public string getMusic(string fastenPositionID)
+        {
+            if (this._fpMusic.ContainsKey(fastenPositionID))
+            {
+                return this._fpMusic[fastenPositionID];
+            }
+            else
+            {
+                return "";
+            }
+            // throw new NotImplementedException();
+        }
     }
     public partial class Data
     {
@@ -791,6 +804,8 @@ namespace HouseManager5_0
         /// </summary>
         Dictionary<string, Dictionary<int, OssModel.SaveRoad.RoadInfo>> _road;
 
+        Dictionary<string, string> _fpMusic;
+
 
         Dictionary<string, string> _roadName;
 
@@ -864,9 +879,48 @@ namespace HouseManager5_0
                 this.pathCal = new PathCal(this, fpDictionary);
                 this.pathCal.cal(unitTest);
             }
+            {
+                Dictionary<string, string> dictOfFPMusic = new Dictionary<string, string>();
+                {
 
+                    foreach (var item in this._allFp)
+                    {
+                        //dictOfFPMusic.Add(item.FastenPositionID, "");
+                        var singleMusicPath1 = $"{rootPath}\\DBPublish\\sound\\{item.FastenPositionID}.mp3";
+                        var singleMusicPath2 = $"{rootPath}\\DBPublish\\sound\\{item.FastenPositionID}.ogg";
+                        if (File.Exists(singleMusicPath1) && File.Exists(singleMusicPath2))
+                        {
+                            dictOfFPMusic.Add(item.FastenPositionID, item.FastenPositionID);
+                        }
+                        else
+                        {
+                            dictOfFPMusic.Add(item.FastenPositionID, "");
+                        }
+                    }
+
+                }
+                {
+                    this._fpMusic = dictOfFPMusic;
+
+                }
+            }
         }
-
+        public string[] GetFPMP3AndOGGID(string fastenPositionID)
+        {
+            var rootPath = System.IO.Directory.GetCurrentDirectory();
+            var singleMusicPath1 = $"{rootPath}\\DBPublish\\sound\\{fastenPositionID}.mp3";
+            var singleMusicPath2 = $"{rootPath}\\DBPublish\\sound\\{fastenPositionID}.ogg";
+            if (File.Exists(singleMusicPath1) && File.Exists(singleMusicPath2))
+            {
+                return new string[] { singleMusicPath1, singleMusicPath2 };
+                // dictOfFPMusic.Add(item.FastenPositionID, item.FastenPositionID);
+            }
+            else
+            {
+                return new string[] { };
+                // dictOfFPMusic.Add(item.FastenPositionID, "");
+            }
+        }
         public List<string> GetAllRoadCodes()
         {
             List<string> list = new List<string>();

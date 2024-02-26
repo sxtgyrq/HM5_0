@@ -73,3 +73,5 @@
 /VRPServer/Aliyun/bin/
 /VRPServer/Server/ReadSqlLiteAndWebPass/obj/
 /VRPServer/Server/ReadSqlLiteAndWebPass/bin/
+/VRPServer/CubeImageTool/obj/
+/VRPServer/FileUpload/obj/

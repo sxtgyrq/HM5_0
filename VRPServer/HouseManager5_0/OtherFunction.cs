@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using static CommonClass.ResistanceDisplay_V3;
 using static HouseManager5_0.Data;
 
 namespace HouseManager5_0
@@ -192,7 +193,75 @@ namespace HouseManager5_0
                 }
             }
 
+            {
+                Console.WriteLine("开始加载音乐");
+                var count = Program.dt.GetFpCount();
+                Console.WriteLine($"共有{count}个fp；");
+                for (int i = 0; i < count; i++)
+                {
+                    var fp = Program.dt.GetFpByIndex(i);
+                    var paths = Program.dt.GetFPMP3AndOGGID(fp.FastenPositionID);
+                    if (paths.Length == 0)
+                    {
+                        Console.WriteLine($"{i}---{fp.FastenPositionID}-{fp.FastenPositionName},没有音乐");
+                    }
+                    else if (paths.Length == 2)
+                    {
+                        Console.WriteLine($"{i}---{fp.FastenPositionID}-{fp.FastenPositionName},有音乐");
+                        {
+                            var data = File.ReadAllBytes(paths[0]);
+                            Aliyun.ByteData.Add($"fpbgmuic/{fp.FastenPositionID}.mp3", data);
+                        }
+                        {
+                            var data = File.ReadAllBytes(paths[1]);
+                            Aliyun.ByteData.Add($"fpbgmuic/{fp.FastenPositionID}.ogg", data);
+                        }
+                        // Console.ReadLine();
+                    }
+                    else
+                    {
+                        throw new Exception("");
+                    }
+                }
+            }
 
+        }
+
+        internal static void checkFPMusic()
+        {
+            Program.boundary = new Geometry.Boundary();
+            Program.boundary.load();
+            Program.dt = new Data();
+            
+            Program.dt.LoadRoad();
+            var dt = Program.dt;
+
+            while (true)
+            {
+                Console.WriteLine("开始加载音乐");
+                var count = Program.dt.GetFpCount();
+                Console.WriteLine($"共有{count}个fp；");
+                for (int i = 0; i < count; i++)
+                {
+                    var fp = Program.dt.GetFpByIndex(i);
+                    var paths = Program.dt.GetFPMP3AndOGGID(fp.FastenPositionID);
+                    if (paths.Length == 0)
+                    {
+                        Console.WriteLine($"{i}---{fp.FastenPositionID}-{fp.FastenPositionName},没有配音");
+                        Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(fp));
+                        Console.ReadLine();
+                    }
+                    else if (paths.Length == 2)
+                    {
+                        Console.WriteLine($"{i}---{fp.FastenPositionID}-{fp.FastenPositionName},有配音");
+                        //  Console.ReadLine();
+                    }
+                    else
+                    {
+                        throw new Exception("");
+                    }
+                }
+            } 
         }
     }
 }

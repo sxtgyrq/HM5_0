@@ -3,6 +3,11 @@
     "WSL": {
       "commandName": "WSL2",
       "distributionName": ""
+    },
+    "HouseManager5_0": {
+      "commandName": "Executable",
+      "executablePath": "E:\\Project\\HouseManager5_0\\VRPServer\\HouseManager5_0\\bin\\Debug\\net8.0\\HouseManager5_0.exe",
+      "nativeDebugging": true
     }
   }
 }

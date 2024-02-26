@@ -19,6 +19,7 @@ namespace HouseManager5_0
 --------- calMercator
 --------- sign
 --------- writeToAliyun
+--------- checkFPMusic
 --------- 
 ");
             var commandInput = Console.ReadLine();
@@ -69,11 +70,15 @@ namespace HouseManager5_0
                         }
                         OtherFunction.writeToAliyun();
                     }; break;
+                case "checkFPMusic":
+                    {
+                        OtherFunction.checkFPMusic();
+                    }; break;
 
             }
 
             // Console.WriteLine("Hello World!");
-            var version = "4.24.01.03";
+            var version = "4.24.02.03";
             string Text = $@"
 版本号{version}
 主要实现功能是寻宝、攻击、收集一体化。这是为前台提供新的服务！

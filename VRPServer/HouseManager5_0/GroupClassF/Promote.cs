@@ -355,7 +355,7 @@ namespace HouseManager5_0.GroupClassF
                         msg = $"<b>是否掏<span style=\"color:blue;text-shadow:1px 1px green;\">{priceStr}</span>路费到[{Fp.region}]【{Fp.FastenPositionName}】收集{diamondName}？</b>";
                     }
                 }
-                var obj = GetConfirmInfomation(player.WebSocketID, Fp, msg, player.Ts);
+                var obj = GetConfirmInfomation(player.WebSocketID, Fp, msg, player.Ts, gp);
                 var url = player.FromUrl;
                 var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
                 notifyMsgs.Add(url);

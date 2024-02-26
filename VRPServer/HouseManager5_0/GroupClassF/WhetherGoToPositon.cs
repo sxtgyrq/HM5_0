@@ -280,7 +280,7 @@ namespace HouseManager5_0.GroupClassF
             }
         }
 
-        public BradCastWhetherGoTo GetConfirmInfomation(int webSocketID, Model.FastonPosition fp, string msg, TargetForSelect ts)
+        public BradCastWhetherGoTo GetConfirmInfomation(int webSocketID, Model.FastonPosition fp, string msg, TargetForSelect ts, GetRandomPos gp)
         {
             var obj = new BradCastWhetherGoTo
             {
@@ -291,7 +291,7 @@ namespace HouseManager5_0.GroupClassF
                 select = ts.select,
                 tsType = ts.tsType.ToString(),
                 Live = WhetherGoLive,
-                musicID = ""
+                musicID = gp.getMusic(fp.FastenPositionID)
 
             };
             return obj;
@@ -661,7 +661,7 @@ namespace HouseManager5_0.GroupClassF
                     //}
                 }
             }
-            var obj = GetConfirmInfomation(player.WebSocketID, Fp, msg, player.Ts);
+            var obj = GetConfirmInfomation(player.WebSocketID, Fp, msg, player.Ts, gp);
             var url = player.FromUrl;
             var sendMsg = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             sendMsgs.Add(url);

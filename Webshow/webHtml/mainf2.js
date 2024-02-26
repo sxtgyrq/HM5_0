@@ -859,6 +859,76 @@ var objMain =
         },
         isSetByWeb: false
     },
+    targetMusic:
+    {
+        theme: [],
+        change: function (themeItem) {
+            try {
+                if (themeItem == '' || themeItem == null) {
+                    return;
+                }
+                else if (/^[A-Z]{10}$/.test(themeItem)) {
+                    objMain.targetMusic.theme.push(themeItem);
+                    if (objMain.targetMusic.theme.length > 3) {
+                        objMain.targetMusic.theme.shift();
+                    }
+                }
+                else if (themeItem == 'pass') {
+
+                }
+                else {
+                    return;
+                }
+                if (objMain.targetMusic.theme.length > 0) {
+                    var bgm = document.getElementById('fpBgSoundMusick');
+                    if (objMain.debug == 2) {
+                        if (bgm.currentTime === 0 || bgm.ended) {
+                            var fpID = objMain.targetMusic.theme[Math.floor(Math.random() * objMain.targetMusic.theme.length)]
+                            var itemCount = bgm.children.length - 1;
+                            for (var i = itemCount; i >= 0; i--) {
+                                bgm.children[i].remove();
+                            }
+                            var source1 = document.createElement('source');
+                            source1.src = 'https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/fpbgmuic/' + fpID + '.ogg';
+                            source1.type = 'audio/ogg';
+
+                            var source2 = document.createElement('source');
+                            source2.src = 'https://yrqmodeldata.oss-cn-beijing.aliyuncs.com/fpbgmuic/' + fpID + '.mp3';;
+                            source2.type = 'audio/mpeg';
+
+                            bgm.appendChild(source1);
+                            bgm.appendChild(source2);
+
+                            bgm.oncanplaythrough = function () {
+                                if (objMain.music.on) {
+                                    this.play();
+                                    var anotherBGM = document.getElementById('backGroudMusick');
+                                    anotherBGM.volume = 0.07;
+                                }
+                            };
+                            bgm.load();
+                            bgm.onended = function ()
+                            {
+                                setTimeout(() => {
+                                    var anotherBGM = document.getElementById('backGroudMusick');
+                                    anotherBGM.volume = 1;
+                                }, 1000); 
+                               // bgm.volume = 0.07;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (e) {
+                console.info('targetMusic音乐报错', e);
+                // console.log('targetMusic音乐报错', e);
+            }
+        },
+        on: true,
+        MarketRepeat: function () {
+        },
+        isSetByWeb: false
+    },
     background:
     {
         path: '',
@@ -2367,6 +2437,7 @@ var objMain =
                 {
                     whetherGo.obj = received_obj;
                     whetherGo.show(received_obj.msg);
+                    objMain.targetMusic.change(received_obj.musicID);
                 }; break;
             case 'BradCastWhereToGoInSmallMap':
                 {
@@ -4114,6 +4185,11 @@ var set3DHtml = function () {
                             case 2: { objMain.jscwObj.play('B'); }; break;
                             case 3: { objMain.jscwObj.play('C'); }; break;
                         }
+                        objMain.targetMusic.change();
+
+                        setTimeout(() => {
+                            objMain.targetMusic.change('pass');
+                        }, 3000);
                     }
                 }
                 else {
@@ -5306,7 +5382,9 @@ var operatePanel =
                             objMain.jscwObj.play('A');
                             objMain.directionGroup.children[1].userData.objState = 1;
                             operatePanel.refresh();
-
+                            setTimeout(() => {
+                                objMain.targetMusic.change('pass');
+                            }, 3000);
                         }
                     }
                 }, objMain.directionGroup.children[1].userData.objState);
@@ -5321,6 +5399,9 @@ var operatePanel =
                             objMain.jscwObj.play('B');
                             objMain.directionGroup.children[2].userData.objState = 1;
                             operatePanel.refresh();
+                            setTimeout(() => {
+                                objMain.targetMusic.change('pass');
+                            }, 3000);
                         }
                     }
                 }, objMain.directionGroup.children[2].userData.objState);
@@ -5335,6 +5416,9 @@ var operatePanel =
                             objMain.jscwObj.play('C');
                             objMain.directionGroup.children[3].userData.objState = 1;
                             operatePanel.refresh();
+                            setTimeout(() => {
+                                objMain.targetMusic.change('pass');
+                            }, 3000);
                         }
                     }
                 }, objMain.directionGroup.children[3].userData.objState);
@@ -6547,13 +6631,13 @@ var DirectionOperator =
             for (var i = 1; i < objMain.directionGroup.children.length; i++) {
 
                 if (i == 1 && adviseObj.select == 'A') {
-                    selectIndex = i; 
+                    selectIndex = i;
                 }
                 else if (i == 2 && adviseObj.select == 'B') {
-                    selectIndex = i; 
+                    selectIndex = i;
                 }
                 else if (i == 3 && adviseObj.select == 'C') {
-                    selectIndex = i; 
+                    selectIndex = i;
                 }
             }
             if (selectIndex > 0) {
