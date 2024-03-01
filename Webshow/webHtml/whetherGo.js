@@ -101,6 +101,7 @@
         var that = whetherGo;
         if (that.obj == null) { }
         else {
+            objMain.targetMusic.change('last');
             if (that.obj.tsType = "collect") {
                 if (objMain.carState["car"] == 'waitAtBaseStation' || objMain.carState["car"] == 'waitOnRoad') {
                     var fp = that.obj.Fp;

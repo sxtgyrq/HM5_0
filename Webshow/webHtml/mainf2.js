@@ -873,7 +873,7 @@ var objMain =
                         objMain.targetMusic.theme.shift();
                     }
                 }
-                else if (themeItem == 'pass') {
+                else if (themeItem == 'pass' || themeItem == 'last') {
 
                 }
                 else {
@@ -883,7 +883,9 @@ var objMain =
                     var bgm = document.getElementById('fpBgSoundMusick');
                     if (objMain.debug == 2) {
                         if (bgm.currentTime === 0 || bgm.ended) {
-                            var fpID = objMain.targetMusic.theme[Math.floor(Math.random() * objMain.targetMusic.theme.length)]
+                            var fpID = objMain.targetMusic.theme[Math.floor(Math.random() * objMain.targetMusic.theme.length)];
+                            if (themeItem == 'last')
+                                fpID = objMain.targetMusic.theme[objMain.targetMusic.theme.length - 1];
                             var itemCount = bgm.children.length - 1;
                             for (var i = itemCount; i >= 0; i--) {
                                 bgm.children[i].remove();
@@ -903,17 +905,23 @@ var objMain =
                                 if (objMain.music.on) {
                                     this.play();
                                     var anotherBGM = document.getElementById('backGroudMusick');
-                                    anotherBGM.volume = 0.07;
+                                    //anotherBGM.volume = 0.07;
+                                    anotherBGM.pause();
                                 }
                             };
                             bgm.load();
-                            bgm.onended = function ()
-                            {
+                            bgm.onended = function () {
                                 setTimeout(() => {
-                                    var anotherBGM = document.getElementById('backGroudMusick');
-                                    anotherBGM.volume = 1;
-                                }, 1000); 
-                               // bgm.volume = 0.07;
+                                    var bgm = document.getElementById('fpBgSoundMusick');
+                                    if (bgm.currentTime === 0 || bgm.ended) {
+                                        var anotherBGM = document.getElementById('backGroudMusick');
+                                        if (objMain.music.on)
+                                            anotherBGM.play();
+                                    }
+                                    //var anotherBGM = document.getElementById('backGroudMusick');
+                                    //anotherBGM.volume = 1;
+                                }, 1000);
+                                // bgm.volume = 0.07;
                             }
                         }
                     }
@@ -922,6 +930,14 @@ var objMain =
             catch (e) {
                 console.info('targetMusic音乐报错', e);
                 // console.log('targetMusic音乐报错', e);
+            }
+        },
+        addTheme: function (themeItem) {
+            if (/^[A-Z]{10}$/.test(themeItem)) {
+                objMain.targetMusic.theme.push(themeItem);
+                if (objMain.targetMusic.theme.length > 3) {
+                    objMain.targetMusic.theme.shift();
+                }
             }
         },
         on: true,
@@ -2437,7 +2453,8 @@ var objMain =
                 {
                     whetherGo.obj = received_obj;
                     whetherGo.show(received_obj.msg);
-                    objMain.targetMusic.change(received_obj.musicID);
+                    objMain.targetMusic.addTheme(received_obj.musicID);
+                    //objMain.targetMusic.change(received_obj.musicID);
                 }; break;
             case 'BradCastWhereToGoInSmallMap':
                 {
