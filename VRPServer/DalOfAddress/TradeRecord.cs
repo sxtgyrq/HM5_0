@@ -208,6 +208,87 @@ namespace DalOfAddress
             //  notifyMsg = "";
         }
 
+        public static bool AddToTradeCenterBySystem(int tradeIndex, string addrFrom, string addrBussiness, string sign, string msg, long passCoin, out string notifyMsg)
+        {
+            /*
+             * 当你读到这里的时候，一定，会有疑问，不要判addrFrom的余额吗？
+             * 再前天调用时余额已经判断。
+             * 二者这里插入，只能按顺序0,1,2,3,4,5自然排序，从而避免了数据库双花！
+             * addrBussiness addrFrom tradeIndex三个组成的主键，避免了数据库层面的双花！
+             */
+            if (passCoin < 2)
+            {
+                notifyMsg = "转到股份中心的最小股点是2sotashi";
+                return false;
+            }
+            else
+            {
+                var mysql = "INSERT INTO traderecord(msg,sign,bussinessAddr,tradeIndex,addrFrom,TimeStamping) VALUES(@msg,@sign,@bussinessAddr,@tradeIndex,@addrFrom,@TimeStamping);";
+
+                using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
+                {
+                    con.Open();
+                    using (MySqlTransaction tran = con.BeginTransaction())
+                    {
+                        try
+                        {
+                            if (TradeReward.CheckOccupied(tran, con, addrBussiness, addrFrom) >= tradeIndex)
+                            {
+                                notifyMsg = MsgMoneyIsLocked(addrFrom);
+                                tran.Rollback();
+                                return false;
+                            }
+                            else
+                            {
+                                int tradeIndexInDB;
+                                string sQL = "SELECT count(*) FROM traderecord WHERE bussinessAddr=@bussinessAddr AND addrFrom=@addrFrom";
+                                using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                                {
+                                    command.Parameters.AddWithValue("@bussinessAddr", addrBussiness);
+                                    command.Parameters.AddWithValue("@addrFrom", addrFrom);
+                                    tradeIndexInDB = Convert.ToInt32(command.ExecuteScalar());
+                                }
+                                if (tradeIndexInDB != tradeIndex)
+                                {
+                                    notifyMsg = "逻辑错误！！！";
+                                    tran.Rollback();
+                                    return false;
+                                }
+                            }
+                            {
+                                string sQL = mysql;
+                                // long moneycount;
+                                using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                                {
+                                    DateTime operateT = DateTime.Now;
+                                    command.Parameters.AddWithValue("@msg", msg);
+                                    command.Parameters.AddWithValue("@sign", sign);
+                                    command.Parameters.AddWithValue("@bussinessAddr", addrBussiness);
+                                    command.Parameters.AddWithValue("@tradeIndex", tradeIndex);
+                                    command.Parameters.AddWithValue("@addrFrom", addrFrom);
+                                    command.Parameters.AddWithValue("@TimeStamping", operateT);
+                                    command.ExecuteNonQuery();
+                                }
+                                long stockSumCenterValue = passCoin < 100 ? (passCoin - 1) : (passCoin * 99 / 100);
+                                long costStock = passCoin - stockSumCenterValue;
+                                Stocksum.AddStockCount(con, tran, addrFrom, stockSumCenterValue);
+                                notifyMsg = $"花费{costStock}satoshi股份，{stockSumCenterValue}satoshi股份已经进入交易市场。";
+                                tran.Commit();
+                                return true;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            throw e;
+                            throw new Exception("新增错误");
+                        }
+                    }
+                }
+            }
+            //  notifyMsg = "";
+        }
+
+
         /// <summary>
         /// 此方法用于测试。
         /// </summary>

@@ -477,13 +477,8 @@
             document.getElementById('roleStatePanel').remove();
             return;
         }
-        var fightSituationBtnName = '';
-        if (objMain.fightSituationGroup.children.length > 0) {
-            fightSituationBtnName = '取消查看';
-        }
-        else {
-            fightSituationBtnName = '查看态势';
-        }
+        var fightSituationBtnName = '交易态势';
+
         var html = `<div id="roleStatePanel" style="position: absolute; z-index: 8; top: calc(100% - 60px - 5.25em); left: calc(12em + 20px); width: 6em; height: 5.25em; border: solid 1px red; text-align: center; background: rgba(104, 48, 8, 0.85); color: #83ffff;">
         <div id="taskShowBtnToDisplayPanel" style="background: yellowgreen; 
         margin-top: 0.25em;
@@ -507,12 +502,8 @@
         while (document.getElementById('roleStatePanel') != null) {
             document.getElementById('roleStatePanel').remove();
         }
-        if (objMain.fightSituationGroup.children.length > 0) {
-            objMain.mainF.removeF.clearGroup(objMain.fightSituationGroup);
-            this.dealWithRoleState();
-        }
-        else {
-            objMain.ws.send(JSON.stringify({ 'c': 'GetFightSituation', 'Page': 0 }));
+        {
+            objMain.ws.send(JSON.stringify({ 'c': 'GetStockTradeCenterDetail' }));
         }
     },
     RefreshTaskCopy: function () {

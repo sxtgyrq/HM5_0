@@ -60581,6 +60581,24 @@
 
                 };
 
+                Message.prototype.getPublickFromSignatureString = function getPublickFromSignatureString(signatureString) {
+                    var result = [];
+                    var signature = Signature.fromCompact(new Buffer(signatureString, 'base64'));
+
+                    // recover the public key
+                    var ecdsa = new ECDSA();
+                    ecdsa.hashbuf = this.magicHash();
+                    ecdsa.sig = signature;
+                    var publicKey = ecdsa.toPublicKey();
+
+                    if (this._verify(publicKey, signature)) {
+                        return publicKey;
+                        // result.push(signatureAddress.toString());
+                    }
+                    else {
+                        return null;
+                    }
+                }
                 /**
                  * Instantiate a message from a message string
                  *
@@ -60694,11 +60712,54 @@
             else {
                 return false;
             }
-        },
+        }
+        window.yrqGetPublickFromSignatureString = function (msgInput, signature) {
+            var regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$/;
+            if (regex.test(signature)) {
+                var publicKey = new Message(msgInput).getPublickFromSignatureString(signature);
+                if (publicKey != null) {
+                    if (publicKey.compressed) {
+                        // var Address = bitcore.Address;
+                        //const script = new bitcore.Script.buildPublicKeyHashOut(publicKey);
+                        // const p2pkhScript = bitcore.Script.buildPublicKeyHashOut(publicKey);
+                        var combineUint8ArrayF = function (a1, a2) {
+                            const newBuffer = new ArrayBuffer(a1.length + a2.length);
+                            // 创建一个新的 Uint8Array 来操作这个 ArrayBuffer
+                            const newBytes = new Uint8Array(newBuffer);
+                            // 首先插入新的字节
+                            newBytes.set(a1, 0);
+                            // 然后插入原有的数据
+                            newBytes.set(a2, a1.length);
+                            return newBytes;
+                        }
 
-            window.yrqGetRandomPrivateKey = function () {
-                var privateKeyStr = bitcore.PrivateKey.fromRandom('livenet').toWIF();
-                return privateKeyStr;
+                        let ripe160 = bitcore.crypto.Hash.ripemd160(bitcore.crypto.Hash.sha256(publicKey.toBuffer()));
+
+                        // console.log('ripe160', ripe160);
+                        var bytesToInsert = new Uint8Array([0x00, 0x14]); //Buffer.from([0x00, 0x14]);
+                        //existingBytes = ripe160;
+                        const newBuffer = combineUint8ArrayF(bytesToInsert, ripe160);
+                        var step5 = bitcore.crypto.Hash.sha256(newBuffer);
+                        var step6 = bitcore.crypto.Hash.ripemd160(step5);
+                        var step7 = combineUint8ArrayF(new Uint8Array([0x05]), step6);
+                        var step8 = bitcore.crypto.Hash.sha256sha256(step7);
+                        var step9 = combineUint8ArrayF(step7, new Uint8Array([step8[0], step8[1], step8[2], step8[3]]));
+                        console.log('step9', step9);
+                        return [publicKey.toAddress().toString(), bitcore.Address.fromBuffer(step7).toString()];
+                    }
+                    else {
+                        return [publicKey.toAddress().toString()];
+                    }
+                }
+                else return [];
             }
+            else {
+                return [];
+            }
+        }
+        window.yrqGetRandomPrivateKey = function () {
+            var privateKeyStr = bitcore.PrivateKey.fromRandom('livenet').toWIF();
+            return privateKeyStr;
+        }
     }, { "bitcore-lib": 198, "bitcore-message": 271 }]
 }, {}, [273]);

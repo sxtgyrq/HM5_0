@@ -30,7 +30,7 @@
             </label> 
             
  <textarea id="subsidizePanelPromptPrivateKeyValue" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(127, 255, 127, 0.6);height:4em;overflow:hidden;" onchange="subsidizeSys.privateKeyChanged();"></textarea>
- 
+ </div>
        
         <div id="subsidizeBtnSignMsg" style="background: yellowgreen;
         margin-bottom: 0.25em;
@@ -124,6 +124,76 @@
 
             var el = document.getElementById('labelDivNeedToInputPrivateKey');
             el.classList.add('needToClick');
+        }
+    }
+}
+
+var okxAddrDisplay =
+{
+    id: 'WindowToShowAddrAfterOkxSigned',
+    html: function (addresses, signature) {
+        if (addresses.length == 2) {
+            var html =
+                `<div id="WindowToShowAddrAfterOkxSigned" style="position: absolute;
+        z-index: 8;
+        top: calc(10% - 1px);
+        width: 24em;
+        left: calc(50% - 12em);
+        height: auto;
+        border: solid 1px red;
+        text-align: center;
+        background: rgba(104, 48, 8, 0.85);
+        color: #83ffff;
+        overflow: hidden;
+        max-height: calc(90%);
+">
+<div>
+<div  style="
+        margin-bottom: 0.25em;
+        margin-top: 0.25em;border:1px solid gray;">
+            <label>
+                --↓↓↓请选择用于登录的地址↓↓↓--
+            </label> 
+ </div>
+        <div id="WindowToShowAddrAfterOkxSignedSelect1" style="background: yellowgreen;
+        margin-bottom: 0.25em;
+        margin-top: 0.25em;padding:0.25em 0 0.25em 0;" onclick="okxAddrDisplay.setParameter('${addresses[0]}','${signature}');">
+            ${addresses[0]}
+        </div>
+         <div id="WindowToShowAddrAfterOkxSignedSelect2" style="background: yellowgreen;
+        margin-bottom: 0.25em;
+        margin-top: 0.25em;padding:0.25em 0 0.25em 0;" onclick="okxAddrDisplay.setParameter('${addresses[1]}','${signature}');">
+            ${addresses[1]}
+        </div>
+    </div>`
+            return html;
+        }
+    },
+    show: function (addresses, signature, success) {
+        var that = okxAddrDisplay;
+        that.success = null;
+        that.msg = '';
+        if (addresses.length == 2) {
+            that.success = success;
+            var htmlContent = that.html(addresses, signature);
+            if (document.getElementById(that.id) == null) {
+                var frag = document.createRange().createContextualFragment(htmlContent);
+                frag.id = that.id;
+                document.body.appendChild(frag);
+            }
+        }
+        else if (addresses.length == 1)
+        {
+            that.success = success;
+            that.success(addresses[0], signature);
+        }
+    },
+    success: null,
+    msg: '',
+    setParameter: function (address, signature) {
+        var that = okxAddrDisplay;
+        if (that.success != null) {
+            that.success(address, signature);
         }
     }
 }

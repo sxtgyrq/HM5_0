@@ -498,7 +498,7 @@ namespace WsOfWebClient
                     return s;
                 }
 
-                GoldIngotIcon gi=new GoldIngotIcon();
+                GoldIngotIcon gi = new GoldIngotIcon();
                 if (SetModelCopy(gi, connectInfoDetail)) { }
                 else
                 {
@@ -2076,6 +2076,24 @@ namespace WsOfWebClient
                     Key = s.Key,
                 };
                 var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gfs);
+                respon = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+            }
+            {
+                // CommonF.SendData(respon, connectInfoDetail, 0);
+                return s;
+            }
+        }
+        internal static State GetStockTradeCenterDetail(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail)
+        {
+            string respon;
+            {
+                CommonClass.GetStockTradeCenterDetail gstcd = new GetStockTradeCenterDetail()
+                {
+                    c = "GetStockTradeCenterDetail",
+                    Key = s.Key,
+                    GroupKey = s.GroupKey,
+                };
+                var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gstcd);
                 respon = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
             }
             {

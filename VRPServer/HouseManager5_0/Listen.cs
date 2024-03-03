@@ -507,6 +507,11 @@ namespace HouseManager5_0
 
                             // outPut = objI.GetFightSituationF(fs);
                         }; break;
+                    case "GetStockTradeCenterDetail":
+                        {
+                            GetStockTradeCenterDetail gstcd = Newtonsoft.Json.JsonConvert.DeserializeObject<GetStockTradeCenterDetail>(notifyJson);
+                            outPut = objI.GetStockTradeCenterDetailF(gstcd);
+                        }; break;
                     case "GetTaskCopyDetail":
                         {
                             GetTaskCopyDetail gtd = Newtonsoft.Json.JsonConvert.DeserializeObject<GetTaskCopyDetail>(notifyJson);

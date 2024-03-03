@@ -584,42 +584,42 @@ namespace MarketConsoleApp
                 //string ip = this.servers[i].Split(':')[0];
                 //int port = int.Parse(this.servers[i].Split(':')[1]);
 
-                sendMsg(this.servers[i],
-                  Newtonsoft.Json.JsonConvert.SerializeObject(
-                      new CommonClass.MarketPrice()
-                      {
-                          c = "MarketPrice",
-                          count = this.mileCount,
-                          price = getPrice(this.mileCount),
-                          sellType = "mile",
-                      }));
-                sendMsg(this.servers[i],
-                 Newtonsoft.Json.JsonConvert.SerializeObject(
-                     new CommonClass.MarketPrice()
-                     {
-                         c = "MarketPrice",
-                         count = this.businessCount,
-                         price = getPrice(this.businessCount),
-                         sellType = "business",
-                     }));
-                sendMsg(this.servers[i],
-                 Newtonsoft.Json.JsonConvert.SerializeObject(
-                     new CommonClass.MarketPrice()
-                     {
-                         c = "MarketPrice",
-                         count = this.volumeCount,
-                         price = getPrice(this.volumeCount),
-                         sellType = "volume",
-                     }));
-                sendMsg(this.servers[i],
-                 Newtonsoft.Json.JsonConvert.SerializeObject(
-                     new CommonClass.MarketPrice()
-                     {
-                         c = "MarketPrice",
-                         count = this.speedCount,
-                         price = getPrice(this.speedCount),
-                         sellType = "speed",
-                     }));
+                //sendMsg(this.servers[i],
+                //  Newtonsoft.Json.JsonConvert.SerializeObject(
+                //      new CommonClass.MarketPrice()
+                //      {
+                //          c = "MarketPrice",
+                //          count = this.mileCount,
+                //          price = getPrice(this.mileCount),
+                //          sellType = "mile",
+                //      }));
+                //sendMsg(this.servers[i],
+                // Newtonsoft.Json.JsonConvert.SerializeObject(
+                //     new CommonClass.MarketPrice()
+                //     {
+                //         c = "MarketPrice",
+                //         count = this.businessCount,
+                //         price = getPrice(this.businessCount),
+                //         sellType = "business",
+                //     }));
+                //sendMsg(this.servers[i],
+                // Newtonsoft.Json.JsonConvert.SerializeObject(
+                //     new CommonClass.MarketPrice()
+                //     {
+                //         c = "MarketPrice",
+                //         count = this.volumeCount,
+                //         price = getPrice(this.volumeCount),
+                //         sellType = "volume",
+                //     }));
+                //sendMsg(this.servers[i],
+                // Newtonsoft.Json.JsonConvert.SerializeObject(
+                //     new CommonClass.MarketPrice()
+                //     {
+                //         c = "MarketPrice",
+                //         count = this.speedCount,
+                //         price = getPrice(this.speedCount),
+                //         sellType = "speed",
+                //     }));
             }
 
 

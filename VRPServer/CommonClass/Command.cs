@@ -1144,6 +1144,20 @@ namespace CommonClass
             public string[] Opponents { get; set; }
         }
     }
+    public class GetStockTradeCenterDetail : Command
+    {
+        public string Key { get; set; }
+        public string GroupKey { get; set; }
+
+        public class Result : Command
+        {
+            public bool IsLogined { get; set; }
+            public long Score { get; set; }
+            public long Sotoshi { get; set; }
+            public string BTCAddr { get; set; }
+        }
+    }
+
 
     public class GetTaskCopyDetail : Command
     {

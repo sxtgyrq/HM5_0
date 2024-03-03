@@ -104,6 +104,10 @@ var transactionBussiness = function () {
     };
     this.drawAgreementEditor = function () {
         // return;
+        var signPart = `<input type="button" value="在线签名"  onclick="transactionBussiness().signOnLine();" />`;
+        if (typeof window.okxwallet !== 'undefined') {
+            signPart = `<input type="button" value="okx签名"  onclick="transactionBussiness().okxSign();" />`;
+        }
         var html = `
 <div style="width:calc(100% - 5px);word-wrap:anywhere;word-break:break-all;border:solid 2px green;">
                 <div id="agreementErrMsg" style="color:red;margin-top:20px;"></div>
@@ -120,7 +124,7 @@ var transactionBussiness = function () {
                 </div>
                 <div>
                     <input type="button" value="生成协议"  onclick="setTransactionHtml.generateAgreement();" />
-                    <input type="button" value="在线签名"  onclick="transactionBussiness().signOnLine();" />
+                    ${signPart}
                 </div>
                 <div>
                     <label>协议</label>
@@ -159,7 +163,7 @@ var transactionBussiness = function () {
                 </div>
                 <div>
                     <input type="button" value="生成交易协议"  onclick="setTransactionHtml.generateTransactionWithScore();" />
-                    <input type="button" value="在线签名"  onclick="transactionBussiness().signOnLine();" />
+                     ${signPart}
                 </div>
                 <div>
                     <label>协议</label>
@@ -445,7 +449,7 @@ var transactionBussiness = function () {
                 return document.getElementById('agreementText').value != '';
             },
             function () {
-                $.notify('协议为空', 'info');
+                $.notify('协议为空，请先生成协议。', 'info');
             }, function (addr, sign) {
                 switch (objMain.groupNumber) {
                     case 2: { }; break;
@@ -458,6 +462,33 @@ var transactionBussiness = function () {
             },
             document.getElementById('agreementText').value)
     };
+    this.okxSign = function () {
+        if (objMain.stateNeedToChange.isLogin) {
+            if (document.getElementById(okxAddrDisplay.id) == null) {
+
+                async function signMessage(signStr) {
+                    try {
+                        const result = await window.okxwallet.bitcoin.signMessage(signStr, 'ecdsa');
+                        document.getElementById('signText').value = result;
+                    }
+                    catch (e) {
+                        if (e.code == 4001) {
+                            $.notify('欧意钱包拒绝了签名', 'warn')
+                        }
+                    }
+                }
+                if (document.getElementById('agreementText').value != '') {
+                    signMessage(document.getElementById('agreementText').value);
+                }
+                else {
+                    $.notify('协议为空，请先生成协议。', 'info');
+                }
+            }
+        }
+        else {
+            $.notify('你还没有登录', 'warn')
+        }
+    }
     this.notifyMsg = function (show) {
         if (show) {
             var html = ` <div id="msgToNotifyWhenDetail" style="font-size:calc(1.25em - 2px);position: fixed; z-index: 9;width:calc(2.5em - 2px); max-width: 2.5em; text-align: center; right: calc(0.5em + 7px); bottom: calc(2.5em + 8px);">按设置键退出详情模式<span style="width:calc(2.5em - 2px);">↓</span></div>`;
@@ -480,10 +511,10 @@ var transactionBussiness = function () {
                             {
                                 if (document.getElementById('confirmTransactionBusinessPanel') != null) {
                                     var innerHtml = `<input type="button" value="确认" onclick="setTransactionHtml.confirmTransaction('${inputObj.Hash256Code}');" />
-                    <div>点击确认后，将用${((inputObj.TradeScore + 200000) / 100).toFixed(2)}积分换此处的${(inputObj.PassCoin / 100000000).toFixed(8)}点股份，其中2000.00积分是交易消耗。对方获得${(inputObj.TradeScore / 100).toFixed(2)}积分</div>`;
+                    <div>点击确认后，将用${((inputObj.TradeScore + 1100000) / 100).toFixed(2)}积分换此处的${(inputObj.PassCoin / 100000000).toFixed(8)}点股份，其中11000.00积分是交易消耗。对方获得${(inputObj.TradeScore / 100).toFixed(2)}积分</div>`;
                                     document.getElementById('confirmTransactionBusinessPanel').innerHTML = innerHtml;
                                 }
-                                transactionBussiness().showAgreement(inputObj.Msg); 
+                                transactionBussiness().showAgreement(inputObj.Msg);
                             }; break;
                         case 'canCancle'://needToAgree
                             {
@@ -495,12 +526,12 @@ var transactionBussiness = function () {
                             }; break;
                         case 'success_buyer':
                             {
-                                var innerHtml = `<div>交易完成。用${((inputObj.TradeScore + 200000) / 100).toFixed(2)}积分交换了换此处的${(inputObj.PassCoin / 100000000).toFixed(8)}点股份，其中2000.00积分是交易消耗。对方获得${(inputObj.TradeScore / 100).toFixed(2)}积分</div>`;
+                                var innerHtml = `<div>交易完成。用${((inputObj.TradeScore + 1100000) / 100).toFixed(2)}积分交换了换此处的${(inputObj.PassCoin / 100000000).toFixed(8)}点股份，其中11000.00积分是交易消耗。对方获得${(inputObj.TradeScore / 100).toFixed(2)}积分</div>`;
                                 document.getElementById('confirmTransactionBusinessPanel').innerHTML = innerHtml;
                             }; break;
                         case 'success_seller':
                             {
-                                var innerHtml = `<div>交易完成。用此处的${(inputObj.PassCoin / 100000000).toFixed(8)}点股份交换了${(inputObj.TradeScore / 100).toFixed(2)}积分。对方支付了${((inputObj.TradeScore + 200000) / 100).toFixed(2)}积分，其中2000.00积分是交易消耗</div>`;
+                                var innerHtml = `<div>交易完成。用此处的${(inputObj.PassCoin / 100000000).toFixed(8)}点股份交换了${(inputObj.TradeScore / 100).toFixed(2)}积分。对方支付了${((inputObj.TradeScore + 1100000) / 100).toFixed(2)}积分，其中11000.00积分是交易消耗</div>`;
                                 document.getElementById('confirmTransactionBusinessPanel').innerHTML = innerHtml;
                             }; break;
                         case 'fail':
@@ -526,7 +557,7 @@ var transactionBussiness = function () {
             'c': 'CancleTheTransaction',
             'hasCode': hasCode,
             'businessAddr': businessAddr,
-        }; 
+        };
         return JSON.stringify(obj);
     };
     return this;

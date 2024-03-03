@@ -128,7 +128,7 @@ namespace HouseManager5_0.interfaceOfHM
 
 
         string GetRoadMeshF(GetRoadMesh tbm);
-
+       
     }
 
     interface MapEditor
@@ -215,5 +215,6 @@ namespace HouseManager5_0.interfaceOfHM
 
         string DouyinLogContentF(DouyinLogContent douyinLog);
         string SetGroupIsLive(SetGroupLive sgl);
+        string GetStockTradeCenterDetailF(GetStockTradeCenterDetail gstcd);
     }
 }

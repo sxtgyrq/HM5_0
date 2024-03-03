@@ -2576,6 +2576,10 @@ var objMain =
                 {
                     setTransactionHtml.editAgreementPanelWhenTransactionWithScore(received_obj);
                 }; break;
+            case 'GetStockTradeCenterDetail.Result':
+                {
+                    stocktradecenter.add();
+                }; break;
             default:
                 {
                     console.log('命令未注册', received_obj.c + "__没有注册。");
@@ -2728,6 +2732,9 @@ var startA = function () {
             }
         }
     });
+    if (typeof window.okxwallet !== 'undefined') {
+        okxwallet.bitcoin.connect();
+    }
 }
 startA();
 window.requestAnimationFrame =
@@ -4232,6 +4239,7 @@ var set3DHtml = function () {
                 }
 
                 operatePanel.refresh();
+                onWindowResize();
             }
         }
         //objMain.ws

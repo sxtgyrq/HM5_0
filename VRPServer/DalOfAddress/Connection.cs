@@ -43,5 +43,22 @@ namespace DalOfAddress
                 Connection.password = pass;
             }
         }
+
+        public static void UpdateMysql()
+        {
+            Console.WriteLine("输入confirm将要变更数据库结构了。请知悉");
+            if (Console.ReadLine() == "confirm") 
+            {
+                //string script = File.ReadAllText("update20240411.sql");
+                //using (MySqlConnection con = new MySqlConnection(ConnectionStrValue_))
+                //{
+                //    con.Open();
+                //    Console.WriteLine($"Database:{con.Database}");
+                //    Console.WriteLine($"DataSource:{con.DataSource}");
+
+                //}
+            }
+            //    throw new NotImplementedException();
+        }
     }
 }

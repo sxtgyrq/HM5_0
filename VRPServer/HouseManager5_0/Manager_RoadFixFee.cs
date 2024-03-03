@@ -21,7 +21,7 @@ namespace HouseManager5_0
          * 如果有交易，赔本的化，+(10-Tax%10)；如果有交易，挣了，-1；
          * 一周没有交易的话，-1；
          */
-        const long Tax = 91;//最小值1，最大值99
+        const long Tax = 89;//最小值1，最大值99
         public Manager_RoadFixFee(RoomMain roomMain)
         {
             this.roomMain = roomMain;
@@ -41,7 +41,7 @@ namespace HouseManager5_0
 
         internal long RefererFix(ref long referer)
         {
-            referer = referer * 100 / (100 - Manager_RoadFixFee.Tax);
+            // referer = referer * 100 / (100 - Manager_RoadFixFee.Tax);
             return referer;
             // throw new NotImplementedException();
         }

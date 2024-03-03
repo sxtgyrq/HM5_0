@@ -1,4 +1,5 @@
-﻿using CommonClass;
+﻿using BitCoin;
+using CommonClass;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,6 +21,9 @@ namespace HouseManager5_0
         //}
         string IP { get; set; }
         int port { get; set; }
+        public string TradingCenterAddr { get; private set; }
+        string PrivateKey { get; set; }
+
         public Market(PriceChanged priceChanged)
         {
             this.mile_Price = null;
@@ -46,7 +50,28 @@ namespace HouseManager5_0
                 var text = $"{this.IP}:{this.port}";
                 File.WriteAllText($"{rootPath}\\config\\MarketIP.txt", text);
             }
-
+            this.TradingCenterAddr = "**";
+            if (File.Exists($"{rootPath}\\config\\StockAddrPrivate.txt"))
+            {
+                var PrivateKeyContent = File.ReadAllText($"{rootPath}\\config\\StockAddrPrivate.txt");
+                // CommonClass.AES.AesDecrypt(content, password);
+                this.PrivateKey = CommonClass.AES.AesDecrypt(PrivateKeyContent, DalOfAddress.Connection.PasswordStr);
+                System.Numerics.BigInteger privateValue;
+                if (BitCoin.PrivateKeyF.Check(this.PrivateKey, out privateValue))
+                {
+                    this.TradingCenterAddr = PublicKeyF.GetAddressOfP2SH(Calculate.getPublicByPrivate(privateValue));
+                    Console.WriteLine($"股份交易地址为:{this.TradingCenterAddr}");
+                }
+                else
+                {
+                    throw new Exception("股份交易私钥加载错误！");
+                }
+            }
+            else
+            {
+                this.PrivateKey = "**";
+                this.TradingCenterAddr = "**";
+            }
         }
 
         internal void Update(MarketPrice sa)

@@ -176,6 +176,7 @@ namespace TcpFunction
 
                         var body = await reader.ReadToEndAsync();
                         // Console.WriteLine($"body:{body}");
+
                         var dealWithF = ResponseObj.DealWithDic[context.Request.Host.Value];
                         //Console.WriteLine(context.Request.Host.Value);
                         result = dealWithF(body, Convert.ToInt32(context.Request.Host.Value.Split(":")[1]));

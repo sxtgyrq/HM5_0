@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 
 namespace BitCoin
 {
@@ -50,6 +51,7 @@ namespace BitCoin
             //}
             public async Task<Dictionary<string, long>> GetTradeInfomationFromChain_v2()
             {
+                bool success;
                 //var socketsHttpHandler = new SocketsHttpHandler()
                 //{
                 //    //建立TCP连接时的超时时间,默认不限制
@@ -58,7 +60,7 @@ namespace BitCoin
                 //    Expect100ContinueTimeout = TimeSpan.FromSeconds(120),
                 //};
                 //https://blockchain.info/q/getblockcount
-                int current_block_count;
+                int? current_block_count = null;
                 {
                     var url = "https://blockchain.info/q/getblockcount";
 
@@ -67,27 +69,41 @@ namespace BitCoin
                         try
                         {
                             // Send an HTTP GET request to the URL
-                            HttpResponseMessage response = await client.GetAsync(url);
+                            using (HttpResponseMessage response = await client.GetAsync(url))
+                            {
 
-                            // Check if the response status code is successful (200 OK)
-                            if (response.IsSuccessStatusCode)
-                            {
-                                // Read the JSON content as a string
-                                string txt = await response.Content.ReadAsStringAsync();
-                                current_block_count = Convert.ToInt32(txt);
-                                // Now you can work with the JSON data
-                                // Console.WriteLine(json);
-                            }
-                            else
-                            {
-                                Console.WriteLine($"Error: {response.StatusCode}");
-                                throw new Exception(response.StatusCode.ToString());
+                                // Check if the response status code is successful (200 OK)
+                                if (response.IsSuccessStatusCode)
+                                {
+                                    // Read the JSON content as a string
+                                    string txt = await response.Content.ReadAsStringAsync();
+                                    current_block_count = Convert.ToInt32(txt);
+                                    success = true;
+                                    // Now you can work with the JSON data
+                                    // Console.WriteLine(json);
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Error: {response.StatusCode}");
+                                    var errorCode = response.StatusCode.ToString();
+                                    response.Dispose();
+                                    current_block_count = null;
+                                    success = false;
+                                    //throw new Exception(errorCode);
+                                }
+
                             }
                         }
                         catch (Exception ex)
                         {
                             Console.WriteLine($"Exception: {ex.Message}");
-                            throw ex;
+                            current_block_count = null;
+                            success = false;
+                            // throw ex;
+                        }
+                        finally
+                        {
+                            client.Dispose();
                         }
                     }
                     //using (WebCS web1 = new WebCS())
@@ -95,6 +111,16 @@ namespace BitCoin
                     //    current_block_count = Convert.ToInt32(Encoding.UTF8.GetString(await web1.DownloadDataTaskAsync(url)));
                     //}
                 }
+                if (success) { }
+                else if (!current_block_count.HasValue)
+                {
+                    throw new Exception($"getblockcount !current_block_count.HasValue");
+                }
+                else
+                {
+                    throw new Exception($"getblockcount not Success");
+                }
+
                 StringBuilder detailOfTrade = new StringBuilder();
                 Dictionary<string, bool> record = new Dictionary<string, bool>();
                 Dictionary<string, long> valuesInput = new Dictionary<string, long>();
@@ -109,57 +135,77 @@ namespace BitCoin
                         string data = "";
                         for (int i = 0; i < 10; i++)
                         {
+                            bool iLoopSuccess;
                             try
                             {
+
                                 using (HttpClient client = new HttpClient())
                                 {
                                     try
                                     {
                                         // Send an HTTP GET request to the URL
-                                        HttpResponseMessage response = await client.GetAsync(url);
-
-                                        // Check if the response status code is successful (200 OK)
-                                        if (response.IsSuccessStatusCode)
+                                        using (HttpResponseMessage response = await client.GetAsync(url))
                                         {
-                                            // Read the JSON content as a string
-                                            data = await response.Content.ReadAsStringAsync();
 
-                                            // Now you can work with the JSON data
-                                            // Console.WriteLine(json);
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine($"Error: {response.StatusCode}");
-                                            throw new Exception(response.StatusCode.ToString());
+                                            // Check if the response status code is successful (200 OK)
+                                            if (response.IsSuccessStatusCode)
+                                            {
+                                                // Read the JSON content as a string
+                                                data = await response.Content.ReadAsStringAsync();
+                                                iLoopSuccess = true;
+
+                                                // Now you can work with the JSON data
+                                                // Console.WriteLine(json);
+                                            }
+                                            else
+                                            {
+                                                iLoopSuccess = false;
+                                                Console.WriteLine($"Error: {response.StatusCode}");
+                                                //throw new Exception(response.StatusCode.ToString());
+                                            }
+                                            response.Dispose();
                                         }
                                     }
                                     catch (Exception ex)
                                     {
+                                        iLoopSuccess = false;
                                         Console.WriteLine($"Exception: {ex.Message}");
+                                    }
+                                    finally
+                                    {
+                                        client.Dispose();
                                     }
                                 }
 
-                                //using (WebCS web1 = new WebCS())
-                                //{
-                                //    data = Encoding.UTF8.GetString(await web1.DownloadDataTaskAsync(url));
-                                //}
-                                //using (var client = new HttpClient(socketsHttpHandler))
-                                //{
-                                //    data = await client.GetStringAsync(url);
-                                //}
-                                //  Console.WriteLine(data);
-                                break;
-                            }
-                            catch (Exception e)
-                            {
-                                if (i < 9) { }
-                                //Consol.WriteLine($"重新尝试第{i + 2}次");
+                                if (iLoopSuccess)
+                                {
+                                    success = true;
+                                    break;
+                                }
                                 else
                                 {
-                                    throw e;
+                                    if (i < 9)
+                                    {
+                                        continue;
+                                    }
+                                    //Consol.WriteLine($"重新尝试第{i + 2}次");
+                                    else
+                                    {
+                                        success = false;
+                                    }
+                                    data = "";
                                 }
-                                data = "";
                             }
+                            catch
+                            {
+                                success = false;
+                            }
+                        }
+                        if (success) { }
+                        else
+                        {
+                            Console.WriteLine($"{this.adress}获取详情失败");
+                            throw new Exception($"getAddress Detail {this.adress} not Success");
                         }
                         Transaction t = Newtonsoft.Json.JsonConvert.DeserializeObject<Transaction>(data);
                         if (t.txs.Count == 0)
@@ -344,7 +390,7 @@ namespace BitCoin
                                     else
                                     {
                                         throw new Exception($"Error: {response.StatusCode}");
-                                    } 
+                                    }
                                 }
                                 //using (WebCS web1 = new WebCS())
                                 //{

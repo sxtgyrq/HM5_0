@@ -1206,6 +1206,13 @@ namespace WsOfWebClient
                                                 s = Room.GetFightSituation(s, connectInfoDetail);
                                             }
                                         }; break;
+                                    case "GetStockTradeCenterDetail": 
+                                        {
+                                            if (s.Ls == LoginState.OnLine)
+                                            {
+                                                s = Room.GetStockTradeCenterDetail(s, connectInfoDetail);
+                                            }
+                                        };break;
                                     case "GetTaskCopy":
                                         {
                                             if (s.Ls == LoginState.OnLine)

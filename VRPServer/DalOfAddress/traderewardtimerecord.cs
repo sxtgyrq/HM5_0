@@ -411,7 +411,7 @@ ORDER BY
                                     }
                                     if (exitCount == 0)
                                     {
-                                        if (Exit(con, tran, dataItem.applyAddr))
+                                        if (ExitHistory(con, tran, dataItem.applyAddr))
                                         {
                                             // var dataItem = dataItem;
                                             int attemptCount = 1;
@@ -457,7 +457,7 @@ ORDER BY
             }
         }
 
-        static bool Exit(MySqlConnection con, MySqlTransaction tran, string bTCAddress)
+        static bool ExitHistory(MySqlConnection con, MySqlTransaction tran, string bTCAddress)
         {
             bTCAddress = bTCAddress.Trim();
             if (string.IsNullOrEmpty(bTCAddress)) { return false; }

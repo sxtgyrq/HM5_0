@@ -232,7 +232,8 @@ namespace DalOfAddress
 
         public static bool MoneyTransctraction(string addressFrom, string addressTo, long moneyTransfer, out string msg)
         {
-            if (moneyTransfer >= 200000)
+
+            if (moneyTransfer >= 50000)
                 using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
                 {
                     con.Open();
@@ -272,7 +273,56 @@ namespace DalOfAddress
                 }
             else
             {
-                msg = $"积分转移的额度，要大于等于{CommonClass.F.LongToDecimalString(200000)}";
+                msg = $"积分转移的额度，要大于等于{CommonClass.F.LongToDecimalString(50000)}";
+                return false;
+            }
+        }
+
+        public static bool MoneyTransctractionToStockTradeCenter(string addressFrom, string addressTo, long moneyTransfer, out string msg)
+        {
+
+            if (moneyTransfer >= 100)
+                using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
+                {
+                    con.Open();
+                    using (MySqlTransaction tran = con.BeginTransaction())
+                    {
+                        try
+                        {
+                            var moneyFrom = GetMoney(con, tran, addressFrom);
+                            // var moneyTo = GetMoney(con, tran, addressTo);
+                            if (moneyFrom > moneyTransfer)
+                            {
+                                AddMoney(con, tran, addressFrom, -moneyTransfer);
+                                var moneyTo = moneyTransfer * 99 / 100;
+                                var moneyTrade = moneyTransfer - moneyTo;
+                                AddMoney(con, tran, addressTo, moneyTo);
+                                // AddressMoneyGiveRecord.AddMoney(con, tran, addressFrom, addressTo, moneyTo);
+                                Stocksum.AddMoney(con, tran, addressFrom, moneyTo);
+                                tran.Commit();
+                                msg = $"成功，花费了{CommonClass.F.LongToDecimalString(moneyTrade)}积分作为手续费。";
+                                return true;
+                            }
+                            else
+                            {
+                                tran.Rollback();
+                                msg = "失败!积分交易数额大于或等于你所拥有的积分。";
+                                return false;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            //throw e;
+                            //throw new Exception("新增错误");
+                            tran.Rollback();
+                            msg = "MoneyTransctraction方法内错误！";
+                            return false;
+                        }
+                    }
+                }
+            else
+            {
+                msg = $"汇入交易市场的积分额度，要大于等于{CommonClass.F.LongToDecimalString(100)}";
                 return false;
             }
         }

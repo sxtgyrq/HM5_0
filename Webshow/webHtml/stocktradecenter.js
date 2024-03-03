@@ -1,88 +1,109 @@
-﻿var subsidizeSys =
+﻿var stocktradecenter =
 {
     operateAddress: '',
-    operateID: 'subsidizePanel',
-    html: `<div id="subsidizePanel"  style="position:absolute;z-index:8;top:calc(10% - 1px);width:24em; left:calc(50% - 12em);height:auto;border:solid 1px red;text-align:center;background:rgba(104, 48, 8, 0.85);color:#83ffff;overflow-y: scroll;max-height: calc(90%);  ">
+    operateID: 'stocktradecenterPanel',
+    html: `<div id="stocktradecenterPanel" style="position: absolute;
+        z-index: 8;
+        top: calc(10% - 1px);
+        width: 24em;
+        left: calc(50% - 12em);
+        height: auto;
+        border: solid 1px red;
+        text-align: center;
+        background: rgba(104, 48, 8, 0.85);
+        color: #83ffff;
+        overflow: hidden;
+        overflow-y: scroll;
+        max-height: calc(90%);
+">
         <table style="width:100%;">
             <tr>
-                <th>剩余资助</th>
-                <th>现有资助</th>
+                <th colspan="6" style="width:50%;">积分↓</th>
+                <th colspan="6" style="width:50%;">股份↓</th>
             </tr>
             <tr>
-                <td id="moneyOfSumSubsidizing" >未知</td>
-                <td id="moneyOfSumSubsidized">0</td>
+                <td colspan="6" style="width:50%;">0.00</td>
+                <td colspan="6" style="width:50%;"><span>₿</span>0.0001332</td>
+            </tr>
+            <tr>
+                <td colspan="12">
+                    <span>价格→</span> <input type="number" name="quantity" min="1" max="5" style="width:calc(100% - 10em);"><span>分/聪</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="12">
+                    <span>交易份额→</span>
+                    <input type="range" id="volume" name="volume" min="0" max="100" value="50" oninput="updateVolumeValue(this.value)" style="width:calc(100% - 12em);"><span>199%</span>
+                </td>
+            </tr>
+            <tr>
             </tr>
         </table>
-        <div style="
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;border:1px solid gray;">
 
-            <label  onclick="subsidizeSys.readStr('bitcoinSubsidizeAddressInput');">
-                --↓↓↓输入1打头的B地址↓↓↓--
-            </label>
-            <input id="bitcoinSubsidizeAddressInput" type="text" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(127, 255, 127, 0.6);" />
-        </div>
-        <div style="
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;border:1px solid gray;">
-
-            <label onclick="subsidizeSys.copyStr();">
-                --↓↓↓对以下信息进行签名↓↓↓--
-            </label> 
-            <input  id="msgNeedToSign" type="text" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(127, 255, 127, 0.6);" readonly onclick="subsidizeSys.copyStr();" />
-        </div>
-        <div style="
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;border:1px solid gray;">
-
-            <label onclick="subsidizeSys.readStr('signatureInputTextArea');">
-                --↓↓↓输入签名↓↓↓--
-            </label>
-            <textarea id="signatureInputTextArea" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(127, 255, 127, 0.6);height:4em;overflow:hidden;">1111111111111111111111</textarea>
-
-        </div> 
 
         <table style="width:100%">
             <tr>
                 <td style="width:50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(10000)" >
-                        取出100.00
+                    <div style="background: yellowgreen; width: 90%; margin-left: 5%;  padding: 0.5em 0 0.5em 0;border-radius:0.2em;">
+                        出售股点
                     </div>
                 </td>
                 <td style="width: 50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;"  onclick="subsidizeSys.subsidize(50000)" >
-                        取出500.00
+                    <div style="background: yellowgreen; width: 90%; margin-left: 5%; padding: 0.5em 0 0.5em 0; border-radius: 0.2em; ">
+                        购买股点
                     </div>
                 </td>
             </tr>
             <tr>
                 <td style="width:50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.subsidize(500000)" >
-                        交易大额积分
+                    <div style="background: yellowgreen; width: 90%; margin-left: 5%; padding: 0.5em 0 0.5em 0; border-radius: 0.2em; ">
+                        积分提取
                     </div>
                 </td>
                 <td style="width: 50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.beginnerMode()">
-                        开启新手模式
-                    </div>
-                </td>
-            </tr> 
-            <tr>
-                <td style="width:50%">
-                    <div id="bthNeedToUpdateLevel" style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.updateLevel();" >
-                        登录/读档
-                    </div>
-                </td>
-                <td style="width: 50%">
-                    <div id="btnSignOnLineWhenSubsidize" style="background: yellowgreen; width:90%;margin-left:5%;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.signOnline();">
-                        线上私钥签名
+                    <div style="background: yellowgreen; width: 90%; margin-left: 5%; padding: 0.5em 0 0.5em 0; border-radius: 0.2em; ">
+                        股点提取
                     </div>
                 </td>
             </tr>
-        </table> 
-        <div style="background: orange;
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.add();">
+        </table>
+
+
+        <div style="
+ margin-bottom: 0.25em;
+ margin-top: 0.25em;border:1px solid gray;">
+
+            <label>
+                --↓↓↓对以下信息进行签名↓↓↓--
+            </label>
+            <textarea style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(255, 0, 0, 0.5);height:4em;overflow:hidden;">1111111111111111111111</textarea>
+
+        </div>
+        <div style="
+ margin-bottom: 0.25em;
+ margin-top: 0.25em;border:1px solid gray;">
+
+            <label>
+                --↓↓↓输入签名↓↓↓--
+            </label>
+            <textarea style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(255, 0, 0, 0.5);height:4em;overflow:hidden;">1111111111111111111111</textarea>
+
+        </div>
+        <div  >
+            <div style="background: yellowgreen; margin-bottom: 0.25em; margin-top: 0.25em; left: 1em; width: calc(33.3% - 1.66em); display: inline-block; padding: 0.5em 0 0.5em 0; " onclick="moneyOperator.add();">
+                签名
+            </div>
+            <div style="background: yellowgreen; margin-bottom: 0.25em; margin-top: 0.25em; left: 1em; width: calc(33.3% - 1.66em); display: inline-block; padding: 0.5em 0 0.5em 0; " onclick="moneyOperator.add();">
+                挂单
+            </div>
+
+            <div style="background: yellowgreen; margin-bottom: 0.25em; margin-top: 0.25em; left: 1em; width: calc(33.3% - 1.6em); display: inline-block; padding: 0.5em 0 0.5em 0; " onclick="moneyOperator.add();">
+                历史记录
+            </div>
+        </div>
+        
+
+        <div style="background: orange; margin-bottom: 0.25em; margin-top: 2em; padding: 0.5em 0 0.5em 0;" onclick="stocktradecenter.add();">
             取消
         </div>
     </div>`,
@@ -172,77 +193,15 @@
         </div>
     </div>`,
     add: function () {
-        if (typeof window.okxwallet !== 'undefined') {
-            var that = subsidizeSys;
-            if (document.getElementById(that.operateID) == null) {
-                // var obj = new DOMParser().parseFromString(that.html, 'text/html');
-                var frag = document.createRange().createContextualFragment(that.htmlOkxwallet);
-                frag.id = that.operateID;
-
-                document.body.appendChild(frag);
-                that.updateMoney();
-                that.updateSignInfomation();
-                that.updateMoneyOfSumSubsidized();
-                that.updateMoneyOfSumSubsidizing();
-
-                that.updateBtnInnerHtml();
-
-                var el = document.getElementById('moneySubsidize');
-                el.classList.remove('msg');
-                if (objMain.stateNeedToChange.isLogin) {
-
-                }
-                else {
-                    var bthNeedToUpdateLevel = document.getElementById('bthNeedToUpdateLevel');
-                    bthNeedToUpdateLevel.classList.add('needToClick');
-
-                }
-                //localStorage['addrOfMainss']
-            }
-            else {
-                document.getElementById(that.operateID).remove();
-                if (objMain.stateNeedToChange.isLogin) { }
-                else {
-                    var el = document.getElementById('moneySubsidize');
-                    el.classList.add('msg');
-                }
-            }
+        var that = stocktradecenter;
+        if (document.getElementById(that.operateID) == null) {
+            // var obj = new DOMParser().parseFromString(that.html, 'text/html');
+            var frag = document.createRange().createContextualFragment(that.html);
+            frag.id = that.operateID; 
+            document.body.appendChild(frag); 
         }
         else {
-            var that = subsidizeSys;
-            if (document.getElementById(that.operateID) == null) {
-                // var obj = new DOMParser().parseFromString(that.html, 'text/html');
-                var frag = document.createRange().createContextualFragment(that.html);
-                frag.id = that.operateID;
-
-                document.body.appendChild(frag);
-                that.updateMoney();
-                that.updateSignInfomation();
-                that.updateMoneyOfSumSubsidized();
-                that.updateMoneyOfSumSubsidizing();
-
-                that.updateBtnInnerHtml();
-
-                var el = document.getElementById('moneySubsidize');
-                el.classList.remove('msg');
-                if (objMain.stateNeedToChange.isLogin) {
-
-                }
-                else {
-                    var bthNeedToUpdateLevel = document.getElementById('bthNeedToUpdateLevel');
-                    bthNeedToUpdateLevel.classList.add('needToClick');
-
-                }
-                //localStorage['addrOfMainss']
-            }
-            else {
-                document.getElementById(that.operateID).remove();
-                if (objMain.stateNeedToChange.isLogin) { }
-                else {
-                    var el = document.getElementById('moneySubsidize');
-                    el.classList.add('msg');
-                }
-            }
+            document.getElementById(that.operateID).remove(); 
         }
     },
     updateMoneyOfSumSubsidizing: function () {
@@ -527,10 +486,9 @@
                         );
                     }
                     catch (e) {
-                        if (e.code == 4001)
-                        {
+                        if (e.code == 4001) {
                             $.notify('欧意钱包拒绝了签名', 'warn')
-                        } 
+                        }
                     }
                     //   alert(nyrqOkex.signMsg);
                     // 处理result...

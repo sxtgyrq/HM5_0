@@ -1338,7 +1338,16 @@ namespace HouseManager5_0.RoomMainF
 
         public string TradeCoinF(ModelTranstraction.TradeCoin tc)
         {
-            return TradeCoinF(tc, false);
+            if (tc.addrTo == this.Market.TradingCenterAddr)
+            {
+                //**将股份转移到交易中心地址
+                return TradeCoinToTradeCenterF(tc, true);
+            }
+            else
+            {
+                return TradeCoinF(tc, false);
+            }
+
         }
         public string TradeCoinF(ModelTranstraction.TradeCoin tc, bool bySystem)
         {
@@ -1381,6 +1390,10 @@ namespace HouseManager5_0.RoomMainF
                                                 bool r;
                                                 if (bySystem)
                                                     r = DalOfAddress.TradeRecord.AddBySystem(tc.tradeIndex, tc.addrFrom, tc.addrBussiness, tc.sign, tc.msg, tc.passCoin, out notifyMsg);
+                                                else if (tc.addrTo.Trim() == this.Market.TradingCenterAddr.Trim())
+                                                {
+                                                    r = DalOfAddress.TradeRecord.AddToTradeCenterBySystem(tc.tradeIndex, tc.addrFrom, tc.addrBussiness, tc.sign, tc.msg, tc.passCoin, out notifyMsg);
+                                                }
                                                 else
                                                 {
                                                     r = DalOfAddress.TradeRecord.Add(tc.tradeIndex, tc.addrFrom, tc.addrBussiness, tc.sign, tc.msg, tc.passCoin, out notifyMsg);
@@ -1453,6 +1466,93 @@ namespace HouseManager5_0.RoomMainF
                 return Newtonsoft.Json.JsonConvert.SerializeObject(objR);
             }
         }
+
+        public string TradeCoinToTradeCenterF(ModelTranstraction.TradeCoin tc, bool bySystem)
+        {
+            // throw new Exception();
+
+            var parameter = tc.msg.Split(new char[] { '@', '-', '>', ':' }, StringSplitOptions.RemoveEmptyEntries);
+            //  var agreement = $"{indexNumber}@{ga.addrFrom}@{ga.addrBussiness}->{ga.addrTo}:{ga.tranNum * 100000000}Satoshi";
+            var regex = new Regex("^[0-9]{1,8}@[A-HJ-NP-Za-km-z1-9]{1,50}@[A-HJ-NP-Za-km-z1-9]{1,50}->[A-HJ-NP-Za-km-z1-9]{1,50}:[0-9]{1,13}[Ss]{1}atoshi$");
+            if (regex.IsMatch(tc.msg))
+            {
+                if (parameter.Length == 5)
+                {
+                    if (BitCoin.Sign.checkSign(tc.sign, tc.msg, parameter[1]))
+                    {
+                        var tradeIndex = int.Parse(parameter[0]);
+                        var addrFrom = parameter[1];
+                        var addrBussiness = parameter[2];
+                        var addrTo = parameter[3];
+                        var passCoinStr = parameter[4];
+                        if ((passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi" || passCoinStr.Substring(passCoinStr.Length - 7, 7) == "satoshi") &&
+                            tradeIndex == tc.tradeIndex &&
+                            addrFrom == tc.addrFrom &&
+                            addrTo == tc.addrTo &&
+                            addrBussiness == tc.addrBussiness)
+                        {
+                            bool success;
+                            var trDetail = getValueOfAddr(addrBussiness, out success);
+                            if (success)
+                            {
+                                var passCoin = Convert.ToInt64(passCoinStr.Substring(0, passCoinStr.Length - 7));
+                                if (passCoin > 0 && tc.passCoin == passCoin)
+                                {
+                                    if (trDetail.ContainsKey(addrFrom))
+                                    {
+                                        if (trDetail[addrFrom] >= passCoin)
+                                        {
+                                            string notifyMsg;
+                                            if (tc.addrTo.Trim() != tc.addrBussiness.Trim())
+                                            {
+                                                bool r;
+                                                if (bySystem)
+                                                {
+                                                    r = DalOfAddress.TradeRecord.AddBySystem(tc.tradeIndex, tc.addrFrom, tc.addrBussiness, tc.sign, tc.msg, tc.passCoin, out notifyMsg);
+
+                                                    var objR = new ModelTranstraction.TradeCoin.Result()
+                                                    {
+                                                        msg = notifyMsg,
+                                                        success = r
+                                                    };
+                                                    return Newtonsoft.Json.JsonConvert.SerializeObject(objR);
+                                                }
+                                            }
+                                            else
+                                            {
+
+                                            }
+                                        }
+                                        else
+                                        {
+
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+            {
+                var objR = new ModelTranstraction.TradeCoin.Result()
+                {
+                    msg = "传输错误，校验数据为无效！",
+                    success = false
+                };
+                return Newtonsoft.Json.JsonConvert.SerializeObject(objR);
+            }
+        }
+
+
         public string TradeIndex(ModelTranstraction.TradeIndex tc)
         {
             var Index = DalOfAddress.TradeRecord.GetCount(tc.addrBussiness, tc.addrFrom);
@@ -2059,47 +2159,95 @@ namespace HouseManager5_0.RoomMainF
 
         public string ScoreTransactionToServerF(ModelTranstraction.ScoreTransactionToServer ssts)
         {
-            List<string> notifyMsg = new List<string>();
-            if (this._Groups.ContainsKey(ssts.GroupKey))
+            if (ssts.scoreTranstractionToBitcoinAddr.Trim() != this.Market.TradingCenterAddr.Trim())
             {
-                var group = this._Groups[ssts.GroupKey];
-                if (group == null) { }
-                else
+                List<string> notifyMsg = new List<string>();
+                if (this._Groups.ContainsKey(ssts.GroupKey))
                 {
-                    if (group._PlayerInGroup.ContainsKey(ssts.Key))
+                    var group = this._Groups[ssts.GroupKey];
+                    if (group == null) { }
+                    else
                     {
-                        var player = group._PlayerInGroup[ssts.Key];
-                        if (player == null) { }
-                        else
+                        if (group._PlayerInGroup.ContainsKey(ssts.Key))
                         {
-                            if (string.IsNullOrEmpty(player.BTCAddress)) { }
-                            else if (player.BTCAddress.Trim() == ssts.scoreTranstractionToBitcoinAddr.Trim())
+                            var player = group._PlayerInGroup[ssts.Key];
+                            if (player == null) { }
+                            else
                             {
-                                this.WebNotify(player, "不能自己转自己");
-                            }
-                            else if (BitCoin.CheckAddress.CheckAddressIsUseful(ssts.scoreTranstractionToBitcoinAddr.Trim()))
-                            {
-                                string msg;
-                                var success = DalOfAddress.MoneyAdd.MoneyTransctraction(player.BTCAddress.Trim(), ssts.scoreTranstractionToBitcoinAddr.Trim(), ssts.scoreTranstractionValue, out msg);
-                                if (success)
+                                if (string.IsNullOrEmpty(player.BTCAddress)) { }
+                                else if (player.BTCAddress.Trim() == ssts.scoreTranstractionToBitcoinAddr.Trim())
                                 {
-                                    long subsidizeGet, subsidizeLeft;
-                                    DalOfAddress.MoneyGet.GetSubsidizeAndLeft(player.BTCAddress, 0, out subsidizeGet, out subsidizeLeft);
-                                    this.SendLeftMoney((Player)player, subsidizeLeft, player.BTCAddress, ref notifyMsg);
-                                    this.WebNotify(player, msg, 60);
-                                    this.WebNotify(player, $"转{ssts.scoreTranstractionToBitcoinAddr.Trim()}积分{CommonClass.F.LongToDecimalString(ssts.scoreTranstractionValue * 99 / 100)}。成功", 60);
+                                    this.WebNotify(player, "不能自己转自己");
                                 }
-                                else
+                                else if (BitCoin.CheckAddress.CheckAddressIsUseful(ssts.scoreTranstractionToBitcoinAddr.Trim()))
                                 {
-                                    this.WebNotify(player, msg);
+                                    string msg;
+                                    var success = DalOfAddress.MoneyAdd.MoneyTransctraction(player.BTCAddress.Trim(), ssts.scoreTranstractionToBitcoinAddr.Trim(), ssts.scoreTranstractionValue, out msg);
+                                    if (success)
+                                    {
+                                        long subsidizeGet, subsidizeLeft;
+                                        DalOfAddress.MoneyGet.GetSubsidizeAndLeft(player.BTCAddress, 0, out subsidizeGet, out subsidizeLeft);
+                                        this.SendLeftMoney((Player)player, subsidizeLeft, player.BTCAddress, ref notifyMsg);
+                                        this.WebNotify(player, msg, 60);
+                                        this.WebNotify(player, $"转{ssts.scoreTranstractionToBitcoinAddr.Trim()}积分{CommonClass.F.LongToDecimalString(ssts.scoreTranstractionValue * 99 / 100)}。成功", 60);
+                                    }
+                                    else
+                                    {
+                                        this.WebNotify(player, msg);
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                Startup.sendSeveralMsgs(notifyMsg);
+                return "";
             }
-            Startup.sendSeveralMsgs(notifyMsg);
-            return "";
+            else
+            {
+                List<string> notifyMsg = new List<string>();
+                if (this._Groups.ContainsKey(ssts.GroupKey))
+                {
+                    var group = this._Groups[ssts.GroupKey];
+                    if (group == null) { }
+                    else
+                    {
+                        if (group._PlayerInGroup.ContainsKey(ssts.Key))
+                        {
+                            var player = group._PlayerInGroup[ssts.Key];
+                            if (player == null) { }
+                            else
+                            {
+                                if (string.IsNullOrEmpty(player.BTCAddress)) { }
+                                else if (player.BTCAddress.Trim() == ssts.scoreTranstractionToBitcoinAddr.Trim())
+                                {
+                                    this.WebNotify(player, "不能自己转自己");
+                                }
+                                else if (BitCoin.CheckAddress.CheckAddressIsUseful(ssts.scoreTranstractionToBitcoinAddr.Trim()))
+                                {
+                                    string msg;
+                                    var success = DalOfAddress.MoneyAdd.MoneyTransctractionToStockTradeCenter(player.BTCAddress.Trim(), ssts.scoreTranstractionToBitcoinAddr.Trim(), ssts.scoreTranstractionValue, out msg);
+                                    if (success)
+                                    {
+                                        long subsidizeGet, subsidizeLeft;
+                                        DalOfAddress.MoneyGet.GetSubsidizeAndLeft(player.BTCAddress, 0, out subsidizeGet, out subsidizeLeft);
+                                        this.SendLeftMoney((Player)player, subsidizeLeft, player.BTCAddress, ref notifyMsg);
+                                        this.WebNotify(player, msg, 60);
+                                        this.WebNotify(player, $"{CommonClass.F.LongToDecimalString(ssts.scoreTranstractionValue * 99 / 100)}积分已经进入交易市场。", 60);
+                                    }
+                                    else
+                                    {
+                                        this.WebNotify(player, msg);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                Startup.sendSeveralMsgs(notifyMsg);
+                return "";
+                return "";
+            }
         }
 
 

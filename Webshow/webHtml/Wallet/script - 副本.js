@@ -60581,6 +60581,25 @@
 
                 };
 
+                Message.prototype.getAddrFromSignatureString = functiongetAddrFromSignatureString(signatureString)
+                {
+                    var result = [];
+                    var signature = Signature.fromCompact(new Buffer(signatureString, 'base64'));
+
+                    // recover the public key
+                    var ecdsa = new ECDSA();
+                    ecdsa.hashbuf = this.magicHash();
+                    ecdsa.sig = signature;
+                    var publicKey = ecdsa.toPublicKey();
+
+                    if (this._verify(publicKey, signature)) 
+                    {
+                        result.push(signatureAddress.toString());
+                    }
+                    return result;
+                     
+                }
+
                 /**
                  * Instantiate a message from a message string
                  *
