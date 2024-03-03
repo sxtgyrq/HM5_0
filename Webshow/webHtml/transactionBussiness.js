@@ -480,7 +480,7 @@ var transactionBussiness = function () {
                             {
                                 if (document.getElementById('confirmTransactionBusinessPanel') != null) {
                                     var innerHtml = `<input type="button" value="确认" onclick="setTransactionHtml.confirmTransaction('${inputObj.Hash256Code}');" />
-                    <div>点击确认后，将用${((inputObj.TradeScore + 200000) / 100).toFixed(2)}积分换此处的${(inputObj.PassCoin / 100000000).toFixed(8)}点股份，其中2000.00积分是交易消耗。对方获得${(inputObj.TradeScore / 100).toFixed(2)}积分</div>`;
+                    <div>点击确认后，将用${((inputObj.TradeScore + 1100000) / 100).toFixed(2)}积分换此处的${(inputObj.PassCoin / 100000000).toFixed(8)}点股份，其中11000.00积分是交易消耗。对方获得${(inputObj.TradeScore / 100).toFixed(2)}积分</div>`;
                                     document.getElementById('confirmTransactionBusinessPanel').innerHTML = innerHtml;
                                 }
                                 transactionBussiness().showAgreement(inputObj.Msg); 
@@ -495,12 +495,12 @@ var transactionBussiness = function () {
                             }; break;
                         case 'success_buyer':
                             {
-                                var innerHtml = `<div>交易完成。用${((inputObj.TradeScore + 200000) / 100).toFixed(2)}积分交换了换此处的${(inputObj.PassCoin / 100000000).toFixed(8)}点股份，其中2000.00积分是交易消耗。对方获得${(inputObj.TradeScore / 100).toFixed(2)}积分</div>`;
+                                var innerHtml = `<div>交易完成。用${((inputObj.TradeScore + 1100000) / 100).toFixed(2)}积分交换了换此处的${(inputObj.PassCoin / 100000000).toFixed(8)}点股份，其中11000.00积分是交易消耗。对方获得${(inputObj.TradeScore / 100).toFixed(2)}积分</div>`;
                                 document.getElementById('confirmTransactionBusinessPanel').innerHTML = innerHtml;
                             }; break;
                         case 'success_seller':
                             {
-                                var innerHtml = `<div>交易完成。用此处的${(inputObj.PassCoin / 100000000).toFixed(8)}点股份交换了${(inputObj.TradeScore / 100).toFixed(2)}积分。对方支付了${((inputObj.TradeScore + 200000) / 100).toFixed(2)}积分，其中2000.00积分是交易消耗</div>`;
+                                var innerHtml = `<div>交易完成。用此处的${(inputObj.PassCoin / 100000000).toFixed(8)}点股份交换了${(inputObj.TradeScore / 100).toFixed(2)}积分。对方支付了${((inputObj.TradeScore + 1100000) / 100).toFixed(2)}积分，其中11000.00积分是交易消耗</div>`;
                                 document.getElementById('confirmTransactionBusinessPanel').innerHTML = innerHtml;
                             }; break;
                         case 'fail':
