@@ -15,6 +15,8 @@ using System.Runtime.CompilerServices;
 using System.Reflection;
 using static NBitcoin.Scripting.OutputDescriptor;
 using static WsOfWebClient.GenerateAgreementBetweenTwo;
+using System.Linq.Expressions;
+using static WsOfWebClient.ConnectInfo;
 
 namespace WsOfWebClient
 {
@@ -421,8 +423,316 @@ namespace WsOfWebClient
                 var index = s.roomIndex;
                 var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ti);
                 var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
-            } 
+            }
         }
+        internal static void AlipayRewardF(State s, AlipayReward ar)
+        {
+            //AlipayRewardSecretToServer
+            var ti = new AlipayRewardSecretToServer()
+            {
+                c = "AlipayRewardSecretToServer",
+                GroupKey = s.GroupKey,
+                Key = s.Key,
+                SecretStr = ar.SecretStr,
+            };
+            var index = s.roomIndex;
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ti);
+            var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+        }
+
+        #region stockCenter
+        internal static State GetStockTradeCenterDetail(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail)
+        {
+            string respon;
+            {
+                CommonClass.GetStockTradeCenterDetail gstcd = new GetStockTradeCenterDetail()
+                {
+                    c = "GetStockTradeCenterDetail",
+                    Key = s.Key,
+                    GroupKey = s.GroupKey,
+                };
+                var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gstcd);
+                respon = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+            }
+            {
+                CommonF.SendData(respon, connectInfoDetail, 0);
+                return s;
+            }
+        }
+
+        internal static State StockTradeParseInfo(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail, StockTradeInfo sti)
+        {
+            {
+                Regex rex1 = new Regex("^北京时间(?<year>\\d{4})年(?<month>\\d{2})月(?<day>\\d{2})日(?<hour>\\d{2})时(?<minutes>\\d{2})分,(?<bitcoinAddr>[13]{1}[1-9A-HJ-NP-Za-km-z]{25,34})取回(?<score>(?!0(?!\\.))\\d{1,}\\.\\d{2})积分。nyrq123\\.com$");
+                Match match1 = rex1.Match(sti.Msg);
+                if (match1.Success)
+                {
+                    int year = Convert.ToInt32(match1.Groups["year"].Value);
+                    int month = Convert.ToInt32(match1.Groups["month"].Value);
+                    int day = Convert.ToInt32(match1.Groups["day"].Value);
+                    int hour = Convert.ToInt32(match1.Groups["hour"].Value);
+                    int minutes = Convert.ToInt32(match1.Groups["minutes"].Value);
+
+                    string bitcoinAddr = match1.Groups["bitcoinAddr"].Value.Trim();
+                    var msgTime = new DateTime(year, month, day, hour, minutes, 0);
+                    if (Math.Abs((msgTime - DateTime.Now).TotalMinutes) < 10)
+                    {
+                        if (BitCoin.Sign.checkSign(sti.Sign, sti.Msg, bitcoinAddr))
+                        {
+                            var ti = new ReturnScoreFromStockCenter()
+                            {
+                                c = "ReturnScoreFromStockCenter",
+                                GroupKey = s.GroupKey,
+                                Key = s.Key,
+                                Msg = sti.Msg,
+                                Sign = sti.Sign,
+                            };
+                            var index = s.roomIndex;
+                            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ti);
+                            var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+                            if (string.IsNullOrEmpty(info)) { }
+                            else
+                            {
+
+                                CommonF.SendData(info, connectInfoDetail, 0);
+                            }
+                            // StockTradeScore
+                        }
+                    }
+                    else
+                    {
+                        NotifyMsg(connectInfoDetail, $"{msgTime.ToString("yyyy-mm-dd HH:mm")}的签名已过期！");
+                    }
+                    //  rex1..
+                }
+
+            }
+            // if (false)
+            {
+                Regex rex2 = new Regex("^北京时间(?<year>\\d{4})年(?<month>\\d{2})月(?<day>\\d{2})日(?<hour>\\d{2})时(?<minutes>\\d{2})分,(?<bitcoinAddr>[13]{1}[1-9A-HJ-NP-Za-km-z]{25,34})用50\\.00积分与(?<score>(?!0(?!\\.))\\d{1,})聪股点换取支付宝红包。nyrq123\\.com$");
+                Match match1 = rex2.Match(sti.Msg);
+                if (match1.Success)
+                {
+                    int year = Convert.ToInt32(match1.Groups["year"].Value);
+                    int month = Convert.ToInt32(match1.Groups["month"].Value);
+                    int day = Convert.ToInt32(match1.Groups["day"].Value);
+                    int hour = Convert.ToInt32(match1.Groups["hour"].Value);
+                    int minutes = Convert.ToInt32(match1.Groups["minutes"].Value);
+
+                    string bitcoinAddr = match1.Groups["bitcoinAddr"].Value.Trim();
+                    var msgTime = new DateTime(year, month, day, hour, minutes, 0);
+                    if (Math.Abs((msgTime - DateTime.Now).TotalMinutes) < 10)
+                    {
+                        if (BitCoin.Sign.checkSign(sti.Sign, sti.Msg, bitcoinAddr))
+                        {
+                            var ti = new ReturnSatoshiFromStockCenter()
+                            {
+                                c = "ReturnSatoshiFromStockCenter",
+                                GroupKey = s.GroupKey,
+                                Key = s.Key,
+                                Msg = sti.Msg,
+                                Sign = sti.Sign,
+                            };
+                            var index = s.roomIndex;
+                            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ti);
+                            var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+                            if (string.IsNullOrEmpty(info)) { }
+                            else
+                            {
+
+                                CommonF.SendData(info, connectInfoDetail, 0);
+                            }
+                            // StockTradeScore
+                        }
+                    }
+                    else
+                    {
+                        NotifyMsg(connectInfoDetail, $"{msgTime.ToString("yyyy-mm-dd HH:mm")}的签名已过期！");
+                    }
+                    //  rex1..
+                }
+            }
+
+            {
+                Regex rex3 = new Regex("^北京时间(?<year>\\d{4})年(?<month>\\d{2})月(?<day>\\d{2})日(?<hour>\\d{2})时(?<minutes>\\d{2})分,(?<bitcoinAddr>[13]{1}[1-9A-HJ-NP-Za-km-z]{25,34})以(?!0(?!\\.))\\d{1,}\\.\\d{2}积分每聪的价格出售(?!0(?!\\.))\\d{1,}聪股点。nyrq123\\.com$");
+                Match match1 = rex3.Match(sti.Msg);
+                if (match1.Success)
+                {
+                    int year = Convert.ToInt32(match1.Groups["year"].Value);
+                    int month = Convert.ToInt32(match1.Groups["month"].Value);
+                    int day = Convert.ToInt32(match1.Groups["day"].Value);
+                    int hour = Convert.ToInt32(match1.Groups["hour"].Value);
+                    int minutes = Convert.ToInt32(match1.Groups["minutes"].Value);
+
+                    string bitcoinAddr = match1.Groups["bitcoinAddr"].Value.Trim();
+                    var msgTime = new DateTime(year, month, day, hour, minutes, 0);
+                    if (Math.Abs((msgTime - DateTime.Now).TotalMinutes) < 10)
+                    {
+                        if (BitCoin.Sign.checkSign(sti.Sign, sti.Msg, bitcoinAddr))
+                        {
+                            var ti = new StockSellFromStockCenter()
+                            {
+                                c = "StockSellFromStockCenter",
+                                GroupKey = s.GroupKey,
+                                Key = s.Key,
+                                Msg = sti.Msg,
+                                Sign = sti.Sign,
+                            };
+                            var index = s.roomIndex;
+                            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ti);
+                            var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+                            if (string.IsNullOrEmpty(info)) { }
+                            else
+                            {
+
+                                CommonF.SendData(info, connectInfoDetail, 0);
+                            }
+                            // StockTradeScore
+                        }
+                    }
+                    else
+                    {
+                        NotifyMsg(connectInfoDetail, $"{msgTime.ToString("yyyy-mm-dd HH:mm")}的签名已过期！");
+                    }
+                    //  rex1..
+                }
+            }
+
+            {
+                Regex rex3 = new Regex("^北京时间(?<year>\\d{4})年(?<month>\\d{2})月(?<day>\\d{2})日(?<hour>\\d{2})时(?<minutes>\\d{2})分,(?<bitcoinAddr>[13]{1}[1-9A-HJ-NP-Za-km-z]{25,34})以(?!0(?!\\.))\\d{1,}\\.\\d{2}积分每聪的价格出售(?!0(?!\\.))\\d{1,}聪股点。nyrq123\\.com$");
+                Match match1 = rex3.Match(sti.Msg);
+                if (match1.Success)
+                {
+                    int year = Convert.ToInt32(match1.Groups["year"].Value);
+                    int month = Convert.ToInt32(match1.Groups["month"].Value);
+                    int day = Convert.ToInt32(match1.Groups["day"].Value);
+                    int hour = Convert.ToInt32(match1.Groups["hour"].Value);
+                    int minutes = Convert.ToInt32(match1.Groups["minutes"].Value);
+
+                    string bitcoinAddr = match1.Groups["bitcoinAddr"].Value.Trim();
+                    var msgTime = new DateTime(year, month, day, hour, minutes, 0);
+                    if (Math.Abs((msgTime - DateTime.Now).TotalMinutes) < 10)
+                    {
+                        if (BitCoin.Sign.checkSign(sti.Sign, sti.Msg, bitcoinAddr))
+                        {
+                            var ti = new StockSellFromStockCenter()
+                            {
+                                c = "StockSellFromStockCenter",
+                                GroupKey = s.GroupKey,
+                                Key = s.Key,
+                                Msg = sti.Msg,
+                                Sign = sti.Sign,
+                            };
+                            var index = s.roomIndex;
+                            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ti);
+                            var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+                            if (string.IsNullOrEmpty(info)) { }
+                            else
+                            {
+
+                                CommonF.SendData(info, connectInfoDetail, 0);
+                            }
+                            // StockTradeScore
+                        }
+                    }
+                    else
+                    {
+                        NotifyMsg(connectInfoDetail, $"{msgTime.ToString("yyyy-mm-dd HH:mm")}的签名已过期！");
+                    }
+                    //  rex1..
+                }
+            }
+            {
+                Regex rex4 = new Regex("^北京时间(?<year>\\d{4})年(?<month>\\d{2})月(?<day>\\d{2})日(?<hour>\\d{2})时(?<minutes>\\d{2})分,(?<bitcoinAddr>[13]{1}[1-9A-HJ-NP-Za-km-z]{25,34})以(?!0(?!\\.))\\d{1,}\\.\\d{2}积分每聪的价格收购(?!0(?!\\.))\\d{1,}聪股点。nyrq123\\.com$");
+                Match match1 = rex4.Match(sti.Msg);
+                if (match1.Success)
+                {
+                    int year = Convert.ToInt32(match1.Groups["year"].Value);
+                    int month = Convert.ToInt32(match1.Groups["month"].Value);
+                    int day = Convert.ToInt32(match1.Groups["day"].Value);
+                    int hour = Convert.ToInt32(match1.Groups["hour"].Value);
+                    int minutes = Convert.ToInt32(match1.Groups["minutes"].Value);
+
+                    string bitcoinAddr = match1.Groups["bitcoinAddr"].Value.Trim();
+                    var msgTime = new DateTime(year, month, day, hour, minutes, 0);
+                    if (Math.Abs((msgTime - DateTime.Now).TotalMinutes) < 10)
+                    {
+                        if (BitCoin.Sign.checkSign(sti.Sign, sti.Msg, bitcoinAddr))
+                        {
+                            var ti = new StockBuyFromStockCenter()
+                            {
+                                c = "StockBuyFromStockCenter",
+                                GroupKey = s.GroupKey,
+                                Key = s.Key,
+                                Msg = sti.Msg,
+                                Sign = sti.Sign,
+                            };
+                            var index = s.roomIndex;
+                            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ti);
+                            var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+                            if (string.IsNullOrEmpty(info)) { }
+                            else
+                            {
+
+                                CommonF.SendData(info, connectInfoDetail, 0);
+                            }
+                            // StockTradeScore
+                        }
+                    }
+                    else
+                    {
+                        NotifyMsg(connectInfoDetail, $"{msgTime.ToString("yyyy-mm-dd HH:mm")}的签名已过期！");
+                    }
+                    //  rex1..
+                }
+            }
+            return s;
+            //throw new NotImplementedException();
+        }
+
+        internal static void StockCenerOrderF(State s, ConnectInfo.ConnectInfoDetail connectInfoDetail, StockCenerOrder sco)
+        {
+            var ti = new StockCenerOrderDetail()
+            {
+                c = "StockCenerOrderDetail",
+                GroupKey = s.GroupKey,
+                Key = s.Key
+            };
+            var index = s.roomIndex;
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(ti);
+            var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[index], msg);
+            var obj = new
+            {
+                c = "StockCenerOrderDetail.Result",
+                list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<StockCenerOrderDetail.StockCenerOrderDetailResult>>(info)
+            };
+            CommonF.SendData(Newtonsoft.Json.JsonConvert.SerializeObject(obj), connectInfoDetail, 0);
+        }
+        internal static void CancelStockD(State s, CancelStock cs)
+        {
+            var gfma = new StockCancle()
+            {
+                c = "StockCancle",
+                GroupKey = s.GroupKey,
+                Key = s.Key,
+                infosha256ID = cs.infosha256ID,
+            };
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gfma);
+            var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+        }
+
+        internal static void GetAllStockPlaceF(State s)
+        {
+            var gfma = new GetAllStockPlace()
+            {
+                c = "GetAllStockPlace",
+                GroupKey = s.GroupKey,
+                Key = s.Key,
+            };
+            var msg = Newtonsoft.Json.JsonConvert.SerializeObject(gfma);
+            var info = Startup.sendInmationToUrlAndGetRes(Room.roomUrls[s.roomIndex], msg);
+        }
+        #endregion stockCenter
 
 
         private static int GetIndexOfTrade(string addrBussiness, string addrFrom)

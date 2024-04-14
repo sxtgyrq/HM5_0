@@ -85,21 +85,47 @@ namespace DalOfAddress
 
         public static List<CommonClass.databaseModel.marketdouyin> GetAll()
         {
-            var ds = MySqlHelper.ExecuteDataset(Connection.ConnectionStr, "SELECT FpID,uid,dyNickName,passCount from marketdouyin");
-
             List<CommonClass.databaseModel.marketdouyin> data = new List<CommonClass.databaseModel.marketdouyin>();
-
-            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            var sQL = "SELECT FpID,uid,dyNickName,passCount from marketdouyin";
+            using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
             {
-                data.Add(new CommonClass.databaseModel.marketdouyin()
+                con.Open();
+                using (MySqlTransaction tran = con.BeginTransaction())
                 {
-                    dyNickName = ds.Tables[0].Rows[i]["dyNickName"] == DBNull.Value || ds.Tables[0].Rows[i]["dyNickName"] == null ? "" : Convert.ToString(ds.Tables[0].Rows[i]["dyNickName"]).Trim(),
-                    FpID = ds.Tables[0].Rows[i]["FpID"] == DBNull.Value || ds.Tables[0].Rows[i]["FpID"] == null ? "" : Convert.ToString(ds.Tables[0].Rows[i]["FpID"]).Trim(),
-                    passCount = ds.Tables[0].Rows[i]["passCount"] == DBNull.Value || ds.Tables[0].Rows[i]["passCount"] == null ? 1 : Convert.ToInt32(ds.Tables[0].Rows[i]["passCount"]),
-                    uid = ds.Tables[0].Rows[i]["uid"] == DBNull.Value || ds.Tables[0].Rows[i]["uid"] == null ? "" : Convert.ToString(ds.Tables[0].Rows[i]["uid"]).Trim(),
-                });
+                    using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                data.Add(new CommonClass.databaseModel.marketdouyin()
+                                {
+                                    dyNickName = reader["dyNickName"] == DBNull.Value || reader["dyNickName"] == null ? "" : Convert.ToString(reader["dyNickName"]).Trim(),
+                                    FpID = reader["FpID"] == DBNull.Value || reader == null ? "" : Convert.ToString(reader["FpID"]).Trim(),
+                                    passCount = reader["passCount"] == DBNull.Value || reader["passCount"] == null ? 1 : Convert.ToInt32(reader["passCount"]),
+                                    uid = reader["uid"] == DBNull.Value || reader["uid"] == null ? "" : Convert.ToString(reader["uid"]).Trim(),
+                                });
+                            }
+                        }
+                    }
+                }
             }
             return data;
+            //var ds = MySqlHelper.ExecuteDataset(Connection.ConnectionStr, "SELECT FpID,uid,dyNickName,passCount from marketdouyin");
+
+
+
+            //for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            //{
+            //    data.Add(new CommonClass.databaseModel.marketdouyin()
+            //    {
+            //        dyNickName = ds.Tables[0].Rows[i]["dyNickName"] == DBNull.Value || ds.Tables[0].Rows[i]["dyNickName"] == null ? "" : Convert.ToString(ds.Tables[0].Rows[i]["dyNickName"]).Trim(),
+            //        FpID = ds.Tables[0].Rows[i]["FpID"] == DBNull.Value || ds.Tables[0].Rows[i]["FpID"] == null ? "" : Convert.ToString(ds.Tables[0].Rows[i]["FpID"]).Trim(),
+            //        passCount = ds.Tables[0].Rows[i]["passCount"] == DBNull.Value || ds.Tables[0].Rows[i]["passCount"] == null ? 1 : Convert.ToInt32(ds.Tables[0].Rows[i]["passCount"]),
+            //        uid = ds.Tables[0].Rows[i]["uid"] == DBNull.Value || ds.Tables[0].Rows[i]["uid"] == null ? "" : Convert.ToString(ds.Tables[0].Rows[i]["uid"]).Trim(),
+            //    });
+            //}
+
             //throw new NotImplementedException();
         }
     }

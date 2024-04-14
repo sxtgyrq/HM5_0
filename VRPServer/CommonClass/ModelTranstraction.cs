@@ -74,12 +74,76 @@ namespace CommonClass
         {
         }
 
-        public class ScoreTransactionToServer : CommonClass.Command 
+        public class ScoreTransactionToServer : CommonClass.Command
         {
             public string Key { get; set; }
             public string GroupKey { get; set; }
             public long scoreTranstractionValue { get; set; }
             public string scoreTranstractionToBitcoinAddr { get; set; }
+        }
+        public class AlipayRewardSecretToServer : CommonClass.Command
+        {
+            public string SecretStr { get; set; }
+            public string Key { get; set; }
+            public string GroupKey { get; set; }
+        }
+
+        public class StockCenerOrderDetail : CommonClass.Command
+        {
+            public string Key { get; set; }
+            public string GroupKey { get; set; }
+
+            public class StockCenerOrderDetailResult //: CommonClass.Command
+            {
+                public DateTime dateTimeCreate { get; set; }
+                public string infosha256ID { get; set; }
+                public string infomationContent { get; set; }
+                public string sign { get; set; }
+                public string resultStr { get; set; }
+                public bool canCancle { get; set; }
+            }
+        }
+        public class StockCancle : CommonClass.Command 
+        {
+            public string Key { get; set; }
+            public string GroupKey { get; set; }
+            public string infosha256ID { get; set; }
+        }
+
+        public class ReturnScoreFromStockCenter : CommonClass.Command
+        {
+            public string Key { get; set; }
+            public string GroupKey { get; set; }
+            public string Msg { get; set; }
+            public string Sign { get; set; }
+        }
+        public class ReturnSatoshiFromStockCenter : CommonClass.Command
+        {
+            public string Key { get; set; }
+            public string GroupKey { get; set; }
+            public string Msg { get; set; }
+            public string Sign { get; set; }
+        }
+
+        public class StockBuyFromStockCenter : CommonClass.Command
+        {
+            public string Key { get; set; }
+            public string GroupKey { get; set; }
+            public string Msg { get; set; }
+            public string Sign { get; set; }
+        }
+        public class StockSellFromStockCenter : CommonClass.Command
+        {
+            public string Key { get; set; }
+            public string GroupKey { get; set; }
+            public string Msg { get; set; }
+            public string Sign { get; set; }
+        }
+
+        public class GetAllStockPlace : CommonClass.Command
+        {
+            public string Key { get; set; }
+            public string GroupKey { get; set; }
         }
 
         public class AllBuiisnessAddr : Command

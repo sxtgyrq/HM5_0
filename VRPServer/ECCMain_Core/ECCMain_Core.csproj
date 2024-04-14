@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="EccGetSqrt.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="EccGetSqrt.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="RIPEMD" Version="4.3.0" />
+	</ItemGroup>
+
+</Project>

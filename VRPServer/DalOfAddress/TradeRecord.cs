@@ -64,7 +64,10 @@ namespace DalOfAddress
                 using (MySqlTransaction tran = con.BeginTransaction())
                 {
                     try
-                    {
+                    {// raceRecordIndex READ, introducedetai READ,traderewardtimerecord READ,administratorwallet READ,
+                     // var lockSQL = "LOCK TABLES tradereward READ,traderecord WRITE,addressmoney WRITE,administratorwallet READ;";
+                     // LockTabel(lockSQL, tran, con);
+                     // LockTabel(tran, con);
                         if (TradeReward.CheckOccupied(tran, con, addrBussiness, addrFrom) >= tradeIndex)
                         {
                             notifyMsg = MsgMoneyIsLocked(addrFrom);
@@ -74,7 +77,7 @@ namespace DalOfAddress
                         else
                         {
                             int tradeIndexInDB;
-                            string sQL = "SELECT count(*) FROM traderecord WHERE bussinessAddr=@bussinessAddr AND addrFrom=@addrFrom";
+                            string sQL = "SELECT count(*) FROM traderecord WHERE bussinessAddr=@bussinessAddr AND addrFrom=@addrFrom FOR UPDATE;";
                             using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                             {
                                 command.Parameters.AddWithValue("@bussinessAddr", addrBussiness);
@@ -130,6 +133,7 @@ namespace DalOfAddress
                     }
                     catch (Exception e)
                     {
+                        tran.Rollback();
                         throw e;
                         throw new Exception("新增错误");
                     }
@@ -156,6 +160,9 @@ namespace DalOfAddress
                 {
                     try
                     {
+                        // var lockSQL = "LOCK TABLES tradereward READ,traderecord WRITE,administratorwallet READ;";
+                        //LockTabel(lockSQL, tran, con);
+                        // LockTabel(tran, con);
                         if (TradeReward.CheckOccupied(tran, con, addrBussiness, addrFrom) >= tradeIndex)
                         {
                             notifyMsg = MsgMoneyIsLocked(addrFrom);
@@ -165,7 +172,7 @@ namespace DalOfAddress
                         else
                         {
                             int tradeIndexInDB;
-                            string sQL = "SELECT count(*) FROM traderecord WHERE bussinessAddr=@bussinessAddr AND addrFrom=@addrFrom";
+                            string sQL = "SELECT count(*) FROM traderecord WHERE bussinessAddr=@bussinessAddr AND addrFrom=@addrFrom FOR UPDATE;";
                             using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                             {
                                 command.Parameters.AddWithValue("@bussinessAddr", addrBussiness);
@@ -200,6 +207,7 @@ namespace DalOfAddress
                     }
                     catch (Exception e)
                     {
+                        tran.Rollback();
                         throw e;
                         throw new Exception("新增错误");
                     }
@@ -225,6 +233,8 @@ namespace DalOfAddress
             {
                 var mysql = "INSERT INTO traderecord(msg,sign,bussinessAddr,tradeIndex,addrFrom,TimeStamping) VALUES(@msg,@sign,@bussinessAddr,@tradeIndex,@addrFrom,@TimeStamping);";
 
+
+
                 using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
                 {
                     con.Open();
@@ -232,6 +242,9 @@ namespace DalOfAddress
                     {
                         try
                         {
+                            // LockTabel(tran, con);
+                            //var lockSQL = "LOCK TABLES tradereward READ,traderecord WRITE,stocksum WRITE,administratorwallet READ;";
+                            //LockTabel(lockSQL, tran, con);
                             if (TradeReward.CheckOccupied(tran, con, addrBussiness, addrFrom) >= tradeIndex)
                             {
                                 notifyMsg = MsgMoneyIsLocked(addrFrom);
@@ -241,7 +254,7 @@ namespace DalOfAddress
                             else
                             {
                                 int tradeIndexInDB;
-                                string sQL = "SELECT count(*) FROM traderecord WHERE bussinessAddr=@bussinessAddr AND addrFrom=@addrFrom";
+                                string sQL = "SELECT count(*) FROM traderecord WHERE bussinessAddr=@bussinessAddr AND addrFrom=@addrFrom FOR UPDATE;";
                                 using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                                 {
                                     command.Parameters.AddWithValue("@bussinessAddr", addrBussiness);
@@ -279,6 +292,7 @@ namespace DalOfAddress
                         }
                         catch (Exception e)
                         {
+                            tran.Rollback();
                             throw e;
                             throw new Exception("新增错误");
                         }
@@ -288,7 +302,17 @@ namespace DalOfAddress
             //  notifyMsg = "";
         }
 
+        private static void LockTabel(string lockTabelSql, MySqlTransaction tran, MySqlConnection con)
+        {
+            if (false) { }
+            // var lockTabelSql = "LOCK TABLES traderecord WRITE;";
+            //using (MySqlCommand command = new MySqlCommand(lockTabelSql, con, tran))
+            //{
+            //    command.ExecuteNonQuery();
+            //}
+        }
 
+        [Obsolete]
         /// <summary>
         /// 此方法用于测试。
         /// </summary>
@@ -303,6 +327,7 @@ namespace DalOfAddress
             * addrBussiness addrFrom tradeIndex三个组成的主键，避免了数据库层面的双花！
             */
 
+            throw new Exception("");
             var sQL = "DELETE FROM traderecord WHERE bussinessAddr=@bussinessAddr";
 
             using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
@@ -348,6 +373,9 @@ namespace DalOfAddress
                 {
                     try
                     {
+                        // var lockSQL = "LOCK TABLES tradereward READ,traderecord WRITE,addressmoney WRITE,administratorwallet READ,moneyofcustomerextracted WRITE;";
+                        //LockTabel(lockSQL, tran, con);
+                        //LockTabel(tran, con);
                         if (TradeReward.CheckOccupied(tran, con, addrBussiness, addrFrom) >= tradeIndex)
                         {
                             notifyMsg = $"{addrBussiness}资金锁定中，其正作为奖励使用中。";
@@ -357,7 +385,7 @@ namespace DalOfAddress
                         else
                         {
                             int tradeIndexInDB;
-                            string sQL = "SELECT count(*) FROM traderecord WHERE bussinessAddr=@bussinessAddr AND addrFrom=@addrFrom";
+                            string sQL = "SELECT count(*) FROM traderecord WHERE bussinessAddr=@bussinessAddr AND addrFrom=@addrFrom FOR UPDATE;";
                             using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                             {
                                 command.Parameters.AddWithValue("@bussinessAddr", addrBussiness);
@@ -440,6 +468,7 @@ namespace DalOfAddress
                     }
                     catch (Exception e)
                     {
+                        tran.Rollback();
                         throw e;
                         throw new Exception("新增错误");
                     }
@@ -613,6 +642,20 @@ namespace DalOfAddress
         }
         public static void Add(ModelTranstraction.AwardsGivingPass agp, out AddResult r)
         {
+            /*
+             * 当使用LOCK TABLES语句时，可以指定两种不同的锁定级别：读取锁定（READ）和写入锁定（WRITE）。这两种级别具有不同的行为和影响。
+
+读取锁定（READ）：
+当使用读取锁定时，其他事务仍然可以读取被锁定的表，但是不能写入。
+读取锁定被称为共享锁（Shared Lock），因为它可以被多个事务同时持有，不会阻止其他事务读取数据。
+适用于需要读取数据但不需要修改数据的情况，可以提高并发性能。
+写入锁定（WRITE）：
+当使用写入锁定时，其他事务既不能读取也不能写入被锁定的表。
+写入锁定被称为排他锁（Exclusive Lock），因为它会阻止其他事务对表进行任何操作。
+适用于需要对数据进行写入操作，确保在修改期间其他事务不能对数据进行读取或写入的情况。
+总的来说，读取锁定允许其他事务读取数据，但不允许写入，而写入锁定则阻止其他事务对表进行任何操作。在实际应用中，根据需要选择合适的锁定级别来保护数据的完整性和一致性，同时提高并发性能。
+             */
+
             var tr = DalOfAddress.TradeReward.GetByStartDate(int.Parse(agp.Time));
             if (tr == null)
             {
@@ -624,7 +667,10 @@ namespace DalOfAddress
                 con.Open();
                 using (MySqlTransaction tran = con.BeginTransaction())
                 {
-
+                    //var lockSQL = "LOCK TABLES raceRecordIndex READ, introducedetai READ,tradereward READ,traderewardtimerecord READ;";
+                    //LockTabel(lockSQL, tran, con);
+                    //var lockSQL = "LOCK TABLES tradereward WRITE,traderecord WRITE,traderewardtimerecord READ,introducedetai READ,administratorwallet READ;";
+                    //LockTabel(lockSQL, tran, con);
                     if (agp.Msgs.Count == 0)
                     {
                         if (traderewardtimerecord.Count(con, tran, Convert.ToInt32(agp.Time)) == 0)
@@ -683,7 +729,7 @@ namespace DalOfAddress
                                 {
                                     int tradeIndexInDB;
                                     {
-                                        string sQL = "SELECT count(*) FROM traderecord WHERE bussinessAddr=@bussinessAddr AND addrFrom=@addrFrom";
+                                        string sQL = "SELECT count(*) FROM traderecord WHERE bussinessAddr=@bussinessAddr AND addrFrom=@addrFrom FOR UPDATE;";
                                         using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                                         {
                                             command.Parameters.AddWithValue("@bussinessAddr", tr.bussinessAddr);
@@ -901,6 +947,7 @@ namespace DalOfAddress
                 {
                     try
                     {
+                        //LockTabel(tran, con);
                         if (TradeReward.CheckOccupied(tran, con, addrBussiness, addrFrom) >= tradeIndex)
                         {
                             notifyMsg = MsgMoneyIsLocked(addrFrom);
@@ -968,6 +1015,7 @@ namespace DalOfAddress
                     }
                     catch (Exception e)
                     {
+                        tran.Rollback();
                         throw e;
                         throw new Exception("新增错误");
                     }

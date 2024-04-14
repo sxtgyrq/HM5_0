@@ -1,8 +1,10 @@
 ﻿var stocktradecenter =
 {
+    data: null,
     operateAddress: '',
     operateID: 'stocktradecenterPanel',
-    html: `<div id="stocktradecenterPanel" style="position: absolute;
+    html: function (passObj) {
+        var htmlValue = `<div id="stocktradecenterPanel" style="position: absolute;
         z-index: 8;
         top: calc(10% - 1px);
         width: 24em;
@@ -22,18 +24,18 @@
                 <th colspan="6" style="width:50%;">股份↓</th>
             </tr>
             <tr>
-                <td colspan="6" style="width:50%;">0.00</td>
-                <td colspan="6" style="width:50%;"><span>₿</span>0.0001332</td>
+                <td colspan="6" style="width:50%;">${(passObj.Score / 100).toFixed(2)}</td>
+                <td colspan="6" style="width:50%;"><span>₿</span><span>${(passObj.Sotoshi / 100000000).toFixed(8)}</span></td>
             </tr>
             <tr>
                 <td colspan="12">
-                    <span>价格→</span> <input type="number" name="quantity" min="1" max="5" style="width:calc(100% - 10em);"><span>分/聪</span>
+                    <span>价格→</span> <input id="stocktradecenterpanelpricevalue" type="number" name="quantity" min="0.01" max="5000" style="width:calc(100% - 10em);" value="${(passObj.price / 100).toFixed(2)}" step="0.05"><span>分/聪</span>
                 </td>
             </tr>
             <tr>
                 <td colspan="12">
                     <span>交易份额→</span>
-                    <input type="range" id="volume" name="volume" min="0" max="100" value="50" oninput="updateVolumeValue(this.value)" style="width:calc(100% - 12em);"><span>199%</span>
+                    <input type="range" id="stocktradecenterVolume" name="volume" min="1" max="100" value="50" oninput="stocktradecenter.updateVolumeValue(this.value)" style="width:calc(100% - 12em);"><span id="stocktradecenterVolumeDisplay">50%</span>
                 </td>
             </tr>
             <tr>
@@ -44,25 +46,25 @@
         <table style="width:100%">
             <tr>
                 <td style="width:50%">
-                    <div style="background: yellowgreen; width: 90%; margin-left: 5%;  padding: 0.5em 0 0.5em 0;border-radius:0.2em;">
+                    <div style="background: yellowgreen; width: 90%; margin-left: 5%;  padding: 0.5em 0 0.5em 0;border-radius:0.2em;" onclick="stocktradecenter.setMsgContent('sell');">
                         出售股点
                     </div>
                 </td>
                 <td style="width: 50%">
-                    <div style="background: yellowgreen; width: 90%; margin-left: 5%; padding: 0.5em 0 0.5em 0; border-radius: 0.2em; ">
+                    <div style="background: yellowgreen; width: 90%; margin-left: 5%; padding: 0.5em 0 0.5em 0; border-radius: 0.2em; " onclick="stocktradecenter.setMsgContent('buy');">
                         购买股点
                     </div>
                 </td>
             </tr>
             <tr>
                 <td style="width:50%">
-                    <div style="background: yellowgreen; width: 90%; margin-left: 5%; padding: 0.5em 0 0.5em 0; border-radius: 0.2em; ">
+                    <div style="background: yellowgreen; width: 90%; margin-left: 5%; padding: 0.5em 0 0.5em 0; border-radius: 0.2em; " onclick="stocktradecenter.setMsgContent('scoreReturn');">
                         积分提取
                     </div>
                 </td>
                 <td style="width: 50%">
-                    <div style="background: yellowgreen; width: 90%; margin-left: 5%; padding: 0.5em 0 0.5em 0; border-radius: 0.2em; ">
-                        股点提取
+                    <div style="background: yellowgreen; width: 90%; margin-left: 5%; padding: 0.5em 0 0.5em 0; border-radius: 0.2em; " onclick="stocktradecenter.setMsgContent('zhifubao');"> 
+                        红包兑换
                     </div>
                 </td>
             </tr>
@@ -76,7 +78,7 @@
             <label>
                 --↓↓↓对以下信息进行签名↓↓↓--
             </label>
-            <textarea style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(255, 0, 0, 0.5);height:4em;overflow:hidden;">1111111111111111111111</textarea>
+            <textarea id="msgNeedToSignTextareaAtStocktradecenter" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(255, 0, 0, 0.5);height:4em;overflow:hidden;">1111111111111111111111</textarea>
 
         </div>
         <div style="
@@ -86,18 +88,18 @@
             <label>
                 --↓↓↓输入签名↓↓↓--
             </label>
-            <textarea style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(255, 0, 0, 0.5);height:4em;overflow:hidden;">1111111111111111111111</textarea>
+            <textarea id="signOfMsgTextareaAtStocktradecenter"  style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(255, 0, 0, 0.5);height:4em;overflow:hidden;">1111111111111111111111</textarea>
 
         </div>
         <div  >
-            <div style="background: yellowgreen; margin-bottom: 0.25em; margin-top: 0.25em; left: 1em; width: calc(33.3% - 1.66em); display: inline-block; padding: 0.5em 0 0.5em 0; " onclick="moneyOperator.add();">
+            <div style="background: yellowgreen; margin-bottom: 0.25em; margin-top: 0.25em; left: 1em; width: calc(33.3% - 1.66em); display: inline-block; padding: 0.5em 0 0.5em 0; " onclick="stocktradecenter.add2();">
                 签名
             </div>
-            <div style="background: yellowgreen; margin-bottom: 0.25em; margin-top: 0.25em; left: 1em; width: calc(33.3% - 1.66em); display: inline-block; padding: 0.5em 0 0.5em 0; " onclick="moneyOperator.add();">
+            <div style="background: yellowgreen; margin-bottom: 0.25em; margin-top: 0.25em; left: 1em; width: calc(33.3% - 1.66em); display: inline-block; padding: 0.5em 0 0.5em 0; " onclick="stocktradecenter.add3();">
                 挂单
             </div>
 
-            <div style="background: yellowgreen; margin-bottom: 0.25em; margin-top: 0.25em; left: 1em; width: calc(33.3% - 1.6em); display: inline-block; padding: 0.5em 0 0.5em 0; " onclick="moneyOperator.add();">
+            <div style="background: yellowgreen; margin-bottom: 0.25em; margin-top: 0.25em; left: 1em; width: calc(33.3% - 1.6em); display: inline-block; padding: 0.5em 0 0.5em 0; " onclick="stocktradecenter.add4();">
                 历史记录
             </div>
         </div>
@@ -106,7 +108,9 @@
         <div style="background: orange; margin-bottom: 0.25em; margin-top: 2em; padding: 0.5em 0 0.5em 0;" onclick="stocktradecenter.add();">
             取消
         </div>
-    </div>`,
+    </div>`;
+        return htmlValue;
+    },
     htmlOkxwallet: `<div id="subsidizePanel"  style="position:absolute;z-index:8;top:calc(10% - 1px);width:24em; left:calc(50% - 12em);height:auto;border:solid 1px red;text-align:center;background:rgba(104, 48, 8, 0.85);color:#83ffff;overflow-y: scroll;max-height: calc(90%);  ">
         <table style="width:100%;">
             <tr>
@@ -192,16 +196,55 @@
             取消
         </div>
     </div>`,
-    add: function () {
+    add: function (passObj) {
+
         var that = stocktradecenter;
+        that.data = passObj;
         if (document.getElementById(that.operateID) == null) {
-            // var obj = new DOMParser().parseFromString(that.html, 'text/html');
-            var frag = document.createRange().createContextualFragment(that.html);
-            frag.id = that.operateID; 
-            document.body.appendChild(frag); 
+            if (passObj.IsLogined) {
+                // var obj = new DOMParser().parseFromString(that.html, 'text/html');
+                var frag = document.createRange().createContextualFragment(that.html(passObj));
+                frag.id = that.operateID;
+                document.body.appendChild(frag);
+
+                function addObjNumberCheck() {
+                    if (document.getElementById('stocktradecenterpanelpricevalue') != null)
+                        document.getElementById('stocktradecenterpanelpricevalue').addEventListener('input', function (e) {
+                            var value = this.value;
+
+                            const regex = /^[+-]?(\d+(\.\d*)?|\.\d+)$/;
+                            if (regex.test(value))
+                                if (value.includes('.') && value.split('.')[1].length > 2) {
+                                    this.value = parseFloat(value).toFixed(2);
+                                }
+                                else {
+                                }
+                            else {
+                            }
+                            stocktradecenter.updateMsgNeedToSignTextareaAtStocktradecenter();
+                        });
+
+                    if (document.getElementById('msgNeedToSignTextareaAtStocktradecenter') != null)
+                        document.getElementById('msgNeedToSignTextareaAtStocktradecenter').addEventListener('input', function (e) {
+                            var value = this.value;
+
+                            if (stocktradecenter.formatIsRight(value)) {
+                                document.getElementById('msgNeedToSignTextareaAtStocktradecenter').style.background = 'rgba(0, 255, 0, 0.5)';
+                            }
+                            else {
+                                document.getElementById('msgNeedToSignTextareaAtStocktradecenter').style.background = 'rgba(255, 0, 0, 0.5)';
+                            }
+                        });
+                }
+
+                setTimeout(addObjNumberCheck, 500);
+            }
+            else {
+                $.notify('请先登录', 'warn');
+            }
         }
-        else {
-            document.getElementById(that.operateID).remove(); 
+        else if (passObj == undefined || document.getElementById(that.operateID) != null) {
+            document.getElementById(that.operateID).remove();
         }
     },
     updateMoneyOfSumSubsidizing: function () {
@@ -301,203 +344,158 @@
         }
     },
     add2: function () {
+        if (typeof window.okxwallet !== 'undefined') {
+            // if (false) {
+            async function signMessage(signStr) {
+                //nyrqOkex.signMsg
+                //  okxwallet.bitcoin.connect();
+                // okxwallet.bitcoin.requestAccounts();
+                try {
+                    const result = await window.okxwallet.bitcoin.signMessage(signStr, 'ecdsa');
+                    //console.log(result);
+                    //nyrqOkex.signMsg = result;
 
-        if (document.getElementById(PrivateSignPanelObj.id) == null) {
-            PrivateSignPanelObj.show(
-                function () {
-                    return true;
-                },
-                function () {
-                    if (!objMain.stateNeedToChange.isLogin) {
+                    var addresses = yrqGetPublickFromSignatureString(signStr, result);
+                    okxAddrDisplay.show(
+                        addresses,
+                        result,
+                        function (addr, sign) {
+                            document.getElementById('signOfMsgTextareaAtStocktradecenter').value = sign;
+                            document.getElementById('signOfMsgTextareaAtStocktradecenter').style.background = 'rgba(0, 255, 0, 0.5)';
+                            //objMain.okxRecord.addr = addr;
+                            //objMain.okxRecord.sign = sign;
+                            //objMain.ws.send(sign);
+                            document.getElementById(okxAddrDisplay.id).remove();
+                        },
 
+                    );
+                }
+                catch (e) {
+                    if (e.code == 4001) {
+                        $.notify('欧意钱包拒绝了签名', 'warn')
                     }
-                }, function (addr, sign) {
-                    var that = subsidizeSys;
-                    that.signInfoMatiion = [sign, addr];
-                    that.add2();
-                    that.add();
-                },
-                JSON.parse(sessionStorage['session']).Key,
-                function () {
-                    if (objMain.stateNeedToChange.isLogin) { }
-                    else {
-                        var el = document.getElementById('moneySubsidize');
-                        el.classList.add('msg');
-
-                    }
                 }
-            );
-        }
-        else {
-            document.getElementById(PrivateSignPanelObj.id).remove();
-        }
-    },
-    add3: function (bitcoinAddrFrom) {
-        var panelID = 'subsidizePanel_MoneyTransctractionToOther';
-        var html = `<div id="${panelID}" style="position: absolute;
-        z-index: 8;
-        top: calc(10% - 1px);
-        width: 24em;
-        left: calc(50% - 12em);
-        height: auto;
-        border: solid 1px red;
-        text-align: center;
-        background: rgba(104, 48, 8, 0.85);
-        color: #83ffff;
-        overflow: hidden;
-        overflow-y: scroll;
-        max-height: calc(90%);
-">
-         
-        <div style="
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;border:1px solid gray;">
-
-            <label>
-                --↓↓↓当前地址↓↓↓--
-            </label>
-            <input type="text" style="width: calc(90% - 10px); margin-bottom: 0.25em; background: rgba(0, 255, 0, 0.5);" readonly value="${bitcoinAddrFrom}"/>
-        </div>
-
-        <div style="margin-bottom: 0.25em;margin-top: 0.25em;border:1px solid gray;">
-
-            <label onclick="subsidizeSys.readStr('scoreTranstractionToBitcoinAddr');">
-                --↓↓↓转出地址↓↓↓--
-            </label>
-            <input id="scoreTranstractionToBitcoinAddr" type="text" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(255, 0, 0, 0.5);"/>
-        </div> 
-        <div style="
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;border:1px solid gray;">
-
-            <label>
-                --积分额度→
-            </label>
-            <input id="scoreTranstractionValue" type="number" value="5000.00"/>
-
-        </div> 
-         <div style="background: yellowgreen;
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.scoreTranstraction();">
-            转让
-        </div>
-        <div style="background: orange;
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;padding:0.5em 0 0.5em 0;" onclick="subsidizeSys.add3();">
-            取消
-        </div>
-    </div>`;
-
-
-        //var that = subsidizeSys; 
-        if (document.getElementById(panelID) == null) {
-            // var obj = new DOMParser().parseFromString(that.html, 'text/html');
-            var frag = document.createRange().createContextualFragment(html);
-            frag.id = panelID;
-
-            document.body.appendChild(frag);
-
-            function addObjNumberCheck() {
-                if (document.getElementById('scoreTranstractionValue') != null) {
-                    document.getElementById('scoreTranstractionValue').addEventListener('input', function (e) {
-                        var value = this.value;
-                        if (value.includes('.') && value.split('.')[1].length > 2) {
-                            this.value = parseFloat(value).toFixed(2);
-                        }
-                    });
-                }
-                //yrqCheckAddress('16CkZUFmzb1cLNUzwTTqdL7vugmdr3Pyy4')
-                if (document.getElementById('scoreTranstractionToBitcoinAddr') != null) {
-                    document.getElementById('scoreTranstractionToBitcoinAddr').addEventListener('input', function (e) {
-                        var value = this.value;
-                        if (yrqCheckAddress(value)) {
-                            document.getElementById('scoreTranstractionToBitcoinAddr').style.background = 'rgba(0, 255, 0, 0.5)';
-                        }
-                        else {
-                            document.getElementById('scoreTranstractionToBitcoinAddr').style.background = 'rgba(255, 0, 0, 0.5)';
-                        }
-                        //if (value.includes('.') && value.split('.')[1].length > 2) {
-                        //    this.value = parseFloat(value).toFixed(2);
-                        //}
-                    });
-                    document.getElementById('scoreTranstractionToBitcoinAddr').addEventListener('change', function (e) {
-                        var value = this.value;
-                        if (yrqCheckAddress(value)) {
-                            document.getElementById('scoreTranstractionToBitcoinAddr').style.background = 'rgba(0, 255, 0, 0.5)';
-                        }
-                        else {
-                            document.getElementById('scoreTranstractionToBitcoinAddr').style.background = 'rgba(255, 0, 0, 0.5)';
-                        }
-                        //if (value.includes('.') && value.split('.')[1].length > 2) {
-                        //    this.value = parseFloat(value).toFixed(2);
-                        //}
-                    });
-                }
+                //   alert(nyrqOkex.signMsg);
+                // 处理result...
             }
-
-            setTimeout(addObjNumberCheck, 50); // 1000毫秒后执行myFunction
-            //that.updateMoney();
-            //that.updateSignInfomation();
-            //that.updateMoneyOfSumSubsidized();
-            //that.updateMoneyOfSumSubsidizing();
-
-            //that.updateBtnInnerHtml();
-
-            //var el = document.getElementById('moneySubsidize');
-            //el.classList.remove('msg');
-            //if (objMain.stateNeedToChange.isLogin) {
-
-            //}
-            //else {
-            //    var bthNeedToUpdateLevel = document.getElementById('bthNeedToUpdateLevel');
-            //    bthNeedToUpdateLevel.classList.add('needToClick');
-
-            //}
-            //localStorage['addrOfMainss']
+            if (stocktradecenter.formatIsRight(document.getElementById('msgNeedToSignTextareaAtStocktradecenter').value))
+                signMessage(document.getElementById('msgNeedToSignTextareaAtStocktradecenter').value);
+            else
+                $.notify('请输入正确的协议', 'info');
         }
         else {
-            document.getElementById(panelID).remove();
-        }
-    },
-    add4_okx: function () {
-        if (!objMain.stateNeedToChange.isLogin) {
-            if (document.getElementById(okxAddrDisplay.id) == null) {
+            if (document.getElementById(PrivateSignPanelObj.id) == null) {
+                PrivateSignPanelObj.show(
+                    function () {
 
-                async function signMessage(signStr) {
-                    //nyrqOkex.signMsg
-                    //  okxwallet.bitcoin.connect();
-                    // okxwallet.bitcoin.requestAccounts();
-                    try {
-                        const result = await window.okxwallet.bitcoin.signMessage(signStr, 'ecdsa');
-                        //console.log(result);
-                        //nyrqOkex.signMsg = result;
+                        return stocktradecenter.formatIsRight(document.getElementById('msgNeedToSignTextareaAtStocktradecenter').value);
+                        //var rexx = /^[\u4e00-\u9fa5]{2,10}$/;
+                        //return rexx.test(document.getElementById('bindWordMsg').value);
+                        //return true;
+                    },
+                    function () {
+                        $.notify('请输入正确的协议', 'info');
+                        // document.getElementById('msgNeedToSignTextareaAtStocktradecenter').style.background = 'rgba(255, 0, 0, 0.5)';
+                        // $.notify('绑定词得是2至10个汉字', 'info');
+                    }, function (addr, sign) {
 
-                        var addresses = yrqGetPublickFromSignatureString(signStr, result);
-                        okxAddrDisplay.show(
-                            addresses,
-                            result,
-                            function (addr, sign) {
-                                var that = subsidizeSys;
-                                that.signInfoMatiion = [sign, addr];
-                                that.add();
-                                that.add4_okx();
-                            },
 
-                        );
-                    }
-                    catch (e) {
-                        if (e.code == 4001) {
-                            $.notify('欧意钱包拒绝了签名', 'warn')
-                        }
-                    }
-                    //   alert(nyrqOkex.signMsg);
-                    // 处理result...
-                }
-                signMessage(JSON.parse(sessionStorage['session']).Key);
-
+                        document.getElementById('signOfMsgTextareaAtStocktradecenter').value = sign;
+                        document.getElementById('signOfMsgTextareaAtStocktradecenter').style.background = 'rgba(0, 255, 0, 0.5)';
+                        //document.getElementById('bindWordSign').value = sign;
+                    },
+                    document.getElementById('msgNeedToSignTextareaAtStocktradecenter').value);
             }
             else {
-                document.getElementById(okxAddrDisplay.id).remove();
+                document.getElementById(PrivateSignPanelObj.id).remove();
+            }
+        }
+    },
+    add3: function () {
+        if (/^[0-9A-Za-z+\/=]{43,}$/.test(document.getElementById('signOfMsgTextareaAtStocktradecenter').value) &&
+            stocktradecenter.formatIsRight(document.getElementById('msgNeedToSignTextareaAtStocktradecenter').value)
+        ) {
+            //   stocktradecenter.formoatAddr = '';
+            if (yrqVerify(stocktradecenter.formoatAddr, document.getElementById('signOfMsgTextareaAtStocktradecenter').value, document.getElementById('msgNeedToSignTextareaAtStocktradecenter').value, sessionStorage.addrAfterSuccess)) {
+                objMain.ws.send(JSON.stringify({
+                    'c': 'StockTradeInfo',
+                    'Msg': document.getElementById('msgNeedToSignTextareaAtStocktradecenter').value,//msgNeedToSignTextareaAtStocktradecenter
+                    'Sign': document.getElementById('signOfMsgTextareaAtStocktradecenter').value
+                }));
+            }
+            else {
+                $.notify('签名不正确', 'warn');
+                document.getElementById('signOfMsgTextareaAtStocktradecenter').style.background = 'rgba(255, 0, 0, 0.5)';
+            }
+
+        }
+    },
+    add4: function () {
+        objMain.ws.send(JSON.stringify({
+            'c': 'StockCenerOrder',
+        }));
+    },
+    addStockCenterDetail: function (data) {
+        if (data == undefined) {
+            var id = "stocktradecenterOrderDetail";
+            document.getElementById(id).remove();
+            if (document.getElementById(id) == null) { }
+            else {
+                document.getElementById(id).remove();
+            }
+        }
+        else {
+            var id = "stocktradecenterOrderDetail";
+            var htmlPart1 = `<div id="${id}" style="position: absolute; z-index: 9; top: calc(5% - 1px); width: 24em; left: calc(50% - 12em); height: auto; border: solid 1px red; text-align: center; background: rgba(104, 48, 8, 0.85); color: #83ffff; overflow: hidden; overflow-y: scroll; height: calc(90%); max-height: calc(90%); ">
+        <div> <span id="minOrMax" style="background:red;float:left;border:solid 1px #000000;" onclick="stocktradecenter.stocktradecenterOrderDetailExit();">返回</span></div>`;
+            for (var i = 0; i < data.list.length; i++) {
+                if (data.list[i].canCancle) {
+                    var itemHtml = `<table style="width:100%;border:double 3px #ffffff;" id="table${data.list[i].infosha256ID}">
+            <tr>
+
+                <td style="max-width: calc(20em - 6px); width: calc(20em - 6px); word-wrap: anywhere; word-break: break-all; color: #439fdf; ">${data.list[i].infomationContent}</td>
+                <td rowspan="3" style="max-width:4em;width:4em;"><button style="height:calc( 100%);padding-top:2em;padding-bottom:2em;" onclick="stocktradecenter.stockCancel('${data.list[i].infosha256ID}')">撤<br />单</button></td>
+            </tr>
+            <tr>
+                <td style="max-width: calc(20em - 6px); width: calc(20em - 6px); word-wrap: anywhere; word-break: break-all; color: #63cfef;">${data.list[i].sign}</td>
+            </tr>
+            <tr>
+                <td style="max-width: calc(20em - 6px); width: calc(20em - 6px); word-wrap: anywhere; word-break: break-all; color: #83ffff; ">${data.list[i].resultStr}</td>
+
+            </tr>
+        </table>`;
+                    htmlPart1 += itemHtml;
+                }
+                else {
+                    var itemHtml = `<table style="width:100%;border:double 3px #ffffff;">
+            <tr>
+
+                <td style="max-width: calc(24em - 6px); width: calc(24em - 6px); word-wrap: anywhere; word-break: break-all; color: #439fdf; ">${data.list[i].infomationContent}</td>
+                
+            </tr>
+            <tr>
+                <td style="max-width: calc(24em - 6px); width: calc(24em - 6px); word-wrap: anywhere; word-break: break-all; color: #63cfef; ">${data.list[i].sign}</td>
+            </tr>
+            <tr>
+                <td style="max-width: calc(24em - 6px); width: calc(24em - 6px); word-wrap: anywhere; word-break: break-all; color: #83ffff; ">${data.list[i].resultStr}</td>
+
+            </tr>
+        </table>`;
+                    htmlPart1 += itemHtml;
+                }
+            }
+
+            var htmlPartEnd = ` </div>`;
+            htmlPart1 += htmlPartEnd;
+
+            if (document.getElementById(id) == null) {
+                // var obj = new DOMParser().parseFromString(that.html, 'text/html');
+                var frag = document.createRange().createContextualFragment(htmlPart1);
+                frag.id = id;
+                document.body.appendChild(frag);
+            }
+            else {
+                document.getElementById(id).remove();
             }
         }
     },
@@ -719,104 +717,205 @@
             case 4: { document.getElementById('bthNeedToUpdateLevel').innerText = '登录' + addContent; }; break;
             case 5: { document.getElementById('bthNeedToUpdateLevel').innerText = '登录' + addContent; }; break;
         }
+    },
+    percentValue: 50,
+    updateVolumeValue: function (value) {
+
+        stocktradecenter.percentValue = Number.parseInt(value);
+        document.getElementById('stocktradecenterVolumeDisplay').innerText = stocktradecenter.percentValue + '%';
+        stocktradecenter.updateMsgNeedToSignTextareaAtStocktradecenter();
+        //'北京时间'+stocktradecenter.data.DateTimeStr+','+stocktradecenter.data.BTCAddr+'以0.01积分每聪的价格出售10000聪股点。nyrq123.com'
+    },
+    setMsgContent: function (select) {
+        switch (select) {
+            case 'sell':
+                {
+                    stocktradecenter.state = 'sell';
+                    stocktradecenter.updateMsgNeedToSignTextareaAtStocktradecenter();
+                }; break;
+            case 'buy':
+                {
+                    stocktradecenter.state = 'buy';
+                    stocktradecenter.updateMsgNeedToSignTextareaAtStocktradecenter();
+                }; break;
+            case 'scoreReturn':
+                {
+                    stocktradecenter.state = 'scoreReturn';
+                    stocktradecenter.updateMsgNeedToSignTextareaAtStocktradecenter();
+                }; break;
+            case 'zhifubao':
+                {
+                    stocktradecenter.state = 'zhifubao';
+                    stocktradecenter.updateMsgNeedToSignTextareaAtStocktradecenter();
+                }; break;
+            default:
+                {
+                    stocktradecenter.state = '';
+                }
+        }
+        // updateMsgNeedToSignTextareaAtStocktradecenter();
+    },
+    state: '',
+    updateMsgNeedToSignTextareaAtStocktradecenter: function () {
+        // document.getElementById('msgNeedToSignTextareaAtStocktradecenter').style.background = 'rgba(0, 255, 0, 0.5)';
+        switch (stocktradecenter.state) {
+            case 'sell':
+                {
+                    var msg = '北京时间' + stocktradecenter.data.DateTimeStr + ',' + stocktradecenter.data.BTCAddr + `以${stocktradecenter.priceStrValue()}积分每聪的价格出售${stocktradecenter.satoshiValue()}聪股点。nyrq123.com`;
+                    //msgNeedToSignTextareaAtStocktradecenter
+                    if (document.getElementById('msgNeedToSignTextareaAtStocktradecenter') == null) { }
+                    else {
+                        document.getElementById('msgNeedToSignTextareaAtStocktradecenter').value = msg;
+                    }
+                }; break;
+            case 'buy':
+                {
+                    var msg = '北京时间' + stocktradecenter.data.DateTimeStr + ',' + stocktradecenter.data.BTCAddr + `以${stocktradecenter.priceStrValue()}积分每聪的价格收购${stocktradecenter.satoshiValue()}聪股点。nyrq123.com`;
+                    //msgNeedToSignTextareaAtStocktradecenter
+                    if (document.getElementById('msgNeedToSignTextareaAtStocktradecenter') == null) { }
+                    else {
+                        document.getElementById('msgNeedToSignTextareaAtStocktradecenter').value = msg;
+                    }
+                }; break;
+            case 'scoreReturn':
+                {
+                    var msg = '北京时间' + stocktradecenter.data.DateTimeStr + ',' + stocktradecenter.data.BTCAddr + `取回${stocktradecenter.scoreValue()}积分。nyrq123.com`;
+                    //msgNeedToSignTextareaAtStocktradecenter
+                    if (document.getElementById('msgNeedToSignTextareaAtStocktradecenter') == null) { }
+                    else {
+                        document.getElementById('msgNeedToSignTextareaAtStocktradecenter').value = msg;
+                    }
+                }; break;
+            case 'zhifubao':
+                {
+                    var msg = '北京时间' + stocktradecenter.data.DateTimeStr + ',' + stocktradecenter.data.BTCAddr + `用50.00积分与${stocktradecenter.data.RewardSotoshiCost}聪股点换取支付宝红包。nyrq123.com`;
+                    //msgNeedToSignTextareaAtStocktradecenter
+                    if (document.getElementById('msgNeedToSignTextareaAtStocktradecenter') == null) { }
+                    else {
+                        document.getElementById('msgNeedToSignTextareaAtStocktradecenter').value = msg;
+                    }
+                }; break;
+            default:
+                {
+                    //msgNeedToSignTextareaAtStocktradecenter
+                    // document.getElementById('msgNeedToSignTextareaAtStocktradecenter').style.background = 'rgba(255, 0, 0, 0.5)'; //= msg;
+                }; break;
+        }
+
+        var msgValue = document.getElementById('msgNeedToSignTextareaAtStocktradecenter').value;
+        if (stocktradecenter.formatIsRight(msgValue)) {
+            document.getElementById('msgNeedToSignTextareaAtStocktradecenter').style.background = 'rgba(0, 255, 0, 0.5)';
+        }
+        else {
+            document.getElementById('msgNeedToSignTextareaAtStocktradecenter').style.background = 'rgba(255, 0, 0, 0.5)';
+        }
+    },
+    priceStrValue: function () {
+        if (document.getElementById('stocktradecenterpanelpricevalue') == null)
+            return '0.01';
+        else {
+            return Number.parseFloat(document.getElementById('stocktradecenterpanelpricevalue').value).toFixed(2);
+        }
+    },
+    satoshiValue: function () {
+        switch (stocktradecenter.state) {
+            case 'sell':
+                {
+                    if (stocktradecenter.data == null) {
+                        return 0;
+                    }
+                    else {
+                        return Number.parseInt(Math.floor(stocktradecenter.data.Sotoshi * stocktradecenter.percentValue / 100).toFixed(0));
+                    }
+                }; break;
+            case 'buy':
+                {
+                    if (stocktradecenter.data == null) {
+                        return 0;
+                    }
+                    else {
+                        var price = Number.parseFloat(stocktradecenter.priceStrValue());
+                        if (price >= 0.01) {
+                        }
+                        else price = 0.01;
+                        var satoshiCount = Number.parseInt(Math.floor(stocktradecenter.data.Score / 100 / price));
+
+                        return Number.parseInt(Math.floor(satoshiCount * stocktradecenter.percentValue / 100).toFixed(0));
+                    }
+                }
+        }
+    },
+    scoreValue: function () {
+        switch (stocktradecenter.state) {
+            case 'scoreReturn':
+                {
+                    if (stocktradecenter.data == null) {
+                        return 0;
+                    }
+                    else {
+                        return (Math.floor(stocktradecenter.data.Score * stocktradecenter.percentValue / 100) / 100).toFixed(2);
+                    }
+                }
+        }
+    },
+    formoatAddr: '',
+    formatIsRight: function (inputV) {
+
+        const regex1 = /^北京时间\d{4}年\d{2}月\d{2}日\d{2}时\d{2}分,[13]{1}[1-9A-HJ-NP-Za-km-z]{25,34}取回(?!0(?!\.))\d{1,}\.\d{2}积分。nyrq123\.com$/;
+
+        const regex2 = /^北京时间\d{4}年\d{2}月\d{2}日\d{2}时\d{2}分,[13]{1}[1-9A-HJ-NP-Za-km-z]{25,34}以(?!0(?!\.))\d{1,}\.\d{2}积分每聪的价格出售(?!0(?!\.))\d{1,}聪股点。nyrq123\.com$/;
+
+        const regex3 = /^北京时间\d{4}年\d{2}月\d{2}日\d{2}时\d{2}分,[13]{1}[1-9A-HJ-NP-Za-km-z]{25,34}以(?!0(?!\.))\d{1,}\.\d{2}积分每聪的价格收购(?!0(?!\.))\d{1,}聪股点。nyrq123\.com$/;
+
+        const regex4 = /^北京时间\d{4}年\d{2}月\d{2}日\d{2}时\d{2}分,[13]{1}[1-9A-HJ-NP-Za-km-z]{25,34}用50\.00积分与(?!0(?!\.))\d{1,}聪股点换取支付宝红包。nyrq123\.com$/;
+
+        if (regex1.test(inputV)) {
+            var text = inputV;
+            var index1 = text.indexOf(',', 0);
+            var index2 = text.indexOf('取', 0);
+            stocktradecenter.formoatAddr = text.substr(index1 + 1, index2 - index1 - 1);
+            return true;
+        }
+        else if (regex2.test(inputV)) {
+            var text = inputV;
+            var index1 = text.indexOf(',', 0);
+            var index2 = text.indexOf('以', 0);
+            stocktradecenter.formoatAddr = text.substr(index1 + 1, index2 - index1 - 1);
+            return true;
+        }
+        else if (regex3.test(inputV)) {
+            var text = inputV;
+            var index1 = text.indexOf(',', 0);
+            var index2 = text.indexOf('以', 0);
+            stocktradecenter.formoatAddr = text.substr(index1 + 1, index2 - index1 - 1);
+            return true;
+        }
+        else if (regex4.test(inputV)) {
+            var text = inputV;
+            var index1 = text.indexOf(',', 0);
+            var index2 = text.indexOf('用', 0);
+            stocktradecenter.formoatAddr = text.substr(index1 + 1, index2 - index1 - 1);
+            return true;
+        }
+        else {
+            stocktradecenter.formoatAddr = '';
+            return false;
+        }
+        //if (regex.test(inputV)) { }
+    },
+    stockCancel: function (infosha256ID) {
+        var tableID = "table" + infosha256ID;
+        if (document.getElementById(tableID) != null) {
+            document.getElementById(tableID).remove();
+            objMain.ws.send(JSON.stringify({ c: 'CancelStock', infosha256ID: infosha256ID }));
+        }
+    },
+    stocktradecenterOrderDetailExit: function ()
+    {
+        var id = 'stocktradecenterOrderDetail';
+        if (document.getElementById(id) != null) {
+            document.getElementById(id).remove(); 
+        }
     }
 }
     ;
-var debtInfoSys =
-{
-    operateID: 'debtPanel',
-    html: `<div id="subsidizePanel"  style="position:absolute;z-index:8;top:calc(10% - 1px);width:24em; left:calc(50% - 12em);height:auto;border:solid 1px red;text-align:center;background:rgba(104, 48, 8, 0.85);color:#83ffff;overflow-y: scroll;max-height: calc(90%);  ">
-        <table style="width:100%;">
-            <tr>
-                <th>剩余资助</th>
-                <th>现有资助</th>
-            </tr>
-            <tr>
-                <td id="moneyOfSumSubsidizing" >未知</td>
-                <td id="moneyOfSumSubsidized">0</td>
-            </tr>
-        </table>
-        <div style="
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;border:1px solid gray;">
-
-            <label>
-                --↓↓↓输入1打头的B地址↓↓↓--
-            </label>
-            <input id="bitcoinSubsidizeAddressInput" type="text" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(127, 255, 127, 0.6);" />
-        </div>
-        <div style="
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;border:1px solid gray;">
-
-            <label onclick="alert('弹出二维码');">
-                --↓↓↓对以下信息进行签名↓↓↓--
-            </label> 
-            <input  id="msgNeedToSign" type="text" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(127, 255, 127, 0.6);" readonly />
-        </div>
-        <div style="
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;border:1px solid gray;">
-
-            <label onclick="alert('弹出扫描二维码');">
-                --↓↓↓输入签名↓↓↓--
-            </label>
-            <textarea id="signatureInputTextArea" style="width:calc(90% - 10px);margin-bottom:0.25em;background:rgba(127, 255, 127, 0.6);height:4em;overflow:hidden;">1111111111111111111111</textarea>
-
-        </div> 
-
-        <table style="width:100%">
-            <tr>
-                <td style="width:50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;" onclick="subsidizeSys.subsidize(50000)" >
-                        资助500
-                    </div>
-                </td>
-                <td style="width: 50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;"  onclick="subsidizeSys.subsidize(100000)" >
-                        资助1000
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td style="width:50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;" onclick="subsidizeSys.subsidize(200000)" >
-                        资助2000
-                    </div>
-                </td>
-                <td style="width: 50%">
-                    <div style="background: yellowgreen; width:90%;margin-left:5%;" onclick="subsidizeSys.subsidize(500000)">
-                        资助5000
-                    </div>
-                </td>
-            </tr> 
-        </table>
-         <div style="background: yellowgreen;
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;" onclick="subsidizeSys.signOnline();">
-            线上私钥签名
-        </div>
-        <div style="background: yellowgreen;
-        margin-bottom: 0.25em;
-        margin-top: 0.25em;" onclick="subsidizeSys.add();">
-            取消
-        </div>
-    </div>`,
-    add: function () {
-        var that = subsidizeSys;
-        if (document.getElementById(that.operateID) == null) {
-            // var obj = new DOMParser().parseFromString(that.html, 'text/html');
-            var frag = document.createRange().createContextualFragment(that.html);
-            frag.id = that.operateID;
-
-            document.body.appendChild(frag);
-            that.updateMoney();
-            that.updateSignInfomation();
-            that.updateMoneyOfSumSubsidized();
-            that.updateMoneyOfSumSubsidizing();
-        }
-        else {
-            document.getElementById(that.operateID).remove();
-        }
-    },
-};

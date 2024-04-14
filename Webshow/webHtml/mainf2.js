@@ -2578,7 +2578,13 @@ var objMain =
                 }; break;
             case 'GetStockTradeCenterDetail.Result':
                 {
-                    stocktradecenter.add();
+                    //{IsLogined: true, Score: 0, Sotoshi: 0, BTCAddr: '115NqAdiyiDAf2VFvF2gznxhF7DQZUw8Wy', price: 1, …}
+                    if (received_obj.IsLogined)
+                        stocktradecenter.add(received_obj);
+                }; break;
+            case 'StockCenerOrderDetail.Result':
+                {
+                    stocktradecenter.addStockCenterDetail(received_obj);
                 }; break;
             default:
                 {

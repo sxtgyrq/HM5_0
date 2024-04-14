@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using static CommonClass.Finance;
+using static CommonClass.ModelTranstraction;
 using static HouseManager5_0.RoomMainF.RoomMain;
 
 namespace HouseManager5_0.interfaceOfHM
@@ -216,5 +217,14 @@ namespace HouseManager5_0.interfaceOfHM
         string DouyinLogContentF(DouyinLogContent douyinLog);
         string SetGroupIsLive(SetGroupLive sgl);
         string GetStockTradeCenterDetailF(GetStockTradeCenterDetail gstcd);
+        string GetAllStockPlaceF(ModelTranstraction.GetAllStockPlace gasp);
+
+        string ReturnScoreFromStockCenterF(ModelTranstraction.ReturnScoreFromStockCenter rsfsc);
+        string ReturnSatoshiFromStockCenterF(ReturnSatoshiFromStockCenter rsfsc);
+        string StockBuyFromStockCenterF(StockBuyFromStockCenter ssfsc);
+        string StockSellFromStockCenterF(StockSellFromStockCenter ssfsc);
+        string AlipayRewardSecretToServerF(AlipayRewardSecretToServer arsts);
+        string StockCenerOrderDetailF(StockCenerOrderDetail scod);
+        string StockCancleF(StockCancle sc);
     }
 }

@@ -1155,6 +1155,9 @@ namespace CommonClass
             public long Score { get; set; }
             public long Sotoshi { get; set; }
             public string BTCAddr { get; set; }
+            public long price { get; set; }//score/satoshi
+            public string DateTimeStr { get; set; }
+            public long RewardSotoshiCost { get; set; }
         }
     }
 

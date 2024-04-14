@@ -74,7 +74,7 @@ namespace DalOfAddress
                     {
                         bool indexIsRight;
                         {
-                            string sQL = "SELECT COUNT(*) FROM traderecord WHERE bussinessAddr=@bussinessAddr AND addrFrom=@addrFrom";
+                            string sQL = "SELECT COUNT(*) FROM traderecord WHERE bussinessAddr=@bussinessAddr AND addrFrom=@addrFrom FOR UPDATE;";
                             using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
                             {
                                 command.Parameters.AddWithValue("@bussinessAddr", bussinessAddr);
@@ -186,7 +186,7 @@ waitingForAddition) VALUES (@startDate,@tradeIndex,@tradeAddress,@bussinessAddr,
                         tradeAddress = Convert.ToString(r["tradeAddress"]).Trim(),
                         tradeIndex = Convert.ToInt32(r["tradeIndex"]),
                         waitingForAddition = Convert.ToInt32(r["waitingForAddition"]),
-                         
+
                     };
                 }
                 else
@@ -199,7 +199,7 @@ waitingForAddition) VALUES (@startDate,@tradeIndex,@tradeAddress,@bussinessAddr,
         }
 
         internal static bool HasDataToOperate(int startDate, MySqlConnection con, MySqlTransaction tran)
-        { 
+        {
             var sQL = $"SELECT startDate,tradeIndex,tradeAddress,bussinessAddr,passCoin,waitingForAddition,signOfTradeAddress,signOfBussinessAddr,orderMessage FROM  tradereward WHERE startDate={startDate} AND waitingForAddition=1;";
 
             using (MySqlCommand command = new MySqlCommand(sQL, con))

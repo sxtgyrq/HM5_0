@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>www.nyrq123.com畅玩游戏，赢取奖励！</title>
+    <title></title>
+    <script>
+        var f = function () {
+            var result = '';
+            var c = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸', '子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥', '金', '木', '水', '火', '土', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '东', '南', '西', '北', '中'];
+            var num = (Date.now() + Math.floor(Math.random() * 10000)) % c.length;
+
+            for (var i = 0; i < 11; i++) {
+                var num = (Date.now() + Math.floor(Math.random() * 10000)) % c.length;
+                result += c[num]
+            }
+            return result;
+        }
+
+    </script>
+</head>
+<body>
+    <p id="showP"></p>
+    <script>
+        document.getElementById('showP').innerText = 'nyrq123' + f();
+    </script>
+</body>
+</html>

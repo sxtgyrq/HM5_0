@@ -118,6 +118,23 @@ namespace WsOfWebClient
         public double scoreTranstractionValue { get; set; }
     }
 
+    public class AlipayReward : CommonClass.Command
+    {
+        public string SecretStr { get; set; }
+    }
+    public class StockCenerOrder : CommonClass.Command { }
+
+    public class StockTradeInfo : CommonClass.Command
+    {
+        public string Msg { get; set; }
+        public string Sign { get; set; }
+    }
+    public class CancelStock : CommonClass.Command
+    {
+        public string infosha256ID { get; set; }
+    }
+
+
     public class Bust : Attack
     {
         public int Target { get; set; }

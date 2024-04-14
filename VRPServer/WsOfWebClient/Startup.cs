@@ -1206,13 +1206,21 @@ namespace WsOfWebClient
                                                 s = Room.GetFightSituation(s, connectInfoDetail);
                                             }
                                         }; break;
-                                    case "GetStockTradeCenterDetail": 
+                                    case "GetStockTradeCenterDetail":
                                         {
                                             if (s.Ls == LoginState.OnLine)
                                             {
                                                 s = Room.GetStockTradeCenterDetail(s, connectInfoDetail);
                                             }
-                                        };break;
+                                        }; break;
+                                    case "StockTradeInfo":
+                                        {
+                                            if (s.Ls == LoginState.OnLine)
+                                            {
+                                                StockTradeInfo sti = Newtonsoft.Json.JsonConvert.DeserializeObject<StockTradeInfo>(returnResult.result);
+                                                s = Room.StockTradeParseInfo(s, connectInfoDetail, sti);
+                                            }
+                                        }; break;
                                     case "GetTaskCopy":
                                         {
                                             if (s.Ls == LoginState.OnLine)
@@ -1364,6 +1372,25 @@ namespace WsOfWebClient
                                         {
                                             ScoreTransaction stt = Newtonsoft.Json.JsonConvert.DeserializeObject<ScoreTransaction>(returnResult.result);
                                             Room.ScoreTransactionF(s, stt);
+                                        }; break;
+                                    case "AlipayReward":
+                                        {
+                                            AlipayReward ar = Newtonsoft.Json.JsonConvert.DeserializeObject<AlipayReward>(returnResult.result);
+                                            Room.AlipayRewardF(s, ar);
+                                        }; break;
+                                    case "StockCenerOrder":
+                                        {
+                                            StockCenerOrder sco = Newtonsoft.Json.JsonConvert.DeserializeObject<StockCenerOrder>(returnResult.result);
+                                            Room.StockCenerOrderF(s, connectInfoDetail, sco);
+                                        }; break;
+                                    case "CancelStock":
+                                        {
+                                            CancelStock cs = Newtonsoft.Json.JsonConvert.DeserializeObject<CancelStock>(returnResult.result);
+                                            Room.CancelStockD(s, cs);
+                                        }; break;
+                                    case "GetAllStockPlace":
+                                        {
+                                            Room.GetAllStockPlaceF(s);
                                         }; break;
                                     default:
                                         {

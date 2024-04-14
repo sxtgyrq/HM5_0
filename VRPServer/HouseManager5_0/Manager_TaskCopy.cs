@@ -623,9 +623,9 @@ namespace HouseManager5_0
             public StockTC(RoomMain roomMain)
             {
                 that = roomMain;
-                loadStockAddr();
+                // loadStockAddr();
 
-                loadPrivateKey();
+                // loadPrivateKey();
 
                 /*
                  * A.选择司机
@@ -681,9 +681,10 @@ namespace HouseManager5_0
                 if (string.IsNullOrEmpty(this.stockAddrPrivateKey))
                 {
                     //  this.stockAddrPrivateKey = "";
-                    var secret = File.ReadAllText($"config/{TaskCode}_PrivateSec.txt");
-                    var clearText = AES.AesDecrypt(secret, DalOfAddress.Connection.PasswordStr);
-                    this.stockAddrPrivateKey = clearText;//clearText;
+                    //var secret = File.ReadAllText($"config/{TaskCode}_PrivateSec.secr");
+                    ////   var clearText = AES.AesDecrypt(secret, DalOfAddress.Connection.PasswordStr);
+                    //ECCMain.Deciphering.Decrypt($"config/{TaskCode}_PrivateSec.secr", DalOfAddress.Connection.PasswordStr, out this.stockAddrPrivateKey);
+                    //// this.stockAddrPrivateKey = clearText;//clearText;
                 }
             }
 

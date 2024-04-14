@@ -66,10 +66,10 @@ namespace TcpFunction
                                 continue;
                             }
                             else
-                            { 
+                            {
                                 Console.WriteLine($"Error: {response.StatusCode}");
                                 Console.WriteLine($"Error: SendInmationToUrlAndGetRes_V2");
-                                return ""; 
+                                return "";
                             }
                         }
                         //catch (Exception ex)
@@ -176,17 +176,26 @@ namespace TcpFunction
 
                         var body = await reader.ReadToEndAsync();
                         // Console.WriteLine($"body:{body}");
-
-                        var dealWithF = ResponseObj.DealWithDic[context.Request.Host.Value];
-                        //Console.WriteLine(context.Request.Host.Value);
-                        result = dealWithF(body, Convert.ToInt32(context.Request.Host.Value.Split(":")[1]));
+                        if (ResponseObj.DealWithDic.ContainsKey(context.Request.Host.Value))
+                        {
+                            var dealWithF = ResponseObj.DealWithDic[context.Request.Host.Value];
+                            //Console.WriteLine(context.Request.Host.Value);
+                            result = dealWithF(body, Convert.ToInt32(context.Request.Host.Value.Split(":")[1]));
+                        }
+                        else
+                        {
+                            result = null;
+                            //ResponseObj.DealWithDic.Add(context.Request.Host.Value, dealWith);
+                        }
 
                         // 处理body内容...
                     }
-                    context.Response.ContentType = "application/json";
-                    var bytes = Encoding.UTF8.GetBytes(result);
-                    await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
-
+                    if (result != null)
+                    {
+                        context.Response.ContentType = "application/json";
+                        var bytes = Encoding.UTF8.GetBytes(result);
+                        await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
+                    }
                 });
             }
 

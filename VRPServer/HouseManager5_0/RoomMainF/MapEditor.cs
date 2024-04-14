@@ -1338,15 +1338,7 @@ namespace HouseManager5_0.RoomMainF
 
         public string TradeCoinF(ModelTranstraction.TradeCoin tc)
         {
-            if (tc.addrTo == this.Market.TradingCenterAddr)
-            {
-                //**将股份转移到交易中心地址
-                return TradeCoinToTradeCenterF(tc, true);
-            }
-            else
-            {
-                return TradeCoinF(tc, false);
-            }
+            return TradeCoinF(tc, false); 
 
         }
         public string TradeCoinF(ModelTranstraction.TradeCoin tc, bool bySystem)
@@ -1467,90 +1459,7 @@ namespace HouseManager5_0.RoomMainF
             }
         }
 
-        public string TradeCoinToTradeCenterF(ModelTranstraction.TradeCoin tc, bool bySystem)
-        {
-            // throw new Exception();
-
-            var parameter = tc.msg.Split(new char[] { '@', '-', '>', ':' }, StringSplitOptions.RemoveEmptyEntries);
-            //  var agreement = $"{indexNumber}@{ga.addrFrom}@{ga.addrBussiness}->{ga.addrTo}:{ga.tranNum * 100000000}Satoshi";
-            var regex = new Regex("^[0-9]{1,8}@[A-HJ-NP-Za-km-z1-9]{1,50}@[A-HJ-NP-Za-km-z1-9]{1,50}->[A-HJ-NP-Za-km-z1-9]{1,50}:[0-9]{1,13}[Ss]{1}atoshi$");
-            if (regex.IsMatch(tc.msg))
-            {
-                if (parameter.Length == 5)
-                {
-                    if (BitCoin.Sign.checkSign(tc.sign, tc.msg, parameter[1]))
-                    {
-                        var tradeIndex = int.Parse(parameter[0]);
-                        var addrFrom = parameter[1];
-                        var addrBussiness = parameter[2];
-                        var addrTo = parameter[3];
-                        var passCoinStr = parameter[4];
-                        if ((passCoinStr.Substring(passCoinStr.Length - 7, 7) == "Satoshi" || passCoinStr.Substring(passCoinStr.Length - 7, 7) == "satoshi") &&
-                            tradeIndex == tc.tradeIndex &&
-                            addrFrom == tc.addrFrom &&
-                            addrTo == tc.addrTo &&
-                            addrBussiness == tc.addrBussiness)
-                        {
-                            bool success;
-                            var trDetail = getValueOfAddr(addrBussiness, out success);
-                            if (success)
-                            {
-                                var passCoin = Convert.ToInt64(passCoinStr.Substring(0, passCoinStr.Length - 7));
-                                if (passCoin > 0 && tc.passCoin == passCoin)
-                                {
-                                    if (trDetail.ContainsKey(addrFrom))
-                                    {
-                                        if (trDetail[addrFrom] >= passCoin)
-                                        {
-                                            string notifyMsg;
-                                            if (tc.addrTo.Trim() != tc.addrBussiness.Trim())
-                                            {
-                                                bool r;
-                                                if (bySystem)
-                                                {
-                                                    r = DalOfAddress.TradeRecord.AddBySystem(tc.tradeIndex, tc.addrFrom, tc.addrBussiness, tc.sign, tc.msg, tc.passCoin, out notifyMsg);
-
-                                                    var objR = new ModelTranstraction.TradeCoin.Result()
-                                                    {
-                                                        msg = notifyMsg,
-                                                        success = r
-                                                    };
-                                                    return Newtonsoft.Json.JsonConvert.SerializeObject(objR);
-                                                }
-                                            }
-                                            else
-                                            {
-
-                                            }
-                                        }
-                                        else
-                                        {
-
-                                        }
-                                    }
-                                    else
-                                    {
-
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-
-                    }
-                }
-            }
-            {
-                var objR = new ModelTranstraction.TradeCoin.Result()
-                {
-                    msg = "传输错误，校验数据为无效！",
-                    success = false
-                };
-                return Newtonsoft.Json.JsonConvert.SerializeObject(objR);
-            }
-        }
+        
 
 
         public string TradeIndex(ModelTranstraction.TradeIndex tc)

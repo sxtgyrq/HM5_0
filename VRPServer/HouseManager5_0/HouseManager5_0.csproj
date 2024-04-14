@@ -25,6 +25,7 @@
     <ProjectReference Include="..\CommonClass\CommonClass.csproj" />
     <ProjectReference Include="..\ConsoleBitcoinChainApp\ConsoleBitcoinChainApp.csproj" />
     <ProjectReference Include="..\DalOfAddress\DalOfAddress.csproj" />
+    <ProjectReference Include="..\ECCMain_Core\ECCMain_Core.csproj" />
     <ProjectReference Include="..\Geometry\Geometry.csproj" />
     <ProjectReference Include="..\LogClass\LogClass.csproj" />
     <ProjectReference Include="..\Model\Model.csproj" />

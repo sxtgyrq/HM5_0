@@ -127,20 +127,43 @@ WHERE bindWordMsg=@bindWordMsg;";
         {
             string sQL = $@"SELECT bindWordAddr,bindWordMsg,bindWordSign,endTime from bindwordinfo 
  WHERE bindWordMsg='{bindWordMsg}';";
-            var ds = MySqlHelper.ExecuteDataset(Connection.ConnectionStr, sQL);
-            if (ds.Tables.Count > 0)
+
+            using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
             {
-                if (ds.Tables[0].Rows.Count > 0)
+                con.Open();
+                using (MySqlTransaction tran = con.BeginTransaction())
                 {
-                    var bindWordAddr = Convert.ToString(ds.Tables[0].Rows[0]["bindWordAddr"]).Trim();
-                    var bindWordSign = Convert.ToString(ds.Tables[0].Rows[0]["bindWordSign"]).Trim();
-                    var endTime = Convert.ToDateTime(ds.Tables[0].Rows[0]["endTime"]);
-                    btcAddr = bindWordAddr;
-                    return $"【{bindWordAddr}】与“{bindWordMsg}”绑定，有效期至{endTime.ToString("yyyy年MM月dd日")}";
+                    using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                var bindWordAddr = Convert.ToString(reader["bindWordAddr"]).Trim();
+                                var bindWordSign = Convert.ToString(reader["bindWordSign"]).Trim();
+                                var endTime = Convert.ToDateTime(reader["endTime"]);
+                                btcAddr = bindWordAddr;
+                                return $"【{bindWordAddr}】与“{bindWordMsg}”绑定，有效期至{endTime.ToString("yyyy年MM月dd日")}";
+                            }
+                        }
+                    }
                 }
-            }
+            } 
             btcAddr = "";
             return $"没有查询到【{bindWordMsg}】的绑定关系";
+            //var ds = MySqlHelper.ExecuteDataset(Connection.ConnectionStr, sQL);
+            //if (ds.Tables.Count > 0)
+            //{
+            //    if (ds.Tables[0].Rows.Count > 0)
+            //    {
+            //        var bindWordAddr = Convert.ToString(ds.Tables[0].Rows[0]["bindWordAddr"]).Trim();
+            //        var bindWordSign = Convert.ToString(ds.Tables[0].Rows[0]["bindWordSign"]).Trim();
+            //        var endTime = Convert.ToDateTime(ds.Tables[0].Rows[0]["endTime"]);
+            //        btcAddr = bindWordAddr;
+            //        return $"【{bindWordAddr}】与“{bindWordMsg}”绑定，有效期至{endTime.ToString("yyyy年MM月dd日")}";
+            //    }
+            //}
+           
         }
 
 
@@ -148,34 +171,57 @@ WHERE bindWordMsg=@bindWordMsg;";
         {
             string sQL = $@"SELECT bindWordAddr,bindWordMsg,bindWordSign,endTime from bindwordinfo 
  WHERE bindWordAddr='{bindWordAddr}';";
-            var ds = MySqlHelper.ExecuteDataset(Connection.ConnectionStr, sQL);
-            if (ds.Tables.Count > 0)
+
+            using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
             {
-                if (ds.Tables[0].Rows.Count > 0)
+                con.Open();
+                using (MySqlTransaction tran = con.BeginTransaction())
                 {
-                    var bindWordMsg = Convert.ToString(ds.Tables[0].Rows[0]["bindWordMsg"]).Trim();
-                    var bindWordSign = Convert.ToString(ds.Tables[0].Rows[0]["bindWordSign"]).Trim();
-                    var endTime = Convert.ToDateTime(ds.Tables[0].Rows[0]["endTime"]);
-                    return $"【{bindWordAddr}】与“{bindWordMsg}”绑定，有效期至{endTime.ToString("yyyy年MM月dd日")}";
+                    using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                var bindWordMsg = Convert.ToString(reader["bindWordMsg"]).Trim();
+                                var bindWordSign = Convert.ToString(reader["bindWordSign"]).Trim();
+                                var endTime = Convert.ToDateTime(reader["endTime"]);
+                                return $"【{bindWordAddr}】与“{bindWordMsg}”绑定，有效期至{endTime.ToString("yyyy年MM月dd日")}";
+                            }
+                        }
+                    }
                 }
             }
+
+            //var ds = MySqlHelper.ExecuteDataset(Connection.ConnectionStr, sQL);
+            //if (ds.Tables.Count > 0)
+            //{
+            //    if (ds.Tables[0].Rows.Count > 0)
+            //    {
+            //        var bindWordMsg = Convert.ToString(ds.Tables[0].Rows[0]["bindWordMsg"]).Trim();
+            //        var bindWordSign = Convert.ToString(ds.Tables[0].Rows[0]["bindWordSign"]).Trim();
+            //        var endTime = Convert.ToDateTime(ds.Tables[0].Rows[0]["endTime"]);
+            //        return $"【{bindWordAddr}】与“{bindWordMsg}”绑定，有效期至{endTime.ToString("yyyy年MM月dd日")}";
+            //    }
+            //}
             return $"没有查询到【{bindWordAddr}】的绑定关系";
         }
-
+        [Obsolete]
         static string LookForByAddr2(string bindWordAddr)
         {
-            string sQL = $@"SELECT bindWordAddr,bindWordMsg,bindWordSign,endTime from bindwordinfo 
- WHERE bindWordAddr='{bindWordAddr}';";
-            var ds = MySqlHelper.ExecuteDataset(Connection.ConnectionStr, sQL);
-            if (ds.Tables.Count > 0)
-            {
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    var bindWordMsg = Convert.ToString(ds.Tables[0].Rows[0]["bindWordMsg"]).Trim();
-                    return $"{bindWordAddr}已与{bindWordMsg}绑定。";
-                }
-            }
-            return "";
+            throw new Exception("");
+            //           string sQL = $@"SELECT bindWordAddr,bindWordMsg,bindWordSign,endTime from bindwordinfo 
+            //WHERE bindWordAddr='{bindWordAddr}';";
+            //           var ds = MySqlHelper.ExecuteDataset(Connection.ConnectionStr, sQL);
+            //           if (ds.Tables.Count > 0)
+            //           {
+            //               if (ds.Tables[0].Rows.Count > 0)
+            //               {
+            //                   var bindWordMsg = Convert.ToString(ds.Tables[0].Rows[0]["bindWordMsg"]).Trim();
+            //                   return $"{bindWordAddr}已与{bindWordMsg}绑定。";
+            //               }
+            //           }
+            //           return "";
         }
 
         public static string GetAddrByWord(string words)
@@ -183,25 +229,47 @@ WHERE bindWordMsg=@bindWordMsg;";
             Regex reg = new System.Text.RegularExpressions.Regex("^[\u4e00-\u9fa5]{2,10}$");
             if (reg.IsMatch(words))
             {
-                string sQL = $@"SELECT bindWordAddr,bindWordMsg,bindWordSign,endTime from bindwordinfo 
+                string sql = $@"SELECT bindWordAddr,bindWordMsg,bindWordSign,endTime from bindwordinfo 
  WHERE bindWordMsg='{words}';";
-                var ds = MySqlHelper.ExecuteDataset(Connection.ConnectionStr, sQL);
-                if (ds.Tables.Count > 0)
+
+
+                using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
                 {
-                    if (ds.Tables[0].Rows.Count > 0)
+                    con.Open();
+                    using (MySqlTransaction tran = con.BeginTransaction())
                     {
-                        var bindWordAddr = Convert.ToString(ds.Tables[0].Rows[0]["bindWordAddr"]).Trim();
-                        return bindWordAddr;
-                    }
-                    else
-                    {
-                        return "";
+                        using (MySqlCommand command = new MySqlCommand(sql, con, tran))
+                        {
+                            using (var reader = command.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    var bindWordAddr = Convert.ToString(reader["bindWordAddr"]).Trim();
+                                    return bindWordAddr;
+                                }
+                            }
+                        }
                     }
                 }
-                else
-                {
-                    return "";
-                }
+                return "";
+
+                //var ds = MySqlHelper.ExecuteDataset(Connection.ConnectionStr, sQL);
+                //if (ds.Tables.Count > 0)
+                //{
+                //    if (ds.Tables[0].Rows.Count > 0)
+                //    {
+                //        var bindWordAddr = Convert.ToString(ds.Tables[0].Rows[0]["bindWordAddr"]).Trim();
+                //        return bindWordAddr;
+                //    }
+                //    else
+                //    {
+                //        return "";
+                //    }
+                //}
+                //else
+                //{
+                //    return "";
+                //}
             }
             else return "";
         }
@@ -209,18 +277,42 @@ WHERE bindWordMsg=@bindWordMsg;";
         {
             string sQL = $@"SELECT bindWordAddr,bindWordMsg,bindWordSign,endTime from bindwordinfo 
  WHERE bindWordAddr='{bindWordAddr}';";
-            var ds = MySqlHelper.ExecuteDataset(Connection.ConnectionStr, sQL);
-            if (ds.Tables.Count > 0)
+
+
+            using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
             {
-                if (ds.Tables[0].Rows.Count > 0)
+                con.Open();
+                using (MySqlTransaction tran = con.BeginTransaction())
                 {
-                    var bindWordMsg = Convert.ToString(ds.Tables[0].Rows[0]["bindWordMsg"]).Trim();
-                    var bindWordSign = Convert.ToString(ds.Tables[0].Rows[0]["bindWordSign"]).Trim();
-                    var endTime = Convert.ToDateTime(ds.Tables[0].Rows[0]["endTime"]);
-                    return bindWordMsg;
+                    using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                var bindWordMsg = Convert.ToString(reader["bindWordMsg"]).Trim();
+                                var bindWordSign = Convert.ToString(reader["bindWordSign"]).Trim();
+                                var endTime = Convert.ToDateTime(reader["endTime"]);
+                                return bindWordMsg;
+                            }
+                        }
+                    }
                 }
             }
             return "";
+
+            //var ds = MySqlHelper.ExecuteDataset(Connection.ConnectionStr, sQL);
+            //if (ds.Tables.Count > 0)
+            //{
+            //    if (ds.Tables[0].Rows.Count > 0)
+            //    {
+            //        var bindWordMsg = Convert.ToString(ds.Tables[0].Rows[0]["bindWordMsg"]).Trim();
+            //        var bindWordSign = Convert.ToString(ds.Tables[0].Rows[0]["bindWordSign"]).Trim();
+            //        var endTime = Convert.ToDateTime(ds.Tables[0].Rows[0]["endTime"]);
+            //        return bindWordMsg;
+            //    }
+            //}
+
         }
 
         /// <summary>

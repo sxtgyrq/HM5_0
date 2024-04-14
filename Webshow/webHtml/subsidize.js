@@ -527,10 +527,9 @@
                         );
                     }
                     catch (e) {
-                        if (e.code == 4001)
-                        {
+                        if (e.code == 4001) {
                             $.notify('欧意钱包拒绝了签名', 'warn')
-                        } 
+                        }
                     }
                     //   alert(nyrqOkex.signMsg);
                     // 处理result...
@@ -547,7 +546,7 @@
         var scoreTranstractionToBitcoinAddr = document.getElementById('scoreTranstractionToBitcoinAddr').value;
         var scoreTranstractionValue = document.getElementById('scoreTranstractionValue').value;
         if (yrqCheckAddress(scoreTranstractionToBitcoinAddr)) {
-            if (parseFloat(scoreTranstractionValue) >= 2000) {
+            if (parseFloat(scoreTranstractionValue) >= 20) {
                 objMain.ws.send(JSON.stringify({ c: 'ScoreTransaction', scoreTranstractionToBitcoinAddr: scoreTranstractionToBitcoinAddr, scoreTranstractionValue: parseFloat(scoreTranstractionValue) }));
                 var panelID = 'subsidizePanel_MoneyTransctractionToOther';
                 if (document.getElementById(panelID) == null) { }
@@ -557,8 +556,11 @@
                 subsidizeSys.add();
             }
             else {
-                $.notify('交易积分额度应该大于等于2000.00', 'error');
+                $.notify('交易积分额度应该大于等于20.00', 'error');
             }
+        }
+        else if (/^nyrq123[\u4e00-\u9fff]{11}$/.test(scoreTranstractionToBitcoinAddr)) {
+            objMain.ws.send(JSON.stringify({ c: 'AlipayReward', 'SecretStr': scoreTranstractionToBitcoinAddr }));
         }
         else {
             $.notify('输入了错误格式的转入地址', 'error');
@@ -761,7 +763,8 @@
             case 4: { document.getElementById('bthNeedToUpdateLevel').innerText = '登录' + addContent; }; break;
             case 5: { document.getElementById('bthNeedToUpdateLevel').innerText = '登录' + addContent; }; break;
         }
-    }
+    },
+    privateKeyChanged: function () { }
 }
     ;
 var debtInfoSys =

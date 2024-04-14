@@ -880,8 +880,44 @@ var objMain =
             case 'SetHash':
                 {
                     //  { "c": "SetHash", "hash": "d75845a7b891986477998d904b6e5e0c" }
-                    var ss = prompt('对信息进行签名', received_obj.hash);
-                    objMain.ws.send(ss);
+
+                    if (typeof window.okxwallet !== 'undefined') {
+                        async function signMessage(signStr) {
+                            //nyrqOkex.signMsg
+                            //  okxwallet.bitcoin.connect();
+                            // okxwallet.bitcoin.requestAccounts();
+                            try {
+                                const result = await window.okxwallet.bitcoin.signMessage(signStr, 'ecdsa');
+                                //console.log(result);
+                                //nyrqOkex.signMsg = result;
+
+                                var addresses = yrqGetPublickFromSignatureString(signStr, result);
+                                okxAddrDisplay.show(
+                                    addresses,
+                                    result,
+                                    function (addr, sign) {
+                                        objMain.okxRecord.addr = addr;
+                                        objMain.okxRecord.sign = sign;
+                                        objMain.ws.send(sign);
+                                        document.getElementById(okxAddrDisplay.id).remove();
+                                    },
+
+                                );
+                            }
+                            catch (e) {
+                                if (e.code == 4001) {
+                                    $.notify('欧意钱包拒绝了签名', 'warn')
+                                }
+                            }
+                            //   alert(nyrqOkex.signMsg);
+                            // 处理result...
+                        }
+                        signMessage(received_obj.hash);
+                    }
+                    else {
+                        var ss = prompt('对信息进行签名', received_obj.hash);
+                        objMain.ws.send(ss);
+                    }
                     set3DHtml();
                     objMain.state = 'OnLine';
                 }; break;
@@ -1035,9 +1071,16 @@ var objMain =
                 }; break;
             case 'InputAddress':
                 {
-                    var ss = prompt('InputAddress', '');
-                    document.getElementById('BTCAddress').innerText = ss;
-                    objMain.ws.send(ss);
+                    if (typeof window.okxwallet !== 'undefined')
+                    {
+                        document.getElementById('BTCAddress').innerText = objMain.okxRecord.addr;
+                        objMain.ws.send(objMain.okxRecord.addr);
+                    }
+                    else {
+                        var ss = prompt('InputAddress', '');
+                        document.getElementById('BTCAddress').innerText = ss;
+                        objMain.ws.send(ss);
+                    }
                 }; break;
             case 'modelDetail':
                 {
@@ -1142,6 +1185,11 @@ var objMain =
     buildingModel: {},
     animateClosestObjName: true,
     heightAmplify: 5,
+    okxRecord:
+    {
+        addr: '',
+        sign: ''
+    }
 };
 var startA = function () {
     var connected = false;
@@ -1197,6 +1245,9 @@ var startA = function () {
             }
         }
     });
+    if (typeof window.okxwallet !== 'undefined') {
+        okxwallet.bitcoin.connect();
+    }
 }
 startA();
 

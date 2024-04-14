@@ -239,6 +239,7 @@
     <script src="notify.js"></script>
     <script src="driver.js"></script>
     <script src="mainf2MapEditor.js"></script>
+    <script src="privateSignF.js"></script>
     <img id="confirmAlert" style="z-index:-10;position:absolute;left:calc(50% - 182px);top:calc(50% - 42px);" src="Pic/editor/delConfirm.png" />
 
     <img id="instruction" style="z-index:-10;position:absolute;left:calc(50% - 302px);top:calc(50% - 163px);" src="Pic/editor/instruction.png" />
@@ -539,11 +540,11 @@
         <div>
 
             <!--<div>
-                <input type="range" id="zoomValue" name="points" min="0.1" max="2" step="0.01">
-                <div>1</div>
-            </div>-->
+        <input type="range" id="zoomValue" name="points" min="0.1" max="2" step="0.01">
+        <div>1</div>
+    </div>-->
             <!--<button>清空</button>-->
-            <button id="chargingBtn" onclick="chargingDataF();">充值</button>
+            <button id="chargingBtn" onclick="chargingDataF();">充值</button>  <button id="chargingBtn" onclick="chargingDataF();">支付宝红包</button>
             <script>
                 var chargingDataF = function () {
                     var type = document.getElementById('rmbChargingDatalTypes').value;

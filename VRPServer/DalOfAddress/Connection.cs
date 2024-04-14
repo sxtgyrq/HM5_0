@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace DalOfAddress
@@ -9,7 +10,7 @@ namespace DalOfAddress
     public class Connection
     {
         static string ConnectionStrValue_ = "";
-        static string password = "Yrq123";
+        static string password = "KxghmLEhBYoGcF66Uw6XDvSrFxUSqgakVB7LXggRd8UPwF6TszmB";//由Yrq123 生成的私钥
         public static string PasswordStr
         {
             get { return password; }
@@ -20,8 +21,11 @@ namespace DalOfAddress
             {
                 if (string.IsNullOrEmpty(ConnectionStrValue_))
                 {
-                    var content = File.ReadAllText("config/connect.txt");
-                    ConnectionStrValue_ = CommonClass.AES.AesDecrypt(content, password);
+                    var content = File.ReadAllText("config/connect.secr");
+
+                    ECCMain.Deciphering.Decrypt("config/connect.secr", password, out ConnectionStrValue_);
+
+                   //ConnectionStrValue_ = CommonClass.AES.AesDecrypt(content, password);
 
                     using (MySqlConnection con = new MySqlConnection(ConnectionStrValue_))
                     {
@@ -47,7 +51,7 @@ namespace DalOfAddress
         public static void UpdateMysql()
         {
             Console.WriteLine("输入confirm将要变更数据库结构了。请知悉");
-            if (Console.ReadLine() == "confirm") 
+            if (Console.ReadLine() == "confirm")
             {
                 //string script = File.ReadAllText("update20240411.sql");
                 //using (MySqlConnection con = new MySqlConnection(ConnectionStrValue_))

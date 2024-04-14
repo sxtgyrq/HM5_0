@@ -15,16 +15,16 @@ namespace WsOfWebClient.MapEditor
             WsOfWebClient.ConnectInfo.ConnectInfoDetail connectInfoDetail = new ConnectInfo.ConnectInfoDetail(webSocket, 0);
             WebSocketReceiveResult wResult;
             {
-                var returnResult = await ReceiveStringAsync(webSocket, webWsSize);
-                wResult = returnResult.wr;
-                //Consol.WriteLine($"receive from web:{returnResult.result}");
+                //var returnResult = await ReceiveStringAsync(webSocket, webWsSize);
+                //wResult = returnResult.wr;
+                ////Consol.WriteLine($"receive from web:{returnResult.result}");
 
-                var address = await GetBTCAddress(connectInfoDetail);
-                if (BitCoin.CheckAddress.CheckAddressIsUseful(address)) { }
-                else
-                {
-                    return;
-                }
+                //var address = await GetBTCAddress(connectInfoDetail);
+                //if (BitCoin.CheckAddress.CheckAddressIsUseful(address)) { }
+                //else
+                //{
+                //    return;
+                //}
 
 
                 var hash = CommonClass.Random.GetMD5HashFromStr(DateTime.Now.ToString("yyyyMMddHHmmss") + "yrq");
@@ -40,9 +40,24 @@ namespace WsOfWebClient.MapEditor
                     var sendData = Encoding.ASCII.GetBytes(msg);
                     await webSocket.SendAsync(new ArraySegment<byte>(sendData, 0, sendData.Length), WebSocketMessageType.Text, true, CancellationToken.None);
                 }
+
+
+
+                var returnResult = await ReceiveStringAsync(webSocket, webWsSize);
+                wResult = returnResult.wr;
+                var sign = returnResult.result;
+                //Consol.WriteLine($"receive from web:{returnResult.result}");
+
                 returnResult = await ReceiveStringAsync(webSocket, webWsSize);
                 wResult = returnResult.wr;
                 //Consol.WriteLine($"receive from web:{returnResult.result}");
+
+                var address = await GetBTCAddress(connectInfoDetail);
+                if (BitCoin.CheckAddress.CheckAddressIsUseful(address)) { }
+                else
+                {
+                    return;
+                }
 
                 bool signIsRight = false;
                 List<string> dModelID = new List<string>();

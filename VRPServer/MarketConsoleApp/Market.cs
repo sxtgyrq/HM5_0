@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -319,10 +320,11 @@ namespace MarketConsoleApp
                     }
                     catch
                     {
-                        //Consol.WriteLine($"获取信息失败");
+                        Console.WriteLine($"获取信息失败");
                     }
                 }
                 Thread.Sleep(1000 * 60 * 20);
+                // Thread.Sleep(1000 * 60);//调试专用
             }
         }
 
@@ -579,49 +581,71 @@ namespace MarketConsoleApp
         internal void tellMarketIsOn()
         {
             //  this.servers = File.ReadAllLines("servers.txt");
-            for (var i = 0; i < this.servers.Length; i++)
+            Thread th = new Thread(() =>
             {
-                //string ip = this.servers[i].Split(':')[0];
-                //int port = int.Parse(this.servers[i].Split(':')[1]);
+                while (true)
+                {
+                    for (var i = 0; i < this.servers.Length; i++)
+                    {
+                        //string ip = this.servers[i].Split(':')[0];
+                        //int port = int.Parse(this.servers[i].Split(':')[1]);
+                        /*
+                         * 这里虽然没有具体功能。但是在判断读取地址时，回判断回传的price是否为null
+                         * 这里起个true/false 功能。
+                         */
+                        sendMsg(this.servers[i],
+                          Newtonsoft.Json.JsonConvert.SerializeObject(
+                              new CommonClass.MarketPrice()
+                              {
+                                  c = "MarketPrice",
+                                  count = this.mileCount,
+                                  price = getPrice(this.mileCount),
+                                  sellType = "mile",
+                              }));
+                        sendMsg(this.servers[i],
+                         Newtonsoft.Json.JsonConvert.SerializeObject(
+                             new CommonClass.MarketPrice()
+                             {
+                                 c = "MarketPrice",
+                                 count = this.businessCount,
+                                 price = getPrice(this.businessCount),
+                                 sellType = "business",
+                             }));
+                        sendMsg(this.servers[i],
+                         Newtonsoft.Json.JsonConvert.SerializeObject(
+                             new CommonClass.MarketPrice()
+                             {
+                                 c = "MarketPrice",
+                                 count = this.volumeCount,
+                                 price = getPrice(this.volumeCount),
+                                 sellType = "volume",
+                             }));
+                        sendMsg(this.servers[i],
+                         Newtonsoft.Json.JsonConvert.SerializeObject(
+                             new CommonClass.MarketPrice()
+                             {
+                                 c = "MarketPrice",
+                                 count = this.speedCount,
+                                 price = getPrice(this.speedCount),
+                                 sellType = "speed",
+                             }));
+                        sendMsg(this.servers[i],
+                        Newtonsoft.Json.JsonConvert.SerializeObject(
+                            new CommonClass.MarketPrice()
+                            {
+                                c = "MarketPrice",
+                                count = 1,
+                                price = this.stockScorePrice,
+                                sellType = "stock",
+                            }));
 
-                //sendMsg(this.servers[i],
-                //  Newtonsoft.Json.JsonConvert.SerializeObject(
-                //      new CommonClass.MarketPrice()
-                //      {
-                //          c = "MarketPrice",
-                //          count = this.mileCount,
-                //          price = getPrice(this.mileCount),
-                //          sellType = "mile",
-                //      }));
-                //sendMsg(this.servers[i],
-                // Newtonsoft.Json.JsonConvert.SerializeObject(
-                //     new CommonClass.MarketPrice()
-                //     {
-                //         c = "MarketPrice",
-                //         count = this.businessCount,
-                //         price = getPrice(this.businessCount),
-                //         sellType = "business",
-                //     }));
-                //sendMsg(this.servers[i],
-                // Newtonsoft.Json.JsonConvert.SerializeObject(
-                //     new CommonClass.MarketPrice()
-                //     {
-                //         c = "MarketPrice",
-                //         count = this.volumeCount,
-                //         price = getPrice(this.volumeCount),
-                //         sellType = "volume",
-                //     }));
-                //sendMsg(this.servers[i],
-                // Newtonsoft.Json.JsonConvert.SerializeObject(
-                //     new CommonClass.MarketPrice()
-                //     {
-                //         c = "MarketPrice",
-                //         count = this.speedCount,
-                //         price = getPrice(this.speedCount),
-                //         sellType = "speed",
-                //     }));
-            }
+                    }
+                    Thread.Sleep(1000 * 60 * 10);//休息十分钟
+                }
 
+            });
+
+            th.Start();
 
         }
 
@@ -659,6 +683,50 @@ namespace MarketConsoleApp
             {
                 return 1250;
             }
+        }
+
+        internal void StockCenterTrade()
+        {
+            Thread th = new Thread(() => this.StockCenterTradeDetail());
+            th.Start();
+        }
+
+        private void StockCenterTradeDetail()
+        {
+            while (true)
+            {
+                var alreadyTraded1 = StockCenterBuy();
+                var alreadyTraded2 = StrockCenterRecord();
+
+                if (alreadyTraded1 || alreadyTraded2)
+                {
+                    Thread.Sleep(10);
+                }
+                else
+                {
+                    Thread.Sleep(1000 * 60);
+                }
+
+            }
+        }
+
+        private bool StrockCenterRecord()
+        {
+            var step1 = DalOfAddress.StockBuy.FinishedItemSort();
+            var step2 = DalOfAddress.StockSell.FinishedItemSort();
+
+            return step1 || step2;
+            // throw new NotImplementedException();
+        }
+
+
+
+        long stockScorePrice = 1;
+        private bool StockCenterBuy()
+        {
+            // this.mileCount
+            return DalOfAddress.StockBuy.Trade(ref this.stockScorePrice);
+            // throw new NotImplementedException();
         }
     }
 }

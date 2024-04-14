@@ -20,5 +20,12 @@ namespace CommonClass
             Regex r = new Regex(reg);
             return r.Match(input).Success;
         }
+
+        public static bool IsSha256(string input)
+        {
+            var reg = "^[a-fA-F0-9]{64}$";
+            Regex r = new Regex(reg);
+            return r.Match(input).Success; 
+        }
     }
 }

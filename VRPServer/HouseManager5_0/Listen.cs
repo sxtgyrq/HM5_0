@@ -653,6 +653,46 @@ namespace HouseManager5_0
                             ScoreTransactionToServer ssts = Newtonsoft.Json.JsonConvert.DeserializeObject<ScoreTransactionToServer>(notifyJson);
                             outPut = objI.ScoreTransactionToServerF(ssts);
                         }; break;
+                    case "GetAllStockPlace":
+                        {
+                            GetAllStockPlace gasp = Newtonsoft.Json.JsonConvert.DeserializeObject<GetAllStockPlace>(notifyJson);
+                            outPut = objI.GetAllStockPlaceF(gasp);
+                        }; break;
+                    case "ReturnScoreFromStockCenter":
+                        {
+                            ReturnScoreFromStockCenter rsfsc = Newtonsoft.Json.JsonConvert.DeserializeObject<ReturnScoreFromStockCenter>(notifyJson);
+                            outPut = objI.ReturnScoreFromStockCenterF(rsfsc);
+                        }; break;
+                    case "ReturnSatoshiFromStockCenter":
+                        {
+                            ReturnSatoshiFromStockCenter rsfs = Newtonsoft.Json.JsonConvert.DeserializeObject<ReturnSatoshiFromStockCenter>(notifyJson);
+                            outPut = objI.ReturnSatoshiFromStockCenterF(rsfs);
+                        }; break;
+                    case "StockBuyFromStockCenter":
+                        {
+                            StockBuyFromStockCenter ssfsc = Newtonsoft.Json.JsonConvert.DeserializeObject<StockBuyFromStockCenter>(notifyJson);
+                            outPut = objI.StockBuyFromStockCenterF(ssfsc);
+                        }; break;
+                    case "StockSellFromStockCenter":
+                        {
+                            StockSellFromStockCenter ssfsc = Newtonsoft.Json.JsonConvert.DeserializeObject<StockSellFromStockCenter>(notifyJson);
+                            outPut = objI.StockSellFromStockCenterF(ssfsc);
+                        }; break;
+                    case "AlipayRewardSecretToServer":
+                        {
+                            AlipayRewardSecretToServer arsts = Newtonsoft.Json.JsonConvert.DeserializeObject<AlipayRewardSecretToServer>(notifyJson);
+                            outPut = objI.AlipayRewardSecretToServerF(arsts);
+                        }; break;
+                    case "StockCenerOrderDetail":
+                        {
+                            StockCenerOrderDetail scod = Newtonsoft.Json.JsonConvert.DeserializeObject<StockCenerOrderDetail>(notifyJson);
+                            outPut = objI.StockCenerOrderDetailF(scod);
+                        }; break;
+                    case "StockCancle":
+                        {
+                            StockCancle sc = Newtonsoft.Json.JsonConvert.DeserializeObject<StockCancle>(notifyJson);
+                            outPut = objI.StockCancleF(sc);
+                        }; break;
                 }
             }
             {

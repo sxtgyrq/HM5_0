@@ -1,4 +1,5 @@
-﻿using HouseManager5_0.RoomMainF;
+﻿//using HouseManager5_0.interfaceOfHM;
+using HouseManager5_0.RoomMainF;
 //using Renci.SshNet.Messages.Authentication;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace HouseManager5_0
         public Manager_NewRecordReward(RoomMain roomMain)
         {
             this.roomMain = roomMain;
+            this.prepareRewardDisplay();
         }
         public class RewardInfo
         {
@@ -25,19 +27,91 @@ namespace HouseManager5_0
             public long SatoshiCount { get; set; }
             // {"BaseAddr":"34yAZeC6et2bGLciCgcFXtWd5GWnXfUYc9","BaseAddrName":"中北大学","RewardBtcAddr":"1CYk5FbLJdWsYzYvnCDTMHfEPPZjKqhRUy","privateKey":"Kxxxxxw7rCgjw7rCgjw7rCgjw7rCgjw7rCK7K4gQ","SatoshiCount":4000}
         }
+
+        // static string baseString = "";
+        List<RewardInfo> ris = new List<RewardInfo>();
+
+        void prepareRewardDisplay()
+        {
+            if (File.Exists("config/NewRecordReward.secr"))
+            {
+                string password = DalOfAddress.Connection.PasswordStr;
+                if (ris.Count == 0)
+                {
+                    string json;
+                    ECCMain.Deciphering.Decrypt("config/NewRecordReward.secr", password, out json);
+                    ris = Newtonsoft.Json.JsonConvert.DeserializeObject<List<RewardInfo>>(json);
+
+
+                }
+                if (ris.Count == 0)
+                {
+                    Console.WriteLine("奖励没有加载任何项");
+                    return;
+                }
+                else
+                {
+                    for (int i = 0; i < ris.Count; i++)
+                    {
+                        var ri = ris[i];
+                        System.Numerics.BigInteger privateBigInteger;
+                        bool privateKeyIsRight;
+                        if (BitCoin.PrivateKeyF.Check(ri.privateKey, out privateBigInteger))
+                        {
+                            if (ri.privateKey.Length == 51)
+                            {
+                                //compressed = false;
+                                var address = BitCoin.PublicKeyF.GetAddressOfUncompressed(BitCoin.Calculate.getPublicByPrivate(privateBigInteger));
+                                privateKeyIsRight = address == ri.RewardBtcAddr;
+                            }
+                            else if (ri.privateKey.Length == 52)
+                            {
+                                //  compressed = true;
+                                var address1 = BitCoin.PublicKeyF.GetAddressOfcompressed(BitCoin.Calculate.getPublicByPrivate(privateBigInteger));
+                                var address2 = BitCoin.PublicKeyF.GetAddressOfP2SH(BitCoin.Calculate.getPublicByPrivate(privateBigInteger));
+                                privateKeyIsRight = address1 == ri.RewardBtcAddr || address2 == ri.RewardBtcAddr;
+                            }
+                            else
+                            {
+                                privateKeyIsRight = false;
+                            }
+                            if (privateKeyIsRight)
+                            {
+                                Console.WriteLine($"{i}-{ri.BaseAddrName}-{ri.BaseAddr}-{ri.RewardBtcAddr}-{ri.SatoshiCount}--end");
+                            }
+                            else
+                            {
+                                Console.WriteLine("奖励地址，检测到有错误项！");
+                                Console.ReadLine();
+                            }
+                        }
+                        //  Console.WriteLine($"{i}-{ris[i].}");
+                    }
+                }
+            }
+        }
         internal void reward(Player player)
         {
             try
             {
-                if (File.Exists("config/NewRecordReward.txt"))
+                if (File.Exists("config/NewRecordReward.secr"))
                 {
-                    var str = File.ReadAllText("config/NewRecordReward.txt");
-                    var contents = str.Split(',');
-                    var index = this.that.rm.Next(0, contents.Length);
-                    var content = contents[index];
                     string password = DalOfAddress.Connection.PasswordStr;
-                    var json = CommonClass.AES.AesDecrypt(content, password);
-                    RewardInfo ri = Newtonsoft.Json.JsonConvert.DeserializeObject<RewardInfo>(json);
+                    //if (ris.Count == 0)
+                    //{
+                    //    string json;
+                    //    ECCMain.Deciphering.Decrypt("config/NewRecordReward.secr", password, out json);
+                    //    ris = Newtonsoft.Json.JsonConvert.DeserializeObject<List<RewardInfo>>(json);
+
+                    //}
+                    if (ris.Count == 0)
+                    {
+                        return;
+                    }
+                    var index = this.that.rm.Next(0, ris.Count);
+
+
+                    RewardInfo ri = ris[index];
                     var addrBussiness = ri.BaseAddr;
                     var addrFrom = ri.RewardBtcAddr;
                     var addrTo = player.BTCAddress;

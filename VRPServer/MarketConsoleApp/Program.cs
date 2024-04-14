@@ -51,6 +51,7 @@ namespace MarketConsoleApp
                 m.sendInteview();
                 m.getAllBitcoinThread();
                 m.GetDetailOfPayer();
+                m.StockCenterTrade();
                 m.waitToBeTelled();
                 //m.
 

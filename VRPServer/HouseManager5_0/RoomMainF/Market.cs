@@ -287,32 +287,32 @@ namespace HouseManager5_0.RoomMainF
         }
 
 
-        void DoSellTrade(Transaction t, SetSellDiamond ss, Player role, ref List<string> notifyMsg)
-        {
-            if (t.Price(this) != null)
-            {
-                var calValue = t.Price(this).Value * 97 / 100;
-                var sellCount = Math.Min(role.PromoteDiamondCount[ss.pType], ss.count);
-                role.PromoteDiamondCount[ss.pType] -= sellCount;
+        //void DoSellTrade(Transaction t, SetSellDiamond ss, Player role, ref List<string> notifyMsg)
+        //{
+        //    if (t.Price(this) != null)
+        //    {
+        //        var calValue = t.Price(this).Value * 97 / 100;
+        //        var sellCount = Math.Min(role.PromoteDiamondCount[ss.pType], ss.count);
+        //        role.PromoteDiamondCount[ss.pType] -= sellCount;
 
-                role.MoneySet(role.Money + calValue * sellCount, ref notifyMsg);
+        //        role.MoneySet(role.Money + calValue * sellCount, ref notifyMsg);
 
-                if (sellCount > 0)
-                {
-                    if (role.playerType == Player.PlayerType.player)
-                    {
-                        SendPromoteCountOfPlayer(ss.pType, (Player)role, ref notifyMsg);
-                        // this.taskM.DiamondSell((Player)role);
-                    }
-                    Thread th = new Thread(() => this.Market.Receive(ss.pType, sellCount));
-                    th.Start();
-                }
-            }
-            else
-            {
-                WebNotify(role, "市场没开放！");
-            }
-        }
+        //        if (sellCount > 0)
+        //        {
+        //            if (role.playerType == Player.PlayerType.player)
+        //            {
+        //                SendPromoteCountOfPlayer(ss.pType, (Player)role, ref notifyMsg);
+        //                // this.taskM.DiamondSell((Player)role);
+        //            }
+        //            Thread th = new Thread(() => this.Market.Receive(ss.pType, sellCount));
+        //            th.Start();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        WebNotify(role, "市场没开放！");
+        //    }
+        //}
 
         public string TakeApartF(TakeApart t)
         {

@@ -482,8 +482,8 @@
         var html = `<div id="roleStatePanel" style="position: absolute; z-index: 8; top: calc(100% - 60px - 5.25em); left: calc(12em + 20px); width: 6em; height: 5.25em; border: solid 1px red; text-align: center; background: rgba(104, 48, 8, 0.85); color: #83ffff;">
         <div id="taskShowBtnToDisplayPanel" style="background: yellowgreen; 
         margin-top: 0.25em;
-        padding:0.5em 0 0.5em 0;" onclick="dialogSys.RefreshTaskCopy();">
-            任务
+        padding:0.5em 0 0.5em 0;" onclick="dialogSys.GetAllStockPlace();">
+            汇总
         </div>
         <div style="background: yellowgreen;
         margin-bottom: 0.25em;
@@ -506,11 +506,11 @@
             objMain.ws.send(JSON.stringify({ 'c': 'GetStockTradeCenterDetail' }));
         }
     },
-    RefreshTaskCopy: function () {
-        objMain.stateNeedToChange.HasNewTask = false;
-        this.AlertNewTask();
-        objMain.ws.send(JSON.stringify({ 'c': 'GetTaskCopy' }));
-        this.show();
+    GetAllStockPlace: function () {
+        // objMain.stateNeedToChange.HasNewTask = false;
+        //this.AlertNewTask();
+        objMain.ws.send(JSON.stringify({ 'c': 'GetAllStockPlace' }));
+        //this.show();
     },
     drawPanelOfTaskCoyp: function (datas) {
         var s1 = '';

@@ -9,7 +9,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BitCoin\BitCoin.csproj" />
     <ProjectReference Include="..\CommonClass\CommonClass.csproj" />
+    <ProjectReference Include="..\ECCMain_Core\ECCMain_Core.csproj" />
   </ItemGroup>
 
 </Project>

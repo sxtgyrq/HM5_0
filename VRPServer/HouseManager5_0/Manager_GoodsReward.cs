@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using static HouseManager5_0.Engine;
 using System.Reflection;
 using System.Linq;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 //using HouseManager5_0.interfaceOfHM;
 //using HouseManager5_0.interfaceOfHM;
 
@@ -160,7 +161,7 @@ namespace HouseManager5_0
         }
 
         internal void GetModelByAddr(string bussinessAddr, ref List<string> notifyMsg)
-        { 
+        {
             List<Data.detailmodel> modelsNeedToShow = new List<Data.detailmodel>();
             var models = Program.dt.models;
             var mItem = DalOfAddress.detailmodel.GetByAddr(bussinessAddr);
@@ -177,6 +178,16 @@ namespace HouseManager5_0
             Program.rm.modelM.setModels(modelsNeedToShow, ref notifyMsg);
             //return notifyMsg;
             // Program.rm.modelM.setModels(player, modelsNeedToShow, ref notifyMsg);
+        }
+
+        internal void GetSumSatAndCount(string bTCAddress)
+        {
+            var models = Program.dt.models;
+            for (int i = 0; i < models.Count; i++)
+            {
+                //   models[i].
+            }
+            //throw new NotImplementedException();
         }
 
         //internal void ShowConnectionModels(Player player, List<RoomMain.Node.direction> selections, ref List<string> notifyMsg)

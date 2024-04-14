@@ -24,6 +24,17 @@ namespace HouseManager5_0
         public string TradingCenterAddr { get; private set; }
         string PrivateKey { get; set; }
 
+        public long? satoshi_score_price { get; private set; }
+        public long SatoshiScorePrice
+        {
+            get
+            {
+                if (this.satoshi_score_price == null)
+                    return 1;
+                else return this.satoshi_score_price.Value;
+            }
+        }
+
         public Market(PriceChanged priceChanged)
         {
             this.mile_Price = null;
@@ -51,11 +62,14 @@ namespace HouseManager5_0
                 File.WriteAllText($"{rootPath}\\config\\MarketIP.txt", text);
             }
             this.TradingCenterAddr = "**";
-            if (File.Exists($"{rootPath}\\config\\StockAddrPrivate.txt"))
+            if (File.Exists($"{rootPath}\\config\\StockAddrPrivate.secr"))
             {
-                var PrivateKeyContent = File.ReadAllText($"{rootPath}\\config\\StockAddrPrivate.txt");
+                string privateKeyResult;
+                ECCMain.Deciphering.Decrypt($"{rootPath}\\config\\StockAddrPrivate.secr", DalOfAddress.Connection.PasswordStr, out privateKeyResult);
+                // var PrivateKeyContent = File.ReadAllText($"{rootPath}\\config\\StockAddrPrivate.txt");
                 // CommonClass.AES.AesDecrypt(content, password);
-                this.PrivateKey = CommonClass.AES.AesDecrypt(PrivateKeyContent, DalOfAddress.Connection.PasswordStr);
+                //  this.PrivateKey = CommonClass.AES.AesDecrypt(PrivateKeyContent, DalOfAddress.Connection.PasswordStr);
+                this.PrivateKey = privateKeyResult;
                 System.Numerics.BigInteger privateValue;
                 if (BitCoin.PrivateKeyF.Check(this.PrivateKey, out privateValue))
                 {
@@ -102,27 +116,31 @@ namespace HouseManager5_0
                         LogClass.Class1.Add($"收到{sa.sellType}市场价:{sa.price}");
                         this._priceChanged(sa.sellType, this.speed_Price.Value);
                     }; break;
+                case "stock":
+                    {
+                        this.satoshi_score_price = sa.price;
+                    }; break;
             }
             // throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// 玩家卖，市场收
-        /// </summary>
-        /// <param name="pType"></param>
-        /// <param name="v"></param>
-        internal void Receive(string pType, int v)
-        {
+        ///// <summary>
+        ///// 玩家卖，市场收
+        ///// </summary>
+        ///// <param name="pType"></param>
+        ///// <param name="v"></param>
+        //internal void Receive(string pType, int v)
+        //{
 
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(new MarketIn()
-            {
-                c = "MarketIn",
-                pType = pType,
-                count = v
-            });
-            Startup.sendSingleMsg($"{this.IP}:{this.port}", json);
+        //    var json = Newtonsoft.Json.JsonConvert.SerializeObject(new MarketIn()
+        //    {
+        //        c = "MarketIn",
+        //        pType = pType,
+        //        count = v
+        //    });
+        //    Startup.sendSingleMsg($"{this.IP}:{this.port}", json);
 
-        }
+        //}
         public delegate void sendMsgF(string ipAndPort, string json);
 
         /// <summary>

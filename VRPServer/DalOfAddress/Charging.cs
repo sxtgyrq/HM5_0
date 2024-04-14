@@ -137,8 +137,20 @@ ORDER BY
 
         public static int GetMaxIndexNum()
         {
+            object result;
             string sQL = $@"SELECT MAX(chargingOrder) FROM charging;";
-            var result = MySqlHelper.ExecuteScalar(Connection.ConnectionStr, sQL);
+
+            using (MySqlConnection con = new MySqlConnection(Connection.ConnectionStr))
+            {
+                con.Open();
+                using (MySqlTransaction tran = con.BeginTransaction())
+                {
+                    using (MySqlCommand command = new MySqlCommand(sQL, con, tran))
+                    {
+                        result = command.ExecuteScalar();
+                    }
+                }
+            } 
             if (result == null || result == DBNull.Value)
             {
                 return 0;
